@@ -132,7 +132,23 @@ Least-Squares cubic spline.
 
 ### Pain Points of Pure Programmable Spline Fitting
 
-SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting and extrapolation control lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
+SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting ({ref}`fig:overfitting`) and extrapolation control ({ref}`fig:bad_extrapolation`) lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
+
+::::{grid} 1 1 2 2
+
+:::{figure} overfitting.png
+:height: 230px
+:label: fig:overfitting
+Typical overfitting issue - RMSE is minimal, but interpolation error is high
+:::
+
+:::{figure} bad_extrapolation.png
+:height: 230px
+:label: fig:bad_extrapolation
+Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval
+:::
+
+::::
 
 The mathematical formulation of B-splines—especially parametric B-splines and NURBS—enables fine control over curve shapes through manipulation of control points and knot vectors. While this functionality is widely leveraged in computer graphics and CAD applications, it is not supported in SciPy.
 
@@ -149,34 +165,29 @@ These needs motivated the development of SplineCloud, a platform that extends Sc
 
 ## Introducing SplineCloud
 
-SplineCloud is an open platform for formalized knowledge exchange. It is designed to make technical data, like results of simulations, tests and modeling more accessible and reusable in computer code. The platform has integrated tools that allow formalizing and organizing data in topical repositories. Its architecture and instruments help reduce the routine overhead of data collection, processing, and model reconstruction in code.
+SplineCloud is an open platform for formalized knowledge exchange (free to use for everyone). It is a cloud solution designed to make technical data, like results of simulations, tests and modeling more accessible and reusable in computer code. The platform has integrated tools that allow formalizing and organizing data in topical repositories. Its architecture and instruments help reduce the routine overhead of data collection, processing, and model reconstruction in code.
 
 SplineCloud’s main features are: plot digitizer, advanced spline fitting tool, open API, and client libraries for Python and MATLAB (support of other languages is planned for future implementation). It addresses all four problems of FAIR data: findability, accessibility, interoperability, and reusability for a specific type of data: experimental, simulation, and statistical results, which can have either tabular or graphical form. 
 
-The philosophy behind the platform is in representing data relations in the form of spline models, which can be reused in code to omit tedious and repetitive operations on data extraction and fitting, which usually complicate mathematical modeling processes. In this way, SplineCloud can be considered as a repository-based open library of functional relations. The typical user journey on the platform is given on the {ref}`fig:4`.
+The philosophy behind the platform is in representing data relations in the form of spline models, which can be reused in code to omit tedious and repetitive operations on data extraction and fitting, which usually complicate mathematical modeling processes. In this way, SplineCloud can be considered as a repository-based open library of functional relations. The typical user journey on the platform is given on the {ref}`fig:workflow_scheme`.
 
 :::{figure} workflow_scheme.png
-:label: fig:4
-:width: 400px
+:label: fig:workflow_scheme
+:width: 350px
 SplineCloud workflow scheme
 :::
 
-The platform’s data structure is given in {ref}`fig:5`. This data structure models a hierarchical system for managing technical datasets within user-owned repositories. Each repository contains multiple data files, which serve as sources for datasets; these in turn produce subsets of structured (clean) data used for construction of data relations. Relationships between columns in subsets are captured as data relation objects, which can be fitted with spline curves to model underlying patterns.
+The platform’s data structure is given in {ref}`fig:class_diagram`. This data structure models a hierarchical system for managing technical datasets within user-owned repositories. Each repository contains multiple data files, which serve as sources for datasets; these in turn produce subsets of structured (clean) data used for construction of data relations. Relationships between columns in subsets are captured as data relation objects, which can be fitted with spline curves to model underlying patterns.
 
 :::{figure} class_diagram.png
-:label: fig:5
+:label: fig:class_diagram
+:width: 800px
 SplineCloud objects relationship diagram
 :::
 
 Spline fitting tool, a main instrument of the platform, is built on top of SciPy’s interpolate module and provides a visual interface to three main spline fitting methods described in section 3: Interpolating Splines, Smoothing Splines, Least Squares Splines.
 
-:::{figure} smoothing_spline_SC.png
-:width: 600px
-:label: fig:6
-SplineCloud's interactive spline fitting tool
-:::
-
-The web interface of the spline fitting tool ({ref}`fig:6`) is powered by [D3.js](https://d3js.org/) and JavaScript build of [verb-nurbs](https://github.com/pboyer/verb) - an open-source library for NURBS modeling. The RESTful API and an open-source Python client library ([splinecloud-scipy](https://github.com/nomad-vagabond/splinecloud-scipy)) allow the reuse of data objects and spline curves in code. In this way, SplineCloud addresses the key limitations of traditional spline fitting workflows by offering the following core capabilities:
+The web interface of the spline fitting tool is powered by [D3.js](https://d3js.org/) and JavaScript build of [verb-nurbs](https://github.com/pboyer/verb) - an open-source library for NURBS modeling. The RESTful API and an open-source Python client library ([splinecloud-scipy](https://github.com/nomad-vagabond/splinecloud-scipy)) allow the reuse of data objects and spline curves in code. In this way, SplineCloud addresses the key limitations of traditional spline fitting workflows by offering the following core capabilities:
 
  - **Interactive Spline Modeling**. Users can construct spline curves using an interface to the SciPy’s interpolate module. Fine-tuning mode enables manual transformation of knot vectors and control points with real-time feedback to control smoothness, continuity, and fitting tolerance of the curves.
 
@@ -188,23 +199,7 @@ The web interface of the spline fitting tool ({ref}`fig:6`) is powered by [D3.js
 
 ## Interactive Spline Fitting Workflow
 
-As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:7`) and extrapolation ({ref}`fig:8`) issues.
-
-::::{grid} 1 1 2 2
-
-:::{figure} overfitting.png
-:height: 250px
-:label: fig:7
-Typical overfitting issue - RMSE is minimal, but interpolation error is high
-:::
-
-:::{figure} bad_extrapolation.png
-:height: 250px
-:label: fig:8
-Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval
-:::
-
-::::
+As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:overfitting`) and extrapolation ({ref}`fig:bad_extrapolation`) issues.
 
 Interactivity in the curve fitting process significantly simplifies and accelerates model construction. It enables users to identify overfitting, discontinuities, or extrapolation issues early, and make real-time adjustments. This is especially valuable in parametric spline fitting, where fine-tuning the curve shape and knot configuration often requires iterative, visual feedback.
 
@@ -215,30 +210,24 @@ In this section, we will take a look at how these capabilities are implemented i
 
 ### Data Preparation
 
-According to the workflow presented in {ref}`fig:4`, data has to be uploaded to the existing or new repository. It can be a text file, a spreadsheet, or an image containing a plot. In a case of text data, a default dataset will be created automatically and a subset of data can be identified by adjusting data loading options ({ref}`fig:9`). Datasets will be created automatically for each sheet in the spreadsheet source file. An interactive plot digitizer tool will be displayed for the image file to help extract data ranges from plots ({ref}`fig:10`).
+According to the workflow presented in {ref}`fig:workflow_scheme`, data has to be uploaded to the existing or new repository. It can be a text file, a spreadsheet, or an image containing a plot. In a case of text data, a default dataset will be created automatically and a subset of data can be identified by adjusting data loading options. Datasets will be created automatically for each sheet in the spreadsheet source file. An interactive plot digitizer tool will be displayed for the image file to help extract data ranges from plots ({ref}`fig:splinecloud_datasets`).
 
-:::{figure} tabular_dataset.png
-:width: 750px
-:label: fig:9
-Tabular dataset
-:::
-
-:::{figure} plot_didgitizer.png
-:width: 700px
-:label: fig:10
-Dataset and subsets extracted from an image
+:::{figure} splinecloud_datasets.png
+:width: 650px
+:label: fig:splinecloud_datasets
+SplineCloud datasets extracted from tabular data file and plots
 :::
 
 After identifying clean subsets, a default Data Relation object will be created after entering a curve fitting mode (either by clicking Fit Curve button or going into the Relations tab).
 
 ### Automatic Spline Fitting
 
-By adding a first curve, an initial spline fit is generated using one of the SciPy fitting methods. The default choice is often a smoothing spline (implemented via `UnivariateSpline`), where a smoothing factor controls the trade-off between fidelity to the data and smoothness of the resulting curve ({ref}`fig:11`). 
+By adding a first curve, an initial spline fit is generated using one of the SciPy fitting methods. The default choice is often a smoothing spline (implemented via `UnivariateSpline`), where a smoothing factor controls the trade-off between fidelity to the data and smoothness of the resulting curve ({ref}`fig:splinecloud-curve-fitting`). 
 
-:::{figure} smoothing_parameter.png
-:width: 700px
-:label: fig:11
-Dataset and subsets extracted from an image
+:::{figure} splinecloud-curve-fitting.png
+:width: 550px
+:label: fig:splinecloud-curve-fitting
+Selecting a spline fitting method
 :::
 
 The important difference here is that SplineCloud’s smoothness parameter is a relative parameter used to calculate the actual SciPy’s (FITPACK’s) smoothing factor $s$ defined as:
@@ -254,21 +243,9 @@ The transition from the relative smoothing parameter to  the SciPy’s s-factor 
 
 This approach improves user experience - instead of guessing each time the correct absolute value (which depends on the scale of data points), it is more intuitive to use relative values. By selecting several values for one data range the developed feedback instructs the more appropriate values for another curve of a different scale.
 
-:::{figure} least_squares_method.png
-:width: 700px
-:label: fig:12
-Dataset and subsets extracted from an image
-:::
+Least Squares fitting is implemented as an alternative to smoothing splines and is built on top of SciPy’s `LSQUnivariateSpline` class. For simplicity, a uniform knot vector is constructed and passed to the class constructor using the number of internal knots from the user input. However, there is an option to adjust the knot vector interactively and use least squares fitting for the given non-uniform knot vector. This capability is implemented in the fine-tuning mode (see Section 5.3).
 
-Least Squares fitting is implemented as an alternative to smoothing splines and is built on top of SciPy’s `LSQUnivariateSpline` class. For simplicity, a uniform knot vector is constructed and passed to the `LSQUnivariateSpline` constructor using the number of internal knots from the user input ({ref}`fig:12`). However, there is an option to adjust the knot vector interactively and use least squares fitting for the given non-uniform knot vector. This capability is implemented in the fine-tuning mode (see Section 5.3).
-
-:::{figure} interpolating_spline.png
-:width: 700px
-:label: fig:13
-Dataset and subsets extracted from an image
-:::
-
-For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines ({ref}`fig:13`). This method is also implemented by using SciPy’s `UnivariateSpline` with hardcoded $s=0$.
+For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines. This method is also implemented by using SciPy’s `UnivariateSpline` with hardcoded $s=0$.
 
 ### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector
 
@@ -284,11 +261,11 @@ S^{(y)}(t) &= \sum_{i=0}^{n} c_{i}^{(y)} B_{i,k}(t)
 \end{aligned}
 ```
 
-In simpler words, parametric spline curves can be defined by two distinct univariate spline functions, $x(t)$ and $y(t)$, sharing a common knot vector ({ref}`fig:14`). This representation allows for the modeling of complex geometries, including loops, sharp transitions, and high-curvature regions.
+In simpler words, parametric spline curves can be defined by two distinct univariate spline functions, $x(t)$ and $y(t)$, sharing a common knot vector ({ref}`fig:spline_curve_as_two_functions`). This representation allows for the modeling of complex geometries, including loops, sharp transitions, and high-curvature regions.
 
 :::{figure} spline_curve_as_two_functions.png
-:width: 600px
-:label: fig:14
+:width: 500px
+:label: fig:spline_curve_as_two_functions
 Parametric spline curve as a combination of two spline functions.  *Black triangles along parameter axes represent knots. Control polygons and control points are displayed in green color*
 :::
 
@@ -304,14 +281,14 @@ However, it is important to mention that for parametric spline curves coordinate
 
 Due to the local support property of B-spline basis functions, moving a single control point influences the shape of the curve only within a limited range of the parameter domain, providing localized editing capabilities.
 
-In the Fine-Tune mode, users can interactively drag control points to reshape the curve ({ref}`fig:15`). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. For example:
+In the Fine-Tune mode, users can interactively drag control points to reshape the curve ({ref}`fig:fine-tune-control-points`). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. For example:
  - Control points clustered more closely create tighter curvature and sharper transitions;
  - Distant spacing results in smoother, flatter regions of the curve;
  - Assigning higher weights to a control point increases its pull on the curve, bringing it closer to the point's location, converting the B-Spline to NURBS.
 
 :::{figure} fine-tune-control-points.png
-:width: 700px
-:label: fig:15
+:width: 600px
+:label: fig:fine-tune-control-points
 Adjusting control points of the spline curve in the Fine-Tune mode
 :::
 
@@ -327,11 +304,11 @@ The location and multiplicity of knots affect several critical properties of the
 
 - **Flexibility**. Adding more knots increases the local adaptability of the spline, allowing it to better follow variations in the data. In the B-spline formulation, the number of basis functions, and therefore the number of control points $n$ is always $T−k−1$, where $k$ is the spline degree, $T$ is the number of knots. As more interior knots are introduced, the number of basis functions increases, providing additional degrees of freedom for shaping the curve while maintaining the required continuity.
 
-In traditional fitting methods such as `LSQUnivariateSpline` in SciPy, the knot vector must be either provided manually or generated heuristically, which typically requires some kind of iterative approach in finding an optimal (usually quasi-optimal) knot vector. SplineCloud removes this complexity by exposing the knot vector as an editable structure in the Fine-Tune mode, where users can manipulate knots directly and observe their impact on the spline in real time ({ref}`fig:16`).
+In traditional fitting methods such as `LSQUnivariateSpline` in SciPy, the knot vector must be either provided manually or generated heuristically, which typically requires some kind of iterative approach in finding an optimal (usually quasi-optimal) knot vector. SplineCloud removes this complexity by exposing the knot vector as an editable structure in the Fine-Tune mode, where users can manipulate knots directly and observe their impact on the spline in real time ({ref}`fig:fine-tuning-knot-vector`).
 
 :::{figure} fine-tuning-knot-vector.png
-:width: 700px
-:label: fig:16
+:width: 600px
+:label: fig:fine-tuning-knot-vector
 Adjusting knot vector of the spline curve in the Fine-Tune mode
 :::
 
@@ -432,27 +409,29 @@ RMSE (Manual): 0.22361
 
 #### Estimating Fitting Errors in SplineCloud
 
-In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit accuracy` hint updates after each curve modification ({ref}`fig:17`). This allows tracking the change of fitting error while applying different fitting parameters, comparing different models and fine-tuned curves against automatically fitted models.
+In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit accuracy` hint updates after each curve modification ({ref}`fig:fit_accuracy`). This allows tracking the change of fitting error while applying different fitting parameters, comparing different models and fine-tuned curves against automatically fitted models.
+
+::::{grid} 1 1 2 2
 
 :::{figure} fit_accuracy.png
-:width: 700px
-:label: fig:17
+:label: fig:fit_accuracy
 RMSE estimation in SplineCloud
 :::
 
-For complex curve shapes, especially those with closed loops ({ref}`fig:18`), the error between a data point and the curve should not be measured only along the vertical axis. Instead, the true discrepancy is the Euclidean distance from each data point to the nearest point on the curve. This approach is implemented in SplineCloud to estimate ftting errors of parametric curves that approximate data in non-ascending order via $RMSE_{sd}$ - root mean squared shortest distance error:
+:::{figure} fit_accuracy_parametric.png
+:label: fig:fit_accuracy_parametric
+RMSE valuated via shortst distance residuals
+:::
+
+::::
+
+For complex curve shapes, especially those with closed loops ({ref}`fig:fit_accuracy_parametric`), the error between a data point and the curve should not be measured only along the vertical axis. Instead, the true discrepancy is the Euclidean distance from each data point to the nearest point on the curve. This approach is implemented in SplineCloud to estimate ftting errors of parametric curves that approximate data in non-ascending order via $RMSE_{sd}$ - root mean squared shortest distance error:
 
 ```{math}
 \text{RMSE}_{sd} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (w_i d_i)^2 }
 ```
 
 where $d_i$ is the shortest distance between a data point and spline curve. Evaluation of this distance is implemented via SciPy's `optimize` module, and particularly a [direct](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.direct.html) method is used as the one of the most stable and fastest global optimization algorithms (based on the in-house analyses).
-
-:::{figure} fit_accuracy_parametric.png
-:width: 700px
-:label: fig:18
-RMSE valuated via shortst distance residuals
-:::
 
 
 ## Reusability and Reproducibility with SplineCloud
@@ -502,11 +481,11 @@ from splinecloud_scipy import load_spline
 spline = load_spline(<curve_uid>)
 ```
 
-The curve UID can be taken from SplineCloud - an API link dropdown on the Curves toolbox ({ref}`fig:19`)
+The curve UID can be taken from SplineCloud - an API link dropdown on the Curves toolbox ({ref}`fig:curve_api_link`)
 
 :::{figure} curve_api_link.png
-:width: 700px
-:label: fig:19
+:width: 600px
+:label: fig:curve_api_link
 Accessing curve API link
 :::
 
@@ -520,7 +499,7 @@ Y = spline.eval(X, extrapolate=True)
 
 :::{figure} evaluated_curve.png
 :width: 400px
-:label: fig:20
+:label: fig:evaluated_curve
 Reproduced spline curve
 :::
 
@@ -537,12 +516,12 @@ from splinecloud_scipy import load_subset
 columns, table = load_subset(<subset_uid>)
 ```
 
-Similarly to spline curve, the subset UID can be taken from SplineCloud - an API link dropdown on the table header for tabular data, and from the Subsets toolbox for data extracted from plots ({ref}`fig:21`)
+Similarly to spline curve, the subset UID can be taken from SplineCloud - an API link dropdown on the table header for tabular data, and from the Subsets toolbox for data extracted from plots ({ref}`fig:subset_api_link`)
 
 
 :::{figure} subset_api_link.png
 :width: 700px
-:label: fig:21
+:label: fig:subset_api_link
 Accessing subset API link
 :::
 
