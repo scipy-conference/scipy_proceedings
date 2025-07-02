@@ -48,7 +48,7 @@ Several demonstrations of such pipelines already exist in Tesseract ecosystem:
 
 - **[4D-Variational data assimilation for a chaotic dynamical system](https://github.com/pasteurlabs/tesseract-core/blob/7106bf39ae1e07f092e821741aea2b6a02a6d4f4/demo/data-assimilation-4dvar/demo.ipynb).** Using Tesseract Core, we hand-implement a data assimilation pipeline for a chaotic dynamical system. It exploits auto-differentiation capabilities of JAX to backpropagate gradients through the data generating process for efficient solution of the 4D-Variational problem.
 
-- **[Gradient-based optimization of a differentiable CFD simulation](https://github.com/pasteurlabs/tesseract-jax/blob/a2f5a91e7d6f0381723dc99a47f5f08d3e76475b/examples/cfd/demo.ipynb).** Uses Tesseract-JAX to automatically register Tesseracts as JAX-compatible functions, and performs optimization over them. Tesseract-JAX is an extension that makes Tesseracts look and feel like regular JAX primitives, and makes them jittable, differentiable, and composable. @fig:tesseract-pipeline illustrates the process of working with Tesseract-JAX, and more information can be found in the [project's documentation](https://docs.pasteurlabs.ai/projects/tesseract-jax/latest/).
+- **[Gradient-based optimization of a differentiable CFD simulation](https://github.com/pasteurlabs/tesseract-jax/blob/a2f5a91e7d6f0381723dc99a47f5f08d3e76475b/examples/cfd/demo.ipynb).** Uses Tesseract-JAX to automatically register Tesseracts as JAX-compatible functions, and performs optimization over them. Tesseract-JAX is an extension that makes Tesseracts look and feel like regular JAX primitives, and makes them jittable[^footnote-jit], differentiable, and composable. @fig:tesseract-pipeline illustrates the process of working with Tesseract-JAX, and more information can be found in the [project's documentation](https://docs.pasteurlabs.ai/projects/tesseract-jax/latest/).
 
 :::{figure} tesseract-scipy-2.png
 :label: fig:tesseract-pipeline
@@ -111,3 +111,5 @@ These directions aim to establish Tesseract as a foundation for scalable, intero
 
 Tesseract projects are born out of realisation that modern autodiff tooling is limited in its scaling capabilities. Tesseracts demonstrate how this gap can be addressed by elevating the concept of gradient tracking to a system level. We hope the community will recognise this need, and leverage Tesseract concept to improve efficiency and scalability of scientific data pipelines.
 
+
+[^footnote-jit]: In this context, with jittable we just mean that JAX does not throw errors when Tesseracts are wrapped with `jax.jit`, but it must be pointed out that no actual compilation takes place. This is still useful, as it allows one to mix and match Tesseract computations with local ones and just wrap the whole pipeline with `jax.jit`, instead of having to split that into parts that are jittable and parts which are not.
