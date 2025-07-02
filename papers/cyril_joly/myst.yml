@@ -26,11 +26,11 @@ project:
   - rule: doi-exists
     severity: ignore
     keys:
-    - Atr03
-    - terradesert
-    - jupyter
-    - sklearn1
-    - sklearn2
+    - vink2023polars
+    - harris2020array
+    - mitchell2011pulp
+    - cplex2009v12
+    - gurobi2023gurobi
   exports:
   - id: pdf
     format: typst
