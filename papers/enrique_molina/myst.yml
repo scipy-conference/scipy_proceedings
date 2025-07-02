@@ -57,6 +57,7 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - colab
   exports:
     - id: pdf
       format: typst
