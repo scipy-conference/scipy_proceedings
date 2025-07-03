@@ -154,7 +154,7 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
 
 ## Python Package  
 
-A Python implementation of the algorithm is available on PyPI (<https://pypi.org/project/optimask/>) and conda-forge (<https://anaconda.org/conda-forge/optimask>) and can be used as follows: 
+A Python implementation of the algorithm is available on PyPI (<https://pypi.org/project/optimask/>) and conda-forge (<https://anaconda.org/conda-forge/optimask>) and can be used as follows:
 
 ```python
 import numpy as np
@@ -169,6 +169,7 @@ len(rows), len(cols)  # (38031, 48)
 ```  
 
 This computation takes approximately ~200ms on an average personal computer.
+The implementation provides the sorted indices of the rows and columns to retain, ensuring that the relative order of the elements is preserved.
 The library uses Numba [@lam2015numba] for speed, and accepts inputs several popular input formats, including NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars].
 
 ## Conclusion
