@@ -154,7 +154,7 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
 
 ## Python Package  
 
-The algorithm is available on PyPI and conda-forge and can be used as follows:  
+A Python implementation of the algorithm is available on PyPI (<https://pypi.org/project/optimask/>) and conda-forge (<https://anaconda.org/conda-forge/optimask>) and can be used as follows: 
 
 ```python  
 from optimask.utils import generate_mar  
