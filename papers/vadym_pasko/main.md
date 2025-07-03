@@ -9,9 +9,9 @@ abstract: |
 
 ## Introduction
 
-The adoption of FAIR (Findable, Accessible, Interoperable, Reusable) data principles has fundamentally transformed research practices across scientific disciplines. Initially designed to enhance research data management and increase transparency, these principles now extend to a broad range of digital scientific artifacts, including computational models, source code, 3D models, and other digital objects. Widespread adoption of FAIR principles fosters improved reproducibility and facilitates the integration and extension of scientific results. However, not all digital objects achieve the same level of FAIRness, and many platforms lack support for the diverse range of data formats and objects used in science and engineering.
+The adoption of FAIR data principles [@doi:10.1038/sdata.2016.18] has fundamentally transformed research practices across scientific disciplines. Initially designed to enhance research data management and increase transparency, these principles now extend to a broad range of digital scientific artifacts, including computational models, source code, 3D models, and other digital objects. Widespread adoption of FAIR principles fosters improved reproducibility and facilitates the integration and extension of scientific results. However, not all digital objects achieve the same level of FAIRness, and many platforms lack support for the diverse range of data formats and objects used in science and engineering.
 
-This paper focuses on enhancing reusability—and thereby reproducibility—in the context of regression modeling, a technique used to mathematically describe the relationship between dependent and independent variables. This process, commonly known as curve fitting, is widely employed in data science, engineering, and scientific computing, particularly for processing experimental data and extracting interpretable models for further analysis. Of particular practical interest is spline fitting, which effectively models complex empirical relationships without explicit underlying mathematical laws. A formal overview of splines and spline fitting is provided in Sections 2 and 3.
+This paper focuses on enhancing reusability — and thereby reproducibility — in the context of regression modeling, a technique used to mathematically describe the relationship between dependent and independent variables. This process, commonly known as curve fitting, is widely employed in data science, engineering, and scientific computing, particularly for processing experimental data and extracting interpretable models for further analysis. Of particular practical interest is spline fitting, which effectively models complex empirical relationships without explicit underlying mathematical laws. A formal overview of splines and spline fitting is provided in Sections 2 and 3.
 
 SciPy’s `interpolate` module offers extensive functionality for constructing splines, from simple interpolating curves to advanced smoothing splines and parametric representations. Its spline fitting methods provide robust algorithms widely used to model complex, noisy, or multidimensional data dependencies. Nonetheless, the capabilities of splines cannot be fully leveraged through purely programmatic interfaces. In contrast, modern graphical modeling software with interactive spline manipulation affords a level of control and intuitive adjustment not achievable by traditional automatic fitting methods. This, together with a problem of reusability of obtained models, their accessibility, and interoperability, leaves a way for thorough considerations towards alternative approaches to the curve fitting process. 
 
@@ -54,18 +54,7 @@ In {ref}`cox-de-boor` possible divisions by zero are resolved by the convention 
 
 ### Applications and Benefits of Parametric Splines
 
-Parametric splines are widely used in computer graphics, computer-aided desig (CAD), and more general geometric modeling, where the goal is to design and manipulate accurate and smooth curves and surfaces in two or three dimensions. Their unique properties provide the following advantages:
-
-- **Geometric Flexibility**. Since parametric curves are not constrained to be functions in the $y = f(x)$ form, they can represent vertical segments, loops, cusps, and other geometries that a function cannot.
-
-- **Smooth Multi-dimensional Representation**. By treating each coordinate as an independent spline, parametric curves offer uniform control over the curve shape in all spatial directions.
-
-- **Local Control**. In representations such as B-splines or NURBS, moving one control point affects only a portion of the curve, enabling precise local edits without changing the global shape.
-
-- **Uniform Parameterization**. The parameter $t$ typically varies over a fixed interval $[t_0, t_n]$, which makes operations like subdivision, evaluation, and rendering more efficient and robust.
-
-These properties make parametric splines ideal for applications in: 3D modeling and animation, font and character design, surface generation (via tensor product surfaces), and industrial design (automotive, aerospace, etc.).
-
+Parametric splines are widely used in computer graphics, computer-aided desig (CAD), and more general geometric modeling, where the goal is to design and manipulate accurate and smooth curves and surfaces in two or three dimensions. Their unique properties allow for high shape flexibility, local control over curve shape and its continuity. These properties make parametric splines ideal for applications in graphical design and computer-aided engineering.
 
 An intuitive visual explanation of splines, different forms of their representation and unique properties is given in the video by Freya Holmér [@holmer-continuity-of-splines].
 
@@ -74,36 +63,27 @@ Despite their geometric advantages, parametric splines are rarely used in statis
 ## Spline Fitting With SciPy
 
 SciPy provides a robust and flexible set of spline fitting tools for both **interpolation** and **approximation** through the `scipy.interpolate` module.
-
 In term of univariate fitting, SciPy supports several spline fitting methods, including:
 
-**Interpolating splines** - exact fit to the data {ref}`fig:scipy-spline-fitting` (a).
-
-This constructs a spline $S(x)$ such that:
+**Interpolating splines** ({ref}`fig:scipy-spline-fitting` a) - exact fit to the data. This constructs a spline $S(x)$ such that:
 
 ```{math}
 S(x_i) = y_i \quad \text{for all } i
 ```
 and ensures continuity of first and second derivatives ($C^2$ continuity for cubic splines).
 
+**Smoothing splines** ({ref}`fig:scipy-spline-fitting` b) - approximate fit with smoothness penalty. The smoothing spline minimizes the penalized least-squares objective:
 
-**Smoothing splines** - approximate fit with smoothness penalty {ref}`fig:scipy-spline-fitting` (b).
-
-The smoothing spline minimizes the penalized least-squares objective:
 ```{math}
 \min_S \left\{ \sum_{i=1}^n \left( y_i - S(x_i) \right)^2 + \lambda \int_a^b \left( S''(x) \right)^2 dx \right\}
 ```
 where $\lambda$ is a regularization parameter related to s.
 
-**Least squares splines** - approximate fit with squared residual minimization penalty {ref}`fig:scipy-spline-fitting` (c). 
-
-LSQ spline is constructed to minimize the sum of squared residuals:
+**Least squares splines** ({ref}`fig:scipy-spline-fitting` c) - approximate fit with squared residual minimization penalty:
 
 ```{math}
 \min_S \sum_{i=1}^n \left( y_i - S(x_i) \right)^2
 ```
-
-This method is useful when knot positions reflect known features or transitions in the data. It can also be used in a pair with custom algorithms that select the best knot position solving optimization problem to minimize the sum of residuals or another objective function that reflects a measure of the fit quality.
 
 **Parametric splines**. Used to fit looped curve, isolines, or 3D curves.
 
@@ -157,7 +137,7 @@ The philosophy behind the platform is in representing data relations in the form
 
 :::{figure} workflow_scheme.png
 :label: fig:workflow_scheme
-:width: 350px
+:width: 400px
 SplineCloud workflow scheme
 :::
 
@@ -165,7 +145,6 @@ The platform’s data structure is given in {ref}`fig:class_diagram`. This data 
 
 :::{figure} class_diagram.png
 :label: fig:class_diagram
-:width: 800px
 SplineCloud objects relationship diagram
 :::
 
@@ -309,38 +288,21 @@ Uniformly spaced knot vectors typically produce curves with more predictable and
 
 ### Fitting Errors
 
-Comparison of the different fitted models requires a well-defined error metric that quantifies the discrepancy between the predicted and actual data. The fitting accuracy estimators tell how closely the curve approximates the given data. Out of many different metrics it is worth to mention the most common.
-
-
-**Mean Absolute Error (MAE)**
-
-The Mean Absolute Error (MAE) is used to evaluate the accuracy of a fitted model by measuring the average magnitude of the errors between predicted and observed values. It is defined as:
+Comparison of the different fitted models requires a well-defined error metric that quantifies the discrepancy between the predicted and actual data.  Out of many different metrics it is worth to mention the most common: Mean Absolute Error (MAE), Mean Squared Error (MSE), Root Mean Squared Error (RMSE).
 
 ```{math}
 \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - S(x_i) \right|
 ```
 
-where $y_i$​ are the actual data values, $S(x_i)$​ are the corresponding predicted values from the curve, $n$ is the total number of data points.
-
-MAE provides an intuitive measure of model performance: it tells how far, on average, the predictions are from the actual observations.  Unlike squared error estimators, MAE is less sensitive to large individual errors (outliers), making it a useful complementary metric for assessing fit quality, especially when robustness is important.
-
-**Mean Squared Error (MSE)**
-
-The mean squared error measures the average of the squared differences between observed values $y_i$​ and corresponding predicted values $S(x_i)$. It is defined as:
-
 ```{math}
 \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2
 ```
 
-This metric penalizes larger deviations more heavily, making it sensitive to outliers.
-
-**Root Mean Squared Error (RMSE)**
-
-The root mean squared error is the square root of the MSE and provides an error measure in the same units as the data:
-
 ```{math}
 \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2}
 ```
+where $y_i$​ are the actual data values, $S(x_i)$​ are the corresponding predicted values from the curve, $n$ is the total number of data points.
+
 
 #### Estimating Fitting Errors in SciPy
 
@@ -417,22 +379,20 @@ where $d_i$ is the shortest distance between a data point and spline curve. Eval
 
 ## Reusability and Reproducibility with SplineCloud
 
-**Reusability** and reproducibility are closely related concepts in scientific research, both essential for ensuring that data-driven results can be reliably verified, extended, and applied across different contexts and by independent researchers.
-Reusability refers to the capacity of data, models, or computational results to be used beyond their original context, either by the same researcher at a later time or by others pursuing related work. For scientific outputs (data, code, models, etc.) to be reusable, they must be well-documented, accessible in a standardized format, and independent of specific software or environments. In the context of regression models, reusability implies that the model can be extracted, stored, and later reintegrated into different analytical workflows, ideally without the need to rerun the original fitting procedure or reaccess the raw data.
+Reusability and reproducibility are closely related concepts in scientific research, both essential for ensuring that data-driven results can be reliably verified, extended, and applied across different contexts and by independent researchers.
 
-**Reproducibility** denotes the ability of independent researchers to replicate the results of a study using the same input data, methods, and conditions. In computational science, this typically involves the complete transparency of the modeling pipeline, including data preprocessing, parameter tuning, and evaluation metrics. For regression models, reproducibility requires that all aspects of the fitting process are recorded and available so that the same model output can be regenerated deterministically.
+**Reusability** refers to the capacity of data, models, or computational results to be used beyond their original context, either by the same researcher at a later time or by others pursuing related work.
+
+**Reproducibility** denotes the ability of independent researchers to replicate the results of a study using the same input data, methods, and conditions. In computational science, this typically involves the complete transparency of the modeling pipeline, including data preprocessing, parameter tuning, and evaluation metrics.
 
 In conventional curve fitting workflows implemented via a programmable interface, fitted models are often tightly coupled with the original data and code used to generate them. While the source data and fitting scripts may be published, the resulting models themselves are rarely stored or shared as independently reusable objects. As a result, anyone wishing to replicate or build upon a previous curve fitting problem must re-execute the entire fitting process, including selecting the method, tuning parameters, and validating the fit.
 
-This leads to three key limitations:
+This leads to the following limitations:
  - **Redundant effort**. Researchers across teams or domains often repeat fitting procedures for the same datasets.
  - **Poor reproducibility**. Deviations in fitting parameters and algorithms across various programming environments may cause discrepancies in reproduced models and, as a consequence, discrepancies in modelling results.
  - **Poor interoperability**. There is no widely adopted convention for serializing and sharing regression models across tools and environments. As a result, transferring models typically requires manual extraction of fitting parameters or curve construction data (like spline parameters). This process is error-prone and demands significant additional effort to reuse models accurately in code.
 
-By extending the principles of FAIR data (Findable, Accessible, Interoperable, Reusable) to regression models, it becomes clear that it is not sufficient to publish raw data and code alone - intermediate or final research outputs such as fitted models (or response surace models) should also be accessible in standardized, referenceable form. Without this, the fitted model becomes an opaque byproduct rather than a verifiable and citable result.
-
-For example, in engineering, a response surface models are widely used to approximate simulation results or material properties. These models are often used in systems engineering modeling processes, optimizations, or other analyses. If those models are not independently accessible, it becomes difficult to trace their provenance, assess their quality, or adapt them in related studies.
-
+By extending the principles of FAIR data to regression models, it becomes clear that it is not sufficient to publish raw data and code alone - intermediate or final research outputs such as fitted models (or response surace models) should also be accessible in standardized, referenceable form.
 
 ### Improving Reusability and Reproducibility of Spline Models
 
