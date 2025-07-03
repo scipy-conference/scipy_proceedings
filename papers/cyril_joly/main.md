@@ -39,8 +39,8 @@ When handling missing values in a matrix, we must decide whether to remove affec
 The optimal choice depends on the matrix's dimensions and NaN distribution:  
 
 1. **Single NaN Case**:  
-   - In tall matrices (rows > columns), removing the problematic row typically preserves more data.  
-   - In wide matrices (columns > rows), removing the affected column is usually preferable.  
+   - In tall matrices (`rows > columns`), removing the problematic row typically preserves more data.  
+   - In wide matrices (`columns > rows`), removing the affected column is usually preferable.  
 
    :::{figure} figures/at_hand_two  
    :alt: Data to process  
