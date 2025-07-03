@@ -158,14 +158,14 @@ A Python implementation of the algorithm is available on PyPI (<https://pypi.org
 
 ```python
 import numpy as np
-from optimask.utils import generate_mar  
-from optimask import OptiMask  
+from optimask import OptiMask
+from optimask.utils import generate_mar
 
-# Generate a Missing At Random matrix with 2% NaN values  
-x = generate_mar(m=100_000, n=1_000, ratio=0.02)  
-rows, cols = OptiMask().solve(x)  
-np.isnan(x[rows, cols]).any()  
-# False  
+# Generate a Missing At Random matrix with 2% NaN values
+x = generate_mar(m=100_000, n=1_000, ratio=0.02)
+rows, cols = OptiMask().solve(x)
+np.isnan(x[np.ix_(rows, cols)]).any()  # False
+len(rows), len(cols)  # (38031, 48)
 ```  
 
 This computation takes approximately ~200ms on an average personal computer.
