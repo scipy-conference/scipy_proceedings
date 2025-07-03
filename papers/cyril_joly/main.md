@@ -89,7 +89,7 @@ However, its primary disadvantage is computational cost: for an $m \times n$ mat
 
 ## Algorithm  
 
-OptiMask is a heuristic designed to provide high-quality (and sometimes optimal) solutions to the problem.
+OptiMask is a heuristic designed to provide near-approximations of the optimal solutions to the problem.
 The core idea is to compute row and column permutations such that the search for the largest non-contiguous NaN-free submatrix reduces to finding a contiguous one.  
 
 ### Core Approach  
