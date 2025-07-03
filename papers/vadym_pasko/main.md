@@ -89,7 +89,7 @@ where $\lambda$ is a regularization parameter related to s.
 
 :::{figure}
 :label: fig:scipy-spline-fitting
-SciPy spline fitting.
+Spline fitting results with a use of SciPy's `interpolate` methods.
 <table>
 <tr>
 <td style="text-align: center;"><img src="interp_spline_fitting_scipy.png" height="220px"/>(a) Simple interpolaing cubic spline.</td>
@@ -101,18 +101,7 @@ SciPy spline fitting.
 
 ### Pain Points of Pure Programmable Spline Fitting
 
-SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting ({ref}`fig:overfitting_extrapolation` a) and extrapolation control ({ref}`fig:overfitting_extrapolation` b) lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
-
-:::{figure}
-:label: fig:overfitting_extrapolation
-Simple interpolaing cubic spline.
-<table>
-<tr>
-<td style="text-align: center;"><img src="overfitting.png" height="230px"/>(a) Typical overfitting issue - RMSE is minimal, but interpolation error is high.</td>
-<td style="text-align: center;"><img src="bad_extrapolation.png" height="230px"/>(b) Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval.</td>
-</tr>
-</table>
-:::
+SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting and extrapolation control lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
 
 The mathematical formulation of B-splines—especially parametric B-splines and NURBS—enables fine control over curve shapes through manipulation of control points and knot vectors. While this functionality is widely leveraged in computer graphics and CAD applications, it is not supported in SciPy.
 
@@ -129,11 +118,11 @@ These needs motivated the development of SplineCloud, a platform that extends Sc
 
 ## Introducing SplineCloud
 
-SplineCloud is an open platform for formalized knowledge exchange (free to use for everyone). It is a cloud solution designed to make technical data, like results of simulations, tests and modeling more accessible and reusable in computer code. The platform has integrated tools that allow formalizing and organizing data in topical repositories. Its architecture and instruments help reduce the routine overhead of data collection, processing, and model reconstruction in code.
+SplineCloud is an open platform for formalized knowledge exchange. It is designed to make technical data, like results of simulations, tests and modeling more accessible and reusable in computer code. Its architecture and instruments help reduce the routine overhead of data collection, processing, and model reconstruction in code.
 
-SplineCloud’s main features are: plot digitizer, advanced spline fitting tool, open API, and client libraries for Python and MATLAB (support of other languages is planned for future implementation). It addresses all four problems of FAIR data: findability, accessibility, interoperability, and reusability for a specific type of data: experimental, simulation, and statistical results, which can have either tabular or graphical form. 
+SplineCloud is free to use for everyone, publishing open data, however its source code is closed (as of now). Repositories with limited access is a part of the platform monetization model. All tools are free to use without limitaions (excpt repository size, that as of now is limited to 3 Gb). The platform's main features are: plot digitizer, advanced spline fitting tool, open API, and client libraries for Python and MATLAB (libraries for other languages are planned for future implementation).
 
-The philosophy behind the platform is in representing data relations in the form of spline models, which can be reused in code to omit tedious and repetitive operations on data extraction and fitting, which usually complicate mathematical modeling processes. In this way, SplineCloud can be considered as a repository-based open library of functional relations. The typical user journey on the platform is given on the {ref}`fig:workflow_scheme`.
+The philosophy behind the platform is in representing data relations in the form of spline models, which can be reused in code. In this way, SplineCloud can be considered as a repository-based open library of functional relations. The typical user journey on the platform is given on the {ref}`fig:workflow_scheme`.
 
 :::{figure} workflow_scheme.png
 :label: fig:workflow_scheme
@@ -141,7 +130,7 @@ The philosophy behind the platform is in representing data relations in the form
 SplineCloud workflow scheme
 :::
 
-The platform’s data structure is given in {ref}`fig:class_diagram`. This data structure models a hierarchical system for managing technical datasets within user-owned repositories. Each repository contains multiple data files, which serve as sources for datasets; these in turn produce subsets of structured (clean) data used for construction of data relations. Relationships between columns in subsets are captured as data relation objects, which can be fitted with spline curves to model underlying patterns.
+The platform’s data structure is given in {ref}`fig:class_diagram`. Each repository may contains multiple data files (uploaded by authors), which serve as sources for datasets; authors and other users can define subsets (clean data) related to datasets. Subsets are used for construction of data relations, that capture relationships between columns in subsets. Parametric spline curves are used to model these relations.
 
 :::{figure} class_diagram.png
 :label: fig:class_diagram
@@ -152,24 +141,13 @@ Spline fitting tool, a main instrument of the platform, is built on top of SciPy
 
 The web interface of the spline fitting tool is powered by [D3.js](https://d3js.org/) and JavaScript build of [verb-nurbs](https://github.com/pboyer/verb) - an open-source library for NURBS modeling. The RESTful API and an open-source Python client library ([splinecloud-scipy](https://github.com/nomad-vagabond/splinecloud-scipy)) allow the reuse of data objects and spline curves in code. In this way, SplineCloud addresses the key limitations of traditional spline fitting workflows by offering the following core capabilities:
 
- - **Interactive Spline Modeling**. Users can construct spline curves using an interface to the SciPy’s interpolate module. Fine-tuning mode enables manual transformation of knot vectors and control points with real-time feedback to control smoothness, continuity, and fitting tolerance of the curves.
-
- - **Reusability and Interoperability of Models**. Fitted models can be accessed programmatically through the API or client libraries, eliminating the need to rerun fitting scripts for each new use case.
-
- - **Model Traceability**. The platform tracks authorship, data provenance, and dependencies between objects — helping preserve the context and credibility of published models.
-
- - **Collaborative Sharing**. Open models and datasets are discoverable and citable (via unique object UID). This supports collaborative workflows and reduces duplication of effort by reusing existing clean subsets and regression models.
+ - **Interactive Spline Modeling**;
+ - **Reusability and Interoperability of Models**;
+ - **Model Traceability**.
 
 ## Interactive Spline Fitting Workflow
 
-As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:overfitting_extrapolation` a) and extrapolation ({ref}`fig:overfitting_extrapolation` b) issues.
-
-Interactivity in the curve fitting process significantly simplifies and accelerates model construction. It enables users to identify overfitting, discontinuities, or extrapolation issues early, and make real-time adjustments. This is especially valuable in parametric spline fitting, where fine-tuning the curve shape and knot configuration often requires iterative, visual feedback.
-
-Despite this, many existing interactive curve fitting applications are either commercial and closed-source, lack support for parametric splines, or does not provide the ability to export and reuse models in code. This limits reproducibility and integration with modern data workflows.
-
-In this section, we will take a look at how these capabilities are implemented in SplineCloud and how the interactive curve fitting approach can be complementary to the programmatic data processing workflows.
-
+Interactivity in the curve fitting process significantly simplifies and accelerates model construction. It enables users to identify overfitting, discontinuities, or extrapolation issues early, and make real-time adjustments. This is especially valuable in parametric spline fitting, where fine-tuning the curve shape and knot configuration often requires iterative, visual feedback. In this section, we will take a look at how these capabilities are implemented in SplineCloud and how the interactive curve fitting approach can be complementary to the programmatic data processing workflows.
 
 ### Data Preparation
 
@@ -185,12 +163,12 @@ After identifying clean subsets, a default Data Relation object will be created 
 
 ### Automatic Spline Fitting
 
-By adding a first curve, an initial spline fit is generated using one of the SciPy fitting methods. The default choice is often a smoothing spline (implemented via `UnivariateSpline`), where a smoothing factor controls the trade-off between fidelity to the data and smoothness of the resulting curve ({ref}`fig:splinecloud-curve-fitting`). 
+By adding a first curve, an initial spline fit is generated using a smoothing splines method ({ref}`fig:splinecloud-curve-fitting`). 
 
 :::{figure} splinecloud-curve-fitting.png
-:width: 550px
+:width: 600px
 :label: fig:splinecloud-curve-fitting
-Selecting a spline fitting method
+Spline fitting tool
 :::
 
 The important difference here is that SplineCloud’s smoothness parameter is a relative parameter used to calculate the actual SciPy’s (FITPACK’s) smoothing factor $s$ defined as:
@@ -200,15 +178,15 @@ The important difference here is that SplineCloud’s smoothness parameter is a 
 ```
 
 The transition from the relative smoothing parameter to  the SciPy’s s-factor is implemented in three steps:
-1) build the least squares fit with the minimal possible number of knots (zero internal knots);
-2) calculate the actual smoothing factor $s_{max}$ for this fit using formula (8);
-3) multiply the relative smoothing parameter by this value: $s_{\text{scipy}} = s_{\text{max}} \cdot s_{\text{rel}}$
+1) building the least squares fit with the minimal possible number of knots (zero internal knots);
+2) calculating the actual smoothing factor $s_{max}$ for this fit using formula (8);
+3) multiplying the relative smoothing parameter by this value: $s_{\text{scipy}} = s_{\text{max}} \cdot s_{\text{rel}}$
 
 This approach improves user experience - instead of guessing each time the correct absolute value (which depends on the scale of data points), it is more intuitive to use relative values. By selecting several values for one data range the developed feedback instructs the more appropriate values for another curve of a different scale.
 
 Least Squares fitting is implemented as an alternative to smoothing splines and is built on top of SciPy’s `LSQUnivariateSpline` class. For simplicity, a uniform knot vector is constructed and passed to the class constructor using the number of internal knots from the user input. However, there is an option to adjust the knot vector interactively and use least squares fitting for the given non-uniform knot vector. This capability is implemented in the fine-tuning mode (see Section 5.3).
 
-For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines. This method is also implemented by using SciPy’s `UnivariateSpline` with hardcoded $s=0$.
+SplineCloud also supports interpolating splines, implemented via hardcoded $s=0$ in `UnivariateSpline` class constructor.
 
 ### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector
 
@@ -244,10 +222,7 @@ However, it is important to mention that for parametric spline curves coordinate
 
 Due to the local support property of B-spline basis functions, moving a single control point influences the shape of the curve only within a limited range of the parameter domain, providing localized editing capabilities.
 
-In the Fine-Tune mode, users can interactively drag control points to reshape the curve ({ref}`fig:fine-tune-control-points`). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. For example:
- - Control points clustered more closely create tighter curvature and sharper transitions;
- - Distant spacing results in smoother, flatter regions of the curve;
- - Assigning higher weights to a control point increases its pull on the curve, bringing it closer to the point's location, converting the B-Spline to NURBS.
+In the Fine-Tune mode, users can interactively drag control points to reshape the curve ({ref}`fig:fine-tune-control-points`). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. Assigning higher weights to a control point increases its pull on the curve, bringing it closer to the point's location, converting the B-Spline to NURBS.
 
 :::{figure} fine-tune-control-points.png
 :width: 600px
@@ -259,9 +234,7 @@ This form of user interaction provides precise control over the spline's shape a
 
 #### Dynamic Knot Vector Adjustment
 
-The knot vector plays a central role in determining the structure and properties of the resulting spline curve. Given a spline of degree k, the knot vector $\{ t_0, t_1, \ldots, t_{m} \}$ is a non-decreasing sequence of real numbers, typically ranging from 0 to 1 (but not necessarily). Each interval $[t_i, t_{i+k+1})$ corresponds to a region over which a particular B-spline basis function $B_{i,k}(t)$ has support, meaning that each basis function is non-zero over at most $k+1$ knot spans.
-
-The location and multiplicity of knots affect several critical properties of the resulting spline:
+The knot vector plays a central role in determining the structure and properties of the resulting spline curve. Given a spline of degree k, the knot vector $\{ t_0, t_1, \ldots, t_{m} \}$ is a non-decreasing sequence of real numbers, typically ranging from 0 to 1 (but not necessarily). Each interval $[t_i, t_{i+k+1})$ corresponds to a region over which a particular B-spline basis function $B_{i,k}(t)$ has support, meaning that each basis function is non-zero over at most $k+1$ knot spans. The location and multiplicity of knots affect several critical properties of the resulting spline:
 
 - **Continuity**. The number of continuous derivatives at a knot $t_i$ is $k−m_i$​, where $m_i$ is the multiplicity of that knot. Repeated knots reduce the smoothness of the spline at that knot location. Specifically, if a knot has multiplicity $m$, then the continuity of the spline at that knot is reduced to $C^{k - m}$, where $k$ is the degree of the spline. That is, the spline remains $(k - m)$-times continuously differentiable, and all higher derivatives are discontinuous.
 
@@ -275,16 +248,9 @@ In traditional fitting methods such as `LSQUnivariateSpline` in SciPy, the knot 
 Adjusting knot vector of the spline curve in the Fine-Tune mode
 :::
 
-In particular, SplineCloud enables users to:
- - Insert new knots to increase the flexibility of the spline in localized regions.
- - Remove knots to enforce greater smoothness and reduce overfitting.
- - Relocate knots to shift the spatial distribution of curve flexibility, optimizing the placement of inflection points or areas of curvature.
- - Add and remove duplicate knots to control continuity and introduce geometric features such as cusps, kinks, or plateaus.
+In particular, SplineCloud enables users to insert and remove knots, relocate internal knots, add and remove duplicate knots to control continuity and introduce geometric features such as cusps, kinks, or plateaus.
 
-This level of control is critical for modeling non-uniform data, such as step functions, relations with discontinuities, or empirical data sampled for distinct regimes or environments. However, compared to adjusting control points, manipulating the knot vector is often less intuitive.
-
-Uniformly spaced knot vectors typically produce curves with more predictable and symmetric behavior, which is easier to interpret visually and adjust interactively. In contrast, non-uniform vectors can help in fitting local irregularities with higher precision. For example, a knot vector with tightly spaced knots in a transition zone and widely spaced knots elsewhere can fit complex behavior without sacrificing smoothness in the remaining domain.
-
+Uniformly spaced knot vectors typically produce curves with more predictable and symmetric behavior, which is easier to interpret visually and adjust interactively. In contrast, non-uniform vectors can help in fitting local irregularities with higher precision.
 
 ### Fitting Errors
 
@@ -403,13 +369,14 @@ SplineCloud addresses these challenges by decoupling the spline model from the f
 
 Once users create spline models interactively, they become instantly accessible to the broad public, including anonymous users. Reusability and reproducibility are ensured by both the open REST API and client libraries. 
 
-An official Python client, `splinecloud-scipy`, is based on SciPy and allows for fetching spline data using the spline UIDs and recreating the model in code. Reusable spline model has critical methods for evaluating spline in the form $y=f(x),$ loading underlying data, and assessing fit accuracy (using one of the methods, listed in Section 5.4). This enables a new level of interoperability: a spline curve fitted by one researcher can be imported and evaluated in another researcher’s codebase, without accessing the original data and refitting it.
+An official Python client, `splinecloud-scipy`, is based on SciPy and allows for fetching spline data using the spline UIDs and recreating the model in code. Reusable spline model has critical methods for evaluating spline in the form $y=f(x),$ loading underlying data, and assessing fit accuracy (using one of the methods, listed in Section 5.4). This enables a new level of interoperability: a spline curve fitted by one researcher can be discovered on the platform, imported and evaluated in another researcher’s codebase, without downloading and importing the original data and refitting it.
 
 Let’s first take a look at the client library basic usage scenarios and then discuss the library structure and how splines a recreated and evaluated. 
 
-#### Installation and basic usage
 
-The `splinecloud-scipy` library is lightweight and can be installed from the Python Package Index:
+#### Python client
+
+`splinecloud-scipy` is a library, that can be installed from the Python Package Index:
 
 ```bash
 pip install splinecloud-scipy
@@ -422,15 +389,7 @@ from splinecloud_scipy import load_spline
 spline = load_spline(<curve_uid>)
 ```
 
-The curve UID can be taken from SplineCloud - an API link dropdown on the Curves toolbox ({ref}`fig:curve_api_link`)
-
-:::{figure} curve_api_link.png
-:width: 600px
-:label: fig:curve_api_link
-Accessing curve API link
-:::
-
-`load_spline()` returns an instance of the `ParametricUnivariateSpline` class, which allows for evaluating the spline as a function of $x$. The structure and usage of this class a given below in section 6.1.2.
+The curve UID can be taken from SplineCloud - an API link dropdown on the Curves toolbox ({ref}`fig:api-links` a). `load_spline()` returns an instance of the `ParametricUnivariateSpline` class, which allows for evaluating the spline as a function of $x$. 
 
 ```python
 import numpy as np
@@ -438,51 +397,37 @@ X = np.linspace(0, 20, 100)
 Y = spline.eval(X, extrapolate=True)
 ```
 
-:::{figure} evaluated_curve.png
-:width: 400px
-:label: fig:evaluated_curve
-Reproduced spline curve
-:::
-
 The spline object allows for loading underlying data:
 
 ```python
 columns, table = spline.load_data()
 ```
 
-The same result can be achieved by explicitly loading a corresponding subset via its UID:
+The same result can be achieved by explicitly loading a corresponding subset via its UID. Similarly to spline curve, the subset UID can be taken from SplineCloud API dropdowns ({ref}`fig:api-links` b). Both methods return a tuple with a list of column names and a NumPy array with subset data.
 
 ```python
 from splinecloud_scipy import load_subset
 columns, table = load_subset(<subset_uid>)
 ```
 
-Similarly to spline curve, the subset UID can be taken from SplineCloud - an API link dropdown on the table header for tabular data, and from the Subsets toolbox for data extracted from plots ({ref}`fig:subset_api_link`)
-
-
-:::{figure} subset_api_link.png
-:width: 700px
-:label: fig:subset_api_link
-Accessing subset API link
+:::{figure}
+:label: fig:api-links
+Accessing curve and subset API links.
+<table>
+<tr>
+<td style="text-align: center;"><img src="curve_api_link.png" height="230px"/>(a) Accessing curve API link.</td>
+<td style="text-align: center;"><img src="subset_api_link.png" height="230px"/>(b) Accessing subset API link.</td>
+</tr>
+</table>
 :::
 
-Both methods return a tuple with a list of column names and a NumPy array with subset data.
-
 More information on the library usage can be found in the library code [repository](https://github.com/nomad-vagabond/splinecloud-scipy) README section.
-
-
-#### The structure of the client library for Python
 
 The `splinecloud-scipy` library is built around two core classes: `ParametricUnivariateSpline` - for the construction of the parametric splines from the curve data (degree, control points, and knot vector) and `PPolyInvertible` - a helper class defined to enable solving the spline curve as a function of $x$ values. Both classes extend SciPy’s classes, namely `interpolate.UnivariateSpline` and `interpolate.PPoly`.
 
 `ParametricUnivariateSpline` is the main class of the `splinecloud-scipy` client library. Its instance is returned by the `load_spline()` function. It defines a 2D parametric spline curve based on two univariate spline functions — one for the $x(t)$ and one for the $y(t)$ dependencies, that share a common knot vector and spline degree.
 
-Such representation allows reusing properties of `UnivariateSpline` and evaluating the inverse relation $t(x)$ by using a piecewise polynomial representation of the spline function $x(t)$.
-
-Initialization of `ParametricUnivariateSpline` takes a tuple or list of the form: `(t: knots, cx: x-coefficients, cy: y-coefficients, k: degree)`
-
-
-The class instance stores: curve degree, knot vector and its normalized version, coefficients for *x-* and *y-splines*. The `ParametricUnivariateSpline` object is callable - it takes a parameter value and returns the corresponding $x$ and y values by calling internal objects `self.spline_x()` and `self.spline_y()` - instances of SciPy’s `UnivariateSpline` class. This part, however, requires refactoring, since it uses private methods to construct `UnivariateSpline` from knot vector, coefficients, and degree:
+The `ParametricUnivariateSpline` object is callable - it takes a parameter value and returns the corresponding $x$ and $y$ values by calling internal objects `self.spline_x()` and `self.spline_y()` - instances of SciPy’s `UnivariateSpline` class. This part, however, requires refactoring, since it uses private methods to construct `UnivariateSpline` from knot vector, coefficients, and degree:
 
 ```python
  self.spline_x = si.UnivariateSpline._from_tck(tck_x)
@@ -490,8 +435,7 @@ The class instance stores: curve degree, knot vector and its normalized version,
 ```
 There is a plan to use the `BSpline` class instead.
 
-
-Evaluation of the spline in the form $y(x)$ is implemented in the `eval()` method. Inside this method, a piecewise polynomial representation of spline functions is used to find the polynomial for the interval containing the *x-value*, then the polynomial is solved for the *t-value*. This parameter value is then used in the spline function $y(t)$ to find the desired *y-value*. 
+Evaluation of the spline in the form $y(x)$ is implemented in the `eval()` method. This method creates piecewise polynomial representation of spline functions x(t) and y(t) using custom `PPolyInvertible` class. The methods of this helper class allow for finding the interval containing the *x-value*, then the polynomial is solved for the *t-value*. This parameter value is then used in the spline function $y(t)$ to find the desired *y-value*. 
 
 Polynomial representations are constructed inside the private method `_build_ppolyrep()`, called on the `ParametricUnivariateSpline` initialization.
 
@@ -500,8 +444,6 @@ Polynomial representations are constructed inside the private method `_build_ppo
       self.spline_x.ppoly = PPolyInvertible.from_splinefunc(self.spline_x, extrapolate=True)
       self.spline_y.ppoly = PPolyInvertible.from_splinefunc(self.spline_y, extrapolate=True)
 ```
-
-These representations are based on the custom class `PPolyInvertible` that extends SciPy’s `PPoly` class. Its main purpose is to find the corresponding interval for the *x-value* and solve for the *t-value* on this interval. This logic is implemented inside `evalinv()` method called from the `ParametricUnivariateSpline.eval()` method for the *x-spline* function. Inside `evalinv()`, a *t-value* is found using SciPy’s [optimize.brentq](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html) method - a root-finding algorithm that finds a zero of a continuous function within a specified interval.
 
 The `ParametricUnivariateSpline` class also provides a method for evaluating fit accuracy using one of the three methods discussed in Section 5.4.
 
@@ -514,25 +456,13 @@ The client library introduces basic capabilities that allow for fetching, recrea
 Nevertheless, the implemented approach is covered with tests, supports extrapolation, and shows good performance (no reportable benchmarking was performed).
 
 
-### Implications for Reusability and Reproducibility of Spline Models
+### Implications and limitations of SplineCloud
 
-By transforming spline models and datasets into shareable, code-native objects, and by introducing a client library for Python, SplineCloud eliminates the need to re-run fitting scripts or re-import raw data. From a practical point of view, this means:
- - **Immediate reuse**. Models can be invoked like native functions in mathematical modeling, numerical analysis, optimization, or visualization processes.
- - **Traceable origin**. Each model retains provenance information. Spline objects are associated with subsets, datasets, source data files, and authors. This provides transparency and enables attribution.
- - **Consistent integration and referencing**.  Anyone can retrieve the exact same spline instance and integrate it into their code, leaving the data fitting process outside the main code. Whether in Jupyter notebooks, software libraries, command-line tools, or a scientific article, the same model can be referenced by its unique identifier.
+The interactive, collaborative and reusable curve fitting enabled by SplineCloud minimizes redundant work and enhances the reliability and continuity of model-based research outputs. However, the platform currently does not support other classes of regression models such as polynomial fits, rational functions, exponential models, or machine learning-based regressors. This limitation is not technical in nature but a deliberate, temporary design decision, rooted in both theoretical and practical considerations.
 
-SplineCloud enables the transition of curve fitting from a script-bound operation to a persistent, shareable, and reproducible modeling activity. This approach minimizes redundant work and enhances the reliability and continuity of model-based research outputs.
-The platform and its client library for Python implement principles of FAIR data and reproducible workflows by allowing fitted models to be handled as independent, discoverable entities that can be consistently integrated, reused, and exchanged across various models, analyses, and software packages.
+Spline models, particularly B-splines and their parametric forms, possess a standardized and well-defined mathematical representation. This makes them ideally suited for platform-independent storage, manipulation, and code-level reuse. In contrast, arbitrary analytical or statistical regression models lack the generalization inherent to splines and the support of all possible modeling techniqus is an overwhelming challenge, at least for the current stage of the project. 
 
-### Limitations
-
-While SplineCloud offers a substantial improvement in the usability, reusability, and reproducibility of spline-based regression models, the platform currently does not support other classes of regression models such as polynomial fits, rational functions, exponential models, or machine learning-based regressors. This limitation is not technical in nature but a deliberate, temporary design decision, rooted in both theoretical and practical considerations.
-
-Spline models, particularly B-splines and their parametric forms, possess a standardized and well-defined mathematical representation. This makes them ideally suited for platform-independent storage, manipulation, and code-level reuse. Their local support, smoothness properties, and flexibility in representing arbitrary empirical relations enable consistent behavior across computational environments and programming languages. These features align with the core objectives of SplineCloud — namely, enabling transparent and reproducible modeling workflows.
-
-In contrast, extending support to arbitrary analytical or statistical regression models would require substantial generalization of the platform’s core architecture. Such models often rely on complex formulations and domain-specific assumptions that are difficult to standardize or serialize reliably. Moreover, handling custom models would require the development of thicker client libraries to support reusability. This, along with significant effort for the platform frontend and backend modifications, constrains their adoption by SplineCloud (at least until proved necessary).
-
-From a pragmatic perspective, spline-based models are especially effective for representing empirical data derived from physical experiments, simulations, and measurements — scenarios where an accurate and differentiable fit is often more valuable than an interpretable analytical expression. SplineCloud is thus particularly suited for constructing surrogate models, processing and interpolating results of numerical simulations (like wind tunnel tests), and reusing such models in downstream analysis, control, or optimization tasks.
+From a technical point of view, spline-based models are especially effective for representing empirical data derived from physical experiments, simulations, and measurements — scenarios where an accurate and differentiable fit is often more valuable than an interpretable analytical expression. SplineCloud is thus particularly suited for constructing surrogate models, processing and interpolating results of numerical simulations (like wind tunnel tests), and reusing such models in downstream analysis, control, or optimization tasks.
 
 However, users requiring analytical model validation (e.g., fitting custom functions to verify physical laws or derive closed-form expressions) will find SplineCloud insufficient for their needs. In such cases, traditional tools, including SciPy, remain more appropriate.
 
