@@ -77,7 +77,7 @@ SciPy provides a robust and flexible set of spline fitting tools for both **inte
 
 In term of univariate fitting, SciPy supports several spline fitting methods, including:
 
-**Interpolating splines** - exact fit to the data {ref}`fig:1`.
+**Interpolating splines** - exact fit to the data {ref}`fig:scipy-spline-fitting` (a).
 
 This constructs a spline $S(x)$ such that:
 
@@ -87,7 +87,7 @@ S(x_i) = y_i \quad \text{for all } i
 and ensures continuity of first and second derivatives ($C^2$ continuity for cubic splines).
 
 
-**Smoothing splines** - approximate fit with smoothness penalty {ref}`fig:2`.
+**Smoothing splines** - approximate fit with smoothness penalty {ref}`fig:scipy-spline-fitting` (b).
 
 The smoothing spline minimizes the penalized least-squares objective:
 ```{math}
@@ -95,7 +95,7 @@ The smoothing spline minimizes the penalized least-squares objective:
 ```
 where $\lambda$ is a regularization parameter related to s.
 
-**Least squares splines** - approximate fit with squared residual minimization penalty {ref}`fig:3`. 
+**Least squares splines** - approximate fit with squared residual minimization penalty {ref}`fig:scipy-spline-fitting` (c). 
 
 LSQ spline is constructed to minimize the sum of squared residuals:
 
@@ -107,48 +107,32 @@ This method is useful when knot positions reflect known features or transitions 
 
 **Parametric splines**. Used to fit looped curve, isolines, or 3D curves.
 
-::::{grid} 1 1 3 3
-
-:::{figure} interp_spline_fitting_scipy.png
-:label: fig:1
-:height: 220px
-Simple interpolaing cubic spline.
+:::{figure}
+:label: fig:scipy-spline-fitting
+SciPy spline fitting.
+<table>
+<tr>
+<td style="text-align: center;"><img src="interp_spline_fitting_scipy.png" height="220px"/>(a) Simple interpolaing cubic spline.</td>
+<td style="text-align: center;"><img src="smooth_spline_fitting_scipy.png" height="220px"/>(b) Smoothing cubic spline.</td>
+<td style="text-align: center;"><img src="lsq_spline_fitting_scipy.png" height="220px"/>(c) Least-Squares cubic spline.</td>
+</tr>
+</table>
 :::
-
-:::{figure} smooth_spline_fitting_scipy.png
-:label: fig:2
-:height: 220px
-Smoothing cubic spline.
-:::
-
-:::{figure} lsq_spline_fitting_scipy.png
-:label: fig:3
-:height: 220px
-Least-Squares cubic spline.
-:::
-
-::::
-
 
 ### Pain Points of Pure Programmable Spline Fitting
 
-SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting ({ref}`fig:overfitting`) and extrapolation control ({ref}`fig:bad_extrapolation`) lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
+SciPy provides a programmatic interface to robust spline fitting methods suitable for a variety of tasks, particularly when working with complex experimental or statistical data. However, despite offering multiple fitting methods and adjustable parameters, selecting an appropriate combination can be challenging. As noted in [@pasko-blog-post-2015], issues such as overfitting ({ref}`fig:overfitting_extrapolation` a) and extrapolation control ({ref}`fig:overfitting_extrapolation` b) lack straightforward solutions and often require multiple iterations, either with visual inspection or advanced scripting.
 
-::::{grid} 1 1 2 2
-
-:::{figure} overfitting.png
-:height: 230px
-:label: fig:overfitting
-Typical overfitting issue - RMSE is minimal, but interpolation error is high
+:::{figure}
+:label: fig:overfitting_extrapolation
+Simple interpolaing cubic spline.
+<table>
+<tr>
+<td style="text-align: center;"><img src="overfitting.png" height="230px"/>(a) Typical overfitting issue - RMSE is minimal, but interpolation error is high.</td>
+<td style="text-align: center;"><img src="bad_extrapolation.png" height="230px"/>(b) Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval.</td>
+</tr>
+</table>
 :::
-
-:::{figure} bad_extrapolation.png
-:height: 230px
-:label: fig:bad_extrapolation
-Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval
-:::
-
-::::
 
 The mathematical formulation of B-splines—especially parametric B-splines and NURBS—enables fine control over curve shapes through manipulation of control points and knot vectors. While this functionality is widely leveraged in computer graphics and CAD applications, it is not supported in SciPy.
 
@@ -199,7 +183,7 @@ The web interface of the spline fitting tool is powered by [D3.js](https://d3js.
 
 ## Interactive Spline Fitting Workflow
 
-As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:overfitting`) and extrapolation ({ref}`fig:bad_extrapolation`) issues.
+As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:overfitting_extrapolation` a) and extrapolation ({ref}`fig:overfitting_extrapolation` b) issues.
 
 Interactivity in the curve fitting process significantly simplifies and accelerates model construction. It enables users to identify overfitting, discontinuities, or extrapolation issues early, and make real-time adjustments. This is especially valuable in parametric spline fitting, where fine-tuning the curve shape and knot configuration often requires iterative, visual feedback.
 
@@ -409,23 +393,20 @@ RMSE (Manual): 0.22361
 
 #### Estimating Fitting Errors in SplineCloud
 
-In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit accuracy` hint updates after each curve modification ({ref}`fig:fit_accuracy`). This allows tracking the change of fitting error while applying different fitting parameters, comparing different models and fine-tuned curves against automatically fitted models.
+In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit accuracy` hint updates after each curve modification ({ref}`fig:fit_accuracy` a, b). This allows tracking the change of fitting error while applying different fitting parameters, comparing different models and fine-tuned curves against automatically fitted models.
 
-::::{grid} 1 1 2 2
-
-:::{figure} fit_accuracy.png
+:::{figure}
 :label: fig:fit_accuracy
-RMSE estimation in SplineCloud
+Simple interpolaing cubic spline.
+<table>
+<tr>
+<td style="text-align: center;"><img src="fit_accuracy.png" height="230px"/>(a) RMSE estimation in SplineCloud.</td>
+<td style="text-align: center;"><img src="fit_accuracy_parametric.png" height="230px"/>(b) RMSE valuated via shortst distance residuals.</td>
+</tr>
+</table>
 :::
 
-:::{figure} fit_accuracy_parametric.png
-:label: fig:fit_accuracy_parametric
-RMSE valuated via shortst distance residuals
-:::
-
-::::
-
-For complex curve shapes, especially those with closed loops ({ref}`fig:fit_accuracy_parametric`), the error between a data point and the curve should not be measured only along the vertical axis. Instead, the true discrepancy is the Euclidean distance from each data point to the nearest point on the curve. This approach is implemented in SplineCloud to estimate ftting errors of parametric curves that approximate data in non-ascending order via $RMSE_{sd}$ - root mean squared shortest distance error:
+For complex curve shapes, especially those with closed loops ({ref}`fig:fit_accuracy` b), the error between a data point and the curve should not be measured only along the vertical axis. Instead, the true discrepancy is the Euclidean distance from each data point to the nearest point on the curve. This approach is implemented in SplineCloud to estimate ftting errors of parametric curves that approximate data in non-ascending order via $RMSE_{sd}$ - root mean squared shortest distance error:
 
 ```{math}
 \text{RMSE}_{sd} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (w_i d_i)^2 }
