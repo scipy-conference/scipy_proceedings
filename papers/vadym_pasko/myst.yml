@@ -13,15 +13,16 @@ project:
       email: vadym@splinecloud.com
       orcid: 0009-0001-7739-2204
       affiliations:
-        - Kyiv Aviation Institute
         - SplineCloud
+        - Kyiv Aviation Institute
   keywords:
     - curve fitting
     - spline fitting
+    - FAIR
     - empyrical relations
     - data analysis
-    - reusable models
-    - FAIR
+    - regression models
+    
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
@@ -30,11 +31,9 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - lyche-morken
+        - pasko-blog-post-2015
+        - holmer-continuity-of-splines
   exports:
     - id: pdf
       format: typst
