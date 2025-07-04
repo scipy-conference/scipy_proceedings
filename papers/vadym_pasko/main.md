@@ -504,6 +504,23 @@ Spline models fitted to experimental data on the step-drawdown test data.
 </table>
 :::
 
+### Reconstructing empyrical relations for wing span efficiency factor
+
+When designing an aerial vehicle, preliminary estimates of wing lift and drag forces are essential. These calculations are often based on empirical data obtained from wind tunnel experiments or numerical simulations. Such data is typically processed and generalized across different combinations of relative design parameters. One example is the estimation of the [induced darag coefficient](https://www.grc.nasa.gov/www/k-12/VirtualAero/BottleRocket/airplane/induced.html) for tapered wings. Amongst various approaches [@oswald-factor], empirical relationships for the span efficiency parameter $δ$, used in induced drag calculations, were proposed by [@mc-cormick] in graphical form.
+
+:::{figure}
+:label: fig:oswald-factor-curves
+Spline models fitted to empirical relations of the span efficiency parameter $δ$.
+<table>
+<tr>
+<td style="text-align: center;"><img src="wingspan_factor_relations.png" height="230px"/>(a) Auto fitted spline models.</td>
+<td style="text-align: center;"><img src="wingspan_efficiency_surface.png" height="230px"/>(b) Fine-tuned spline model.</td>
+</tr>
+</table>
+:::
+
+Using SplineCloud, data from such plots can be digitized and spline models created — see {ref}`fig:oswald-factor-curves` (a). These models can then be reused programmatically to construct a response surface model using linear interpolation between curves (see {ref}`fig:oswald-factor-curves` b). This enables direct evaluation of the $δ$ parameter and ultimately the induced drag coefficient for different wing planforms. The resulting models are shareable and reusable, enabling other researchers to avoid repeating the same steps and improving reproducibility.
+
 
 ## Summary and Future Directions (TODO)
 

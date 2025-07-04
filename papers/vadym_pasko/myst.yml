@@ -34,6 +34,8 @@ project:
         - lyche-morken
         - pasko-blog-post-2015
         - holmer-continuity-of-splines
+        - mc-cormick
+        - oswald-factor
   exports:
     - id: pdf
       format: typst
