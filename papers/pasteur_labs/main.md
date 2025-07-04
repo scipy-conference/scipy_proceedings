@@ -112,4 +112,9 @@ These directions aim to establish Tesseract as a foundation for scalable, intero
 Tesseract projects are born out of realisation that modern autodiff tooling is limited in its scaling capabilities. Tesseracts demonstrate how this gap can be addressed by elevating the concept of gradient tracking to a system level. We hope the community will recognise this need, and leverage Tesseract concept to improve efficiency and scalability of scientific data pipelines.
 
 
+## Further reading
+- Documentation [here](https://docs.pasteurlabs.ai/projects/tesseract-core/latest/).
+- [tesseract-core](https://github.com/pasteurlabs/tesseract-core) repository on Github for the code. 
+- [Discourse](https://si-tesseract.discourse.group/) discussion forums; in particular, the [showcase section](https://si-tesseract.discourse.group/c/showcase/11).
+
 [^footnote-jit]: In this context, with jittable we just mean that JAX does not throw errors when Tesseracts are wrapped with `jax.jit`, but it must be pointed out that no actual compilation takes place. This is still useful, as it allows one to mix and match Tesseract computations with local ones and just wrap the whole pipeline with `jax.jit`, instead of having to split that into parts that are jittable and parts which are not.
