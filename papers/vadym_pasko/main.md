@@ -469,7 +469,40 @@ However, users requiring analytical model validation (e.g., fitting custom funct
 Despite this limitation, SplineCloud introduces the novel capability of building shareable repositories of empirical relations. The catalogs of such relations can serve as reference data and model sources in experimental domains such as fluid dynamics, structural mechanics, or thermodynamics, where precomputed curves and data-driven models are frequently reused. For example, aerodynamic design processes often rely on aggregated wind tunnel results; SplineCloud provides an infrastructure to formalize, store, and exchange such data in a reproducible and programmatically accessible way.
 
 
-## Use Cases and Applications (TODO)
+## Use Cases and Applications (WIP)
+
+Among the many possible applications of SplineCloud, three main types of scenarios are especially worth highlighting:
+
+1) situations where interactive curve fitting improves accuracy and/or reduces time spent on analysis;
+2) cases where making modeling results accessible and reusable enhances research reproducibility;
+3) workflows where empirical data is structured as a library of functions for use in automation.
+
+While the examples presented here are related to engineering, the described patterns and approaches can be applied in other domains.
+
+### Modeling step-drawdown water pumping from boreholes
+
+Step-drawdown tests are performed to determine the optimal pumping rate for water boreholes by measuring how water levels respond to progressively increasing discharge rates. Traditional analysis methods assume that relationships between pumping rates and water level drop should be predictable and follow simple mathematical models, but experimental data often reveals complex non-linear behaviors that standard equations cannot capture. When conventional models fail to fit the observed data, researchers tend to develop more sophisticated mathematical frameworks. 
+
+In [@doi:10.4314/wsa.v27i3.4978] authors developed a model for predicting drawdown behavior in step-drawdown tests based on experimental data from South Africa's Karoo formations. This model can be useful in determining sustainable pumping rates for boreholes. While relying on physical properties of fractured rock aquifers, flow dimensions, and elasticity parameters, the model still exhibits underfitting for some pumping rates. Spline fitting can produce significantly better accuracy and does not require a complex analytical background if practical use is the purpose. 
+
+:::{figure} van_tonder_et_al_model.png
+:width: 500px
+:label: fig:van_tonder_et_al_model
+Empyrical model fitted to experimental data on the step-drawdown test performed on Borehole UP16 [@doi:10.4314/wsa.v27i3.4978]
+:::
+
+Nevertheless, in the case of relations with clearly expressed step changes, fitting becomes a challenge, even for splines. All automatic spline fitting models exhibit overfitting or underfitting ({ref}`fig:van_tonder_et_al_model`). This is where SplineCloud's Fine-Tuning mode can be helpful. By introducing breaks in continuity in the mode change points, and manipulating control points and knot vector, it is possible to manually fit a curve to the complex stepped data ({ref}`fig:step-drawdown-discharge-fitting`).
+
+:::{figure}
+:label: fig:step-drawdown-discharge-fitting
+Spline models fitted to experimental data on the step-drawdown test data.
+<table>
+<tr>
+<td style="text-align: center;"><img src="van_tonder_spline_auto_fitting.png" height="230px"/>(a) Auto fitted spline models.</td>
+<td style="text-align: center;"><img src="van_tonder_spline_fine_tuned.png" height="230px"/>(b) Fine-tuned spline model.</td>
+</tr>
+</table>
+:::
 
 
 ## Summary and Future Directions (TODO)
