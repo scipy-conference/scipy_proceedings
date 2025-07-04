@@ -1,8 +1,8 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: Imprecise uncertainty management with uncertain number to facilitate trustful computations
+title: Imprecise uncertainty management with uncertain number to facilitate trustworthy computations
 abstract: |
-  Scientific computations of complex systems are surrounded by various forms of uncertainty,  requiring appropriate treatment to maximise the credibility of computations. Empirical information for characterisation is often scarce, vague, conflicting and imprecise, requiring expressive uncertainty structures for trustful representation, aggregation and propagation. Current practices may present two undesired extremes in terms of uncertainty management, with one endpoint being the total ignorance of uncertainty, whereas the other suggesting overconfidence through the introduction of assumptions unjustified by empirical information. In response to these challenges, this paper demonstrates the framework of `uncertain number`, a unified construct for expressive uncertainty representation at different imprecision. This framework, embedded in the library `PyUncertainNumber`, allows for a closed computation ecosystem whereby trustful computations can be conducted intrusively or non-intrusively, hence accomplishing faithful management of uncertainty throughout the computational pipeline. This paper presents an overview of the main capabilities and features of `PyUncertainNumber`.
+  Scientific computations of complex systems are surrounded by various forms of uncertainty,  requiring appropriate treatment to maximise the credibility of computations. Empirical information for characterisation is often scarce, vague, conflicting and imprecise, requiring expressive uncertainty structures for trustful representation, aggregation and propagation. Current practices may present two undesired extremes in terms of uncertainty management, with one endpoint being the total ignorance of uncertainty, whereas the other suggesting overconfidence through the introduction of assumptions unjustified by empirical information. In response to these challenges, this paper demonstrates the framework of `uncertain number`, a unified construct for expressive uncertainty representation at different imprecision. This framework, embedded in the library `pyuncertainnumber`, allows for a closed computation ecosystem whereby trustful computations can be conducted intrusively or non-intrusively, hence accomplishing faithful management of uncertainty throughout the computational pipeline. This paper presents an overview of the main capabilities and features of `pyuncertainnumber`.
 ---
 
 ## Introduction
@@ -19,11 +19,11 @@ The lack of uncertainty quantification presented in many deterministic numerical
 
 We aim at a faithful management of uncertainty throughout the computational pipeline using `uncertain number`, a unified construct for uncertainty characterisation at different imprecision.
 This paper demonstrates the framework of `uncertain number` which allows for a closed computation ecosystem whereby trustful computations can be conducted in a rigorous manner.
-This paper presents an overview of the main capabilities of the library [PyUncertainNumber](https://pyuncertainnumber.readthedocs.io/en/latest/index.html).
+This paper presents an overview of the main capabilities of the library `pyuncertainnumber`[^footnote-22].
 
 ## Expressive power of uncertain number
 
-When characterising input parameters to a simulation model, while probability distribution has long been used to reflect uncertainty (*variability*[^footnote-1]), there is still uncertainty (*incertitude*[^footnote-2]) about the distribution shape and interdependencies.
+When characterising input parameters to a simulation model, while probability distribution has long been used to reflect uncertainty (*variability*[^footnote-10]), there is still uncertainty (*incertitude*[^footnote-2]) about the distribution shape and interdependencies.
 Empirical information varies in quality and nature, which may be quantitative, qualitative and even linguistically vague. 
 Multiple sources or elicitation could vary in credibility and even be conflicting. 
 Empirical data, if any, may be scarce or imprecise due to the inaccuracy of experimental measurements, or prohibitive cost of collecting data.
@@ -50,7 +50,7 @@ Often there is little empirical information pertaining some parameters of a math
 The bounding approach presents as a natural reflection of the state of epistemic uncertainty, which tightens the bounds with extra empirical information. 
 As shown in @fig:characterisation_constraints, the level of information specifies constraints to accordingly construct the uncertain number, which starts as little as a coarse estimated range, to moment information, further to the knowledge of shape such that uncertainties are pinched to a precise distribution. These bounds are best-possible[^footnote-3] in the sense that they could not be any tighter without excluding CDF satisfying the specified constraints, or without additional information [@ferson2004arithmetic].
 
-Conveniently, `PyUncertainNumber` provides a bespoke constructor to facilitate the faithful characterisation of uncertain quantities based on known information, which includes limits on quantiles, information about summary statistics such as mean, mode or variance, and qualitative information about distribution shape, such as whether it is symmetric or unimodal.
+Conveniently, `pyuncertainnumber` provides a bespoke constructor to facilitate the faithful characterisation of uncertain quantities based on known information, which includes limits on quantiles, information about summary statistics such as mean, mode or variance, and qualitative information about distribution shape, such as whether it is symmetric or unimodal.
 
 
 :::{figure} free_pbox_constraints_diagram.png
@@ -65,7 +65,7 @@ One of the controversial subject in uncertainty analysis is the aggregation of m
 
 `Uncertain number` presents one advantage that it provides a unified structure to enclose the aggregation operation on a set of expert elicitations, whatever the forms they may be, whether a distribution or an interval. 
 @fig:aggregation shows an example of the elicitation from a couple of experts with their credibility shown as probability masses. This explains further the provenance of the constructs in @fig:uc_constructs.
-`PyUncertainNumber` supports several aggregation rules (e.g. envelope, mixture, and intersection, etc) enabling diverse level of information to be pooled stochastically or conservatively. 
+`pyuncertainnumber` supports several aggregation rules (e.g. envelope, mixture, and intersection, etc) enabling diverse level of information to be pooled stochastically or conservatively. 
 
 :::{figure} aggregation_3in_one.png
 :label: fig:aggregation
@@ -142,7 +142,7 @@ Probability bounds anlaysis (PBA) combines both interval analysis and probabilit
 Intuitively, as interval arithmetic enables rigorous calculation for sets of real numbers, PBA accomplish the same for sets of distributions. 
 P-box arithmetic is built upon generalised probability convolutions, which through further extensions cover a wide spectrum of arithmetic operations: unary transformations, binary operations between p-boxes or Dempster-Shafer structures, and general functions composed of a series of base operations. It also covers a wide spectrum of dependency structures which could be fully known (specified copula $C$), partially known (lower bound copula $\underline{C}$), or even unknown ($\text{Fr\'{e}chet}$).
 
-Importantly, we provide a unified interface and implementation through `PyUncertainNumber`, enabling rigorous calculations regardless of the representation of the uncertain variables or their dependency structure. 
+Importantly, we provide a unified interface and implementation through `pyuncertainnumber`, enabling rigorous calculations regardless of the representation of the uncertain variables or their dependency structure. 
 This interface has abstracted out much of the arcane details in terms of conversion, discretisation, condensation, and stacking such that analysts can benefit the consistency and focus more on the effects the calculations.
 
 Notably, the $\text{Fr\'{e}chet}$ bound provides a trustful default when no dependency information is known, in that the resulting bounds rigorously enclose the result no matter what correlation or nonlinear dependency may exist between these variables.
@@ -157,7 +157,7 @@ Equation {ref}`eq:frechet` gives the $\text{Fr\'{e}chet}$ expression for the add
 ```
 
 @fig:pbox_arithmetic displays several common arithmetic examples.
-These arithmetic operations can be performed in the same signature in `PyUncertainNumber` as real number arithmetics in Python via operator overloading. $\text{Fr\'{e}chet}$ are employed as default except the dependency can be otherwise justified.
+These arithmetic operations can be performed in the same signature in `pyuncertainnumber` as real number arithmetics in Python via operator overloading. $\text{Fr\'{e}chet}$ are employed as default except the dependency can be otherwise justified.
 Importantly, now these calculations yield regirous results that are guaranteed to enclose all possible distributions of the output variable so long as the input uncertain number were all sure to enclose their respective distributions.
 
 
@@ -182,7 +182,32 @@ Regarding the propagation methods for different types of uncertainty, various me
 @tbl:uq_method lists the characteristics of many methods.
 Similar to the cases of information constraints for uncertainty characterisation, the more knowledge about the mathematical model, the higher chances of finding an efficient method. 
 Notably, enriched sampling methods such as nested Monte Carlo or interval Monte Carlo allows the outward (rigorous) implementation for a sampling signature consistent with aleatory uncertainty. This demonstrates the universal applicability and compatibility of sampling-based approaches for generic deterministic black-box models in scientific computing.
-`PyUncertainNumber` provides high-level API to these methods and will automatically inspect the appropriateness of the propagating method given the characteristics of the function and uncertainty.
+`pyuncertainnumber` provides high-level API to these methods and will automatically inspect the appropriateness of the propagating method given the characteristics of the function and uncertainty.
+
+
+```{code-block} python
+# constructions of uncertain number
+a = pun.I(2, 3)
+b = pun.normal(4, 1)
+c = pun.uniform([4,5], [9,10])
+
+# high-level propagation API
+p = Propagation(vars=[a,b,c], 
+      func=foo, 
+      method='slicing', 
+      interval_strategy='subinterval'
+)
+
+# heavy-lifting
+t = p.run(n_sam=20, n_sub=2, style='endpoints')
+
+''' func can also be nonintrusive excutable '''
+# non-intrusive applicability
+p = Propagation(vars=[a,b,c], 
+      func=foo, 
+      method='double_monte_carlo', 
+)
+```
 
 
 
@@ -214,7 +239,7 @@ Modern advanced numerical simulations are often computationally expensive,  maki
 
 To account for such uncertainty, a probabilistic take of machine learning brings models that represent parameters in probability distributions (Bayesian neural networks), and models that represent a distribution of function structures (Gaussian Process). On the other hand, an intervalised or distribution-free view employs models that consider interval-valued parameters (Interval Predictor Model). These models have the prospects of efficiently propagating the input uncertainties to fully characterise the tail probability of the QoI for example in the imprecise reliability analysis (will be discussed in [](#imprecise-reliability-analysis).
 
-With many machine learning frameworks available in the Python ecosystem (e.g. Tensorflow, IPM, etc), we provide the algorithms and the interface in `PyUncertainNumber` to extend those models to be combined within our framework to further propagate uncertain numbers for a efficient and comprehensive uncertainty management.
+With many machine learning frameworks available in the Python ecosystem (e.g. Tensorflow, IPM, etc), we provide the algorithms and the interface in `pyuncertainnumber` to extend those models to be combined within our framework to further propagate uncertain numbers for a efficient and comprehensive uncertainty management.
 
 
 ## Risk, reliability, and design optimisation under uncertainty
@@ -229,14 +254,14 @@ Conventionally, in the analysis of a probabilistic safety framework, the probabi
 
 
 ```{math}
-	[\underline{p}_{\scriptsize{f}}, \overline{p}_{\scriptsize{f}}] = \Big [ \sum_{\eta_{i}: \geq \inf(g(\eta_{i}))} \alpha_{i},  \ \sum_{\eta_{i}: \geq \sup(g(\eta_{i}))} \alpha_{i} \Big]
+	[\underline{p}_{f}, \overline{p}_{f}] = \Big [ \sum_{\eta_{i}: \geq \inf(g(\eta_{i}))} \alpha_{i},  \ \sum_{\eta_{i}: \geq \sup(g(\eta_{i}))} \alpha_{i} \Big]
 ```
 
 in which $\inf$ and $\sup$ denote the infimum and supremum function; Each uncertain number $X_{i}$ is discretised as pairs of focal elements and probability masses $\{(\eta_i, \alpha_i)_{1}^{N}\}$.
- The computation of $g({\boldsymbol{X}}$) can be straightforwardly done by the methods discussed in [](#non-deterministic-propagation) and `PyUncertainNumber` provides a simple function to easily evaluate the probability interval.
+ The computation of $g({\boldsymbol{X}})$ can be straightforwardly done by the methods discussed in [](#non-deterministic-propagation) and `pyuncertainnumber` provides a simple function to easily evaluate the probability interval.
 
 @fig:imprecise_pof illustrates the conceptual comparison of expressing the probability of failure for both probabilistic and imprecise frameworks. Conventionally, the $p_f$ can be estimated using a Monte Carlo estimator that reads: $p_f = \frac{1}{N} \sum_{i}^{N} \mathbb{I}_{g(\boldsymbol{X}) \leq 0}(\boldsymbol{x}_i)$, where $\mathbb{I}$ denotes an indicator function, as shown in different colours in the histogram. 
-This summation also depicts the blue cross in the empirical CDF in the top figure, where an interval of $p_{\scriptsize{f}}\in [\underline{p}_{\scriptsize{f}}, \overline{p}_{\scriptsize{f}}]$ is shown in red.
+This summation also depicts the blue cross in the empirical CDF in the top figure, where an interval of $p_{f}\in [\underline{p}_{f}, \overline{p}_{f}]$ is shown in red.
 
 
 :::{figure} demon_pof_bounds.png
@@ -315,12 +340,12 @@ This paper presents the framework of `uncertain number` which fills this gap and
 (iii) it is underpinned by a probability bounding mechanism which intuitively showcases the notion of epistemic uncertainty --- wherein increased knowledge leads to progressively tighter bounds;
 (iv) the bounding mechanism enables an explicit differentiation of aleatory and epistemic uncertainties, allowing their respective contributions to be  accounted for during both characterisation and propagation.
 
-The developed Python library, `PyUncertainNumber`, facilitates trustful management of uncertainty through faithful representation and rigorous propagation. As probabilistic programming provides support for automatic inference, we aim for an imprecise uncertainty analysis framework, where variables are consistently represented by uncertain numbers in the face of both variability and incertitude, allowing for extensions of deterministic functions to be computed in an automatic, comprehensive, and rigorous manner. 
+The developed Python library, `pyuncertainnumber`, facilitates trustful management of uncertainty through faithful representation and rigorous propagation. As probabilistic programming provides support for automatic inference, we aim for an imprecise uncertainty analysis framework, where variables are consistently represented by uncertain numbers in the face of both variability and incertitude, allowing for extensions of deterministic functions to be computed in an automatic, comprehensive, and rigorous manner. 
 Our next focus will be extending the framework of probabilistic programming, which has a heavy focus on Bayesian inference, into an imprecise realm where more comprehensive uncertainty structures can be integrated into the learning and inference of machine learning models.
 
 
-
-[^footnote-1]: also called randomness, aleatory uncertainty, objective uncertainty, dissonance, or irreducible uncertainty arised from natural stochasticity, environmental or structural variation across space or through time.
+[^footnote-22]: Refer to its GitHub [repository](https://github.com/leslieDLcy/PyUncertainNumber) and [documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) for additional details.
+[^footnote-10]: also called randomness, aleatory uncertainty, objective uncertainty, dissonance, or irreducible uncertainty arised from natural stochasticity, environmental or structural variation across space or through time.
 [^footnote-2]: also called ignorance, epistemic uncertainty, non-specificity, or reducible uncertainty arised from incompleteness of knowledge.
 [^footnote-3]: the uncertain number could not be any tighter without more information.
 
