@@ -149,7 +149,7 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
    :alt: OptiMask result  
    :width: 400 px
    :align: left
-   OptiMask result: red indicates removed rows and columns, blue marks the computed NaN-free submatrix.  
+   OptiMask result: grey indicates missing values, red indicates removed rows and columns, blue marks the computed NaN-free submatrix.  
    :::  
 
 ## Python Package  
