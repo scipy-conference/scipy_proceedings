@@ -36,6 +36,7 @@ project:
         - holmer-continuity-of-splines
         - mc-cormick
         - oswald-factor
+        - wind-turbine-airfoils
   exports:
     - id: pdf
       format: typst

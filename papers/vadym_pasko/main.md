@@ -469,7 +469,7 @@ However, users requiring analytical model validation (e.g., fitting custom funct
 Despite this limitation, SplineCloud introduces the novel capability of building shareable repositories of empirical relations. The catalogs of such relations can serve as reference data and model sources in experimental domains such as fluid dynamics, structural mechanics, or thermodynamics, where precomputed curves and data-driven models are frequently reused. For example, aerodynamic design processes often rely on aggregated wind tunnel results; SplineCloud provides an infrastructure to formalize, store, and exchange such data in a reproducible and programmatically accessible way.
 
 
-## Use Cases and Applications (WIP)
+## Use Cases and Applications
 
 Among the many possible applications of SplineCloud, three main types of scenarios are especially worth highlighting:
 
@@ -521,6 +521,28 @@ Spline models fitted to empirical relations of the span efficiency parameter $δ
 
 Using SplineCloud, data from such plots can be digitized and spline models created — see {ref}`fig:oswald-factor-curves` (a). These models can then be reused programmatically to construct a response surface model using linear interpolation between curves (see {ref}`fig:oswald-factor-curves` b). This enables direct evaluation of the $δ$ parameter and ultimately the induced drag coefficient for different wing planforms. The resulting models are shareable and reusable, enabling other researchers to avoid repeating the same steps and improving reproducibility.
 
+### Building reusable libraries of airfoils performance curves
+
+Airfoil performance data are fundamental for aerodynamic analyses in a wide range of aerospace applications, including wind turbines, unmanned aerial vehicles, and civil and transport aircraft. Usually, an objective in such analyses is the selection of airfoils appropriate to specific operational conditions. This task typically involves evaluating large sets of airfoils and their associated performance data, obtained either through wind tunnel experiments or numerical simulations. Resources like [Airfoil Tools](http://airfoiltools.com/) provide access to the results of simulations for a huge library of airfoils, and PDFs with airfoil performance data can be found in many university libraries: e.g. DTU library published Wind Turbine Airfoil Catalogue [@wind-turbine-airfoils] that contains results of wind tunnel tests and numerical analyses for a collection of airfoils used in wind turbines.
+
+A common limitation of these resources is their lack of programmatic accessibility and reusability. Airfoil Tools does not expose its datasets via an API, and extracting numerical values from plots in PDF documents remains a manual and time-consuming operation. Despite this, processing, fitting, and analysis of airfoil performance data are routine tasks in aerospace engineering and are frequently duplicated across research groups.
+
+For this and similar cases, SplineCloud can be used to create and host airfoil performance curves fitted with splines. The collection of curve IDs from such repositories can be shared publicly to simplify access and reuse in custom scripts and optimization algorithms {ref}`fig:airfoils_collections`.
+
+:::{figure} airfoils_collections.png
+:width: 600px
+:label: fig:airfoils_collections
+Accessing and reusing airfoil performance curves in Python
+:::
+
+Several airfoil repositories are already available on the platform and are actively used in applications such as the [Wing generator web application](https://splinecloud.com/apps/nomad-vagabond/rectangular-wing-generator/) developed for demonstration purposes {ref}`fig:wing-generator-app`
+. Upon selecting an airfoil, the application loads lift and drag curves, along with profile geometry from SplineCloud. These data are then used to compute aerodynamic loads, wing bending, and generate a 3D model of the wing using the [CQ-UAV library](https://github.com/nomad-vagabond/cq-uav).
+
+:::{figure} wing-generator-app.png
+:width: 600px
+:label: fig:wing-generator-app
+Wing console generator web application that reuses airfoil performance curves from SplineCloud repositories
+:::
 
 ## Summary and Future Directions (TODO)
 
