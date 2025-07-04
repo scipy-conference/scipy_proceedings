@@ -37,6 +37,9 @@ project:
     UQ: uncertainty quantification
     CFD: computational fluid dynamics
     API: application programming interface
+    P-box: probability boxes
+    p-box: probability boxes
+    QoI: quantity of interest
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

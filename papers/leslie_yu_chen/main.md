@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Imprecise uncertainty management with uncertain number to facilitate trustworthy computations
 abstract: |
-  Scientific computations of complex systems are surrounded by various forms of uncertainty,  requiring appropriate treatment to maximise the credibility of computations. Empirical information for characterisation is often scarce, vague, conflicting and imprecise, requiring expressive uncertainty structures for trustful representation, aggregation and propagation. Current practices may present two undesired extremes in terms of uncertainty management, with one endpoint being the total ignorance of uncertainty, whereas the other suggesting overconfidence through the introduction of assumptions unjustified by empirical information. In response to these challenges, this paper demonstrates the framework of `uncertain number`, a unified construct for expressive uncertainty representation at different imprecision. This framework, embedded in the library `pyuncertainnumber`, allows for a closed computation ecosystem whereby trustful computations can be conducted intrusively or non-intrusively, hence accomplishing faithful management of uncertainty throughout the computational pipeline. This paper presents an overview of the main capabilities and features of `pyuncertainnumber`.
+  Scientific computations of complex systems are surrounded by various forms of uncertainty,  requiring appropriate treatment to maximise the credibility of computations. Empirical information for characterisation is often scarce, vague, conflicting and imprecise, requiring expressive uncertainty structures for trustworthy representation, aggregation and propagation. Current practices may present two undesired extremes in terms of uncertainty management, with one endpoint being the total ignorance of uncertainty, whereas the other suggesting overconfidence through the introduction of assumptions unjustified by empirical information. In response to these challenges, this paper demonstrates the framework of `uncertain number`, a unified construct for expressive uncertainty representation at different imprecision. This framework, embedded in the library `pyuncertainnumber`, allows for a closed computation ecosystem whereby trustworthy computations can be conducted intrusively or non-intrusively, hence accomplishing faithful management of uncertainty throughout the computational pipeline. This paper presents an overview of the main capabilities and features of `pyuncertainnumber`.
 ---
 
 ## Introduction
@@ -11,14 +11,14 @@ Large-scale scientific computing applications for complex physical and engineere
 Besides, engineered systems are often required to operate safely and robustly under varying environments or uncertain operational conditions, requiring uncertainty to be comprehensively considered in order to maximise the credibility of predictions, designs and decisions [@gray2022inference].
 
 % or prediction
-It is vital to *know what you do not know* in terms of trustful modelling and predictions, suggesting that *all models are wrong but some are useful* on the condition of knowing their assumptions and applicability, hence building the credibility of the computational results. It is often a challenge, in modelling complex physical phenomena, to construct mathematical models in a quantitative manner, on one hand, without ignoring significant information and, on the other hand, without introducing unwarranted assumptions [@beer2013imprecise; @patelli2017cossan]. The bottleneck is usually the limited information in terms of both knowledge and experimental data.
+It is vital to *know what you do not know* in terms of trustworthy modelling and predictions, suggesting that *all models are wrong but some are useful* on the condition of knowing their assumptions and applicability, hence building the credibility of the computational results. It is often a challenge, in modelling complex physical phenomena, to construct mathematical models in a quantitative manner, on one hand, without ignoring significant information and, on the other hand, without introducing unwarranted assumptions [@beer2013imprecise; @patelli2017cossan]. The bottleneck is usually the limited information in terms of both knowledge and experimental data.
 
 The increasing awareness of the differentiation of aleatory and epistemic uncertainty arises the need for more expressive mathematical frameworks to reason with various forms of uncertainty [@ferson2004arithmetic; @ferson1996different]. Imprecise uncertainty frameworks [@destercke2008unifying], such as evidence theory, random set, possibility distributions, credal set, capacities are proposed to reflect the situations when information is scarce, vague, conflicting or imprecise whereby precise distribution are hard to be defined.
-Given the available information, there exists two untenable extreme (exclusive) endpoints which prescribe an interval of trustfulness.
+Given the available information, there exists two untenable extreme (exclusive) endpoints which prescribe an interval of trustworthyness.
 The lack of uncertainty quantification presented in many deterministic numerical simulations constitutes the lower bound, whereas the overconfidence of the computation, through introduction of unwarranted assumptions about uncertainties not faithful to the state of knowledge, as the upper bound.
 
 We aim at a faithful management of uncertainty throughout the computational pipeline using `uncertain number`, a unified construct for uncertainty characterisation at different imprecision.
-This paper demonstrates the framework of `uncertain number` which allows for a closed computation ecosystem whereby trustful computations can be conducted in a rigorous manner.
+This paper demonstrates the framework of `uncertain number` which allows for a closed computation ecosystem whereby trustworthy computations can be conducted in a rigorous manner.
 This paper presents an overview of the main capabilities of the library `pyuncertainnumber`[^footnote-22].
 
 ## Expressive power of uncertain number
@@ -29,12 +29,11 @@ Multiple sources or elicitation could vary in credibility and even be conflictin
 Empirical data, if any, may be scarce or imprecise due to the inaccuracy of experimental measurements, or prohibitive cost of collecting data.
 It is therefore challenging to formulate suitable uncertainty models given partial information without introducing unwarranted assumptions. To this end, more expressive mathematical constructs are needed.
 
-`Uncertain number` stands for a generalised representation that unifies several uncertainty constructs including intervals, probability distributions, probability boxes (p-boxes) and Dempster-Shafer structures (DSS), plus real numbers. 
+`Uncertain number` stands for a generalised representation that unifies several uncertainty constructs including intervals, probability distributions, [probability boxes (p-boxes)](https://en.wikipedia.org/wiki/Probability_box) and [Dempster-Shafer structures (DSS)](https://en.wikipedia.org/wiki/Dempster–Shafer_theory), plus real numbers. 
 These constructs are closely related to each other: P-boxes can be considered as interval bounds on cumulative distributions and DSS can be deemed as a discrete distribution with interval quantiles.
 Parametric p-boxes $F_{X}(x|\theta^{I})$ are probability distributions whose parameters $\theta^{I}$ and samples are intervals, and an interval ($I = [a, b]$) can be identified as a p-box $[H_a(x), H_b(x)]$ whose bounds are unit step functions; a p-box can be discretised into a DSS with pairs of intervals (focal elements) and probability masses  $\{([a_i, b_i],  p_i)_{1}^{N}\}$, and conversely a DSS can be stacked with a list of intervals. Importantly, all of these constructs are special cases of free p-boxes which effectively represents a set of distributions.
 
-@fig:uc_constructs visually illustrates the notion of an `uncertain number`, which is underpinned by a probability bounding approach that allows for a faithful representation 
-of the state of empirical information. For example, it can be characterised as a real number (a *degenerate* of an interval) when there is no uncertainty, a precise distribution (a *degenerate* of a p-box) when there is abundant data, and a set of distributions given partial information.
+@fig:uc_constructs visually illustrates the notion of an `uncertain number`, which is underpinned by a probability bounding approach [@Williamson_1990; @ferson2003constructing] that allows for a faithful representation of the state of empirical information. For example, it can be characterised as a real number (a *degenerate* of an interval) when there is no uncertainty, a precise distribution (a *degenerate* of a p-box) when there is abundant data, and a set of distributions (e.g. a p-box) when there is partial information.
 
 :::{figure} uc_diagram.png
 :label: fig:uc_constructs
@@ -43,7 +42,7 @@ Uncertain number refers to a generalised representation that unifies several con
 :::
 
 
-### a probability bounding approach on information constraints
+### A probability bounding approach on information constraints
 
 Often there is little empirical information pertaining some parameters of a mathematical model. A faithful characterisation entails that all of the available statistical information should be utilised but without introducing any extra assumptions beyond what are empirically justified.
 
@@ -59,7 +58,7 @@ Illustration of the idea of level of information specified as constraints
 :::
 
 
-### aggregation of uncertianty
+### Aggregation of uncertainty
 
 One of the controversial subject in uncertainty analysis is the aggregation of multiple (imperfect) sources of information, evidence, or expert elicitations. Information varies in quality and could be conflicting. Expert may have different degrees of subjectivity and different representations for the uncertain quantity, leading to epistemic uncertainty in the various educated estimates. 
 
@@ -73,10 +72,10 @@ Uncertainty aggregation: **(a)** expert knowledge expressed as intervals coupled
 :::
 
 
-### measurement imprecision
+### Measurement imprecision
 
 Empirical data rarely come in perfect forms, especially for *in situ* measurements.
-Practical computations frequently deal with poor measurements with different imprecision, possibly arised in recording, transmission, communication or manipulation, etc [@ferson2007experimental].
+Practical computations frequently deal with poor measurements with different imprecision, possibly arising in recording, transmission, communication or manipulation, etc [@ferson2007experimental].
 Intervals turn out to be natural constructs for representing *incertitude* in imprecise measurements, manifested either in a direct interval or a plus-or-minus form. When interval-valued measurements are present in a data set, a single probability distribution is inadequate to characterise the epistemic uncertainty. 
 Rather, the bounding strategy applies whereby classical inference methods are extended to both characterise the sampling uncertainty and also data imprecision. For example, as shown in @fig:imprecise_measurements [a], a set of maximum likelihood estimates $\lambda^{I} = [\underline{\lambda}, \overline{\lambda}]$ are yielded for a single datum. Collectively, the dataset leads to an interval bound of the fitted exponential distribution shown in the shaded area in @fig:imprecise_measurements [b].
 Further, as a nonparametric comparison, the Kolmogorov Smirnov confidence bands is also extended [@tretiak2023should], as shown below. These are both rigorous uncertain numbers that enclose the true yet unknown data generating distribution.
@@ -95,7 +94,7 @@ Characterisation of imprecise measurements. **(a)**: fitting an exponential dist
 :::
 
 
-### linguistic numerical hedges for uncertainty interpretation
+### Linguistic numerical hedges for uncertainty interpretation
 
 
 Minimally, qualitative linguistic description may be used to express the estimates over numerical input values. Those are called numerical hedges, which may include colloquial words such as "about", "around", "almost"  etc. [@ferson2015natural]. 
@@ -110,7 +109,7 @@ Illustration of numerical hedges.
 :::
 
 
-### dependency structure: fully specified, partially known or unknown
+### Dependency structure: fully specified, partially known or unknown
 
 Neglecting the incertitude about the dependency structure and assuming independence anyway constitutes a methodological bad practice. Maybe the most notable example of misuse of dependency structure is the 2008 financial crisis [@donnelly2010devil].
 
@@ -130,7 +129,7 @@ A bivariate p-box with marginals $X \sim \mathcal{B}([4, 8], 3)$ and $Y \sim \ma
 Scientific computations are desired to be *rigorous* and *best-possible* when subject to uncertainties.
 
 
-### probability bounds analysis
+### Probability bounds analysis
 
 :::{figure} pbox_arithmetic.png
 :label: fig:pbox_arithmetic
@@ -140,14 +139,14 @@ Illustration of p-box arithmetic under various dependency structure. The left fo
 
 Probability bounds anlaysis (PBA) combines both interval analysis and probability theory, allowing rigorous bounds of (arithmetic) functions of random variables to be computed even with partial information [@ferson2003constructing; @ferson2004arithmetic]. 
 Intuitively, as interval arithmetic enables rigorous calculation for sets of real numbers, PBA accomplish the same for sets of distributions. 
-P-box arithmetic is built upon generalised probability convolutions, which through further extensions cover a wide spectrum of arithmetic operations: unary transformations, binary operations between p-boxes or Dempster-Shafer structures, and general functions composed of a series of base operations. It also covers a wide spectrum of dependency structures which could be fully known (specified copula $C$), partially known (lower bound copula $\underline{C}$), or even unknown ($\text{Fr\'{e}chet}$).
+P-box arithmetic is built upon generalised probability convolutions, which through further extensions cover a wide spectrum of arithmetic operations: unary transformations, binary operations between p-boxes or Dempster-Shafer structures, and general functions composed of a series of base operations. It also covers a wide spectrum of dependency structures which could be fully known (specified copula $C$), partially known (lower bound copula $\underline{C}$), or even unknown ($\text{Fr\'{e}chet}$ bounds [@oberkampf2004dependence]).
 
 Importantly, we provide a unified interface and implementation through `pyuncertainnumber`, enabling rigorous calculations regardless of the representation of the uncertain variables or their dependency structure. 
 This interface has abstracted out much of the arcane details in terms of conversion, discretisation, condensation, and stacking such that analysts can benefit the consistency and focus more on the effects the calculations.
 
-Notably, the $\text{Fr\'{e}chet}$ bound provides a trustful default when no dependency information is known, in that the resulting bounds rigorously enclose the result no matter what correlation or nonlinear dependency may exist between these variables.
+Notably, the $\text{Fr\'{e}chet}$ bounds provides a trustworthy default when no dependency information is known, in that the resulting bounds rigorously enclose the result no matter what correlation or nonlinear dependency may exist between these variables.
 This faithfully translates the situation of unknown into making no assumption at all, as opposed of an unjustified independence assumption. 
-Equation {ref}`eq:frechet` gives the $\text{Fr\'{e}chet}$ expression for the addition of uncertain numbers [@oberkampf2004dependence] and multiplication and division have similar forms, where $[\overline{F}_{X}(x), \underline{F}_{X}(x)]$ denotes the interval bounds of CDF of the composing uncertain number.
+Equation {ref}`eq:frechet` gives the $\text{Fr\'{e}chet}$ expression [@oberkampf2004dependence] for the addition of uncertain numbers and multiplication and division have similar forms, where $[\overline{F}_{X}(x), \underline{F}_{X}(x)]$ denotes the interval bounds of CDF of the composing uncertain number.
 
 
 ```{math}
@@ -161,7 +160,7 @@ These arithmetic operations can be performed in the same signature in `pyuncerta
 Importantly, now these calculations yield regirous results that are guaranteed to enclose all possible distributions of the output variable so long as the input uncertain number were all sure to enclose their respective distributions.
 
 
-### non-deterministic propagation
+### Non-deterministic propagation
 
 Scientific computing typically involves a mathematical model, for example a coupled system of nonlinear partial differential equations, to simulate the behaviour of natural or engineered systems. Many such applications involve high-fidelity numerical solutions as a complicated black-box model (e.g. CFD) in a non-intrusive setting.
 % input sources bla bla
@@ -233,7 +232,7 @@ p = Propagation(vars=[a,b,c],
 
 
 
-### uncertainty-aware surrogate models
+### Uncertainty-aware surrogate models
 
 Modern advanced numerical simulations are often computationally expensive,  making abundant model evaluations required by uncertainty analysis impractical or even intractable. Surrogate models are therefore utilised to learn and generalise from observed data (a limited subset of DOE). Epistemic uncertainties exist not only in the model form (i.e. parameter and structure) but also in the extrapolation of predictions. 
 
@@ -248,7 +247,7 @@ Uncertainty is often a means to an end for scientific computations. For example,
 A comprehensive and expressive uncertainty framework that reflects the contributions of various uncertainties is essential, and an accessible toolkit with universal uncertainty representations is beneficial in facilitating the adoption of comprehensive uncertainty management.
 
 
-### imprecise reliability analysis
+### Imprecise reliability analysis
 
 Conventionally, in the analysis of a probabilistic safety framework, the probability of failure is given as $p_f = \mathbb{P}[g(\boldsymbol{X}) \leq 0]$ which involves an integration of the joint probability distribution over the failure domain. Given the presence of epistemic uncertainty, the failure probability presents as an interval bound as opposed of precise probability measure. Consider a generic simulation in the face of mixed uncertainties such that the system variables $\boldsymbol{X} = (X_1, \dots, X_n)^{T}$ cannot be precisely characterised but to be more appropriately modelled as an `uncertain number`, as suggested in [](#expressive-power-of-uncertain-number). The interval of failure probability can be given as [@zhang2010interval]:
 
@@ -271,7 +270,7 @@ Illustration of failure probability $\mathbb{P}[g(\boldsymbol{X}) \leq 0]$ for b
 :::
 
 
-### robust designs under epistemic and mixture of uncertainty
+### Robust designs under epistemic and mixture of uncertainty
 
 
 Considerable progress has been done towards design optimisation under uncertainty with a probabilistic framework. 
@@ -332,7 +331,7 @@ Optimisation tasks of different formulations in the face of mixed uncertainty
 
 ## Outlook and future work
 
-To know what you do not know suggests the importance to realise the assumptions and applicability of scientific computations to maximise the credibility for the resulting predictions, designs and decisions. Given the various sources of uncertainties and the often limited empirical information, how to appropriately represent, aggregate, propagate uncertainties is a critical challenge for trustful reliability and risk assessments, especially for safety critical applications. Current practices tend to go overboard with  unjustified assumptions of Gaussianality and independence, mostly due to the computational simplicity and the lack of tools for a comprehensive uncertainty analysis. This leads to a need of a computational framework that effectively balances representational expressiveness and computational feasibility.
+To know what you do not know suggests the importance to realise the assumptions and applicability of scientific computations to maximise the credibility for the resulting predictions, designs and decisions. Given the various sources of uncertainties and the often limited empirical information, how to appropriately represent, aggregate, propagate uncertainties is a critical challenge for trustworthy reliability and risk assessments, especially for safety critical applications. Current practices tend to go overboard with  unjustified assumptions of Gaussianality and independence, mostly due to the computational simplicity and the lack of tools for a comprehensive uncertainty analysis. This leads to a need of a computational framework that effectively balances representational expressiveness and computational feasibility.
 
 This paper presents the framework of `uncertain number` which fills this gap and presents several advantages:
  (i) it is highly expressive enabling faithful characterisation of an uncertain quantity given various scenarios of partial knowledge where conventional probability theory struggles to cope; 
@@ -340,7 +339,7 @@ This paper presents the framework of `uncertain number` which fills this gap and
 (iii) it is underpinned by a probability bounding mechanism which intuitively showcases the notion of epistemic uncertainty --- wherein increased knowledge leads to progressively tighter bounds;
 (iv) the bounding mechanism enables an explicit differentiation of aleatory and epistemic uncertainties, allowing their respective contributions to be  accounted for during both characterisation and propagation.
 
-The developed Python library, `pyuncertainnumber`, facilitates trustful management of uncertainty through faithful representation and rigorous propagation. As probabilistic programming provides support for automatic inference, we aim for an imprecise uncertainty analysis framework, where variables are consistently represented by uncertain numbers in the face of both variability and incertitude, allowing for extensions of deterministic functions to be computed in an automatic, comprehensive, and rigorous manner. 
+The developed Python library, `pyuncertainnumber`, facilitates trustworthy management of uncertainty through faithful representation and rigorous propagation. As probabilistic programming provides support for automatic inference, we aim for an imprecise uncertainty analysis framework, where variables are consistently represented by uncertain numbers in the face of both variability and incertitude, allowing for extensions of deterministic functions to be computed in an automatic, comprehensive, and rigorous manner. 
 Our next focus will be extending the framework of probabilistic programming, which has a heavy focus on Bayesian inference, into an imprecise realm where more comprehensive uncertainty structures can be integrated into the learning and inference of machine learning models.
 
 
