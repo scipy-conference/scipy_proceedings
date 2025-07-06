@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: Imprecise uncertainty management with uncertain number to facilitate trustworthy computations
+title: Imprecise uncertainty management with uncertain numbers to facilitate trustworthy computations
 abstract: |
   Scientific computations of complex systems are surrounded by various forms of uncertainty,  requiring appropriate treatment to maximise the credibility of computations. Empirical information for characterisation is often scarce, vague, conflicting and imprecise, requiring expressive uncertainty structures for trustworthy representation, aggregation and propagation. Current practices may present two undesired extremes in terms of uncertainty management, with one endpoint being the total ignorance of uncertainty, whereas the other suggesting overconfidence through the introduction of assumptions unjustified by empirical information. In response to these challenges, this paper demonstrates the framework of `uncertain number`, a unified construct for expressive uncertainty representation at different imprecision. This framework, embedded in the library `pyuncertainnumber`, allows for a closed computation ecosystem whereby trustworthy computations can be conducted intrusively or non-intrusively, hence accomplishing faithful management of uncertainty throughout the computational pipeline. This paper presents an overview of the main capabilities and features of `pyuncertainnumber`.
 ---
@@ -31,7 +31,7 @@ It is therefore challenging to formulate suitable uncertainty models given parti
 
 `Uncertain number` stands for a generalised representation that unifies several uncertainty constructs including intervals, probability distributions, [probability boxes (p-boxes)](https://en.wikipedia.org/wiki/Probability_box) and [Dempster-Shafer structures (DSS)](https://en.wikipedia.org/wiki/Dempster–Shafer_theory), plus real numbers. 
 These constructs are closely related to each other: P-boxes can be considered as interval bounds on cumulative distributions and DSS can be deemed as a discrete distribution with interval quantiles.
-Parametric p-boxes $F_{X}(x|\theta^{I})$ are probability distributions whose parameters $\theta^{I}$ and samples are intervals, and an interval ($I = [a, b]$) can be identified as a p-box $[H_a(x), H_b(x)]$ whose bounds are unit step functions; a p-box can be discretised into a DSS with pairs of intervals (focal elements) and probability masses  $\{([a_i, b_i],  p_i)_{1}^{N}\}$, and conversely a DSS can be stacked with a list of intervals. Importantly, all of these constructs are special cases of free p-boxes which effectively represents a set of distributions.
+Parametric p-boxes $F_{X}(x|\theta^{I})$ are probability distributions $F_{X}$ whose parameters $\theta^{I}$ and samples are intervals, and an interval ($I = [a, b]$) can be identified as a p-box $[H_a(x), H_b(x)]$ whose bounds are unit step functions denoted by $H(x)$; a p-box can be discretised into a DSS with pairs of intervals (focal elements) and probability masses  $\{([a_i, b_i],  p_i)_{1}^{N}\}$, and conversely a DSS can be stacked with a list of intervals. Importantly, all of these constructs are special cases of free p-boxes which effectively represents a set of distributions.
 
 @fig:uc_constructs visually illustrates the notion of an `uncertain number`, which is underpinned by a probability bounding approach [@Williamson_1990; @ferson2003constructing] that allows for a faithful representation of the state of empirical information. For example, it can be characterised as a real number (a *degenerate* of an interval) when there is no uncertainty, a precise distribution (a *degenerate* of a p-box) when there is abundant data, and a set of distributions (e.g. a p-box) when there is partial information.
 
@@ -54,8 +54,18 @@ Conveniently, `pyuncertainnumber` provides a bespoke constructor to facilitate t
 
 :::{figure} free_pbox_constraints_diagram.png
 :label: fig:characterisation_constraints
+:width: 800px
 Illustration of the idea of level of information specified as constraints
 :::
+
+```{code-block} python
+
+from pyuncertainnumber import pun
+
+# specify available empirical information as constraints
+pun.known_constraints(minimum=0, maximum=2., mean=1, var=0.25)
+
+```
 
 
 ### Aggregation of uncertainty
@@ -72,13 +82,28 @@ Uncertainty aggregation: **(a)** expert knowledge expressed as intervals coupled
 :::
 
 
+```{code-block} python
+from pyuncertainnumber import stochastic_mixture, envelope
+
+""" note aggregation operations apply to all constructs of uncertain numbers """
+
+# mixture aggregation of interval elicition into a Dempster-Shafer structure
+a = pun.I(1, 5)  # b, c, d ...
+mix = stochastic_mixture(a, b, c, d, masses=[0.25, 0.25, 0.25, 0.25])    
+
+# envelope aggregation of distributional eclicitation into a p-box
+a = pun.Distribution('gaussian', (-5, 2))
+env = envelope(a, b, c, d)
+
+```
+
 ### Measurement imprecision
 
 Empirical data rarely come in perfect forms, especially for *in situ* measurements.
 Practical computations frequently deal with poor measurements with different imprecision, possibly arising in recording, transmission, communication or manipulation, etc [@ferson2007experimental].
 Intervals turn out to be natural constructs for representing *incertitude* in imprecise measurements, manifested either in a direct interval or a plus-or-minus form. When interval-valued measurements are present in a data set, a single probability distribution is inadequate to characterise the epistemic uncertainty. 
-Rather, the bounding strategy applies whereby classical inference methods are extended to both characterise the sampling uncertainty and also data imprecision. For example, as shown in @fig:imprecise_measurements [a], a set of maximum likelihood estimates $\lambda^{I} = [\underline{\lambda}, \overline{\lambda}]$ are yielded for a single datum. Collectively, the dataset leads to an interval bound of the fitted exponential distribution shown in the shaded area in @fig:imprecise_measurements [b].
-Further, as a nonparametric comparison, the Kolmogorov Smirnov confidence bands is also extended [@tretiak2023should], as shown below. These are both rigorous uncertain numbers that enclose the true yet unknown data generating distribution.
+Rather, the bounding strategy applies whereby classical inference methods are extended to both characterise the sampling uncertainty and also data imprecision. 
+For example, as shown in @fig:imprecise_measurements [a], a set of maximum likelihood estimates $\lambda^{I} = [\underline{\lambda}, \overline{\lambda}]$ are yielded for a single datum. Collectively, the dataset leads to an interval bound of the fitted exponential distribution shown in the shaded area in @fig:imprecise_measurements [b], along with the true data generating mechanism (DGM) in red dotted curve and the empirical CDF in gray dotted curve. Further, as a nonparametric comparison, the Kolmogorov Smirnov confidence bands is also extended [@tretiak2023should], as shown in blue dashes below. These are both rigorous uncertain numbers that enclose the true yet unknown data generating distribution.
 
 
 ```{math}
@@ -90,8 +115,26 @@ where $\hat{F}_{L}$ and $\hat{F}_{R}$ represent the empirical CDF on endpoints o
 :::{figure} imprecise_measurements_combo.png
 :label: fig:imprecise_measurements
 :width: 800px
-Characterisation of imprecise measurements. **(a)**: fitting an exponential distribution to an interval datum by maximum likelihood estimation; **(b)**: Parametric and nonparamettric characterisation of the whole imprecise data set which includes 15 data points i.i.d (independent and identically distributed) sampled from Exp(0.4) contaminated by a margin of error $\Delta=1.4$
+Characterisation of imprecise measurements. **(a)** fitting an exponential distribution to an interval datum by maximum likelihood estimation; **(b)** Parametric and nonparamettric characterisation of the whole imprecise data set $\{ x_{i}\}$ which includes 15 data points i.i.d (independent and identically distributed) sampled from an exponential distribution (i.e. $\text{Exp}(0.4)$) contaminated by a margin of error $\Delta=1.4$. That is, $x_{i} = [\underline{x}_i, \overline{x}_i] = [m_{i} - \Delta, m_{i} + \Delta]$ where $m_i \sim \text{Exp}(0.4)$.
 :::
+
+
+```{code-block} python
+import scipy.stats as sps
+from pyuncertainnumber import pba
+
+# synthetic generation of the imprecise data 
+precise_sample = sps.expon(scale=1/0.4).rvs(15)
+imprecise_data = pba.I(lo = precise_sample - 1.4, hi=precise_sample + 1.4)
+
+# parametric distributional estimator using method of matching moments
+pun.fit('mom', family='exponential', data=imprecise_data)
+
+# nonparametric estimator using Kolmogorov Smirnov confidence bands at 95% confidence level
+pun.KS_bounds(imprecise_data, alpha=0.025, display=True)
+```
+
+
 
 
 ### Linguistic numerical hedges for uncertainty interpretation
@@ -99,7 +142,7 @@ Characterisation of imprecise measurements. **(a)**: fitting an exponential dist
 
 Minimally, qualitative linguistic description may be used to express the estimates over numerical input values. Those are called numerical hedges, which may include colloquial words such as "about", "around", "almost"  etc. [@ferson2015natural]. 
 With the focus on NLP in many deep learning applications in recent years, the interpretation of hedged words and their quantitative implication of uncertainty is vital for downstream safety-related applications.
-`PyUncertainNuumber` provides support to interpret these hedges in an effort to build a consistent basis for consistent uncertainty elicitation and communication in situations where empirical information is almost minimal. Importantly, real numbers such as "7" or "7.0" can also be interpreted as an interval based on significant digits [@ferson2015natural], potentially leading to a complete system of rigorous numerical numbers.
+`pyuncertainnumber` provides support to interpret these hedges in an effort to build a consistent basis for consistent uncertainty elicitation and communication in situations where empirical information is almost minimal. Importantly, real numbers such as "7" or "7.0" can also be interpreted as an interval based on significant digits [@ferson2015natural], potentially leading to a complete system of rigorous numerical numbers.
 
 
 :::{figure} hedges.png
@@ -108,6 +151,11 @@ With the focus on NLP in many deep learning applications in recent years, the in
 Illustration of numerical hedges.
 :::
 
+
+```{code-block} python
+pun.hedge_interpret('about 7')  # similar usage for other hedges, such as '7.0'
+# [5.0,9.0]
+```
 
 ### Dependency structure: fully specified, partially known or unknown
 
@@ -164,7 +212,7 @@ Importantly, now these calculations yield regirous results that are guaranteed t
 
 Scientific computing typically involves a mathematical model, for example a coupled system of nonlinear partial differential equations, to simulate the behaviour of natural or engineered systems. Many such applications involve high-fidelity numerical solutions as a complicated black-box model (e.g. CFD) in a non-intrusive setting.
 % input sources bla bla
-For a comprehensive uncertainty analysis, all uncertainty sources (e.g. model inputs, initial or boundary conditions, model form assumptions, numerical approximation, and model extrapolation) should be appropriately characterised and and have their contributions to the total uncertainty of the system response quantity of interest (QoI) elucidated, such that efficient uncertainty reduction or management can be conducted by decision makers. A notable example that embodies the idea of such uncertainty framework is the NASA UQ challenge [@agrell2024nasa]. 
+For a comprehensive uncertainty analysis, all uncertainty sources (e.g. model inputs, initial or boundary conditions, model form assumptions, numerical approximation, and model extrapolation) should be appropriately characterised and and have their contributions to the total uncertainty of the system response quantity of interest (QoI) elucidated, such that efficient uncertainty reduction or management can be conducted by decision makers. A notable example that embodies the idea of such uncertainty framework is the NASA UQ challenge [@agrell2021nasa]. 
 
 
 :::{figure} flowchart.png
@@ -185,27 +233,28 @@ Notably, enriched sampling methods such as nested Monte Carlo or interval Monte 
 
 
 ```{code-block} python
+""" a typical workflow of uncertainty characterisation and propagation """
+
 # constructions of uncertain number
 a = pun.I(2, 3)
 b = pun.normal(4, 1)
 c = pun.uniform([4,5], [9,10])
 
-# high-level propagation API
+# assume a response function
+def foo(x): return x[0] ** 3 + 5 * x[1] + x[2]
+
+# intrusive propagation signature 
+response = foo([a, b, c])
+
+# alternatively, to use a generic high-level propagation API
 p = Propagation(vars=[a,b,c], 
       func=foo, 
       method='slicing', 
       interval_strategy='subinterval'
 )
 
-# heavy-lifting
-t = p.run(n_sam=20, n_sub=2, style='endpoints')
-
-''' func can also be nonintrusive excutable '''
-# non-intrusive applicability
-p = Propagation(vars=[a,b,c], 
-      func=foo, 
-      method='double_monte_carlo', 
-)
+# heavy-lifting for propagation
+response = p.run(n_slices=50, n_sub=4, style='endpoints')
 ```
 
 
@@ -236,9 +285,9 @@ p = Propagation(vars=[a,b,c],
 
 Modern advanced numerical simulations are often computationally expensive,  making abundant model evaluations required by uncertainty analysis impractical or even intractable. Surrogate models are therefore utilised to learn and generalise from observed data (a limited subset of DOE). Epistemic uncertainties exist not only in the model form (i.e. parameter and structure) but also in the extrapolation of predictions. 
 
-To account for such uncertainty, a probabilistic take of machine learning brings models that represent parameters in probability distributions (Bayesian neural networks), and models that represent a distribution of function structures (Gaussian Process). On the other hand, an intervalised or distribution-free view employs models that consider interval-valued parameters (Interval Predictor Model). These models have the prospects of efficiently propagating the input uncertainties to fully characterise the tail probability of the QoI for example in the imprecise reliability analysis (will be discussed in [](#imprecise-reliability-analysis).
+To account for such uncertainty, a probabilistic take of machine learning brings models that represent parameters in probability distributions (Bayesian neural networks), and models that represent a distribution of function structures (Gaussian Process). On the other hand, an intervalised or distribution-free view employs models that consider interval-valued parameters (Interval Predictor Model). These models have the prospects of efficiently propagating the input uncertainties to fully characterise the tail probability of the QoI for example in the imprecise reliability analysis (will be discussed in [](#imprecise-reliability-analysis)).
 
-With many machine learning frameworks available in the Python ecosystem (e.g. Tensorflow, IPM, etc), we provide the algorithms and the interface in `pyuncertainnumber` to extend those models to be combined within our framework to further propagate uncertain numbers for a efficient and comprehensive uncertainty management.
+With many machine learning frameworks available in the Python ecosystem (e.g. [Tensorflow](https://www.tensorflow.org/), [GPflow](https://gpflow.github.io/GPflow/2.9.1/index.html), [PyIPM](https://github.com/JCSadeghi/PyIPM), etc), we provide the algorithms and the interface in `pyuncertainnumber` to extend those models to be combined within our framework to further propagate uncertain numbers for a efficient and comprehensive uncertainty management.
 
 
 ## Risk, reliability, and design optimisation under uncertainty

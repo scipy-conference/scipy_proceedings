@@ -4,7 +4,7 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-leslie_yu_chen
   # Ensure your title is the same as in your `main.md`
-  title: Imprecise uncertainty management with uncertain number to facilitate trustworthy computations
+  title: Imprecise uncertainty management with uncertain numbers to facilitate trustworthy computations
   # subtitle:
   description: This paper demonstrates the framework of uncertain number which allows for a closed computation ecosystem whereby trustful computations can be conducted in a rigorous manner. This paper presents an overview of the main capabilities of the library PyUncertainNumber.
   # Authors should have affiliations, emails and ORCIDs if available
@@ -40,6 +40,7 @@ project:
     P-box: probability boxes
     p-box: probability boxes
     QoI: quantity of interest
+    i.i.d: independent and identically distributed
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
