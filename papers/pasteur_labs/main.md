@@ -112,6 +112,9 @@ These directions aim to establish Tesseract as a foundation for scalable, intero
 
 Tesseract projects are born out of realisation that modern autodiff tooling is limited in its scaling capabilities. Tesseracts demonstrate how this gap can be addressed by elevating the concept of gradient tracking to a system level. We hope the community will recognise this need, and leverage Tesseract concept to improve efficiency and scalability of scientific data pipelines.
 
+In particular, the focus on composing modular components into pipelines enabled by Tesseracts addresses a critical barrier in real-world scientific computing, where workflows often span multiple communities, frameworks, and computational environments. By containerizing components and standardizing interfaces, with Tesseracts scientists and engineers can build pipelines which can easily make use of a lot of heterogeneous parts, spanning from specialized tools and legacy systems to research-grade software.
+
+We think Tesseracts represent a step in the right direction for building an ecosystem where researchers can easily share and compose differentiable components, where legacy scientific software can be seamlessly integrated into modern optimization workflows, and where the barriers between simulation and machine learning continues to dissolve.
 
 ## Further reading
 - Documentation [here](https://docs.pasteurlabs.ai/projects/tesseract-core/latest/).
