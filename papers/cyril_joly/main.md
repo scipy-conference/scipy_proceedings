@@ -35,24 +35,27 @@ Given an $ m \times n $ matrix $ A $ with missing values (NaN), the goal is to f
 
 ### The Fundamental Trade-off  
 
-When handling missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both.
-The optimal choice depends on the matrix's dimensions and NaN distribution:  
+When handling missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both. The optimal choice depends on the matrix's dimensions and the distribution of NaN values:  
 
-1. **Single NaN Case**:  
-   - In tall matrices (`rows > columns`), removing the problematic row typically preserves more data.  
-   - In wide matrices (`columns > rows`), removing the affected column is usually preferable.  
+1. **Toy Example**:  
+   - In **tall matrices** (rows > columns), removing a problematic **row** typically preserves more data.  
+   - In **wide matrices** (columns > rows), removing an affected **column** is usually preferable.  
 
    :::{figure} figures/at_hand_two  
    :alt: Data to process  
-   :width: 400 px
-   :align: left
+   :width: 400 px  
+   :align: left  
    A toy example: removing the row containing the two NaNs yields the largest submatrix, rather than removing the two columns.  
    :::  
 
-2. **Multiple NaNs**:  
-   - When a row contains several NaNs, removing the entire row may be more efficient than removing multiple columns.  
-   - Conversely, if NaNs are clustered in columns, removing those columns could be optimal.  
-   - In complex cases, the optimal solution requires removing specific combinations of rows and columns, necessitating a general algorithmic approach.  
+2. **Generalizing the Intuition**:  
+   The toy example suggests a greedy heuristic:  
+   - If a row contains many NaNs, removing that single row may be better than removing all corresponding columns (which could discard more data).  
+   - Conversely, if a column contains many NaNs, removing it might be better than eliminating all affected rows.  
+
+3. **Complex Cases Require a Systematic Approach**:  
+   - When NaNs are spread across both rows and columns, the optimal solution isn't obvious. Sometimes, the best solution involves a mix of row and column removals.  
+   - This necessitates an algorithmic strategy to maximize the preserved submatrix. 
 
 ### Linear Programming Formulation  
 
@@ -180,7 +183,7 @@ The Python implementation supports common data structures (numpy, pandas, polars
 
 Future work will explore theoretical guarantees on the approximation quality and extensions to weighted optimization problems.
 The implementation will continue to be optimized for speed in subsequent versions.
-Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against Multiple Imputation by Chained Equations ("MICE") to evaluate whether it can achieve better or faster results.
+Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against Multiple Imputation by Chained Equations ("MICE", [@white2011multiple]) to evaluate whether it can achieve better or faster results.
 
 ## Aknowledgements
 
