@@ -27,11 +27,9 @@ project:
     severity: ignore
     keys:
     - vink2023polars
-    - harris2020array
     - mitchell2011pulp
     - cplex2009v12
     - gurobi2023gurobi
-    - wolsey2020integer
     - makhorin2012glpk
   exports:
   - id: pdf
