@@ -61,6 +61,7 @@ The process of defining multi-tesseract pipelines with Tesseract-JAX.
 :::{figure} illustration.png
 :label: fig:illustration
 Data flow through a Tesseract-based pipeline for parametric shape optimization. Involves two separate Tesseracts: one for computing a signed distance field (SDF) from a parametric geometry, and another for computing the compliance of a structure given a density field via finite element analysis.
+In the picture, the plots display the intermediate results and gradients which are passed between components, and the boxes with a Python or Tesseract logo represent the actual components that are implemented in Python or as a Tesseract in this demo. The primal evaluation, with solid green lines, is executed first, left-to-right, after which the backward pass, in dotted green lines, calculates the gradient of the the loss function with respect to the pipeline's input parameters.
 :::
 
 As a concrete demonstration for how the Tesseract ecosystem enables differentiable physics programing, we present a novel [case study](optimize.ipynb) showcasing parametric end-to-end shape optimization of a geometric model with respect to its physical properties.
