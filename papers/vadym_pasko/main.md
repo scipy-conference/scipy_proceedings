@@ -233,7 +233,7 @@ Due to the local support property of B-spline basis functions, moving a single c
 
 In the Fine-Tune mode, users can interactively drag control points to reshape the curve ({ref}`fig:fine-tune-control-points`). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. Assigning higher weights to a control point increases its pull on the curve, bringing it closer to the point's location, converting the B-Spline to NURBS.
 
-:::{figure} fine-tune-control-points.png
+:::{figure} figures/fine-tune-control-points.png
 :width: 600px
 :label: fig:fine-tune-control-points
 Adjusting control points of the spline curve in the Fine-Tune mode
