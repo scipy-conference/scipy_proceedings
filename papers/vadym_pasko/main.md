@@ -99,9 +99,9 @@ where $\lambda$ is a regularization parameter related to s.
 Spline fitting results with a use of SciPy's `interpolate` methods.
 <table>
 <tr>
-<td style="text-align: center;"><img src="interp_spline_fitting_scipy.png" height="220px"/>(a) Simple interpolating cubic spline.</td>
-<td style="text-align: center;"><img src="smooth_spline_fitting_scipy.png" height="220px"/>(b) Smoothing cubic spline.</td>
-<td style="text-align: center;"><img src="lsq_spline_fitting_scipy.png" height="220px"/>(c) Least-Squares cubic spline.</td>
+<td style="text-align: center;"><img src="figures/interp_spline_fitting_scipy.png" height="220px"/>(a) Simple interpolating cubic spline.</td>
+<td style="text-align: center;"><img src="figures/smooth_spline_fitting_scipy.png" height="220px"/>(b) Smoothing cubic spline.</td>
+<td style="text-align: center;"><img src="figures/lsq_spline_fitting_scipy.png" height="220px"/>(c) Least-Squares cubic spline.</td>
 </tr>
 </table>
 :::
@@ -131,7 +131,7 @@ SplineCloud is free to use for everyone, publishing open data, however, its sour
 
 The philosophy behind the platform is in representing data relations in the form of spline models, which can be reused in code. In this way, SplineCloud can be considered as a repository-based open library of functional relations. The typical user journey on the platform is given in {ref}`fig:workflow_scheme`.
 
-:::{figure} workflow_scheme.png
+:::{figure} figures/workflow_scheme.png
 :label: fig:workflow_scheme
 :width: 400px
 SplineCloud workflow scheme: upload data to repository, define datasets, create data relations using spline fitting tool, share and access curves and datasets in code via API.
@@ -139,7 +139,7 @@ SplineCloud workflow scheme: upload data to repository, define datasets, create 
 
 The platform’s data structure is given in {ref}`fig:class_diagram`. Each repository may contain multiple data files (uploaded by authors), which serve as sources for datasets; authors and other users can define subsets (clean data) related to datasets. Subsets are used for the construction of data relations, which capture relationships between columns in subsets. Parametric spline curves are used to model these relations.
 
-:::{figure} class_diagram.png
+:::{figure} figures/class_diagram.png
 :label: fig:class_diagram
 SplineCloud objects relationship diagram
 :::
@@ -161,7 +161,7 @@ Interactivity in the curve fitting process significantly simplifies and accelera
 
 According to the workflow presented in {ref}`fig:workflow_scheme`, data has to be uploaded to the existing or new repository. It can be a text file, a spreadsheet, or an image containing a plot. In a case of text data, a default dataset will be created automatically and a subset of data can be identified by adjusting data loading options. Datasets will be created automatically for each sheet in the spreadsheet source file. An interactive plot digitizer tool will be displayed for the image file to help extract data ranges from plots ({ref}`fig:splinecloud_datasets`).
 
-:::{figure} splinecloud_datasets.png
+:::{figure} figures/splinecloud_datasets.png
 :width: 650px
 :label: fig:splinecloud_datasets
 SplineCloud datasets extracted from the tabular data file and plots
@@ -173,7 +173,7 @@ After identifying clean subsets, a default Data Relation object will be created 
 
 By adding a first curve, an initial spline fit is generated using a smoothing splines method ({ref}`fig:splinecloud-curve-fitting`). 
 
-:::{figure} splinecloud-curve-fitting.png
+:::{figure} figures/splinecloud-curve-fitting.png
 :width: 600px
 :label: fig:splinecloud-curve-fitting
 Spline fitting tool
@@ -213,7 +213,7 @@ S^{(y)}(t) &= \sum_{i=0}^{n} c_{i}^{(y)} B_{i,k}(t)
 
 In simpler words, parametric spline curves can be defined by two distinct univariate spline functions, $x(t)$ and $y(t)$, sharing a common knot vector ({ref}`fig:spline_curve_as_two_functions`). This representation allows for the modeling of complex geometries, including loops, sharp transitions, and high-curvature regions.
 
-:::{figure} spline_curve_as_two_functions.png
+:::{figure} figures/spline_curve_as_two_functions.png
 :width: 500px
 :label: fig:spline_curve_as_two_functions
 Parametric spline curve as a combination of two spline functions.  *Black triangles along parameter axes represent knots. Control polygons and control points are displayed in green color*
@@ -251,7 +251,7 @@ The knot vector plays a central role in determining the structure and properties
 
 In traditional fitting methods such as `LSQUnivariateSpline` in SciPy, the knot vector must be either provided manually or generated heuristically, which typically requires some kind of iterative approach in finding an optimal (usually quasi-optimal) knot vector. SplineCloud removes this complexity by exposing the knot vector as an editable structure in the Fine-Tune mode, where users can manipulate knots directly and observe their impact on the spline in real time ({ref}`fig:fine-tuning-knot-vector`).
 
-:::{figure} fine-tuning-knot-vector.png
+:::{figure} figures/fine-tuning-knot-vector.png
 :width: 600px
 :label: fig:fine-tuning-knot-vector
 Adjusting the knot vector of the spline curve in the Fine-Tune mode
@@ -338,8 +338,8 @@ In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit ac
 Simple interpolaing cubic spline.
 <table>
 <tr>
-<td style="text-align: center;"><img src="fit_accuracy.png" height="230px"/>(a) RMSE estimation in SplineCloud.</td>
-<td style="text-align: center;"><img src="fit_accuracy_parametric.png" height="230px"/>(b) RMSE evaluated via shortest distance residuals.</td>
+<td style="text-align: center;"><img src="figures/fit_accuracy.png" height="230px"/>(a) RMSE estimation in SplineCloud.</td>
+<td style="text-align: center;"><img src="figures/fit_accuracy_parametric.png" height="230px"/>(b) RMSE evaluated via shortest distance residuals.</td>
 </tr>
 </table>
 :::
@@ -425,8 +425,8 @@ columns, table = load_subset(<subset_uid>)
 Accessing the curve and subset API links.
 <table>
 <tr>
-<td style="text-align: center;"><img src="curve_api_link.png" height="230px"/>(a) Accessing the curve API link.</td>
-<td style="text-align: center;"><img src="subset_api_link.png" height="230px"/>(b) Accessing the subset API link.</td>
+<td style="text-align: center;"><img src="figures/curve_api_link.png" height="230px"/>(a) Accessing the curve API link.</td>
+<td style="text-align: center;"><img src="figures/subset_api_link.png" height="230px"/>(b) Accessing the subset API link.</td>
 </tr>
 </table>
 :::
@@ -494,24 +494,26 @@ Step-drawdown tests are performed to determine the optimal pumping rate for wate
 
 In [@doi:10.4314/wsa.v27i3.4978] authors developed a model for predicting drawdown behavior in step-drawdown tests based on experimental data from South Africa's Karoo formations. This model can be useful in determining sustainable pumping rates for boreholes. While relying on physical properties of fractured rock aquifers, flow dimensions, and elasticity parameters, the model still exhibits underfitting for some pumping rates. Spline fitting can produce significantly better accuracy and does not require a complex analytical background if practical use is the purpose. 
 
-:::{figure} van_tonder_et_al_model.png
+:::{figure} figures/van_tonder_et_al_model.png
 :width: 500px
 :label: fig:van_tonder_et_al_model
 empirical model fitted to experimental data on the step-drawdown test performed on Borehole UP16 [@doi:10.4314/wsa.v27i3.4978]
 :::
 
-Nevertheless, in the case of relations with clearly expressed step changes, fitting becomes a challenge, even for splines. All automatic spline fitting models exhibit overfitting or underfitting ({ref}`fig:van_tonder_et_al_model`). This is where SplineCloud's Fine-Tuning mode can be helpful. By introducing breaks in continuity in the mode change points, and manipulating control points and knot vector, it is possible to manually fit a curve to the complex stepped data ({ref}`fig:step-drawdown-discharge-fitting`).
+Nevertheless, in the case of relations with clearly expressed step changes, fitting becomes a challenge, even for splines. All automatic spline fitting models exhibit overfitting or underfitting ({ref}`fig:van_tonder_et_al_model`). This is where SplineCloud's Fine-Tuning mode can be helpful. By introducing breaks in continuity in the mode change points, and manipulating control points and knot vector, it is possible to manually fit a curve[^footnote-step-drawdown-test-relations] to the complex stepped data ({ref}`fig:step-drawdown-discharge-fitting`).
 
 :::{figure}
 :label: fig:step-drawdown-discharge-fitting
 Spline models fitted to experimental data on the step-drawdown test data.
 <table>
 <tr>
-<td style="text-align: center;"><img src="van_tonder_spline_auto_fitting.png" height="230px"/>(a) Auto fitted spline models.</td>
-<td style="text-align: center;"><img src="van_tonder_spline_fine_tuned.png" height="230px"/>(b) Fine-tuned spline model.</td>
+<td style="text-align: center;"><img src="figures/van_tonder_spline_auto_fitting.png" height="230px"/>(a) Auto fitted spline models.</td>
+<td style="text-align: center;"><img src="figures/van_tonder_spline_fine_tuned.png" height="230px"/>(b) Fine-tuned spline model.</td>
 </tr>
 </table>
 :::
+
+[^footnote-step-drawdown-test-relations]: [Link to curves](https://splinecloud.com/compose/dfl_bWm2c3jB0pzX/relations/drl_gq45NaUsjyYv) fitted to the discharge rates from the test data from [@doi:10.4314/wsa.v27i3.4978]
 
 ### Reconstructing Empirical Relations for Wing Span Efficiency Factor
 
@@ -522,13 +524,15 @@ When designing an aerial vehicle, preliminary estimates of wing lift and drag fo
 Spline models fitted to empirical relations of the span efficiency parameter $δ$.
 <table>
 <tr>
-<td style="text-align: center;"><img src="wingspan_factor_relations.png" height="230px"/>(a) Auto fitted spline models.</td>
-<td style="text-align: center;"><img src="wingspan_efficiency_surface.png" height="230px"/>(b) Fine-tuned spline model.</td>
+<td style="text-align: center;"><img src="figures/wingspan_factor_relations.png" height="230px"/>(a) Auto fitted spline models.</td>
+<td style="text-align: center;"><img src="figures/wingspan_efficiency_surface.png" height="230px"/>(b) Fine-tuned spline model.</td>
 </tr>
 </table>
 :::
 
-Using SplineCloud, data from such plots can be digitized and spline models created — see {ref}`fig:oswald-factor-curves` (a). These models can then be reused programmatically to construct a response surface model using linear interpolation between curves (see {ref}`fig:oswald-factor-curves` b). This enables direct evaluation of the $δ$ parameter and ultimately the induced drag coefficient for different wing planforms. The resulting models are shareable and reusable, enabling other researchers to avoid repeating the same steps and improving reproducibility.
+Using SplineCloud, data from such plots can be digitized and spline models created — see {ref}`fig:oswald-factor-curves` (a). These models[^footnote-span-efficiency-relations] can then be reused programmatically to construct a response surface model using linear interpolation between curves (see {ref}`fig:oswald-factor-curves` b). This enables direct evaluation of the $δ$ parameter and ultimately the induced drag coefficient for different wing planforms. The resulting models are shareable and reusable, enabling other researchers to avoid repeating the same steps and improving reproducibility.
+
+[^footnote-span-efficiency-relations]: [Data relations](https://splinecloud.com/compose/dfl_omTIwGOEVQlx/relations) constructed using plot for efficiency factor [@mc-cormick]
 
 ### Building Reusable Libraries of Airfoils' Performance Curves
 
@@ -538,19 +542,21 @@ A common limitation of these resources is their lack of programmatic accessibili
 
 For this and similar cases, SplineCloud can be used to create and host airfoil performance curves fitted with splines. The collection of curve IDs from such repositories can be shared publicly to simplify access and reuse in custom scripts and optimization algorithms {ref}`fig:airfoils_collections`.
 
-:::{figure} airfoils_collections.png
+:::{figure} figures/airfoils_collections.png
 :width: 600px
 :label: fig:airfoils_collections
 Accessing and reusing airfoil performance curves in Python
 :::
 
-Several airfoil repositories are already available on the platform and are actively used in applications such as the [Wing generator web application](https://splinecloud.com/apps/nomad-vagabond/rectangular-wing-generator/) developed for demonstration purposes {ref}`fig:wing-generator-app`
+Several airfoil repositories are already available on the platform[^footnote-airfoils-repositories] and are actively used in applications such as the [Wing generator web application](https://splinecloud.com/apps/nomad-vagabond/rectangular-wing-generator/) developed for demonstration purposes {ref}`fig:wing-generator-app`
 . Upon selecting an airfoil, the application loads lift and drag curves, along with profile geometry from SplineCloud. These data are then used to compute aerodynamic loads, wing bending, and generate a 3D model of the wing using the [CQ-UAV library](https://github.com/nomad-vagabond/cq-uav).
 
-:::{figure} wing-generator-app.png
+:::{figure} figures/wing-generator-app.png
 :label: fig:wing-generator-app
 Wing console generator web application that reuses airfoil performance curves from SplineCloud repositories
 :::
+
+[^footnote-airfoils-repositories]: SplineCloud [repositories](https://splinecloud.com/explore/?topic=63) containing tag 'airfoils'
 
 ## Summary and Future Directions
 
