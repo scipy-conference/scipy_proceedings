@@ -803,6 +803,19 @@ on the waist makes a larger angle with the vertical compared to when the person 
 For this dataset, all the features are numerical, and hence we can plot the dependency plots directly.
 We shall look at the top 3 features for the classes `Walking`, `Sitting` and `Laying`.
 
+The dependency plots focus on the relationship between the feature values, the SHAP values
+and the model output. The x-axis represents the feature values and the y-axis represents the SHAP values.
+As before, positive SHAP values indicate that the feature pushes the model's prediction towards the positive class 
+(the class in question), while the negative SHAP values imply the feature reduces the model's predicted value 
+towards the negative class (other classes).
+
+For example in {numref}`fig:dep-Walking-cnn` for the `Walking` class, we see that the SHAP values for the feature 
+`angle(tBodyGyroMean, gravityMean)` are positive for low values of the feature, meaning that when the angle between 
+the mean gyroscope signal and the mean gravity signal is smaller, the model is more likely to predict the `Walking` 
+class. For the next feature `fBodyGyro-meanFreq()-X`, we see that the SHAP values are positive for high values of the 
+feature, meaning that when the mean frequency of the X-axis gyroscope signal is higher, the model is more likely 
+to predict the `Walking` class.
+
 :::{figure} dep_Walking_cnn.png
 :label: fig:dep-walking-cnn
 :width: 80%
@@ -825,6 +838,19 @@ SHAP dependency plot for the CNN model for the `Laying` class.
 :::
 
 #### Local
+
+Local explanations provide insights into the factors influencing individual predictions. They are useful for 
+understanding why the model made a particular prediction for a specific instance. There are many types of local
+explaination plots that can be used, e.g. force plots, bar plots, waterfall plots, etc. In this section, we shall
+look at the bar plots.
+
+The red and blue bars represent the positive and negative SHAP values respectively. The length of the bars
+indicates the magnitude of the SHAP value. The bars are ordered by the magnitude of the SHAP values.
+
+For instance, in {numref}`fig:local-Laying-cnn`, we take a look at the local SHAP values for a particular sample that was predicted
+to be in the `Laying` class. We see that most top features contribute positively to the prediction
+of the `Laying` class, which are denoted by the red bars. There are a few features that contribute negatively to the
+prediction, which are denoted by the blue bars, but they are not very significant overall.
 
 :::{figure} local_Walking_cnn.png
 :label: fig:local-walking-cnn
