@@ -265,11 +265,15 @@ In summary, PyRun is a platform that simplifies the development and execution of
 
 \section{Case Study: Python Serverless Data Analytics Empowering METASPACE Metabolomics Pipelines}
 
-One prominent example of leveraging serverless data analytics in Python is METASPACE~\citep{metaspace}, a cloud platform developed by the European Molecular Biology Laboratory (EMBL) to support spatial metabolomics research. This field aims to identify and localize small molecules—such as metabolites and lipids—within tissue sections using imaging mass spectrometry (MS). These spatial insights are critical for understanding biological processes related to disease, development, and immune response. METASPACE allows researchers to submit MS datasets, automatically annotate detected molecules, and visualize their spatial distribution. It provides standardized quality control, enabling comparisons across experiments, laboratories, and instruments. The platform has evolved into a community-driven knowledge base of spatial metabolomes, supporting open data sharing and collaboration. With over 1,000 users and tens of thousands of processed datasets, METASPACE has become a widely adopted tool in biomedical research, making spatial metabolomics more accessible, reproducible, and scalable.
+One prominent example of leveraging serverless data analytics in Python is METASPACE~\citep{metaspace}, a cloud platform developed by the European Molecular Biology Laboratory (EMBL) to support spatial metabolomics research. This field aims to identify and localize small molecules—such as metabolites and lipids—within tissue sections using imaging mass spectrometry (MS). These spatial insights are critical for understanding biological processes related to disease, development, and immune response
+
+METASPACE allows researchers to submit MS datasets, automatically annotate detected molecules, and visualize their spatial distribution. It provides standardized quality control, enabling comparisons across experiments, laboratories, and instruments. The platform has evolved into a community-driven knowledge base of spatial metabolomes, supporting open data sharing and collaboration. With over 1,000 users and tens of thousands of processed datasets, METASPACE has become a widely adopted tool in biomedical research, making spatial metabolomics more accessible, reproducible, and scalable.
+
+\subsection{Lithops for Elasticity}
 
 METASPACE initially relied on a Spark cluster for its computational backend. However, as user numbers grew and workloads became more demanding, the limitations of this setup became increasingly evident. Spark’s static resource allocation and rigid execution model made it difficult to handle large, diverse datasets efficiently. This often led to resource underutilization or performance bottlenecks, restricting the system’s ability to scale effectively.
 
-To address these issues, METASPACE transitioned to a serverless architecture, aiming for greater flexibility and ease of management. By adopting Lithops, the platform gained the ability to scale computing resources dynamically based on workload demands. This move significantly reduced operational overhead while improving performance and cost efficiency. The switch to a serverless model allowed METASPACE to overcome the constraints of its Spark-based infrastructure and provided a more responsive and scalable environment for data processing.
+To address these issues, METASPACE transitioned to a serverless architecture, aiming for greater elasticity and ease of management. By adopting Lithops, the platform gained the ability to scale computing resources dynamically based on workload demands. This move significantly reduced operational overhead while improving performance and resource efficiency. The switch to a serverless model allowed METASPACE to overcome the constraints of its Spark-based infrastructure and provided a more responsive and scalable environment for data processing.
 
 Figure~\ref{fig:wallclock} shows the execution timeline for a METASPACE metabolomics workload, a complex workflow with multiple parallel stages. The timeline reveals significant variability in resource requirements, with some steps requiring substantially more computational power than others. This fluctuation is a key driver for adopting serverless computing, a paradigm where Lithops excels by dynamically scaling resources to precisely match the needs of each pipeline step.
 
@@ -280,6 +284,7 @@ Figure~\ref{fig:wallclock} shows the execution timeline for a METASPACE metabolo
 \label{fig:wallclock}
 \end{figure}
 
+\subsection{Dataplug for Dynamic Partitioning}
 
 A common issue in metabolomics involves processing large, non-cloud-optimized datasets, such as files in the standard imzML format~\citep{imzml}. While widely used for mass spectrometry imaging, imzML lacks native support for cloud-aware access patterns. The Dataplug framework overcomes this limitation with a plugin that enables efficient, on-the-fly partitioning of imzML files. By extracting key metadata, Dataplug facilitates dynamic partitioning strategies tailored to the specific need of each workload, eliminating the need to create static, pre-processed data chunks. This approach yields significant advantages: it reduces preprocessing time and storage costs (Figure~\ref{fig:dataplug_preprocess}) and enables parallel data access, which drastically cuts data ingestion times (Figure~\ref{fig:dataplug_downloading}). Furthermore, it offers researchers the flexibility to experiment with different partitioning schemes without modifying the original dataset.
 
@@ -289,6 +294,38 @@ A common issue in metabolomics involves processing large, non-cloud-optimized da
 \includegraphics[width=0.55\textwidth]{assets/downloading.pdf}\label{fig:dataplug_downloading}
 \caption{Dataplug performance: preprocessing and ingestion.}
 \end{figure}
+
+\subsection{Practical Insights of a Serverless-native Architecture}
+
+To better illustrate the structural benefits of using Lithops, we compared the performance of the original METASPACE Spark-based pipeline with the new Lithops-based implementation. For the Spark execution we used PySpark over the original cluster by EMBL, consisting on four c5.4xlarge AWS EC2 instances. This architecture provided a sum of 64 vCPUs and 128GB of physical memory. We measured the performance, average CPU usage and cost of both deployments. We could assess the resource usage of the Lithops implementation by using the Lithops monitoring~\footnote{\url{https://lithops-cloud.github.io/docs/source/monitoring.html}} interface, which provides detailed metrics on CPU usage (along with memory and network) for each function invocation. The cost was calculated based on the AWS Lambda pricing model, which charges per 1s of execution time and per GB of memory used, and we included the read/write requests to the S3 object storage, which are charged separately.
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Architecture} & \textbf{Execution Time (min)} & \textbf{Cost (\$)} & \textbf{Avg Resource Usage (\%)} \\
+\hline
+PySpark & 14.21 & 0.66 & 54.56 \\
+Lithops Serverless & 4.87 & 1.35 & 75.36 \\
+\hline
+\end{tabular}
+\caption{Execution insight comparison of the PySpark and Lithops deployments of the METASPACE pipeline.}
+\label{tab:arch_comparison}
+\end{table}
+
+We achieved a significant performance improvement with the Lithops serverless implementation, reducing the execution time from 14.21 minutes to just 4.87 minutes, which represents a 65\% speedup. This improvement is largely due to the dynamic scaling capabilities of Lithops, which allowed us to run many more parallel tasks than the Spark cluster could handle. The average resource usage also increased from 54.56\% to 75.36\%, indicating that the Lithops implementation was able to utilize resources more efficiently. However, the cost of the Lithops implementation was higher, at \$1.35 compared to \$0.66 for the Spark cluster, mainly due to the increased number of parallel vCPUs provisioned.
+
+Despite this, the overall performance gain and resource efficiency make the Lithops serverless architecture a compelling choice for sporadic, and bursty workloads like the METASPACE metabolomics pipeline. Provisioning a static cluster for such workloads would have resulted in significant resource underutilization and higher costs in the long term, as the cluster would have been idle most of the time. In contrast, Lithops allows us to provision resources immediately and in real time, as annotation workload requests are submitted. We depict such advantage in Figure~\ref{fig:workload_saving}, where we simulate the monthly savings switching from a static cluster to a Lithops deployment, provisioning resources on demand on a per-workload basis.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{assets/workload_savings.pdf}
+\caption{Simulated monthly cost savings: ratio of the monthly cost between a static PySpark deployment vs. an on-demand Lithops deployment for varying workload frequencies.}
+\label{fig:workload_saving}
+\end{figure}
+
+Lithops delivers substantial cost savings at low workload frequencies—achieving nearly a 50\% reduction in monthly costs when running a single workload per day. Even as the frequency increases (e.g., up to 20 requests per day), Lithops continues to provide cost benefits over the static approach. It is important to note that this simulation assumes a constant workload size per request; in real-world scenarios like METASPACE, where workload sizes can vary significantly, Lithops' elasticity would further amplify these savings by dynamically allocating resources to match each workload's actual requirements.
 
 In terms of usability, some METASPACE applications have been integrated into PyRun to provide a user-friendly interface for running these serverless data pipelines. PyRun hinders the complexity of managing the environment and its dependencies, allowing researchers to focus on their data analysis tasks without worrying about configuration issues. This integration has made it easier for scientists to leverage the power of serverless computing and dynamic partitioning in their research workflows.
 
