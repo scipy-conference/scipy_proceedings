@@ -32,6 +32,8 @@ project:
         - the-field-matching-problem
         - formal-definition
         - comparison-of-string-distances
+        - opendatasus-sim
+        - Gong_Great_Expectations
   exports:
     - id: pdf
       format: typst
