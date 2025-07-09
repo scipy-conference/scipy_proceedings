@@ -50,3 +50,7 @@ The main data formats for HEP are currently ROOT TTrees, with RNTuple expected t
 Managing a two-language configuration and shared environment is feasible if approached carefully. Conda for Python, alongside juliaup and Julia’s integrated package manager, can work together. The main challenge lies in manually controlling Julia package version updates, as they may introduce newer versions incompatible with the currently installed Python packages. At the time of writing, a possible coordination mechanism via pixi is under testing.
 
 This setup allows physicists to gradually adopt Julia within existing Python-based workflows — and vice versa — while also tapping into Julia’s strengths, including just-in-time (JIT) compilation, multiple dispatch, and GPU acceleration.
+
+## Acknowledgements
+
+This work was supported by the National Science Foundation under Cooperative Agreement PHY-2323298.
