@@ -148,6 +148,19 @@ To provide a clear, actionable framework, we first present a table mapping indiv
 We propose four categories of data quality detection methods, which group the 22 techniques into strategic approaches:
 
 
+#### Rule-Based & Constraint Enforcement
+This category involves defining explicit, deterministic rules that data must adhere to, often enforced directly at the database level through mechanisms like schema constraints. These methods are highly automatable and effective for catching violations of known business logic, structural integrity, and formatting requirements, such as ensuring a field is never null, conforms to a specific data type, or follows a predefined pattern.
+
+#### Statistical & Machine Learning Analysis
+This approach leverages mathematical and algorithmic techniques to identify data quality issues by analyzing the aggregate properties and distributions within a dataset. By establishing statistical norms, these methods can automatically flag outliers and uncover improbable or inconsistent data patterns that would not violate simple, hard-coded rules.
+
+#### Data Comparison & Standards
+This category focuses on validating data by comparing it against a trusted source of truth or by identifying inconsistencies through intra-dataset comparisons. It includes techniques like matching records against external reference data (e.g., a list of valid postal codes), using string similarity metrics to find fuzzy duplicates, and employing lookup tables or dictionaries to standardize terminology.
+
+#### Human & Manual Review
+This category encompasses all methods that rely on human intelligence, domain expertise, and contextual understanding to identify and verify data quality problems. It serves as the final line of defense for detecting complex, subtle, or novel issues that automated systems miss, such as evaluating the sufficiency of metadata, verifying the real-world accuracy of a questionable value, or interpreting ambiguous data through expert judgment.
+
+
 ```{list-table} Categories of Data Quality Detection Methods
 :label: tbl:cat-detection
 :header-rows: 1
