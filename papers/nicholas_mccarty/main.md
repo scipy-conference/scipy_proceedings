@@ -238,6 +238,7 @@ AI tools (ChatGPT, Perplexity, and NotebookLM) were used:
 - to generate Matplotlib subplots, process flow diagrams, <span style="font-family: serif;">L<span style="vertical-align: 0.4ex; font-size: 0.8em;">A</span>T<span style="vertical-align: -0.3ex; font-size: 0.8em;">E</span>X</span>, etc.
 - for proofreading and light revision to reduce potential publication errors.
 
+(code)=
 ## Code
 
 Data and code required to replicate our approach can be found using the links below:
