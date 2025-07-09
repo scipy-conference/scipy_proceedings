@@ -305,6 +305,157 @@ Also we present the @tbl:cat-detection-to-problems which provides a high-level m
   -  ✔
 ```
 
+## Case Study: A Practical Analysis of a Public Health Dataset
+
+To bridge the gap between the theoretical taxonomy of problems and the catalogue of detection methods, this section presents a practical analysis of a real-world dataset: Brazil's Mortality Information System (SIM - Sistema de Informação sobre Mortalidade) [@opendatasus-sim]. As a large, publicly available dataset aggregated from numerous sources across the country, it serves as an excellent example of the types of data quality challenges practitioners face. We will examine data from 2024 to illustrate how specific problems can be identified using the methods discussed. This dataset is publicly available from Brazil's Open Data SUS portal.
+
+
+
+
+Below is a sample from the SIM dataset, showing a selection of key fields.
+```{list-table} Sample Data from the Brazilian Mortality Information System (SIM) 2024
+:label: tbl:sim-sample-revised
+:header-rows: 1
+* - DTOBITO (Date of Death)
+  - HORAOBITO (Time of Death)
+  - DTNASC (Date of Birth)
+  - IDADE (Age)
+  - SEXO (Sex)
+  - RACACOR (Race/Color)
+  - ESTCIV (Marital Status)
+  - SERIESCFAL (Last Grade)
+  - CAUSABAS (Basic Cause)
+  - ATESTADO (Death Cert. Causes)
+* - 19042024
+  - 2301
+  - 24121964
+  - 459
+  - 1
+  - 1
+  - 1
+  -
+  - I279
+  - J81/I500/I279/I10
+* - 18012024
+  - 1030
+  - 29041958
+  - 465
+  - 2
+  - 1
+  - 2
+  -
+  - A09
+  - I219/A09
+* - 22012024
+  - 0700
+  - 23031939
+  - 484
+  - 2
+  - 4
+  - 2
+  -
+  - E112
+  - I219/I10/E112
+* - 12012024
+  - 0800
+  - 08031950
+  - 473
+  - 2
+  - 2
+  - 5
+  -
+  - I219
+  - I219/I509/I10
+* - 01032024
+  - 1030
+  - 12051938
+  - 485
+  - 2
+  - 1
+  - 9
+  -
+  - N19
+  - J969/I469/D649/N19*I509
+```
+
+### Example 1: Detecting Data Miscoding with Human & Manual Review
+Problem: A preliminary inspection of the IDADE (Age) field reveals values such as 459 and 484. Without domain context, these appear to be erroneous. A simple cross-validation by subtracting DTNASC from DTOBITO for the first record reveals an age of 59 years, suggesting the value 459 is not a raw integer but an encoded value.
+
+Detection: This is a classic case where Human & Manual Review, informed by domain knowledge, is the primary detection method. The initial observation of impossible age values prompts a deeper investigation. Consulting the official data dictionary confirms that the IDADE field uses a special encoding where the leading digit signifies the time unit (e.g., '4' for years) and the subsequent digits represent the quantity. Failure to identify this results in Data Miscoding, a severe process-induced error. Once detected, the remediation is a straightforward Rule-Based transformation.
+
+
+### Example 2: Quantifying Missing Data with Rule-Based Enforcement
+Problem: The SERIESCFAL (Last Grade) column is blank in every record of the sample, representing a clear case of Missing Data. The impact of this problem depends entirely on the intended use case.
+
+Detection: A simple Rule-Based check can identify null or empty values on a per-record basis. However, the true utility comes from applying this rule across the entire dataset to establish a data quality metric. For an analysis where education level is a critical feature, a team might define an acceptance criterion, such as requiring at least 50% of records to be non-null. The following programmatic check implements this quality gate:
+```python
+# Assumes 'df' is a pandas DataFrame of the full 2024 dataset
+acceptance_threshold = 0.5
+completeness_ratio = df.SERIESCFAL.notnull().sum() / len(df)
+assert completeness_ratio >= acceptance_threshold
+```
+
+Executing this check against the full dataset would return False, indicating that the data fails this specific quality test and is not fit for this particular use.
+
+
+### Example 3: Identifying Inconsistency with Rule-Based Validation
+Problem: A dataset can contain values that are individually valid but logically impossible in combination. According to the SIM documentation, SEXO=1 indicates a person born male, while GRAVIDEZ=1 signifies the person has been pregnant.
+
+Detection: This Inconsistency can be detected using Rule-Based & Constraint Enforcement that evaluates a multi-field invariant. The following test efficiently isolates all records that violate this semantic rule:
+
+```python
+# Filters for records where a person born male is recorded as having been pregnant
+inconsistent_records = df[(df.GRAVIDEZ == 1) & (df.SEXO == 1)]
+```
+
+This test effectively detects that an error exists in the record but cannot determine which of the two fields is incorrect. The remediation strategy—whether to nullify the fields or discard the record—depends on further analysis or predefined business rules.
+
+
+### Example 4: Assessing Plausibility using Statistical Analysis
+Problem: Certain data points, while not strictly impossible, may be so statistically improbable that they warrant scrutiny. The IDADEMAE (Mother's Age) field provides a clear example.
+Detection: By employing Statistical Analysis, we can profile the distribution of IDADEMAE to identify anomalous values. The table below shows the age distribution in bins for all non-null entries in the 2024 dataset.
+
+```{list-table} Distribution of Mother's Age (IDADEMAE) in SIM 2024
+:label: tbl:mother-age-dist
+:header-rows: 1
+* - Age Bin
+  - Count
+* - (0, 10]
+  - 4
+* - (10, 20]
+  - 4867
+* - (20, 30]
+  - 11800
+* - (30, 40]
+  - 7705
+* - (40, 50]
+  - 1240
+* - (50, 60]
+  - 10
+* - (60, 70]
+  - 0
+* - (70, 80]
+  - 0
+* - (80, 90]
+  - 0
+* - (90, 100]
+  - 26
+```
+
+This distribution immediately highlights potential Plausibility issues at the tails. While pregnancies in the 10-20 age group are common, the 4 instances below age 10 are highly suspect.
+
+Even more striking are the 26 recorded pregnancies for mothers aged over 90. While not theoretically impossible with modern medicine, these are statistically extreme outliers and highly likely to be data entry errors. Such records should be flagged as low-quality and considered for exclusion from sensitive analyses.
+
+
+
+### The Role of Data Quality Frameworks
+Except for the Human & Manual check above, all others programmatic checks can be systemized using dedicated data quality frameworks. Great Expectations [@Gong_Great_Expectations] is a open-source tool that institutionalizes "data testing" by allowing teams to declare assertions about their data in a readable, JSON-based format called "Expectations." This approach formalizes the data quality rules, making them version-controllable, shareable, and executable within automated pipelines, directly addressing the need for systematic data testing discussed in this paper.
+
+The library provides a rich, built-in vocabulary of Expectations that directly map to the detection methods and problems we have catalogued. For instance, `expect_column_values_to_not_be_null` addresses Missing Data, `expect_column_values_to_be_in_set` handles Wrong Categorical Data, and `expect_column_mean_to_be_between` can detect Distribution Shift. More complex, multi-field invariants, such as the SEXO/GRAVIDEZ inconsistency, can be implemented using custom Expectations.
+
+A key advantage of Great Expectations is its ability to automatically generate "Data Docs" human-readable documentation that presents the results of data validation runs. This feature transforms abstract quality metrics into tangible reports, fostering trust and communication between data producers and consumers. By integrating such a framework, the analysts can operationalize the principles outlined here, moving from ad-hoc data cleaning to a proactive, scalable, and automated data quality assurance strategy.
+
+
 
 ## Conclusions
 
