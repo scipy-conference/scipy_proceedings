@@ -250,6 +250,7 @@ Data and code required to replicate our approach can be found using the links be
 
 ## Appendix
 
+(accuracy-evaluation-methodology)=
 ### Accuracy Evaluation Methodology
 
 The evaluation focuses on two primary categories of metrics: ***localization accuracy*** and ***detection quality***; the employed methodology relies on the following data:
