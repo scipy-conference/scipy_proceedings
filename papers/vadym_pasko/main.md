@@ -495,7 +495,7 @@ Step-drawdown tests are performed to determine the optimal pumping rate for wate
 [@doi:10.4314/wsa.v27i3.4978] developed a model for predicting drawdown behavior in step-drawdown tests based on experimental data from South Africa's Karoo formations. This model can be useful in determining sustainable pumping rates for boreholes. While relying on physical properties of fractured rock aquifers, flow dimensions, and elasticity parameters, the model still exhibits underfitting for some pumping rates. Spline fitting can produce significantly better accuracy and does not require a complex analytical background if practical use is the purpose. 
 
 :::{figure} figures/van_tonder_et_al_model.png
-:width: 500px
+:width: 450px
 :label: fig:van_tonder_et_al_model
 empirical model fitted to experimental data on the step-drawdown test performed on Borehole UP16 [@doi:10.4314/wsa.v27i3.4978]
 :::
