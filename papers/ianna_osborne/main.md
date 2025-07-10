@@ -8,7 +8,7 @@ abstract: |
 
 The High-Energy Physics (HEP) community has long relied on Python and C++ for data analysis. While Python provides ease of use and a rich scientific ecosystem, it struggles with performance for large-scale analyses. C++, on the other hand, offers speed but comes with increased complexity and slower development cycles. Julia, a modern language designed for scientific computing, promises the best of both worlds: high-level expressiveness with near-native execution speed.
 
-JuliaHEP, with its emerging set of tools and libraries, aims to facilitate HEP data analysis in Julia. There are three distinct ways these tools are being developed. Some — Geant4.jl, for example — wrap mature C++ libraries (in this case, Geant4) and make them accessible via a Julia interface. Others, like BAT.jl, have rewritten the entire codebase in native Julia. Our approach is different: we integrate Julia with the Python-based package Awkward Array via its Julia backend, AwkwardArray.jl.
+JuliaHEP, with its emerging set of tools and libraries[@juliahep], aims to facilitate HEP data analysis in Julia. There are three distinct ways these tools are being developed. Some — Geant4.jl, for example — wrap mature C++ libraries (in this case, Geant4) and make them accessible via a Julia interface. Others, like BAT.jl, have rewritten the entire codebase in native Julia. Our approach is different: we integrate Julia with the Python-based package Awkward Array via its Julia backend, AwkwardArray.jl.
 
 ## Awkward Array in Julia
 
