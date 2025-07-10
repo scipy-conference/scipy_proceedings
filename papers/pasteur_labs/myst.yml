@@ -12,8 +12,30 @@ project:
     optimization problem.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: The Pasteur Labs Team
-      email: hello@simulation.science
+    - name: Andrin Rehmann
+      email: andrin.rehmann@simulation.science
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Pasteur Labs, Brooklyn, NY, USA
+        - Shared first author
+    - name: Dion Häfner
+      email: dion.haefner@simulation.science
+      orcid: 0000-0002-4465-7317
+      affiliations:
+        - Pasteur Labs, Brooklyn, NY, USA
+        - Shared first author
+    - name: Alessandro Angioi
+      email: alessandro.angioi@simulation.science
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Pasteur Labs, Brooklyn, NY, USA
+    - name: Yongquan Qu
+      email: yongquan.qu@simulation.science
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Pasteur Labs, Brooklyn, NY, USA
+    - name: Andrei Paleyes
+      email: andrei.paleyes@simulation.science
       orcid: 0000-0000-0000-0000
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
