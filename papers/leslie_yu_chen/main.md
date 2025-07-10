@@ -240,21 +240,21 @@ a = pun.I(2, 3)
 b = pun.normal(4, 1)
 c = pun.uniform([4,5], [9,10])
 
-# assume a response function
+# specify a response function
 def foo(x): return x[0] ** 3 + 5 * x[1] + x[2]
 
-# intrusive propagation signature 
+# intrusive signature where uncertain numbers are drop-in replacements
 response = foo([a, b, c])
 
 # alternatively, to use a generic high-level propagation API
 p = Propagation(vars=[a,b,c], 
       func=foo, 
       method='slicing', 
-      interval_strategy='subinterval'
+      interval_strategy='direct'
 )
 
-# heavy-lifting for propagation
-response = p.run(n_slices=50, n_sub=4, style='endpoints')
+# heavy-lifting of running propagation
+response = p.run(n_slices=50)
 ```
 
 
