@@ -157,23 +157,58 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
 
 ## Python Package  
 
-A Python implementation of the algorithm is available on PyPI (<https://pypi.org/project/optimask/>) and conda-forge (<https://anaconda.org/conda-forge/optimask>) and can be used as follows:
+A Python implementation of the algorithm is available on PyPI (<https://pypi.org/project/optimask/>) and conda-forge (<https://anaconda.org/conda-forge/optimask>).
+The library uses Numba [@lam2015numba] for speed and supports common input formats, including NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars].  
 
-```python
-import numpy as np
-from optimask import OptiMask
-from optimask.utils import generate_mar
+### Basic Usage  
+```python  
+import numpy as np  
+from optimask import OptiMask  
+from optimask.utils import generate_mar  
 
-# Generate a Missing At Random matrix with 2% NaN values
-x = generate_mar(m=100_000, n=1_000, ratio=0.02)
-rows, cols = OptiMask().solve(x)
-np.isnan(x[np.ix_(rows, cols)]).any()  # False
-len(rows), len(cols)  # (38031, 48)
+# Generate a Missing At Random matrix with 2% NaN values  
+x = generate_mar(m=100_000, n=1_000, ratio=0.02)  
+rows, cols = OptiMask().solve(x)  
+np.isnan(x[np.ix_(rows, cols)]).any()  # False  
+len(rows), len(cols)  # (38031, 48)  
+```  
+This computation takes approximately ~200ms on an average personal computer.
+The implementation provides the sorted indices of the rows and columns to retain, ensuring that the relative order of the elements is preserved. 
+
+### Handling Missing Data for Machine Learning  
+OptiMask removes missing values (NaN) from datasets while maximizing usable data. It does this by finding an optimal subset of samples (rows) and features (columns) to discard, ensuring the remaining data contains no missing values. This makes the dataset directly usable for machine learning models that require complete data, such as scikit-learn's linear models:
+
+```python  
+import numpy as np  
+from optimask import OptiMask  
+from sklearn.datasets import make_spd_matrix  
+from sklearn.linear_model import LinearRegression  
+
+def load_data_with_nan(m, n, nan_ratio):  
+    mean = np.random.randn(n + 1)  
+    cov = make_spd_matrix(n + 1)  
+    data = np.random.multivariate_normal(mean=mean, cov=cov, size=m)  
+    mask = np.random.rand(*data.shape) < nan_ratio  
+    data[mask] = np.nan  
+    return data[:, :-1], data[:, -1]  
+
+# Simulate a dataset with missing values  
+X, y = load_data_with_nan(m=10_000, n=100, nan_ratio=0.02)  
+
+# Drop samples where the target (y) is missing  
+valid_samples = np.isfinite(y)  
+X, y = X[valid_samples], y[valid_samples]  
+
+# Apply OptiMask to remove remaining NaNs  
+rows, cols = OptiMask().solve(X)  
+X_clean, y_clean = X[np.ix_(rows, cols)], y[rows]
+print(X_clean.shape, y_clean.shape) # (3581, 50) (3581,)
+
+# Train a model on the NaN-free data  
+model = LinearRegression().fit(X=X_clean, y=y_clean)  
 ```  
 
-This computation takes approximately ~200ms on an average personal computer.
-The implementation provides the sorted indices of the rows and columns to retain, ensuring that the relative order of the elements is preserved.
-The library uses Numba [@lam2015numba] for speed, and accepts inputs several popular input formats, including NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars].
+By strategically selecting which rows and columns to keep, OptiMask ensures the dataset remains meaningful while becoming fully trainable.
 
 ## Conclusion
 
