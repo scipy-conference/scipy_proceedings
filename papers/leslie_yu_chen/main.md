@@ -383,13 +383,18 @@ Optimisation tasks of different formulations in the face of mixed uncertainty
 To know what you do not know suggests the importance to realise the assumptions and applicability of scientific computations to maximise the credibility for the resulting predictions, designs and decisions. Given the various sources of uncertainties and the often limited empirical information, how to appropriately represent, aggregate, propagate uncertainties is a critical challenge for trustworthy reliability and risk assessments, especially for safety critical applications. Current practices tend to go overboard with  unjustified assumptions of Gaussianality and independence, mostly due to the computational simplicity and the lack of tools for a comprehensive uncertainty analysis. This leads to a need of a computational framework that effectively balances representational expressiveness and computational feasibility.
 
 This paper presents the framework of `uncertain number` which fills this gap and presents several advantages:
- (i) it is highly expressive enabling faithful characterisation of an uncertain quantity given various scenarios of partial knowledge where conventional probability theory struggles to cope; 
- (ii) it provides a closed environment  where various characterisation, aggregation and propagation operations can be consistently conducted based on the unified structure, `uncertain number`;
+(i) it is highly expressive enabling faithful characterisation of an uncertain quantity given various scenarios of partial knowledge where conventional probability theory struggles to cope; 
+(ii) it provides a closed environment  where various characterisation, aggregation and propagation operations can be consistently conducted based on the unified structure, `uncertain number`;
 (iii) it is underpinned by a probability bounding mechanism which intuitively showcases the notion of epistemic uncertainty --- wherein increased knowledge leads to progressively tighter bounds;
 (iv) the bounding mechanism enables an explicit differentiation of aleatory and epistemic uncertainties, allowing their respective contributions to be  accounted for during both characterisation and propagation.
 
 The developed Python library, `pyuncertainnumber`, facilitates trustworthy management of uncertainty through faithful representation and rigorous propagation. As probabilistic programming provides support for automatic inference, we aim for an imprecise uncertainty analysis framework, where variables are consistently represented by uncertain numbers in the face of both variability and incertitude, allowing for extensions of deterministic functions to be computed in an automatic, comprehensive, and rigorous manner. 
 Our next focus will be extending the framework of probabilistic programming, which has a heavy focus on Bayesian inference, into an imprecise realm where more comprehensive uncertainty structures can be integrated into the learning and inference of machine learning models.
+
+
+# Acknowledgement
+
+This work has been supported by the DAWS2 (Development of Advanced Wing Solution 2) project funded by Innovate UK.
 
 
 [^footnote-22]: Refer to its GitHub [repository](https://github.com/leslieDLcy/PyUncertainNumber) and [documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) for additional details.
