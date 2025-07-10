@@ -26,14 +26,14 @@ A key focus of this paper is the performance benefits of Julia for HEP workloads
 
 :::{figure} combinations.png
 :label: fig:combinations
-This is the combinations performance plot, comparing the ak.combinations function with a Julia kernel on an awkward array. The Julia kernel uses [JuliaMath/Combinatirics.jl](https://github.com/JuliaMath/Combinatorics.jl).
+This is the combinations performance plot, comparing the ak.combinations function with a Julia kernel on an awkward array. The Julia kernel uses JuliaMath/Combinatirics.jl[@Combinatorics.jl].
 :::
 
  This is without exploiting Julia’s potential for parallel computing and built-in GPU support, which provides an efficient pathway for scaling HEP computations.
 
 ## Scaling it up
 
-Beyond performance, the introduction of Julia via AwkwardArray.jl addresses the practical aspects of integrating Julia into existing HEP workflows. Physicists can gradually adopt Julia without abandoning Python-based tools, thanks to interlanguage operability. The PythonCall.jl package provides a useful interface between the languages, enabling bi-directional integration between the ecosystems. Yes, this introduces a three-language problem, but it is intended as a temporary measure.
+Beyond performance, the introduction of Julia via AwkwardArray.jl addresses the practical aspects of integrating Julia into existing HEP workflows. Physicists can gradually adopt Julia without abandoning Python-based tools, thanks to interlanguage operability. The PythonCall[@PythonCall.jl] package provides a useful interface between the languages, enabling bi-directional integration between the ecosystems. Yes, this introduces a three-language problem, but it is intended as a temporary measure.
 
 The AwkwardArray.jl Julia package can be considered a backend for Awkward Arrays in Python, but it differs from all other backends. In a sense, it’s a transitional project that allows Python users to speed up computations on Awkward Arrays using Julia kernels — or even Julia packages optimized for specific needs, such as combinatorics. The underlying data representing an Awkward Array is shared between the languages, making it highly efficient by avoiding unnecessary data copying.
 
