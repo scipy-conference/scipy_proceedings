@@ -477,7 +477,7 @@ However, users requiring analytical model validation (e.g., fitting custom funct
 
 Despite this limitation, SplineCloud introduces the novel capability of building shareable repositories of empirical relations. The catalogs of such relations can serve as reference data and model sources in experimental domains such as fluid dynamics, structural mechanics, or thermodynamics, where precomputed curves and data-driven models are frequently reused. For example, aerodynamic design processes often rely on aggregated wind tunnel results; SplineCloud provides an infrastructure to formalize, store, and exchange such data in a reproducible and programmatically accessible way.
 
-(use-cases-and-applications)
+(use-cases-and-applications)=
 ## Use Cases and Applications
 
 Among the many possible applications of SplineCloud, three main types of scenarios are especially worth highlighting:
