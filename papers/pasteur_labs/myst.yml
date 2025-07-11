@@ -26,17 +26,17 @@ project:
         - Shared first author
     - name: Alessandro Angioi
       email: alessandro.angioi@simulation.science
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0003-4653-8036
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
     - name: Yongquan Qu
       email: yongquan.qu@simulation.science
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0002-9941-3977
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
     - name: Andrei Paleyes
       email: andrei.paleyes@simulation.science
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0002-3703-8163
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
   keywords:
