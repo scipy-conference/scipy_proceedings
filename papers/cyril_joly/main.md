@@ -174,10 +174,10 @@ from optimask import OptiMask
 from optimask.utils import generate_mar
 
 # Generate a Missing At Random matrix with 2% NaN values
-x = generate_mar(m=100_000, n=1_000, ratio=0.02)
-rows, cols = OptiMask().solve(x)
+x = generate_mar(m=100_000, n=1_000, ratio=0.02, rng=0)
+rows, cols = OptiMask(random_state=0).solve(x)
 np.isnan(x[np.ix_(rows, cols)]).any()  # False
-len(rows), len(cols)  # (38031, 48)
+len(rows), len(cols)  # (37386, 49)
 ```
 
 This computation takes approximately ~200ms on an average personal computer.
