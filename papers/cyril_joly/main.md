@@ -158,7 +158,8 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
    :alt: OptiMask result
    :width: 400 px
    :align: left
-   OptiMask result: grey indicates missing values, red indicates removed rows and columns, blue marks the computed NaN-free submatrix. The computed submatrix by the algorithm is 27x17, while discarding every row with NaN would yield a 7x30 submatrix, and discarding every column with NaN would yield a 40x3 submatrix.
+   OptiMask result: grey indicates missing values, red indicates removed rows and columns, blue marks the computed NaN-free submatrix.
+   The algorithm computes a 27x17 submatrix, whereas discarding every row with NaN would result in a 7x30 submatrix, and discarding every column with NaN would yield a 40x3 submatrix.
    :::
 
 ## Python Package
