@@ -19,7 +19,7 @@ The lack of uncertainty quantification presented in many deterministic numerical
 
 We aim at a faithful management of uncertainty throughout the computational pipeline using `uncertain number`, a unified construct for uncertainty characterisation at different imprecision.
 This paper demonstrates the framework of `uncertain number` which allows for a closed computation ecosystem whereby trustworthy computations can be conducted in a rigorous manner.
-This paper presents an overview of the main capabilities of the library `pyuncertainnumber`[^footnote-22].
+This paper presents an overview of the main capabilities of the library `pyuncertainnumber`[^footnote-22]. To facilitate clearer illustration and reproducibility of the workflow, essential code snippets are included in the main text, while a comprehensive tutorial is available in the Supporting Documents section.
 
 ## Expressive power of uncertain number
 
@@ -397,7 +397,7 @@ Our next focus will be extending the framework of probabilistic programming, whi
 This work has been supported by the DAWS2 (Development of Advanced Wing Solution 2) project funded by Innovate UK.
 
 
-[^footnote-22]: Refer to its GitHub [repository](https://github.com/leslieDLcy/PyUncertainNumber) and [documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) for additional details.
+[^footnote-22]: `pyuncertainnumber` is a research-grade open-source library, with its source code available on [GitHub](https://github.com/leslieDLcy/PyUncertainNumber) and [comprehesive documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) available online."
 [^footnote-10]: also called randomness, aleatory uncertainty, objective uncertainty, dissonance, or irreducible uncertainty arised from natural stochasticity, environmental or structural variation across space or through time.
 [^footnote-2]: also called ignorance, epistemic uncertainty, non-specificity, or reducible uncertainty arised from incompleteness of knowledge.
 [^footnote-3]: the uncertain number could not be any tighter without more information.
