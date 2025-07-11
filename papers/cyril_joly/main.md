@@ -212,7 +212,7 @@ By strategically selecting which rows and columns to keep, OptiMask ensures the 
 
 ## Conclusion
 
-OptiMask provides a scalable heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical.
+OptiMask provides a heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical.
 By strategically permuting rows and columns to isolate missing values, it offers a practical solution that preserves maximal data without imputation.
 The Python implementation supports common data structures (numpy, pandas, polars) and delivers results efficiently even for big matrices.
 
