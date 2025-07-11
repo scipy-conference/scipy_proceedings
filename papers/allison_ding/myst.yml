@@ -6,7 +6,7 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: A Lightweight Pipeline for Rewards-Guided Synthetic Text Generation Using NeMo and RAPIDS
   # subtitle:
-  description: Add a two sentence description about your article.
+  description: "The paper introduces a lightweight pipelines for rewards-guided synthetic text generation using two NVIDIA products: NeMo and RAPIDS (i.e., cuDF, cuML)"
   # Authors should have affiliations, emails and ORCIDs if available
   bibtex: references.bib
   authors:
@@ -16,21 +16,17 @@ project:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0000
       roles:
-        - Conceptualization
         - Methodology 
-    # - name: Mark Anthony
-    #   email: mark37@rome.it
-    #   affiliations:
-    #     - Egyptian Embassy, S.P.Q.R.
-    # - name: Jarrod Millman
-    #   email: millman@rome.it
-    #   affiliations:
-    #     - Egyptian Embassy, S.P.Q.R.
-    #     - Yet another place, S.P.Q.R.
-    #   corresponding: true
-    # - name: Cleopatra
-    #   email: cleopatra@rome.it
-    #   affiliation: Ptolemaic Kingdom
+    - name: Arham Mehta
+      email: arhamm@nvidia.com
+      affiliations:
+        - NVIDIA Corporation
+      orcid: 0000-0000-0000-0001
+    - name: Nirmal Juluru
+      email: njuluru@nvidia.com
+      affiliations:
+        - NVIDIA Corporation
+      orcid: 0000-0000-0000-0002
   keywords:
     - Synthetic Data Generation
     - Reward Scoring 
@@ -38,6 +34,8 @@ project:
     - GPU Acceleration
     - NeMo 
     - RAPIDS
+    - cuML
+    - cuDF
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
@@ -46,14 +44,8 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
         - nvidia2023nemo
         - rapids2023
-        - sdv2020
   exports:
     - id: pdf
       format: typst
