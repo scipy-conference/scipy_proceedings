@@ -42,14 +42,14 @@ When handling missing values in a matrix, we must decide whether to remove affec
    - In **tall matrices** (rows > columns), removing a problematic **row** typically preserves more data.
    - In **wide matrices** (columns > rows), removing an affected **column** is usually preferable.
 
-   :::{figure} figures/at_hand_two  
-   :alt: Data to process  
-   :width: 400 px  
-   :align: left  
-   A toy example: removing the row containing the two NaNs yields the largest submatrix, rather than removing the two columns.  
+   :::{figure} figures/at_hand_two
+   :alt: Data to process
+   :width: 400 px
+   :align: left
+   In this toy example, removing the row with the two NaNs yields a larger submatrix (11x5) than removing the two columns, which results in a smaller submatrix (12x3) from the original 12x5 matrix.
    :::
 
-2. **Generalizing the Intuition**:  
+2. **Generalizing the Intuition**:
    The toy example suggests a greedy heuristic:
 
    - If a row contains many NaNs, removing that single row may be better than removing all corresponding columns (which could discard more data).
@@ -99,11 +99,11 @@ The core idea is to compute row and column permutations such that the search for
 
 ### Core Approach
 
-:::{figure} figures/algo_data  
-:alt: Data to process  
+:::{figure} figures/algo_data
+:alt: Data to process
 :width: 400 px
 :align: left
-An example matrix illustrating the algorithm's steps. Grey cells represent missing values.  
+An example 40x30 matrix, containing 63 missing values, illustrating the algorithm's steps. Grey cells represent missing values.
 :::
 
 OptiMask employs an iterative permutation-based algorithm to identify the largest NaN-free submatrix through these key steps:
@@ -119,11 +119,11 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
    - Compute `hy`: row-wise rightmost NaN index (from the left).
    - These define the current "NaN frontier" of the matrix.
 
-   :::{figure} figures/algo_0  
-   :alt: Step #1 and #2  
+   :::{figure} figures/algo_0
+   :alt: Step #1 and #2
    :width: 400 px
    :align: left
-   Steps #1 and #2: isolating rows and columns with NaNs and computing `hx` and `hy`.  
+   Steps #1 and #2: isolating the 33 rows and 27 columns with NaNs and computing `hx` and `hy`.
    :::
 
 3. **Permutation Phase**:
@@ -134,31 +134,31 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
    - Track all permutations applied during this process.
    - Repeat until both `hx` and `hy` form non-increasing sequences, indicating an optimal NaN frontier.
 
-   :::{figure} figures/algo_iterations  
-   :alt: Permutation steps  
+   :::{figure} figures/algo_iterations
+   :alt: Permutation steps
    :width: 800 px
    :align: left
-   Three alternate permutations lead to a Pareto frontier of NaNs.  
+   Three alternate permutations lead to a Pareto frontier of NaNs.
    :::
 
 4. **Submatrix Extraction**:
 
    - Identify the largest contiguous NaN-free rectangle in the permuted space.
 
-   :::{figure} figures/algo_result_permuted_space  
-   :alt: OptiMask result in permuted space  
+   :::{figure} figures/algo_result_permuted_space
+   :alt: OptiMask result in permuted space
    :width: 400 px
    :align: left
-   OptiMask result in permuted space: the black-dotted rectangles are candidates for the largest contiguous NaN-free submatrix, with the red-dotted one selected for its maximal area.  
+   OptiMask result in permuted space: the black-dotted rectangles are candidates for the largest contiguous NaN-free submatrix, with the red-dotted one selected for its maximal area.
    :::
 
    - Apply inverse permutations to map back to original row/column indices.
 
    :::{figure} figures/algo_result.png
-   :alt: OptiMask result  
+   :alt: OptiMask result
    :width: 400 px
    :align: left
-   OptiMask result: grey indicates missing values, red indicates removed rows and columns, blue marks the computed NaN-free submatrix.  
+   OptiMask result: grey indicates missing values, red indicates removed rows and columns, blue marks the computed NaN-free submatrix. The computed submatrix by the algorithm is 27x17, while discarding every row with NaN would yield a 7x30 submatrix, and discarding every column with NaN would yield a 40x3 submatrix.
    :::
 
 ## Python Package
