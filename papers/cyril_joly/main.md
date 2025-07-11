@@ -208,7 +208,7 @@ print(X_clean.shape, y_clean.shape) # (3581, 50) (3581,)
 model = LinearRegression().fit(X=X_clean, y=y_clean)  
 ```  
 
-By strategically selecting which rows and columns to keep, OptiMask ensures the dataset remains meaningful while becoming fully trainable.
+By strategically selecting which rows and columns to keep, OptiMask preserves more of the input data than other approaches, improving the ability of machine learning models to learn meaningful relationships.
 
 ## Conclusion
 
