@@ -34,6 +34,8 @@ project:
       orcid: 0000-0002-9941-3977
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
+        - Columbia University, Manhattan, NY, USA
+        - NSF Center for Learn the Earth with Artificial Intelligence and Physics, Manhattan, NY, USA
     - name: Andrei Paleyes
       email: andrei.paleyes@simulation.science
       orcid: 0000-0002-3703-8163
