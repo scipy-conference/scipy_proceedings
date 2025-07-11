@@ -91,9 +91,8 @@ a = pun.I(1, 5)  # b, c, d ...
 mix = stochastic_mixture(a, b, c, d, masses=[0.25, 0.25, 0.25, 0.25])    
 
 # envelope aggregation of distributional eclicitation into a p-box
-a = pun.Distribution('gaussian', (-5, 2))
+a = pun.D('gaussian', (-5, 2))  # b, c, d ...
 env = envelope(a, b, c, d)
-
 ```
 
 ## Measurement imprecision
@@ -151,7 +150,6 @@ Illustration of numerical hedges.
 
 ```{code-block} python
 pun.hedge_interpret('about 7')  # similar usage for other hedges, such as '7.0'
-# [5.0,9.0]
 ```
 
 ## Dependency structure: fully specified, partially known or unknown
