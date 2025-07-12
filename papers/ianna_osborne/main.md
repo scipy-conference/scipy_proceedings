@@ -8,15 +8,22 @@ abstract: |
 
 The High-Energy Physics (HEP) community has long relied on Python and C++ for data analysis. While Python provides ease of use and a rich scientific ecosystem, it struggles with performance for large-scale analyses. C++, on the other hand, offers speed but comes with increased complexity and slower development cycles. Julia, a modern language designed for scientific computing, promises the best of both worlds: high-level expressiveness with near-native execution speed.
 
-JuliaHEP, with its emerging set of tools and libraries[@juliahep], aims to facilitate HEP data analysis in Julia. There are three distinct ways these tools are being developed. Some — Geant4.jl, for example — wrap mature C++ libraries (in this case, Geant4) and make them accessible via a Julia interface. Others, like BAT.jl, have rewritten the entire codebase in native Julia. Our approach is different: we integrate Julia with the Python-based package Awkward Array via its Julia backend, AwkwardArray.jl.
+:::{figure} heplanguages.png
+:label: fig:heplanguages
+HEP Software: it all revolves around a language, or several.
+:::
+
+JuliaHEP, with its emerging set of tools and libraries [@juliahep], aims to facilitate HEP data analysis in Julia. However, given the timescale of the HEP experiments and the legacy software they rely on, this introduces a three-language problem — though it is intended as a temporary measure.
+
+Currently, three main approaches are being pursued in the development of these tools. The first involves wrapping mature C++ libraries — for example, Geant4.jl provides a Julia interface to the widely used Geant4 particle transportation toolkit. The second approach entails a complete reimplementation of existing tools in native Julia, as demonstrated by BAT.jl. The third, and the one we follow, focuses on integrating Julia with the Python-based Awkward Array library via its dedicated Julia backend, AwkwardArray.jl.
+
+Data sharing — especially across language boundaries — is one of the key challenges. Our approach addresses this by exposing shared data buffers between Python and Julia, avoiding costly copies and offering a gentle, incremental path for physicists to explore Julia’s capabilities within existing workflows.
 
 ## Awkward Array in Julia
 
 Awkward Array is a key library for handling complex and jagged HEP data in the Python ecosystem. It is also integrated into Julia via its AwkwardArray.jl backend.
 
-This backend differs from other Awkward Array backends in that it exposes the underlying data buffers to Julia. Data sharing — for example, hopping across the language barrier — is one of the most challenging aspects of bridging different languages. The Awkward Array solution to this is to expose the buffers.
-
-By using Vector of Vectors, a Julia-native type that provides similar capabilities, we have compared performance and usability against the traditional Python stack. There is no significant overhead in combining the two.
+This backend differs from other Awkward Array backends in that it exposes the underlying data buffers to Julia. By using Vector of Vectors, a Julia-native type that provides similar capabilities, we have compared performance and usability against the traditional Python stack. There is no significant overhead in combining the two.
 
 Additionally, we have explored Julia’s code interoperability with Python and its native compilation strategies to optimize HEP computations.
 
@@ -33,7 +40,7 @@ This is the combinations performance plot, comparing the ak.combinations functio
 
 ## Scaling it up
 
-Beyond performance, the introduction of Julia via AwkwardArray.jl addresses the practical aspects of integrating Julia into existing HEP workflows. Physicists can gradually adopt Julia without abandoning Python-based tools, thanks to interlanguage operability. The PythonCall[@PythonCall.jl] package provides a useful interface between the languages, enabling bi-directional integration between the ecosystems. Yes, this introduces a three-language problem, but it is intended as a temporary measure.
+Beyond performance, the introduction of Julia via AwkwardArray.jl addresses the practical aspects of integrating Julia into existing HEP workflows. Physicists can gradually adopt Julia without abandoning Python-based tools, thanks to interlanguage operability. The PythonCall[@PythonCall.jl] package provides a useful interface between the languages, enabling bi-directional integration between the ecosystems.
 
 The AwkwardArray.jl Julia package can be considered a backend for Awkward Arrays in Python, but it differs from all other backends. In a sense, it’s a transitional project that allows Python users to speed up computations on Awkward Arrays using Julia kernels — or even Julia packages optimized for specific needs, such as combinatorics. The underlying data representing an Awkward Array is shared between the languages, making it highly efficient by avoiding unnecessary data copying.
 
