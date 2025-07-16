@@ -14,6 +14,12 @@ project:
       affiliations:
         - Princeton University
       corresponding: true
+    - name: Jerry 🦑 Ling
+      email: proton@jling.dev
+      orcid: 0000-0002-3359-0380
+      affiliations:
+        - Harvard University
+      corresponding: false
   keywords:
     - Awkward Array
     - Julia
