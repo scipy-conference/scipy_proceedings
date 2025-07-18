@@ -41,12 +41,12 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
 
   Python is becoming increasingly popular in High Energy Physics (HEP) analysis due to its flexibility, ease of use and the growing number of scientific tool implementet on it.
   At the same time, the HAMMER package is gaining traction in the community as a powerful framework to reinterpret previously analyzed datasets and explore BSM scenarios through FFs reweighting.
-  The Redist-HAMMER is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the pyhf framework [@pyhf] [@pyhf_joss].
+  The Redist-HAMMER ([github repository](https://github.com/lorenzennio/redist)) is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the *pyhf* framework [@pyhf] [@pyhf_joss].
   This allows HAMMER-processed samples to be used directly within pyhf’s binned-likelihood models [@Cranmer:2012sba], via the Redist modifiers of the likelihood, encoding the BSM and FF dependence of the shapes as defined by the HAMMER theoretical backend.
   Other efforts, such as the RooHammerModel [@Garc_a_Pardi_as_2022], have been spent to address similar functionalities in the C++-based RooFit-HistFactory framework [@Verkerke:2003ir].
-  Redist-HAMMER builds on this idea by bringing it into the Python ecosystem, providing a flexible reinterpretation tool that supports combination and fitting workflows entirely in Python.
+  Redist-HAMMER builds on this idea by bringing it into the Python ecosystem, providing a flexible reinterpretation tool that supports combination and fitting workflows entirely in Python allowing for a easy to start and felxible interface to apply reinterpretation of HEP datasets.
 
-  The structure of this document is as follows: section 2 describes the Redist environment and the custom modifier functionalities implemented as an extension of *pyhf*, section 3 describes the Redist-HAMMER interface to *pyhf* with a specific focus on the methods to start coding with it and perform simple fits, section 4 shows a set of proof fo usage of the package discussing advantages of the methods that are used, finally section 5 provides an outlook on further implementation of the Redist package in HEP and in multiple different fields of science.
+  The structure of this document is as follows: section 2 describes the Redist environment and the custom modifier functionalities implemented as an extension of *pyhf*, section 3 describes the Redist-HAMMER interface to *pyhf* with a specific focus on the methods to start coding with it and perform simple fits, section 4 shows a set of proof of usage of the package discussing advantages of the methods that are used, finally section 5 provides an outlook on further implementation of the Redist package in HEP and in multiple different fields of science.
   
 ## The PyHF and the Redist package
   The *pyhf* package implements a very popular model building method for binned-likelihood fits.
@@ -85,6 +85,13 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   The Redist-HAMMER follows a deliberately nested class structure, where each class is responsible for a narrowly defined task, adhering to the principle of single responsibility.
   Higher-level classes delegate specific subtasks to lower-level components, which are composed as objects within them.
   This design, while seemingly convoluted, promotes clarity, testability and separation of concerns by ensuring that each layer handles only its designated function and relies on contained objects for more granular operations.
+  This modular, layered structure enables to effectively apply both unit and integration testing to validate each class's behavior both in isolation and in collaboration with the other components.
+  The structure of the package and its purpose, with respect to the HAMMER interface and *pyhf*, are summarized in [Figure %s](#fig:scheme).
+    
+  :::{figure} ./figure1.png
+  :name: fig:scheme
+  System diagram of the Redist package allowing HAMMER processed samples to be used in *pyhf* inference. The nested structure of the Redist-HAMMER interface is summarized.
+  :::
   
   The most inner object in the nested structure is the HammerCacher, a class that uses the Python HAMMER interface functions to read from a file a HAMMER-processed histograms, which are created applying HAMMER to the simulations and contain the HAMMER weighting parameters (generally ~10-20 new degrees of freedom for describing the FF parametrization and BSM injection) and the mathematical tools to extrapulate the variations of the shape as function of them.
   The HammerCacher stores the bin content of the HAMMER-processed histogram and updates it on the basis of any set of NP and FF parameters that were defined at HAMMER processing time.
@@ -186,7 +193,7 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   A set of parameters is then defined and the custom modifier created.
   The custom modifier is assigned a name to distinguish it from other types of standard modifiers and is added later to an already existing, but not custom, pyhf model through the expand_pdf attribute:
   ```python
-  new_params = {"Re_S_qLlL": {"inits": (Nnorm,),"bounds": ((-3.0, 3.0),),"paramset_type": "unconstrained"},}
+  new_params = {"Re_S_qLlL": {"inits": (0.0,),"bounds": ((-3.0, 3.0),),"paramset_type": "unconstrained"},}
   cmod = modifier_hammer.Modifier_Hammer(new_params, NP_B02DstTauNu, SM_B02DstTauNu, name="mod_B02DstTauNu")
   spec = {
     "channels": [
@@ -221,7 +228,7 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   More generically, following the same prescription, the pyhf model is able to handle arbitrarily complex degrees of freedom where the effect of changing the templates is completely determined by the initial and alternative hypothesis we define as simple python functions.
 
   This method has direct application in HEP analysis, in particular for the reinterpretation of semileptonic analyses.
-  Taking, for example, the semileptonic modes of the beauty mesons $\overline{B^0} \to D^{*+}\mu^{-}\overline{\nu_{\mu}}$ and $\overline{B^0} \to D^{*+}\tau^{-}\overline{\nu_{\tau}}$, notably, tesion exist between the expected ratio of the abundance of the two decay modes and the measured ratio of the respective Branching Fractions (BF):
+  Taking, for example, the semileptonic modes of the beauty mesons $\overline{B^0} \to D^{*+}\mu^{-}\overline{\nu_{\mu}}$ and $\overline{B^0} \to D^{*+}\tau^{-}\overline{\nu_{\tau}}$, notably, tension exist between the expected ratio of the abundance of the two decay modes and the measured ratio of the respective Branching Fractions (BF):
 
 
   ```{math}
@@ -229,17 +236,17 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   ```
   has been observed [@banerjee2024averagesbhadronchadrontaulepton].
   The Redist method, implemented with the theoretical HAMMER backend, allows to disentangle the tension and study the BSM processes in these decays in an innovative and model-independent way.
-  The HAMMER-weighted sample can be accessed, and a template fit can be applied to study the sensitivity of a given Wilson Coefficient given a certain statistical power, which is the number of events of the template dataset used in the fit.
+  The HAMMER-weighted sample can be accessed, and a template fit can be applied to study the sensitivity on the parameters of interest given a certain statistical power, defined by the number of events of the template dataset used in the fit.
   The phase space of the real and imaginary parts of the Wilson Coefficient associated with a scalar-like NP contribution, coupling particles and antiparticles in the same chiral state, has been inspected using a template generated with the RapidSim tool [@Cowan_2017] and containing $B^0 \to D^{*}\tau\nu_{\tau}$ events.
   The fit has been done using a pseudo-dataset identical to the template itself, with different injections of NP, to demonstrate the application of the Redist-HAMMER interface in a small and simple sensitivity study context.
-  This represents a simple and practical example of a use case in flavour physics data analysis, demostrating the functionalities of maximum-likelihood-fits, generation of pseudodatasets and phase space scanning for confidence level determination.
+  This represents a simple and practical example of a use case in flavour physics data analysis, demonstrating the functionalities of maximum-likelihood-fits, generation of pseudodatasets and phase space scanning for confidence level determination.
 
   A Negative-Logarithmic-Likelihood (NLL) fit is performed to find the optimal point, then further fits are applied over a grid of points in the phase space of the real and imaginary parts of the NP Wilson Coefficients.
   For each point, the NP Wilson Coefficients are fixed, while the rest of the parameters, for instance the SM contributions, are free to float to maximize the NLL.
   If the grid of phase space is defined with sufficiently fine granularity, this method allows inferring 2-Dimensional (2D) Confidence Intervals (CI) correctly, taking into account correlations among the parameters as shown in  [Figure %s](#fig:scan_SLL).
-  :::{figure} ./figure1.png
+  :::{figure} ./figure2.png
   :name: fig:scan_SLL
-  Negative-Log-Likelihood phase-space scan of the scalar Wilson Coefficient on a template-dataset with no NP injection (left) and on a template dataset with the NP injection of $Re(S_{qLlL})=0.2$ and $Im(S_{qLlL})=0.8$ (right). The confidence levels correspontent to 1, 3 and 5 standard deviations are overlaid to both the scans.
+  Negative-Log-Likelihood phase-space scan of the scalar Wilson Coefficient on a template-dataset with no NP injection (left) and on a template dataset with the NP injection of $Re(S_{qLlL})=0.2$ and $Im(S_{qLlL})=0.8$ (right). The confidence levels correspontent to 1, 3 and 5 standard deviations are overlaid to both the scans. Both the fits correctly identify the injected New Physics values showing the effectiveness of the method.
   :::
   
   In fact, the custom modifiers applying the weighting can be mixed with the already existing shape modifiers in pyhf.
@@ -275,16 +282,16 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   where the hi_temp and lo_temp are obtained from the shapes of the contributions with different FFs or WCs injected.
   An example of this usage, where the two alternative shapes hi_temp and lo_temp have been defined with respect to different injections of a FF parameter ($\Delta\rho^2$), is shown in [Figure %s](#fig:histsys_with_Hammer).
 
-  :::{figure} ./figure2.png
+  :::{figure} ./figure3.png
   :name: fig:histsys_with_Hammer
-  Distributions of a 1-dimensional *pyhf* template for different values of the *histsys* modifier, defined with respect to two different injection of values of the $\rho^2$ FF parameter in HAMMER.
+  Distributions of a 1-dimensional *pyhf* template for different values of the *histsys* modifier, defined with respect to two different injection of values of the $\rho^2$ FF parameter in HAMMER. Redist-HAMMER allows the integration of the theoretical uncertainty on the Form Factor parameter as a standard *histosys* nuisance parameter in *pyhf*.
   :::
 
   
 
 ## Outlook
   We present the Redist-HAMMER interface, an extension of the already existing Redist module to interface HAMMER with the fitting environment of pyhf.
-  The package has been developed to address the challenge of direct NP measurements through the reinterpretation of the LHCb and Belle datasets, which will be a crucial step for getting a further and deeper understanding of tensions of HEP mesurements with SM predictions.
+  The package has been developed to address the challenge of direct NP measurements through the reinterpretation of the LHCb and Belle datasets, which will be a crucial step for getting a further and deeper understanding of tensions of HEP measurements with SM predictions.
   The module offers the possibility of easily handling very complex parameters, such as the Wilson Coefficients and the Form Factors, using the HAMMER package as theoretical backend.
 
   Allowing for a correct reinterpretation of data also opens the possibility of combining different datasets in a single coherent fitting environment.
@@ -296,5 +303,4 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   What has been shown in this document represents one of the many applications, in HEP and beyond, of the Redist weighting method for model building.
   Future efforts will integrate other popular theoretical backends in flavour physics like Flavio [@straub2018flaviopythonpackageflavour], finally allowing data analysts effortless use of, and possibly toggling between, all the different packages.
 
-  Fields outside HEP can benefit from the Redist method for any problem requiring the HistFactory model building and the flexibility given by the custom modifier.
-
+  Fields outside HEP can benefit from the Redist method for building model-independent fits, enabling interpretation of observed patterns in complex systems without relying on predefined models.
