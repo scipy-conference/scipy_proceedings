@@ -16,17 +16,21 @@ project:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0000
       roles:
-        - Methodology 
+        - Developer Advocate, Data Science
     - name: Arham Mehta
       email: arhamm@nvidia.com
       affiliations:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0001
+      roles:
+        - Product Manager, NeMo
     - name: Nirmal Juluru
       email: njuluru@nvidia.com
       affiliations:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0002
+      roles:
+        - Product Manager, NeMo
   keywords:
     - Synthetic Data Generation
     - Reward Scoring 
@@ -46,6 +50,7 @@ project:
       keys:
         - nvidia2023nemo
         - rapids2023
+        - sdv2020
   exports:
     - id: pdf
       format: typst
