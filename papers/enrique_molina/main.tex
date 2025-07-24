@@ -101,7 +101,7 @@ Analogously to how $\pi$ is estimated through the parallel execution of multiple
 \vspace{0.5em} \textbf{Storage API. }
 Lithops not only aims to simplify the experience of executing parallel code on serverless platforms, but also abstracts away data access operations—typically performed over object storage. Whether interacting from the Lithops client or from remote workers, the Storage API provides a unified interface that, like the Futures API, avoids vendor lock-in.
 
-The following snippet shows a minimal working example—writing an object to storage and then reading it back—that operates seamlessly across all cloud providers supported by Lithops
+In practice, this means that users can write code that works seamlessly not only across object storage from different cloud providers, but also with memory storage systems like Redis~\citep{redis}. The following snippet shows a minimal working example—writing an object to storage and then reading it back—that operates seamlessly across all cloud providers supported by Lithops
 
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily\small, commentstyle=\color{gray}]
 from lithops import Storage
@@ -113,12 +113,10 @@ if __name__ == "__main__":
 
 \end{lstlisting}
 
-
-
 \subsection{High-Performance Insights}
-Several features make Lithops particularly well-suited for some high-performance parallel data analytics tasks,
-enabling users not only to execute large-scale computations with minimal effort but also leverage serverless computing upsides. When leveraging the \texttt{map()} primitive, users distribute their data processing tasks across numerous cloud
-functions, that presents key highlights that make it stand out, as presented below:
+
+\noindent
+\vspace{0.5em} \textbf{Practical baseline performance.} Several features make Lithops particularly well-suited for some high-performance parallel data analytics workloads, enabling users not only to execute large-scale computations with minimal effort but also leverage serverless computing upsides. When leveraging the \texttt{map()} primitive, users distribute their data processing tasks across numerous cloud functions, that presents key highlights that make it stand out, as presented below:
 
 
 \begin{figure}[htbp]
@@ -135,10 +133,32 @@ functions, that presents key highlights that make it stand out, as presented bel
     \item Once the compute resources (FaaS functions) are instantiated, they typically load their input data from object storage. As depicted in Figure~\ref{fig:rw}, the aggregate bandwidth offered by Amazon S3 reaches up to 100~GB/s for reads and 90~GB/s for writes when accessed concurrently by 1000 functions. This demonstrates the S3 high I/O parallelism, which Lambda functions can efficiently leverage for highly scalable data pull/push operations.
 \end{itemize}
 
+\noindent
+\vspace{0.5em} \textbf{Leveraging effective transparency.} As previously stated, Lithops leverages AWS Lambda and S3 as its default backend, yet its design is not dependent on these specific services. To evaluate its architectural flexibility, we design an I/O-intensive analytics experiment that outlines three key aspects: (1) the performance characteristics of Lithops' default AWS Lambda and S3 configuration, (2) its seamless integration capabilities with alternative cloud providers and services, and (3) the practical transparency achieved through its abstracted Storage API.
+
+For our experimental evaluation, we employ a 5GB TeraSort workload. This benchmark is I/O-intensive, comprising two parallel stages of functions connected by an all-to-all communication pattern. We conduct this experiment across three distinct setups:
+\begin{enumerate}
+    \item AWS Lambda utilizing AWS S3 for intermediate storage.
+    \item Google Cloud Run utilizing Google Cloud Storage for intermediate storage.
+    \item AWS Lambda utilizing Redis as the intermediate storage. To streamline deployment and management, we provision Redis as an AWS ElastiCache~\citep{aws-elasticache} managed cluster.
+\end{enumerate}
+
+Crucially, the experimental methodology maintains identical application code across all three setups, based on the original implementation detailed in~\cite{seer2022}. This serves as a direct demonstration of Lithops' transparency and portability. The only difference is the Lithops configuration file, which specifies the cloud provider and the storage backend to use.
+
+Our empirical results, depicted in Figure~\ref{fig:terasort_times}, show that Google Cloud Run exhibits demonstrably inferior performance compared to the AWS-based configurations. Conversely, the performance of AWS Lambda with S3 is marginally slower than that of AWS Lambda with Redis, underscoring the competitive performance of Lithops' default setup. However, it is important to note that execution variability was significantly higher when using S3, which can likely be attributed to the throughput constraints associated with object storage systems.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{assets/execution_time_bars.pdf}
+\caption{TeraSort performance of Lithops across different cloud providers and storage backends (in parentheses).}
+\label{fig:terasort_times}
+\end{figure}
+
+
 \subsection{Source code}
 The entire Lithops source code is openly accessible to the public via its GitHub repository: \url{https://github.com/lithops-cloud/lithops}.
 
-\section{On the Road to Optimized Partitioning with Dataplug}
+\section{Optimized Data Partitioning with Dataplug}
 
 Scientific computing in the cloud is becoming increasingly data-driven. The success of large-scale data-parallel workloads depends not only on scalable computation, but also on scalable data access. In this section, we examine the limitations of traditional static data partitioning, introduce the concept of cloud-aware formats, and describe how the Dataplug~\citep{dataplug} framework enables dynamic on-the-fly partitioning of unstructured scientific data. We conclude with an overview of Dataplug operational flow, allowing users to efficiently access and process large unstructured scientific datasets.
 
