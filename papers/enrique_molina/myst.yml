@@ -58,6 +58,8 @@ project:
         - sklearn1
         - sklearn2
         - colab
+        - aws-elasticache
+        - redis
   exports:
     - id: pdf
       format: typst
