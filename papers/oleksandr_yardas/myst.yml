@@ -27,10 +27,36 @@ project:
     - depletion
     - coupling
     - OpenMC
-    - Cross sections
-  # Add the abbreviations that you use in your paper here
+    - Cross sections # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    CRPG: Computational Reactor Physics Group
+    ORNL: Oak Ridge National Laboratory
+    MIT: Massachusets Institute of Technology
+    CSG: constructive solid geometry
+    CFD: computational fluid dynamics
+    CAD: computer aided design
+    DNP: delayed neutron precursor
+    GHG: greenhouse gas
+    GIF: Generation IV International Forum
+    MSR: molten salt reactor
+    MSRE: Molten Salt Reactor Experiment
+    MSBR: Molten Salt Breeder Reactor
+    MSFR: Molten Sodium Fast Reactor
+    NRC: Nuclear Regulatory Commission
+    R\&D: research and development
+    M\&S: modeling and simulation
+    E\&T: education and training
+    DOE-NE: Department of Energy Office of Nuclear Energy
+    CC: closed code
+    OSS: open source software
+    IAEA: International Atomic Energy Agency
+    ONCORE: Open-source Nuclear COdes for REactor analysis
+    SNF: spent nuclear fuel
+    SFR: sodium-cooled fast reactor
+    CRAM: Chebyshev rational approximation method
+    PWR: pressurized water reactor
+    DOE: Department of Energy
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
