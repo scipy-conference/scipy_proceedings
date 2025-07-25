@@ -10,8 +10,8 @@
       \label{eq:depletion}
       \begin{split}
         \frac{dN_i}{dt} = &\sum\limits_{j=1}^n \left[ \int_0^\infty 
-        f_{j \rightarrow i}(E) \sigma_j (E, t) \phi(E,t) dE \;+ \lambda_{j\rightarrow i}
-        \right] N_j(t) \\ &- \left [\int_0^\infty \sigma_i (E,t) \phi(E,t) dE \; +
+        f_{j \rightarrow i}(E) \sigma_j (E) \phi(E,t) dE \;+ \lambda_{j\rightarrow i}
+        \right] N_j(t) \\ &- \left [\int_0^\infty \sigma_i (E) \phi(E,t) dE \; +
         \sum\limits_{j=1}^n \lambda_{i\rightarrow j} \right ] N_i(t),
       \end{split}
     \end{equation}
@@ -19,7 +19,7 @@
     \begin{equation*}
       \begin{split}
         N_i(t) &\equiv \text{density of nuclide $i$ at time $t$} \\
-        \sigma_i(E,t) &\equiv \text{transmutation cross section for nuclide $i$ at energy $E$ and time $t$} \\
+        \sigma_i(E) &\equiv \text{transmutation cross section for nuclide $i$ at energy $E$} \\
         \phi(E,t) &\equiv \text{neutron flux at energy $E$ and time $t$} \\
         f_{j \rightarrow i}(E) &\equiv \text{fraction of transmutation reactions in nuclide $j$ that produce nuclide $i$} \\
         \lambda_{j \rightarrow i} &\equiv \text{decay constant for decay modes in nuclide $j$ that produce nuclide $i$} \\
@@ -91,7 +91,7 @@
         rates $r_{ij}(t)$ are tallied directly as:
         \begin{equation}
             \label{eq:cont-rxn-rate}
-            r_{ij}(t) = \left[\int_0^\infty \sigma_{ij}(E,t) \phi(E,t) dE \; \right]
+            r_{ij}(t) = \left[\int_0^\infty \sigma_{ij}(E) \phi(E,t) dE \; \right]
             N_{i}(t)
         \end{equation}
         where $i$ and $j$ indicate the nuclide and reaction, respectively.
@@ -100,7 +100,7 @@
         reaction rate:
         \begin{equation}
             \label{eq:mg-rxn-rate}
-            r_{ij}(t) = \left[\sum_{g} \sigma_{ij,g}(t) \phi_{g}(t) \right]
+            r_{ij}(t) = \left[\sum_{g} \sigma_{ij,g} \phi_{g}(t) \right]
             N_{i}(t) 
         \end{equation}
         In practice, this introduces a discretization error, but in the limit of

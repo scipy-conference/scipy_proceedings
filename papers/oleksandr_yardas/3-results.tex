@@ -15,7 +15,7 @@
     group, CASMO-8, and CASMO-40. The third case is much slower than the first
     case as the cross sections need to be reloaded after each depletion step.
     The third case is a sanity check that the cross sections are being computed
-    correctly correctly, as it should have a smaller error than the second case.
+    correctly, as it should have a smaller error than the second case.
     Due to the cross section discretization that occurs before peforming
     depletion, we do not expect the third case results to converge to the first
     case results in limit of infinite particles, but we would expect it to
@@ -118,11 +118,11 @@
     \begin{figure}[h!tpb]
         \centering
         \subfloat[] {
-            \includegraphics[width=0.5\linewidth]{figs/actinides_constant_xs_predictor_fission_q_days.pdf}
+            \includegraphics[width=\linewidth]{figs/actinides_constant_xs_predictor_fission_q_days.pdf}
             \label{fig:actinides-error-constant-xs-days}
         }
         \subfloat[] {
-            \includegraphics[width=0.5\linewidth]{figs/actinides_updating_xs_predictor_fission_q_days.pdf}
+            \includegraphics[width=\linewidth]{figs/actinides_updating_xs_predictor_fission_q_days.pdf}
             \label{fig:actinides-error-updating-xs-days}
         }
         \caption[]{Relative actinide concentration error using 3-day time steps at 3,
