@@ -41,7 +41,7 @@ This is the combinations performance plot, comparing the ak.combinations functio
 
 ## Scaling it up
 
-While performance gains matter, integrating Julia into established HEP workflows also involves practical challenges. AwkwardArray.jl enables physicists to explore Julia’s capabilities alongside existing Python tools without disrupting current workflows. It acts as a transitional layer, allowing heavy computations to be offloaded to Julia when useful, while preserving compatibility with Python’s data analysis ecosystem.
+While performance gains matter, integrating Julia into established HEP workflows also involves practical challenges. AwkwardArray.jl enables physicists to explore Julia’s capabilities alongside existing Python tools by accessing shared data buffers directly, without copying. This allows heavy computations to be offloaded to Julia where appropriate, while maintaining full compatibility with Python’s data ecosystem.
 
 Naturally, adding a third language raises a long-term question. Will Julia replace Python and C++? It’s too soon to say. Legacy software must be maintained, Python remains dominant, and new options like Rust are emerging. For now, the goal is to provide a flexible, incremental path for physicists to use Julia where it offers clear advantages.
 
