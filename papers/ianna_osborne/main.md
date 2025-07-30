@@ -34,7 +34,7 @@ We present the benefits of using Julia for HEP workloads by benchmarking the sam
 
 :::{figure} combinations.png
 :label: fig:combinations
-This is the combinations performance plot, comparing the ak.combinations function with a Julia kernel on an awkward array. The Julia kernel uses JuliaMath/Combinatirics.jl[@Combinatorics.jl].
+This is the combinations performance plot, comparing the ak.combinations function with a Julia kernel on an awkward array. The Julia kernel uses JuliaMath/Combinatorics.jl[@Combinatorics.jl].
 :::
 
 This is without yet exploiting Julia’s potential for parallel computing and GPU support, which opens the door to workflows where data loaded with AwkwardArray.jl is processed using Julia-native GPU kernels or multi-threaded code — offering scalable performance without disrupting existing pipelines.
