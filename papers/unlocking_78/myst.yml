@@ -37,11 +37,28 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        # Reports
+        - bcg2020women
+        - lorenzo2018leadership
+        - desvaux2007womenmatter
+        - harnham2023diversity
+        - hunt2018diversity
+        - msci2016tipping
+        - techwomen2020eval
+        # Preprints
+        - rossi2022gender
+        - sultana2022reviews
+        - maddi2020diversity
+        # Web & News Articles
+        - isu2023onein20
+        - turing_women_ai
+        - unesco2024g20
+        - womentech2020stats
+        - gammage2019unpaidcare
+        - builtin_aibias
+        - pydata_scholarships
+        - cio2021ada
+        - outreachy
   exports:
     - id: pdf
       format: typst
