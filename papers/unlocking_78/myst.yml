@@ -47,4 +47,4 @@ project:
       format: typst
       template: https://github.com/curvenote-templates/scipy.git
       article: unlocking_78.md
-      output: unlocking_78.pdf
+      output: full_text.pdf
