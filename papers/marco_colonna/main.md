@@ -39,12 +39,12 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
 
 
 
-  Python is becoming increasingly popular in High Energy Physics (HEP) analysis due to its flexibility, ease of use and the growing number of scientific tool implementet on it.
+  Python is becoming increasingly popular in High Energy Physics (HEP) analysis due to its flexibility, ease of use and the growing number of scientific tool implemented on it.
   At the same time, the HAMMER package is gaining traction in the community as a powerful framework to reinterpret previously analyzed datasets and explore BSM scenarios through FFs reweighting.
-  The Redist-HAMMER ([github repository](https://github.com/lorenzennio/redist)) is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the *pyhf* framework [@pyhf] [@pyhf_joss].
-  This allows HAMMER-processed samples to be used directly within pyhf’s binned-likelihood models [@Cranmer:2012sba], via the Redist modifiers of the likelihood, encoding the BSM and FF dependence of the shapes as defined by the HAMMER theoretical backend.
+  The Redist-HAMMER ([github repository](https://github.com/lorenzennio/redist)) is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the *pyhf* framework [@*pyhf*] [@*pyhf*_joss].
+  This allows HAMMER-processed samples to be used directly within *pyhf*’s binned-likelihood models [@Cranmer:2012sba], via the Redist modifiers of the likelihood, encoding the BSM and FF dependence of the shapes as defined by the HAMMER theoretical backend.
   Other efforts, such as the RooHammerModel [@Garc_a_Pardi_as_2022], have been spent to address similar functionalities in the C++-based RooFit-HistFactory framework [@Verkerke:2003ir].
-  Redist-HAMMER builds on this idea by bringing it into the Python ecosystem, providing a flexible reinterpretation tool that supports combination and fitting workflows entirely in Python allowing for a easy to start and felxible interface to apply reinterpretation of HEP datasets.
+  Redist-HAMMER builds on this idea by bringing it into the Python ecosystem, providing a flexible reinterpretation tool that supports combination and fitting workflows entirely in Python allowing for an easy to start interface to apply reinterpretation of HEP datasets.
 
   The structure of this document is as follows: section 2 describes the Redist environment and the custom modifier functionalities implemented as an extension of *pyhf*, section 3 describes the Redist-HAMMER interface to *pyhf* with a specific focus on the methods to start coding with it and perform simple fits, section 4 shows a set of proof of usage of the package discussing advantages of the methods that are used, finally section 5 provides an outlook on further implementation of the Redist package in HEP and in multiple different fields of science.
   
@@ -76,10 +76,10 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   One challenge with defining the rates in terms of the modifiers is that it may be complicated to capture more intricate dependencies, particularly if the degrees of freedom $\eta$ and $\chi$ are expressed as the NP coefficients from the HAMMER package or as FF parameters.
 
   The Redist package [@G_rtner_2024] addresses this problem with a reinterpretation method where the binned event counts are updated on the basis of the new kinematic assumptions.
-  The method has been implemented in the pyhf fitting interface through the definition of a custom modifier of the likelihood: a modifier varying event rates, computed by custom functions or external theoretical backends.
-  The Pythonic interface of the HAMMER package has been used to build an interface between HAMMER and a generic Python-based fitting interface, while the Redist package has been implemented with a new custom modifier to use the HAMMER-weighted histograms in the definition of the pyhf models.
+  The method has been implemented in the *pyhf* fitting interface through the definition of a custom modifier of the likelihood: a modifier varying event rates, computed by custom functions or external theoretical backends.
+  The Pythonic interface of the HAMMER package has been used to build an interface between HAMMER and a generic Python-based fitting interface, while the Redist package has been implemented with a new custom modifier to use the HAMMER-weighted histograms in the definition of the *pyhf* models.
 
-  This implementation of Redist-HAMMER allows us to make use of the HAMMER package directly in our fits and is a valuable example of how the Redist weighting method can be applied easily to specific cases by interfacing HEP theory packages to the pyhf fitting environment.
+  This implementation of Redist-HAMMER allows us to make use of the HAMMER package directly in our fits and is a valuable example of how the Redist weighting method can be applied easily to specific cases by interfacing HEP theory packages to the *pyhf* fitting environment.
 
 ## The Redist-HAMMER interface
   The Redist-HAMMER follows a deliberately nested class structure, where each class is responsible for a narrowly defined task, adhering to the principle of single responsibility.
@@ -93,20 +93,19 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   System diagram of the Redist package allowing HAMMER processed samples to be used in *pyhf* inference. The nested structure of the Redist-HAMMER interface is summarized.
   :::
   
-  The most inner object in the nested structure is the HammerCacher, a class that uses the Python HAMMER interface functions to read from a file a HAMMER-processed histograms, which are created applying HAMMER to the simulations and contain the HAMMER weighting parameters (generally ~10-20 new degrees of freedom for describing the FF parametrization and BSM injection) and the mathematical tools to extrapulate the variations of the shape as function of them.
+  The most inner object in the nested structure is the HammerCacher, a class that uses the Python HAMMER interface functions to read from a file a HAMMER-processed histograms, which are created applying HAMMER to the simulations and contain the HAMMER weighting parameters (generally ~10-20 new degrees of freedom for describing the FF parametrization and BSM injection) and the mathematical tools to extrapolate the variations of the shape as function of them.
   The HammerCacher stores the bin content of the HAMMER-processed histogram and updates it on the basis of any set of NP and FF parameters that were defined at HAMMER processing time.
   To avoid useless iterations with the HAMMER weighting, a caching procedure for the values of the parameters has been used: the values of the NP and FF parameters are stored, and the histogram bin content is updated only when the parameters are effectively varied.
   Multiple HammerCacher instances can be embedded in the same object and their parameters varied at the same time using the MultiHammerCacher.
-  In addition the HammerNuisWrapper is defined, it which contains a HammerCacher and attaches a set of multiplicative parameters to vary the bin content of the HAMMER histogram.
+  In addition the HammerNuisWrapper is defined as the one that contains a HammerCacher and attaches a set of multiplicative parameters to vary the bin content of the HAMMER histogram.
   A similar structure has been built to include non-HAMMER-weighted contributions in the model, meaning regular histograms produced from HEP simulations; the shapes of these contributions are defined by reading a file, and from the set of multiplicative parameters—representing, for example, the yields.
   Each NuisWrapper is further contained in a Template class, which defines an object allowing access to the bin content of the contributions and enabling changes to the parameters.
   The Template class also contains options to generate toy samples or to return the whole template histogram for a specific injection of parameters.
-  Multiple Templates are stored in a single Fitter object, which is used to represent what in pyhf would be defined as a Channel, and it is used to interface the preceding nested structure of classes to Redist.
+  Multiple Templates are stored in a single Fitter object, which is used to represent what in *pyhf* would be defined as a Channel, and it is used to interface the preceding nested structure of classes to Redist.
 
   An additional class named Reader is taking care of model construction using the configurations included in a single JSON file:
 
-  ```{code-block} c
-  :linenos: false
+  ```json
   {
     "B02DstTauNu": {
       "fileNames": ["File_containing_a_histogram.dat"],
@@ -120,13 +119,11 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
       "scalefactor": 1.0,
       "formfactors": {
         "delta_RhoSq": 1.5,
-        "delta_cSt": 2.0,
-        ...
+        "delta_cSt": 2.0
       },
       "wilsoncoefficients": {
         "SM": [1.0,0.0],
-        "S_qLlL": [0.0,0.0],
-        ...
+        "S_qLlL": [0.0,0.0]
       },
       "nuisance": {
         "Luminosity": 1.
@@ -134,11 +131,10 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
       "ishammerweighted": true,
       "injectNP":true,
       "axistitles": [
-        "title",
-        ...
+        "title"
       ],
-      "strides":[1,...],
-      "binning": [[0.0, 10.0],...]
+      "strides":[1],
+      "binning": [[0.0, 10.0]]
     }
   }
   ```
@@ -148,9 +144,9 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   A scalefactor is attached to the contributions to apply a fixed pre-scaling to the yield of the contributions.
   Finally, information useful at plotting time, such as axis titles and binnings, is included.
 
-  Given the JSON file, a Fitter can be easily produced simply by using the Reader object, letting the machinery compose the nested structure on top of which the Fitter sits:
+  Given a JSON file structured as the one above, a Fitter can be easily produced simply by using the Reader object, letting the machinery compose the nested structure on top of which the Fitter sits:
   ```python
-  import *pyhf*
+  import pyhf
   import json
   from redist import modifier
   from redist import modifier_hammer
@@ -160,9 +156,9 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   ```
   then the Fitter object allows easy handling of the HAMMER-processed contributions and their degrees of freedom—for example, generating pseudo-data where, for a given injection of NP and FF parameters, a binned distribution is produced according to a Poissonian distribution for each bin:
   ```python
-  params_0 = {"SM" : 1.,"Re_S_qLlL" : 0.,"Im_S_qLlL" : 0., ... ,
-              "delta_RhoSq" : 0.,"delta_cSt" : 0., ... ,
-              "Luminosity": 1., ...}
+  params_0 = {"SM" : 1.,"Re_S_qLlL" : 0.,"Im_S_qLlL" : 0. ,
+              "delta_RhoSq" : 0.,"delta_cSt" : 0. ,
+              "Luminosity": 1.}
   toy_data = fitter.get_template(0).generate_toy(**params_0) 
   # generate_toy() produces according to a Poisson distribution 
   # generate_template() to produce the exact value without fluctuations
@@ -181,7 +177,12 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
     return SM_distribution
   
   def NP_B02DstTauNu(**kwargs):
-    params_NP = {"SM": 1.,"Re_S_qLlL": **kwargs["Re_S_qLlL"],...}
+    params_NP = {"SM": 1.,
+                 "Re_S_qLlL": **kwargs["Re_S_qLlL"],
+                 "Im_S_qLlL": **kwargs["Im_S_qLlL"],
+                 "delta_RhoSq": **kwargs["delta_RhoSq"],
+                 "delta_cSt": **kwargs["delta_cSt"],
+                 "Luminosity": 1.}
     NP_distribution = fitter.get_template(0).generate_template(**params_NP)
     return NP_distribution
   ```
@@ -191,10 +192,38 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   ```
   where $M(\vec{p})$ is the shape of the template as a function of the parameters $\vec{p}$, $f_0$ is the reference hypothesis distribution, and $f$ is the alternative distribution.
   A set of parameters is then defined and the custom modifier created.
-  The custom modifier is assigned a name to distinguish it from other types of standard modifiers and is added later to an already existing, but not custom, pyhf model through the expand_pdf attribute:
+  The custom modifier is assigned a name to distinguish it from other types of standard modifiers and is added later to an already existing, but not custom, *pyhf* model through the *expand_pdf* attribute:
   ```python
-  new_params = {"Re_S_qLlL": {"inits": (0.0,),"bounds": ((-3.0, 3.0),),"paramset_type": "unconstrained"},}
-  cmod = modifier_hammer.Modifier_Hammer(new_params, NP_B02DstTauNu, SM_B02DstTauNu, name="mod_B02DstTauNu")
+  new_params = {
+    "Re_S_qLlL": {
+        "inits": (0.0,),
+        "bounds": ((-3.0, 3.0),),
+        "paramset_type": "unconstrained"
+    },
+    "Im_S_qLlL": {
+        "inits": (0.0,),
+        "bounds": ((-3.0, 3.0),),
+        "paramset_type": "unconstrained"
+    },
+    "delta_RhoSq": {
+        "inits": (0.0,),
+        "bounds": ((-3.0, 3.0),),
+        "paramset_type": "unconstrained"
+    },
+    "delta_cSt": {
+        "inits": (0.0,),
+        "bounds": ((-3.0, 3.0),),
+        "paramset_type": "unconstrained"
+    }
+  }
+
+  cmod = modifier_hammer.Modifier_Hammer(
+    new_params,
+    NP_B02DstTauNu,
+    SM_B02DstTauNu,
+    name="mod_B02DstTauNu"
+  )
+
   spec = {
     "channels": [
         {
@@ -222,13 +251,19 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
     "data": {"expr": "mod_B02DstTauNu_weight_fn"},
   }
   expanded_pyhf = {**cmod_B02DstTauNu.expanded_pyhf}
-  model = modifier.add_to_model(model, ["RDsMuonic"], ["B02DstTauNu"], expanded_pyhf, custom_mod_B02DstTauNu)
+  model = modifier.add_to_model(
+    model,
+    ["RDsMuonic"],
+    ["B02DstTauNu"],
+    expanded_pyhf,
+    custom_mod_B02DstTauNu
+  )
   ```
   The *pyhf* model contains and handles degrees of freedom associated with HAMMER-processed histograms for model-agnostic fits and reinterpretation.
-  More generically, following the same prescription, the pyhf model is able to handle arbitrarily complex degrees of freedom where the effect of changing the templates is completely determined by the initial and alternative hypothesis we define as simple python functions.
+  More generically, following the same prescription, the *pyhf* model is able to handle arbitrarily complex degrees of freedom where the effect of changing the templates is completely determined by the initial and alternative hypothesis we define as simple python functions.
 
   This method has direct application in HEP analysis, in particular for the reinterpretation of semileptonic analyses.
-  Taking, for example, the semileptonic modes of the beauty mesons $\overline{B^0} \to D^{*+}\mu^{-}\overline{\nu_{\mu}}$ and $\overline{B^0} \to D^{*+}\tau^{-}\overline{\nu_{\tau}}$, notably, tension exist between the expected ratio of the abundance of the two decay modes and the measured ratio of the respective Branching Fractions (BF):
+  Taking, for example, the semileptonic modes of the beauty mesons $\overline{B^0} \to D^{*+}\mu^{-}\overline{\nu_{\mu}}$ and $\overline{B^0} \to D^{*+}\tau^{-}\overline{\nu_{\tau}}$, notably, tension exists between the expected ratio of the abundance of the two decay modes and the measured ratio of the respective Branching Fractions (BF):
 
 
   ```{math}
@@ -249,9 +284,9 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   Negative-Log-Likelihood phase-space scan of the scalar Wilson Coefficient on a template-dataset with no NP injection (left) and on a template dataset with the NP injection of $Re(S_{qLlL})=0.2$ and $Im(S_{qLlL})=0.8$ (right). The confidence levels correspontent to 1, 3 and 5 standard deviations are overlaid to both the scans. Both the fits correctly identify the injected New Physics values showing the effectiveness of the method.
   :::
   
-  In fact, the custom modifiers applying the weighting can be mixed with the already existing shape modifiers in pyhf.
+  In fact, the custom modifiers applying the weighting can be mixed with the already existing shape modifiers in *pyhf*.
   This is particularly important as, generically speaking, multiple templates will compose a single channel, and some of them might not be derived from HAMMER-processed histograms, and might require other parameters for the fit.
-  Shape modifiers like the standard histosys of pyhf can also be assigned to the HAMMER-weighted derived templates, for example to represent the variation of a different parameter, or to embed the impact of one of the HAMMER parameters that is not explicitly set free to float in the fit by defining the model as:
+  Shape modifiers like the standard histosys of *pyhf* can also be assigned to the HAMMER-weighted derived templates, for example to represent the variation of a different parameter, or to embed the impact of one of the HAMMER parameters that is not explicitly set free to float in the fit by defining the model as:
   ```python
   spec = {
     "channels": [
@@ -290,7 +325,7 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
   
 
 ## Outlook
-  We present the Redist-HAMMER interface, an extension of the already existing Redist module to interface HAMMER with the fitting environment of pyhf.
+  We present the Redist-HAMMER interface, an extension of the already existing Redist module to interface HAMMER with the fitting environment of *pyhf*.
   The package has been developed to address the challenge of direct NP measurements through the reinterpretation of the LHCb and Belle datasets, which will be a crucial step for getting a further and deeper understanding of tensions of HEP measurements with SM predictions.
   The module offers the possibility of easily handling very complex parameters, such as the Wilson Coefficients and the Form Factors, using the HAMMER package as theoretical backend.
 
