@@ -41,14 +41,14 @@ List of the EFT operators implemented in HAMMER. The symbols $u$ and $d$ represe
 
   Python is becoming increasingly popular in High Energy Physics (HEP) analysis due to its flexibility, ease of use and the growing number of scientific tool implemented on it.
   At the same time, the HAMMER package is gaining traction in the community as a powerful framework to reinterpret previously analyzed datasets and explore BSM scenarios through FFs reweighting.
-  The Redist-HAMMER ([github repository](https://github.com/lorenzennio/redist)) is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the *pyhf* framework [@*pyhf*] [@*pyhf*_joss].
+  The Redist-HAMMER ([github repository](https://github.com/lorenzennio/redist)) is the first full Pythonic interface between the HAMMER package and a fitting environment, by integrating it with the *pyhf* framework [@pyhf] [@pyhf_joss].
   This allows HAMMER-processed samples to be used directly within *pyhf*’s binned-likelihood models [@Cranmer:2012sba], via the Redist modifiers of the likelihood, encoding the BSM and FF dependence of the shapes as defined by the HAMMER theoretical backend.
   Other efforts, such as the RooHammerModel [@Garc_a_Pardi_as_2022], have been spent to address similar functionalities in the C++-based RooFit-HistFactory framework [@Verkerke:2003ir].
   Redist-HAMMER builds on this idea by bringing it into the Python ecosystem, providing a flexible reinterpretation tool that supports combination and fitting workflows entirely in Python allowing for an easy to start interface to apply reinterpretation of HEP datasets.
 
   The structure of this document is as follows: section 2 describes the Redist environment and the custom modifier functionalities implemented as an extension of *pyhf*, section 3 describes the Redist-HAMMER interface to *pyhf* with a specific focus on the methods to start coding with it and perform simple fits, section 4 shows a set of proof of usage of the package discussing advantages of the methods that are used, finally section 5 provides an outlook on further implementation of the Redist package in HEP and in multiple different fields of science.
   
-## The PyHF and the Redist package
+## The *pyhf* and the Redist package
   The *pyhf* package implements a very popular model building method for binned-likelihood fits.
   The most generic binned-likelihood can be written as the product of three components:
   ```{math}
