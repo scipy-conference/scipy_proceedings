@@ -61,6 +61,8 @@ A data quality problem, or "dirty data," is any instance where the data fails to
 
 *   **Trust/Trustworthiness:** While critically important, trust is a property of the relationship between a data consumer and a data source, not an intrinsic property of the dataset itself. It is often established over time through repeated positive interactions and is influenced by the provenance and perceived reliability of the source [@taxonomy-data-quality-challenges]. Therefore, it is considered outside the scope of direct data quality measurement.
 *   **Accessibility/Availability/Security:** These dimensions relate to the systems and procedures governing access to the data, not the content of the data itself [@RIDZUAN2024341]. While a dataset that cannot be accessed is useless, we focus here on the quality of the data once it has been accessed.
+*   **Representational Validity/Sampling Bias:** A dataset can be internally accurate yet fail to represent its target phenomenon. This issue, known as sampling bias, stems from fundamental flaws in the data collection strategy—for instance, surveying only a specific subset of a population. Because these are problems of study design concerning data that was never collected, they fall outside this paper's scope, which is confined to the intrinsic quality and fidelity of the data at hand.
+
 
 ### Detection Scalability
 
