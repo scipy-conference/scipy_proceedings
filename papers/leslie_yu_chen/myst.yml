@@ -41,6 +41,7 @@ project:
     p-box: probability boxes
     QoI: quantity of interest
     i.i.d: independent and identically distributed
+    NLP: natural language processing
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
