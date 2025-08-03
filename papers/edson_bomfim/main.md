@@ -23,7 +23,8 @@ This paper aims to fill that gap by providing a practical, empirical guide for d
 The paper is structured as follows:
 *   **Section 2: Data Quality Problems** details a taxonomy of 23 common data quality problems, providing concise definitions and relevant context for each, and organizes them into practical categories.
 *   **Section 3: Methods to Detect Data Quality Problems** presents a catalogue of 22 methods used to detect these problems, discusses their automation potential, and groups them into four strategic categories. This section includes a mapping of which method categories are effective for which errors.
-*   **Section 4: Conclusions** discuss with the strategic implications of adopting a proactive data quality assurance mindset, drawing parallels between data testing and established software testing practices to argue for a more robust approach to building data systems.
+*   **Section 4: Case Study** provides a practical analysis of a real-world public health dataset, demonstrating how the catalogued problems and detection methods can be applied to identify concrete data quality issues.
+*   **Section 5: Conclusions** discuss with the strategic implications of adopting a proactive data quality assurance mindset, drawing parallels between data testing and established software testing practices to argue for a more robust approach to building data systems.
 
 
 ## Data Quality Problems
