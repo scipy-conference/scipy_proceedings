@@ -392,7 +392,7 @@ Our next focus will be extending the framework of probabilistic programming, whi
 This work has been supported by the DAWS2 (Development of Advanced Wing Solution 2) project funded by Innovate UK.
 
 
-[^footnote-22]: `pyuncertainnumber` is a research-grade open-source library, with its source code available on [GitHub](https://github.com/leslieDLcy/PyUncertainNumber) and [comprehesive documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) available online."
+[^footnote-22]: `pyuncertainnumber` is a research-grade open-source library, with its source code available on [GitHub](https://github.com/leslieDLcy/PyUncertainNumber) and [comprehesive documentation](https://pyuncertainnumber.readthedocs.io/en/latest/index.html) available online.
 [^footnote-10]: also called randomness, aleatory uncertainty, objective uncertainty, dissonance, or irreducible uncertainty arised from natural stochasticity, environmental or structural variation across space or through time.
 [^footnote-2]: also called ignorance, epistemic uncertainty, non-specificity, or reducible uncertainty arised from incompleteness of knowledge.
 [^footnote-3]: the uncertain number could not be any tighter without more information.
