@@ -14,7 +14,7 @@ Besides, engineered systems are often required to operate safely and robustly un
 It is vital to *know what you do not know* in terms of trustworthy modelling and predictions, suggesting that *all models are wrong but some are useful* on the condition of knowing their assumptions and applicability, hence building the credibility of the computational results. It is often a challenge, in modelling complex physical phenomena, to construct mathematical models in a quantitative manner, on one hand, without ignoring significant information and, on the other hand, without introducing unwarranted assumptions [@beer2013imprecise; @patelli2017cossan]. The bottleneck is usually the limited information in terms of both knowledge and experimental data.
 
 The increasing awareness of the differentiation of aleatory and epistemic uncertainty arises the need for more expressive mathematical frameworks to reason with various forms of uncertainty [@ferson2004arithmetic; @ferson1996different]. Imprecise uncertainty frameworks [@destercke2008unifying], such as evidence theory, random set, possibility distributions, credal set, capacities are proposed to reflect the situations when information is scarce, vague, conflicting or imprecise whereby precise distribution are hard to be defined.
-Given the available information, there exists two untenable extreme (exclusive) endpoints which prescribe an interval of trustworthyness.
+Given the available information, there exist two untenable extreme (exclusive) endpoints that prescribe an interval of trustworthiness.
 The lack of uncertainty quantification presented in many deterministic numerical simulations constitutes the lower bound, whereas the overconfidence of the computation, through introduction of unwarranted assumptions about uncertainties not faithful to the state of knowledge, as the upper bound.
 
 We aim at a faithful management of uncertainty throughout the computational pipeline using `uncertain number`, a unified construct for uncertainty characterisation at different imprecision.
@@ -69,7 +69,7 @@ pun.known_constraints(minimum=0, maximum=2., mean=1, var=0.25)
 
 ## Aggregation of uncertainty
 
-One of the controversial subject in uncertainty analysis is the aggregation of multiple (imperfect) sources of information, evidence, or expert elicitations. Information varies in quality and could be conflicting. Expert may have different degrees of subjectivity and different representations for the uncertain quantity, leading to epistemic uncertainty in the various educated estimates. 
+One of the controversial subject in uncertainty analysis is the aggregation of multiple (imperfect) sources of information, evidence, or expert elicitations. Information varies in quality and could be conflicting. Experts may have different degrees of subjectivity and different representations for the uncertain quantity, leading to epistemic uncertainty in the various educated estimates. 
 
 `Uncertain number` presents one advantage that it provides a unified structure to enclose the aggregation operation on a set of expert elicitations, whatever the forms they may be, whether a distribution or an interval. 
 @fig:aggregation shows an example of the elicitation from a couple of experts with their credibility shown as probability masses. This explains further the provenance of the constructs in @fig:uc_constructs.
