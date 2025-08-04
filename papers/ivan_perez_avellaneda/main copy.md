@@ -4,7 +4,7 @@
 title: 'CFSpy: A Python Library for the Computation of Chen-Fliess Series'
 abstract: |
   In this paper, CFSpy a package in Python that numerically computes Chen-Fliess series
-  is presented. The reachable sets of non-linear systems are also
+  is presented. The reachable sets of non-linear systems are
   calculated with this package. The method used obtains batches of iterative integrals
   of the same length instead one at a time. For this, we consider the alphabetical
   order of the words that index the series. By redefining the iterative
@@ -81,7 +81,8 @@ the preliminary concepts and results in reachability, formal languages and CFS
 are presented. In [](#sec_results), the algorithms for the computation of
 the iterative integrals and the lie derivatives are provided which are 
 the components of CFS. Then, the numerical computation of CFS is shown
-and examples are given. Finally, in [](#sec_conclusions), the conclusions are stated.
+and examples are given. Finally, in [](#sec_conclusions), the conclusions and
+future work are described.
 
 
 (sec_preliminaries)=
@@ -349,7 +350,7 @@ F^N_c[u](t) = \sum_{k \leq N}\sum_{\eta \in X^k} (c, \eta) E_{\eta}[u](t).
 \end{align*}
 $$
 
-Next, to provide the association of the CFS with a nonlinear control-affine system,
+Nest, to provide the association of the CFS with a nonlinear control-affine system,
 we give the defintion of a Lie derivative.
 
 
@@ -720,7 +721,7 @@ CFS truncated word length $N$:
 From the previous section, we have
 
 ```{math}
-F_c^N[u](t) \approx \mathcal{U}\cdot \mathcal{G}
+F_c^N[u](t) = \mathcal{U}\cdot \mathcal{G}
 ```
 
 :::
@@ -728,78 +729,11 @@ F_c^N[u](t) \approx \mathcal{U}\cdot \mathcal{G}
 (sec_CFSpy)=
 ### CFSpy Package
 
-The CFSpy package is a set of tools implemented in the Python programming language to compute Chen-Fliess series
-and perform reachability analysis of nonlinear control-affine systems. The package
-is intended to be as *minimal* and *self-contained* as possible as it doesn't require any other package or software except for
-NumPy [@harris2020array] and SymPy [@Meurer2017] used in the computation of the series and for the reachability.
-
-The package consists of the following elements in terms of the system [](#nonlinsys):
-
-* The function *iter_int* is the implementation of [](#matrix_iter_int)
-and takes as arguments the discretized input function 
-$u: [t_0, t_f] \rightarrow \mathbb{R}^m$, the initial and final time $t_0, t_f$, 
-the step size $dt$ of discretization of the input function 
-and the truncation length $N$ of the series. The input $u$
-is entered as a ${m\times N_{T}}$ matrix where the $i-th$ row 
-is the $i-th$ input coordinate $u_i$ and the length of the dicretization 
-if $N_{T}$. The output of the function is list of iterated integrals
-of length less or equal to $N$. The function *single_iter_int*
-provides one single iterated integral given the index word $\eta$ as argument.
-
-* The function *iter_lie* is the implementation of [](#matrix_lie_deriv)
-and takes as arguments the output function $h:\mathbb{R}^n \rightarrow \mathbb{R}$,
-the vector fields $g_i(z)$, the state variable $z$,
-and the truncation length $N$ of the series. The functions are entered
-as symbolic functions.
-
-
-
 (sec_simulations)=
 ## Simulations
 
-In the current section, we use the CFSpy package to simulate the
-output of a system and analyze the reachability by computing
-the minimum bounding overestimating box of the set of outputs given
-a set of inputs to the system.
-
-Consider the SEIRS model for infectious disease dynamics [@Bjornstad2020]
-
-$$
-\label{SEIR}
-\dot{S} &= \mu M -\beta I S/M + \omega R - \mu S\\
-\dot{E} &= \beta I S /M - \sigma E - \mu E\\
-\dot{I} &= \sigma E - \gamma I - (\mu + \alpha) I\\
-\dot{R} &= \gamma I - \omega R - \mu R
-$$
-
-where $S$ represents the susceptible population, $E$, the exposed group,
-$I$, the infectious population, and $R$ the recovered population. 
-The parameter $\beta$ represents the average rate at which an infected
-individual can infect a susceptible one, $1/\sigma$ is the period
-an exposed individual stays in that group before becoming infectious.
-Recovered individuals are immune for an average protected period of $1/\omega$.
-The parameter $\alpha$ is the rate at which the infected population dies
-and $\mu$ is the rate of background death of all the population. The total population
-in the model is $M$ and $1/\gamma$ is the infectious period.
-
-Take the SEIRS model in [](#SEIR) with control input $\beta$ and $\gamma$ and
-the following parameters:
-$\mu = 1 / 76, \omega = 1, \sigma = 1 / 7, \alpha = 0, M = 1.0$.
-The system [](#SEIR) is written as in [](#nonlinsys) where $y = S$. 
-Consider $\beta = \sin(t)$ and $\gamma = \cos(t)$, and word truncation length of $N = 6$.
-
-
-:::{figure} SEIRS.png
-:label: fig:stream
-The picture shows the susceptible population of the SEIRS model and its approximation by CFS
-when the fluctuating inputs $\gamma = \cos(t)$ and $\beta = \sin(t)$ enter the system.
-The CFS is truncated to a word length of $N = 6$. The approximation by CFS performs well before
-$t = 1.5s$ when the series starts to diverge.
-:::
-
-
 The following block of code uses CFSpy to compute the CFS
-of the SEIRS system having the susceptible population as the output.
+of a Lotka Volterra system.
 
 ```{code} python
 :label: my-program
@@ -811,22 +745,14 @@ from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 import sympy as sp
 
-mu = 1 / 76
-omega = 1 
-sigma = 1 / 7
-alpha = 0
-N = 1.0
-
-# Define the SEIRS system
+# Define the Lotka-Volterra system
 def system(t, x, u1_func, u2_func):
-    x1, x2, x3, x4 = x
+    x1, x2 = x
     u1 = u1_func(t)
     u2 = u2_func(t)
-    dx1 = mu * N - u1 * x3 * x1 / N + omega * x4 - mu * x1
-    dx2 = u1 * x3 * x1 / N - sigma * x2 - mu * x2
-    dx3 = sigma * x2 - u2 * x3 - (mu + alpha) * x3
-    dx4 = u2 * x3 - omega * x4 - mu * x4
-    return [dx1, dx2, dx3, dx4]
+    dx1 = -x1*x2 +  x1 * u1
+    dx2 = x1*x2 - x2* u2
+    return [dx1, dx2]
 
 # Input 1
 def u1_func(t):
@@ -837,7 +763,7 @@ def u2_func(t):
     return np.cos(t)
 
 # Initial condition
-x0 = [0.999, 0.001, 0.0, 0.0]
+x0 = [1/3,2/3]
 
 # Time range
 t0 = 0
@@ -853,22 +779,21 @@ t = np.linspace(t_span[0], t_span[1], int((tf-t0)//dt+1))
 y = solution.sol(t)
 
 # Define the symbolic variables
-x1, x2, x3, x4 = sp.symbols('x1 x2 x3 x4')
-x = sp.Matrix([x1, x2, x3, x4])
+x1, x2 = sp.symbols('x1 x2')
+x = sp.Matrix([x1, x2])
 
 
 # Define the system symbolically
-g = sp.transpose(sp.Matrix([[mu * N + omega * x4 - mu * x1, - sigma * x2 - mu * x2, sigma * x2 - (mu + alpha) * x3, - omega * x4 - mu * x4], \
-                            [-x3 * x1 / N, x3 * x1 / N, 0, 0], [0, 0, - x3, x3]]))
+g = sp.transpose(sp.Matrix([[-x1*x2, x1*x2], [x1, 0], [0, - x2]]))
 
 # Define the output symbolically
 h = x1
 
 # The truncation of the length of the words that index the Chen-Fliess series
-Ntrunc = 6
+Ntrunc = 4
 
 # Coefficients of the Chen-Fliess series evaluated at the initial state
-Ceta = np.array(iter_lie(h,g,x,Ntrunc).subs([(x[0], x0[0]),(x[1], x0[1]), (x[2], x0[2]), (x[3], x0[3])]))
+Ceta = np.array(iter_lie(h,g,x,Ntrunc).subs([(x[0], 1/3),(x[1], 2/3)]))
 
 # inputs as arrays
 u1 = np.sin(t)
@@ -893,8 +818,6 @@ plt.legend(['Output of the system','Chen-Fliess series'])
 plt.grid()
 plt.show()
 ```
-
-
 
 
 %(sec_futurework)=
