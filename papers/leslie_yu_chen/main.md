@@ -60,7 +60,7 @@ Illustration of the idea of level of information specified as constraints
 
 ```{code-block} python
 
-from pyuncertainnumber import pun
+import pyuncertainnumber as pun
 
 # specify available empirical information as constraints
 pun.known_constraints(minimum=0, maximum=2., mean=1, var=0.25)
