@@ -5,27 +5,37 @@ abstract: |
   Accurate and efficient object detection and spatial localization in remote sensing imagery is a persistent challenge. In the context of precision agriculture, the extensive data annotation required by conventional deep learning models poses additional challenges. This paper presents a fully open source workflow leveraging Meta AI's Segment Anything Model (SAM) for zero-shot segmentation, enabling scalable object detection and spatial localization in high-resolution drone orthomosaics without the need for annotated image datasets. Model training and/or fine-tuning is rendered unnecessary in our precision agriculture-focused use case. The presented end-to-end workflow takes high-resolution images and quality control (QC) check points as inputs, automatically generates masks corresponding to the objects of interest (empty plant pots, in our given context), and outputs their spatial locations in real-world coordinates. Detection accuracy (required in the given context to be within 3 cm) is then quantitatively evaluated using the ground truth QC check points and benchmarked against object detection output generated using commercially available software. Results demonstrate that the open source workflow achieves superior spatial accuracy — producing output `20% more spatially accurate`, with `400% greater IoU` — while providing a scalable way to perform spatial localization on high-resolution aerial imagery (with ground sampling distance, or GSD, < 30 cm).
 ---
 
+## Acknowledgments
+
+We gratefully acknowledge the contributions of the open source community — thank you to the giants on whose shoulders we stand.
+
+This work was funded by FiOR Innovations and Woodburn Nursery & Azaleas. We deeply appreciate their support and partnership.
+
+A special thanks to Paniz Herrera, MBA, MSIST, Ryan Marinelli, PhD Fellow at the University of Oslo, and Danny Clifford for their help proofreading. 
+
 ## Introduction
 
 Image segmentation is a critical task in geospatial analysis, enabling the identification and extraction of relevant features from high resolution remote sensing imagery [@wu23]. However, extracting actionable information (i.e., object detection and spatial localization) can be constrained by the need for large, labeled datasets to train deep learning models in order to then perform inference and (hopefully) produce the desired output. This bottleneck is particularly acute in agricultural domains, where variability in conditions and object types complicates manual annotation [@osco23].
 
 Recent advances in foundation models, such as Meta AI’s Segment Anything Model (SAM), offer a promising path forward. SAM is designed for promptable “zero-shot” segmentation. “Prompt engineering”, in this context, involves using points and bounding boxes to focus the model’s efforts on more efficiently generating masks corresponding to objects of interest [@mayladan23]. Providing these prompts allows accurate masks to be generated for novel objects (ones not included in SAM’s training corpus), without domain-specific training. Masks can also be generated automatically with no such prompting. SAM’s automatic mask generator will effectively “detect” everything using open source model checkpoints and generate masks for each object in a provided image [@kirillov23].
 
-While SAM’s ability to generalize is impressive [@kirillov23; @osco23], its performance on remote sensing imagery and fine-grained features requires careful workflow integration and evaluation [@wu23]. This paper describes a comprehensive, open source workflow for object detection and spatial localization in high-resolution remote sensing imagery, built around SAM and widely used geospatial Python libraries [@gdal; @shapely; @geopandas; @rasterio]. The complete process is delineated, from data loading and preprocessing to mask generation, post-processing, and quantitative accuracy assessment, culminating in a robust comparison with the results produced using the proprietary software (see [code](#code)). Precision, accuracy, F1 score, mean deviation (in cm), and Intersection-over-Union (IoU) are calculated in order to quantify the relative quality of the output produced using each workflow[^footnote-1].
+While SAM’s ability to generalize is impressive [@kirillov23; @osco23], its performance on remote sensing imagery and fine-grained features requires careful workflow integration and evaluation [@wu23]. This paper describes a comprehensive, open source workflow for object detection and spatial localization in high-resolution remote sensing imagery, built around SAM and widely used geospatial Python libraries [@gdal; @shapely; @geopandas; @rasterio]. The complete process is delineated, from data loading and preprocessing to mask generation, post-processing, and quantitative accuracy assessment, culminating in a rigorous comparison against the results produced using the proprietary software (see [code](#code)). Precision, accuracy, F1 score, mean deviation (in cm), and Intersection-over-Union (IoU) are calculated in order to quantify the relative quality of the output produced using each workflow[^footnote-1].
 
 
-[^footnote-1]: Output evaluation details are discussed in [Appendix](#accuracy-evaluation-methodology).
+[^footnote-1]: Output evaluation details are discussed in the [Appendix](#accuracy-evaluation-methodology).
 
 ## Motivation
 
-Precision agriculture relies on accurate object detection for tasks such as plant counting, health monitoring, and targeted resource distribution. Traditional deep learning approaches can become hindered by the cost and effort of generating carefully annotated data, limiting scalability and accessibility. Proprietary solutions, while effective, can be expensive and opaque, impeding reproducibility and customization.
+Precision agriculture relies on accurate object detection for tasks such as plant counting, health monitoring, and the automated control of heavy equipment. Traditional deep learning approaches can become hindered by the cost and effort of generating carefully annotated data, limiting scalability and accessibility. Proprietary solutions, while effective, can be expensive and opaque, impeding reproducibility and customization.
 
 :::{figure} trimmer.jpg
 :label: fig:trimmer
-The derived centroids of the objects detected in the drone orthomosaic are used to automate this nursery trimmer.
+The derived centroids of the objects detected in drone orthomosaics are used to automate this nursery trimmer.
 :::
 
-SAM’s zero-shot segmentation capability directly addresses the data annotation bottleneck, enabling rapid deployment in novel contexts. By developing an open source workflow around SAM, an end-to-end pipeline is created which allows for the quantitative evaluation of spatial accuracy with respect to objects detected in high-resolution aerial imagery. This modular workflow can also be repurposed as an automated data annotation pipeline for downstream model training/fine-tuning, if required.
+SAM’s zero-shot segmentation capability directly addresses the data annotation bottleneck, enabling rapid deployment in novel contexts. By developing an open source workflow around SAM, an end-to-end pipeline is created which allows for the quantitative evaluation of spatial accuracy with respect to objects detected in high-resolution aerial imagery. This modular workflow can also be repurposed as an automated data annotation pipeline for downstream model training/fine-tuning, if required[^footnote-2].
+
+[^footnote-2]: See [this Colab notebook](https://colab.research.google.com/drive/1WNZFDr8bMMi51fOo5vv-TrVSBGW56yvA?usp=sharing#sandboxMode=true) for details.
 
 ## Approach
 
@@ -52,7 +62,7 @@ This approach is carried out entirely using open source Python libraries, ensuri
   - **GSD**: 0.71 cm
 - **Ground Truth**: QC points in CSV format, containing spatial coordinates and unique identifiers.
 - **Coordinate Reference System (CRS) Transformations**: All spatial operations are performed using the NAD83 CRS (EPSG:6859), with reprojection to the WGS84 CRS (EPSG:4326) for downstream reporting and nursery trimmer automation.
-- **Dependencies**[^footnote-2]: 
+- **Dependencies**[^footnote-3]: 
   - GDAL [@gdal]
   - GeoPandas [@geopandas]
   - Matplotlib [@matplotlib]
@@ -62,55 +72,104 @@ This approach is carried out entirely using open source Python libraries, ensuri
   - Pandas [@pandas1; @pandas2]
   - Pillow [@pillow]
   - Rasterio [@rasterio]
-  - Segment Anything[^footnote-3] [@kirillov23]
+  - Segment Anything[^footnote-4] [@kirillov23]
   - Shapely [@shapely]
   - Torch [@pytorch]
 
-[^footnote-2]: See [requirements.txt](https://raw.githubusercontent.com/nickmccarty/scipy-2025/refs/heads/main/requirements.txt) for version details.
+[^footnote-3]: See [requirements.txt](https://raw.githubusercontent.com/nickmccarty/scipy-2025/refs/heads/main/requirements.txt) for version details.
 
-[^footnote-3]: Inference was accelerated using `CUDA 12` (`cuDF 25.2.1`) on a `T4` GPU within our Colab notebook environment.
+[^footnote-4]: Inference was accelerated using `CUDA 12` (`cuDF 25.2.1`) on a `T4` GPU within our Colab notebook environment.
 
 ### Workflow
 
-:::{figure} workflow.png
-:label: fig:workflow
-The high-level workflow steps.
-:::
+1. [Data Ingestion](#data-ingestion-and-preprocessing)
+2. [Mask Generation](#mask-generation)
+3. [Post Processing](#post-processing)
+4. [Accuracy Evaluation](#accuracy-evaluation)
+5. [Benchmarking](#benchmarking)
 
+(data-ingestion-and-preprocessing)=
 #### Data Ingestion and Preprocessing
 
-:::{figure} ingestion-and-preprocessing.png
-:label: fig:ingestion-and-preprocessing
-Data ingestion and preprocessing workflow substeps.
-:::
+```{math}
+\begin{array}{ll}
+\textbf{a.} & \text{Load GeoTIFF file(s)} \\
+\quad & \text{Extract image bounds: } (\text{min}_x, \text{min}_y, \text{max}_x, \text{max}_y) \\
+\quad & \text{Extract coordinate reference system (CRS)} \\
+\\
+\textbf{b.} & \text{Load QC point CSV} \\
+\quad & \text{Clean and standardize column names} \\
+\quad & \text{Assign unique IDs to each QC point} \\
+\quad & \text{Reproject QC points to match image CRS (if needed)} \\
+\\
+\textbf{c.} & \text{For each QC point:} \\
+\quad & \textbf{if} \text{ point within image bounds} \textbf{ then} \\
+\quad\quad & \text{Keep point} \\
+\quad & \textbf{else} \\
+\quad\quad & \text{Discard point} \\
+\\
+\textbf{d.} & \text{Save filtered QC points to output CSV}
+\end{array}
+```
 
+(mask-generation)=
 #### Mask Generation
 
-:::{figure} mask-generation.png
-:label: fig:mask-generation
-Mask generation workflow substeps.
-:::
+```{math}
+\begin{array}{ll}
+\textbf{a.} & \text{Initialize SAM (ViT-H checkpoint)} \\
+\quad & \text{Use GPU if available} \\
+\\
+\textbf{b.} & \text{Tile ("chip") input images} \\
+\quad & \text{Iteratively generate masks using SAM} \\
+\\
+\textbf{c.} & \text{Filter masks with confidence } \geq 80\% \\
+\\
+\textbf{d.} & \text{Convert masks to polygons} \\
+\quad & \text{Aggregate results and export as GeoJSON}
+\end{array}
+```
 
+(post-processing)=
 #### Post-Processing
 
-:::{figure} post-processing.png
-:label: fig:post-processing
-Data post-processing workflow substeps.
-:::
+```{math}
+\begin{array}{ll}
+\textbf{a.} & \text{Filter polygons (e.g., based on area threshold)} \\
+\\
+\textbf{b.} & \text{Merge overlapping polygons} \\
+\quad & \text{Extract individual (non-overlapping) polygons} \\
+\\
+\textbf{c.} & \text{Extract centroids from polygons} \\
+\end{array}
+```
 
+(accuracy-evaluation)=
 #### Accuracy Evaluation
 
-:::{figure} accuracy-evaluation.png
-:label: fig:accuracy-evaluation
-Data post-processing workflow substeps; see [Appendix](#accuracy-evaluation-methodology) for methodology details.
-:::
+```{math}
+\begin{array}{ll}
+\textbf{a.} & \text{Load merged geometry and filtered QC points} \\
+\\
+\textbf{b.} & \text{Iteratively compute geometric deviation from QC points} \\
+\quad & \text{Output deviations in centimeters}
+\end{array}
+```
 
-#### Benchmarking
+See [Appendix](#accuracy-evaluation-methodology) for accuracy evaluation methodology details.
 
-:::{figure} benchmarking.png
-:label: fig:benchmarking
-Benchmarking workflow substeps; see [code](#code) for methodology details.
-:::
+(benchmarking)=
+#### Benchmarking 
+
+```{math}
+\begin{array}{ll}
+\textbf{a.} & \text{Apply accuracy evaluation steps to proprietary software output} \\
+\\
+\textbf{b.} & \text{Compare workflows using IoU, precision, recall, and F1 scores}
+\end{array}
+```
+
+See [code](#code) for benchmarking methodology details.
 
 ## Results
 
@@ -121,9 +180,9 @@ Benchmarking workflow substeps; see [code](#code) for methodology details.
 19 false positives (FP) and hundreds of sliver polygons were observed in the output produced using the proprietary software.
 :::
 
-The bounding boxes that were output using this workflow (against which we are benchmarking ours) can be viewed as a layer overlain onto the GeoTIFF orthomosaic using GIS software[^footnote-4]. Certain inferences can be drawn from the output that we won't go into here; what is of particular use to us is the fact that zero false negatives (FN) were observed in the output, though 19 FP were. This empirical knowledge equips us with something not usually possessed in use cases such as this: the number of true positives (TP), which allows us to leverage such metrics as precision, recall, and the harmonic mean of the two, F1 score, in order to perform a rigorous comparison (see [code](https://colab.research.google.com/drive/1pwnb14s2i7n_VAlfwhBqzDQ0cOb9oGs-?usp=sharing#sandboxMode=true&scrollTo=VNWvzNKU-ePt)). 
+The bounding boxes that were output using this workflow (against which we are benchmarking ours) can be viewed as a layer overlain onto the GeoTIFF orthomosaic using GIS software[^footnote-5]. What was of particular use to us is the fact that zero false negatives (FN) were observed in the output, though 19 false positives (FP) were. This empirical knowledge equips us with something not usually possessed in use cases such as this: the number of true positives (TP), which allows us to leverage such metrics as precision, recall, and the harmonic mean of the two, F1 score, to perform a rigorous comparison against our open source workflow (see [code](https://colab.research.google.com/drive/1pwnb14s2i7n_VAlfwhBqzDQ0cOb9oGs-?usp=sharing#sandboxMode=true&scrollTo=VNWvzNKU-ePt)). 
 
-[^footnote-4]: We use open source QGIS [@qgis] as our selected data viewer.
+[^footnote-5]: We used open source QGIS [@qgis] as our selected data viewer.
 
 ### Open Source Workflow
 
@@ -132,7 +191,7 @@ The bounding boxes that were output using this workflow (against which we are be
 18 FP were observed in the output produced using the open source workflow. 
 :::
 
-Knowing how many TP (18,736) there are in the benchmark output ultimately allows us to derive how many FP (18) and FN (65) there are in our workflow output and conduct our performance comparison.
+Merging the overlapping geometry and filtering out the empircially observed FP allowed for us to ascertain exactly how many TP (18,736) there are in the benchmark output and derive how many FP (18) and FN (65) there are in our workflow output, which enabled us to conduct our performance comparison.
 
 :::{table} Performance Comparison  
 :label: tbl:performance-comparison
@@ -171,20 +230,20 @@ Knowing how many TP (18,736) there are in the benchmark output ultimately allows
 
 It can be observed that empty plant pots tend to be ~64 pixels (px) wide and tall; with QC points corresponding to actual pot centroids, we were able to create 64-by-64px boxes to facilitate our IoU calculations (see [code](https://colab.research.google.com/drive/1NqDTYw0V9yRnZtoT6Pc7ZJ3ATe7CTue8?usp=sharing#sandboxMode=true)). These calculations further allow us to assess the relative alignment between the detection output geometry and our "ground truth" geometry.
 
-This work makes it easy to identify down to the individual QC point ID level which detection centroids deviate from said point by more than 3 cm, which is the tolerance specified by our client. In aggregate, we are able to gain a quantified sense of the mean deviation (in cm) of the output produced by each workflow. However, visual inspection reveals that some QC points flagged as having cooresponding detection centroids that are out-of-tolerance were, in fact, themselves off-center. This is to say the some detections from both the open source workflow and the benchmark workflow were flagged as being out-of-tolerance when they observably were not.
+This work makes it easy to identify down to the individual QC point ID level which detection centroids deviate from said point by more than 3 cm, which is the tolerance specified by our client. In aggregate, we were able to gain a quantified sense of the mean deviation (in cm) of the output produced by each workflow. However, visual inspection revealed that some detection geometry was flagged as having out-of-tolerance centroids when the QC points were themselves off-center. This is to say that some detections from both workflows were flagged as being out-of-tolerance when they observably were not.
 
 :::{figure} qc-point-91-collage.png
 :label: fig:qc-point-91
 Visual inspection of the detected centroids relative to QC point 91 reveal that the QC point is off-center.
 :::
 
-Visual inspection also reveals that our detections (in pink) and those produced using the commercial software (in beige) have greater overall coverage with respect to the QC geometry (in grey). This provides intuition as to why the IoU calculations revealed a 400% increase in coverage with respect to the geometry produced using SAM's automatic mask generator, zero-shot.
+Visual inspection also reveals that our detections (the pink circle) and those produced using the commercial software (the beige square) have greater overall coverage with respect to the QC geometry (the grey square). This provides intuition as to why the IoU calculations revealed a 400% increase in coverage with respect to the geometry produced using SAM's automatic mask generator, zero-shot.
 
 ## Discussion
 
 ### Key Findings
 
-The open-source workflow using Meta AI’s Segment Anything Model (SAM) outperformed a commercial alternative in object detection and spatial localization on high-resolution drone imagery. It achieved `20% higher spatial accuracy` (1.20 cm vs 1.39 cm deviation) and a `400% higher Intersection-over-Union (IoU)` (0.74 vs 0.18), indicating stronger alignment with object boundaries. Both methods had near-perfect precision, but the open-source approach showed slightly lower recall due to 65 false negatives. It should be noted, however, that these FN were a direct result of the filtering substep in our workflow, which filtered our detections (based on arbitrary geometry area and compactness thresholds; see [code](https://colab.research.google.com/drive/1pwnb14s2i7n_VAlfwhBqzDQ0cOb9oGs-?usp=sharing#sandboxMode=true&scrollTo=240nXaT5-EqM)) that are present in the output. 
+The open-source workflow powered by Meta AI’s Segment Anything Model (SAM) outperformed a commercial alternative in object detection and spatial localization on high-resolution drone imagery. It achieved `20% higher spatial accuracy` (1.20 cm vs. 1.39 cm deviation) and a `400% higher Intersection-over-Union (IoU)` (0.74 vs. 0.18), indicating stronger alignment between the detections and the actual object boundaries. Both methods had near-perfect precision, but the open-source approach showed slightly lower recall due to 65 false negatives. It should be noted, however, that these FN were a direct result of the filtering substep in our workflow, which excludes detections outside of the provided geometry area and compactness thresholds; see [code](https://colab.research.google.com/drive/1pwnb14s2i7n_VAlfwhBqzDQ0cOb9oGs-?usp=sharing#sandboxMode=true&scrollTo=240nXaT5-EqM). 
 
 Nevertheless, its overall performance supports its suitability for precision agriculture and downstream automation.
 
@@ -194,37 +253,25 @@ Our work began with an eye toward tackling a major challenge in agricultural rem
 
 ### Benefits of Open Source
 
-Built entirely on open source geospatial tools, the workflow offers transparency, reproducibility, and flexibility. It can be tailored for various tasks like plant counting or automated annotation for model training, supporting broader adoption in agriculture and remote sensing.
+Built entirely on open source geospatial tools, our open source workflow offers transparency, reproducibility, and flexibility. It can be tailored to suit various tasks, even automating annotation for model training, thereby supporting broader adoption with respect to high-resolution remote sensing imagery, in general.
 
 ### Practical Impact
 
-Meeting professional-grade tolerance requirements (e.g., < 3 cm) enables real-world applications, such as automating nursery machinery, based on precise object localization. This demonstrates how automated workflows can reduce manual labor and support more efficient agricultural practices.
+Meeting professional-grade tolerance requirements (e.g., < 3 cm) enables real-world applications, such as automating heavy equipment, based on precise object localization. This demonstrates how automated workflows can reduce manual labor and support more efficient agricultural practices.
 
 ### Limitations and Future Work
 
 Our approach to tiling ("chipping") high-resolution orthomosaics, processing 588 individual 1280-by-1280px tiles at an average pace of 11 seconds per tile, required a total processing time of ~110 minutes running on a Colab single `T4` GPU instance. It is important to note that an overlap of 25% (320px) between tiles during processing was required to ensure that geometry was not produced containing "holes" or malformations; merging overlapping polygons after filtering (based on area and compactness calculations, in this case) helped us ensure the overall quality of the geometric output.
 
-Future work will be centered on building a CLI that we can open source[^footnote-5], which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatail charactersitics as an output.
+Future work will be centered on building an open source CLI and Python package[^footnote-6], which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatail charactersitics as an output.
 
-[^footnote-5]: We have since open-sourced the [`orthomasker`](https://pypi.org/project/orthomasker) Python package.
+[^footnote-6]: We have since open-sourced the [`orthomasker`](https://pypi.org/project/orthomasker) Python package and CLI; work on a GUI is currently underway.
 
 ## Conclusion
 
-We present a robust, open source workflow for object detection and spatial localization in high-resolution drone orthomosaics, leveraging SAM’s zero-shot segmentation capabilities. Our quantitative evaluation demonstrates improved accuracy over a commercially available software solution, underscoring the potential of foundation models and open source tools to advance scalable, cost-effective feature extraction in agriculture. This work provides a template for further research and deployment in diverse contexts.
+We present a robust, open source workflow for object detection and spatial localization in high-resolution drone orthomosaics, leveraging SAM’s zero-shot segmentation capabilities. Our quantitative evaluation demonstrates improved accuracy over a commercially available software solution, underscoring the potential of foundation models and open source tools to advance scalable, cost-effective feature extraction. This work provides a template for further research and deployment in diverse contexts.
 
-To our knowledge, this is the first comparative evaluation of an open source segmentation model (SAM) against commercial software in a context requiring high (< 3 cm) spatial accuracy. Our results demonstrate that the workflow not only matches but in some cases exceeds performance metrics with respect to the evaluated output.
-
-## Acknowledgments
-
-We gratefully acknowledge the contributions of the open source community — thank you to the giants on whose shoulders we stand.
-
-This work was funded by FiOR Innovations and Woodburn Nursery & Azaleas. We deeply appreciate their support and partnership.
-
-Special thanks to Paniz Herrera, MBA, MSIST, for her invaluable suggestions.
-
-We also thank Ryan Marinelli, PhD Fellow at the University of Oslo, for his assistance with proofreading and his insightful feedback.
-
-Finally, to Danny Clifford, your insightful questions and targeted suggestions for improvement continue to be of tremendous value. Thank you.
+To our knowledge, this is the first comparative evaluation of an open source segmentation model against commercial software in a context requiring high (< 3 cm) spatial accuracy. Our results demonstrate that the workflow not only matches but in some cases exceeds performance metrics with respect to the evaluated output.
 
 ## Conflicts of Interest
 
@@ -235,7 +282,7 @@ The author declares no conflicts of interest.
 AI tools (ChatGPT, Perplexity, and NotebookLM) were used:
 
 - in writing portions of the workflow integration code,
-- to generate Matplotlib subplots, process flow diagrams, <span style="font-family: serif;">L<span style="vertical-align: 0.4ex; font-size: 0.8em;">A</span>T<span style="vertical-align: -0.3ex; font-size: 0.8em;">E</span>X</span>, etc.
+- to generate Matplotlib subplots, process flow diagrams, pseudocode, <span style="font-family: serif;">L<span style="vertical-align: 0.4ex; font-size: 0.8em;">A</span>T<span style="vertical-align: -0.3ex; font-size: 0.8em;">E</span>X</span>, etc.
 - for proofreading and light revision to reduce potential publication errors.
 
 (code)=
@@ -245,7 +292,7 @@ Data and code required to replicate our approach can be found using the links be
 
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nickmccarty/scipy-2025)
 <a href="https://colab.research.google.com/drive/1pwnb14s2i7n_VAlfwhBqzDQ0cOb9oGs-?usp=sharing#sandboxMode=true">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" height="28px">
 </a>
 
 ## Appendix
