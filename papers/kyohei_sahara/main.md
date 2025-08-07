@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Quantum Chemistry Acceleration: Comparative Performance Analysis of Modern DFT Implementations"
 abstract: |
-  This proceeding examines the acceleration of quantum chemistry calculations through
+  This article examines the acceleration of quantum chemistry calculations through
   modern implementations of Density Functional Theory (DFT). We provide a
   comparative performance analysis between traditional frameworks and advanced
   implementations, demonstrating computational efficiency gains. Applications
@@ -29,7 +29,7 @@ benefit quantum chemistry calculations. The Python ecosystem, in particular,
 has seen growth in high-performance scientific libraries that enable
 researchers to leverage these advances more effectively.
 
-This proceeding presents a performance analysis comparing traditional
+This article presents a performance analysis comparing traditional
 quantum chemistry frameworks with modern optimized implementations. The development of environmentally-friendly materials for electrochemical applications is crucial for sustainable energy storage and electrolysis technologies. This study focuses on chlorinated analogues of phosphoric acid compounds ($\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$) as alternatives to fluorinated materials for use in electrochemical systems, aiming to reduce environmental impact while maintaining proton conductivity properties for electrolysis processes. Each test system contains 38 atoms with varying water molecule distributions to simulate realistic chemical environments. Our
 analysis demonstrates substantial computational speedups obtained through modern
 code optimization strategies while maintaining chemical accuracy.
@@ -58,16 +58,16 @@ Chemical structure of the $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\tex
 Traditional quantum chemistry frameworks have provided the foundation for
 decades of molecular modeling research. Packages such as 
 SIESTA have been widely adopted due to their robust implementations and
-extensive feature sets. However, these frameworks often present computational
+extensive feature sets. However, traditional implementations like SIESTA often present computational
 bottlenecks when applied to complex systems requiring extensive parameter space
-exploration.
+exploration. SIESTA remains valuable for specific applications requiring its specialized basis sets, pseudopotentials, or particular exchange-correlation functionals, but may be less optimal for high-throughput studies.
 
 Modern Python-based quantum chemistry environments offer
 computational advantages through optimized algorithms, efficient memory
 management, and leveraging of high-performance numerical libraries. Frameworks
 such as PySCF [@pyscf] and its GPU-accelerated extension GPU4PySCF [@gpu4pyscf] have emerged as powerful
 alternatives that can dramatically reduce computation times while maintaining
-chemical accuracy.
+chemical accuracy. PySCF achieves performance improvements through efficient integral computation algorithms and optimized parallel processing using OpenMP and MPI implementations, while GPU4PySCF further accelerates calculations by leveraging GPU parallelization for computationally intensive operations like two-electron integrals and matrix operations.
 
 ## Experimental Conditions
 
@@ -110,7 +110,7 @@ These computational advantages enable:
 - **Enhanced statistical reliability**: Larger sample sizes enabling more robust conclusions and confident predictions in materials design studies through increased sampling of molecular configurations and property distributions
 - **Integration with modern workflows**: Seamless compatibility with machine learning approaches and automated high-throughput computational screening pipelines, facilitating development of predictive models for materials discovery
 
-The methodology established here provides a foundation for accelerating quantum chemistry calculations across various molecular systems, particularly those involving compounds with heteroatoms and solvation effects.
+The methodology established here provides a foundation for accelerating quantum chemistry calculations across various molecular systems, particularly those involving compounds with heteroatoms (atoms other than carbon and hydrogen) and solvation effects (interactions between solutes and surrounding solvent molecules).
 
 ## Conclusions
 
