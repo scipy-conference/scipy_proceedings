@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: Extension of the OpenMC depletion module for transport-independent depletion
 abstract: |
   We have added functionality for running depletion simulations independently
   of neutron transport in OpenMC, an open source Monte Carlo particle

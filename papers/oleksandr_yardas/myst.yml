@@ -6,7 +6,7 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: Extension of the OpenMC depletion module for transport-independent depletion
   # subtitle:
-  description: Add a two sentence description about your article.
+  description: This paper describes new functionality in OpenMC's depletion module for depleting materials independent of a neutron transport simulation. The paper valdiates the capability against transport-coupled depletion on a simple model.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Oleksandr Yardas
