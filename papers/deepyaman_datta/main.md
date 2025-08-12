@@ -8,9 +8,9 @@ abstract: |
   dataframe API.
 
   Through new integrations, Ibis supercharges existing open-source libraries like Kedro
-  and Pandera. Combined, these technologies (together with a few more) enable building
-  and orchestrating scalable data engineering pipelines without sacrificing the comfort
-  (and other advantages) of Python.
+  and Pandera. Combined, these technologies enable building and orchestrating scalable
+  data engineering pipelines without sacrificing the comfort and other advantages of
+  Python.
 ---
 
 ## Introduction
@@ -18,8 +18,8 @@ abstract: |
 By 2016, the modern data stack was a well-defined idea [@roundup] that had begun to take
 hold of the data engineering community. Specifically, it represented a set of products
 that enabled end-to-end data transformation _in_ the cloud using SQL. This mindset shift
-was driven by the advent and of cloud-based analytics databases like Amazon Redshift,
-Google BigQuery, and Snowflake [@modernBI] and the subsequent rise of the extract, load,
+was driven by the advent of cloud-based analytics databases like Amazon Redshift, Google
+BigQuery, and Snowflake [@modernBI] and the subsequent rise of the extract, load,
 transform (ELT) paradigm. Compared to the extract, transform, load (ETL) workflows that
 had become ubiquitous since their invention in the 1970s [@fivetranETLvsELT], ELT
 leveraged the power and efficiency of cloud data warehouses in performing
@@ -60,8 +60,8 @@ the individual who initially coined the term, wrote that the idea of distinguish
 
 However, when data and analytics engineers talk about the modern data stack, they
 invariably mean SQL-based workflows. Most _SQL-oriented_ data products are built for
-the cloud. Despite Python's explosive growth—by some measures, overtaking SQL in
-popularity among developers [@stackOverflow2023]—the Python data ecosystem has lagged
+the cloud. Despite Python's explosive growth&mdash;by some measures, overtaking SQL in
+popularity among developers [@stackOverflow2023]&mdash;the Python data ecosystem has lagged
 in supporting data engineering best practices. Python is often relegated to the fallback
 option for when a use case can't be solved be solved with SQL, and support can be
 limited [@dbtPythonModels] (if available at all).
@@ -130,8 +130,8 @@ supports 20+ query engines, from local backends like Polars, DuckDB, and DataFus
 remote databases and distributed computation frameworks like BigQuery, Snowflake, and
 Spark [@ibis]. Ibis constructs a query plan, or IR, that it evaluates lazily (i.e. as
 and when needed) on the execution engine [@kedroIbis]. Because Ibis code is functionally
-equivalent to SQL—in fact, Ibis produces and executes SQL under the hood for all but the
-Polars backend—it is well suited for ELT workflows as part of a Python-first data stack.
+equivalent to SQL&mdash;in fact, Ibis produces and executes SQL under the hood for all but the
+Polars backend&mdash;it is well suited for ELT workflows as part of a Python-first data stack.
 
 [^footnote-2]: The SQL standard isn't a well-adhered-to standard in that each database
 supports a slightly different version of the SQL standard, often referred to as a
@@ -198,7 +198,7 @@ dlt is frequently used alongside dbt in the existing analytics stack.
 After data lands in the centralized data storage, it needs to be cleaned, processed, and
 combined before it's useful for analytics, reporting, or machine learning. Before dbt
 became the standard for SQL data transformation, the SQL data transformation layer often
-consisted of an unstructured mess of scripts, stored procedures, or—even worse—GUI-based
+consisted of an unstructured mess of scripts, stored procedures, or&mdash;even worse&mdash;GUI-based
 data pipelines. dbt changed the game by providing a "SQL-first transformation workflow
 that lets teams quickly and collaboratively deploy analytics code following software
 engineering best practices" [@dbtWhatIs].
@@ -424,7 +424,7 @@ Later, pandera loosened its tight coupling with the pandas API in order to suppo
 execution engines like Polars [@doi:10.25080/gerudo-f2bc6f59-010].
 
 We take advantage of this prior work to support validating Ibis tables using
-pandera—and, by extension, enable data validation across the full suite of
+pandera&mdash;and, by extension, enable data validation across the full suite of
 Ibis-supported backends. For built-in checks (i.e. the wide range of common data quality
 checks that pandera supports out of the box), the fact that _Ibis_ enables validation on
 a previously-unsupported data processing framework or database can be almost transparent
@@ -437,7 +437,7 @@ to be written using Ibis syntax.
 In this paper, we have laid out the foundations for the composable, Python-native data
 stack. As with any new development in the open-source data ecosystem, getting to this
 point would not have been possible without the contributions of many people and projects
-over the past decade—maintainers, committers, contributors, and users across dlt, Kedro,
+over the past decade&mdash;maintainers, committers, contributors, and users across dlt, Kedro,
 pandera, and, of course, Ibis.
 
 At the same time, the Python data stack is not (yet) a product category that the data
