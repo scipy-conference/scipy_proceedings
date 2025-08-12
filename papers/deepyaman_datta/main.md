@@ -68,14 +68,15 @@ limited [@dbtPythonModels] (if available at all).
 
 In this paper, we present a set of new software integrations that form the basis for the
 composable Python analytics stack[^footnote-1]. First, we will introduce the concept of
-composable data management systems and Ibis, the data processing workhorse of the Python
-analytics stack. Then, we will present two key components of the emerging stack: Kedro
-as the core transformation framework and Pandera for data validation. In both cases, we
-will highlight how Ibis extends the capabilities of the existing, established tool.
-Finally, we will step back and look at the remaining pieces of the composable analytics
-stack. We will fill out the picture with Python-native recommendations for ingestion and
-orchestration. We will also be transparent about some of the current gaps compared to
-the more established SQL-first approach and ongoing work to address them.
+composable data management systems and Ibis [@ibis], the data processing workhorse of
+the Python analytics stack. Then, we will present two key components of the emerging
+stack: Kedro as the core transformation framework and Pandera for data validation. In
+both cases, we will highlight how Ibis extends the capabilities of the existing,
+established tool. Finally, we will step back and look at the remaining pieces of the
+composable analytics stack. We will fill out the picture with Python-native
+recommendations for ingestion and orchestration. We will also be transparent about some
+of the current gaps compared to the more established SQL-first approach and ongoing work
+to address them.
 
 [^footnote-1]: Given Handy suggests "analytics stack" as a more appropriate term for the
 ecosystem of cloud-first data tools [@roundup], and to avoid confusion with the existing
