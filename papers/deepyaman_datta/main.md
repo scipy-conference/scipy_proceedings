@@ -227,16 +227,16 @@ One of the core features of Kedro is the Data Catalog, a per-Kedro-project repos
 data sources and sinks configured for use by the project [@kedro]. Kedro also supports a
 concept of data connectors called datasets. To enable reading and writing Ibis tables in
 Kedro pipelines, we contributed Ibis dataset implementations for handling data in tables
-and in files to Kedro-Datasets, a Python package containing most commonly-used dataset
-implementations.
+and in files to Kedro-Datasets, a Python package containing commonly-used dataset
+implementations maintained by the Kedro team.
 
 The standard approach for using a dataset is to add it to the `catalog.yml`
-configuration file. For example, we can examine a subset of the dataset definitions used
-by the Jaffle Shop project:
+configuration file:
 
 ```{code-block} yaml
 :linenos:
 :filename: conf/base/catalog.yml
+:caption: A subset of the dataset definitions used to implement a port of the Jaffle Shop dbt demo project [@dbtJaffleShopDuckDB] using Kedro and Ibis.
 _duckdb:
   backend: duckdb
   # `database` and `threads` are parameters for `ibis.duckdb.connect()`.
@@ -277,75 +277,12 @@ supported by the Kedro configuration loader to define and reuse connection infor
 
 Kedro pipelines are composed of nodes, which themselves are simply Python functions.
 Given the datasets described in the above section load and save data as Ibis tables, the
-function needs to take as input and return as output any number of Ibis tables. For
-example, consider the `orders.sql` model from @dbtJaffleShopDuckDB:
-
-```{code-block} sql
-:linenos:
-:filename: models/orders.sql
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
-
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
-),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
-order_payments as (
-
-    select
-        order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
-),
-
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
-)
-
-select * from final
-```
-
-We can express the same logic using Ibis in a Python function, thus defining a new node:
+function needs to take as input and return as output any number of Ibis tables.
 
 ```{code-block} python
 :linenos:
 :filename: src/jaffle_shop/pipelines/data_processing/nodes.py
+:caption: The same logic as the `orders.sql` model from @dbtJaffleShopDuckDB expressed using Ibis in a Python function.
 from __future__ import annotations
 
 import ibis
@@ -380,19 +317,12 @@ def process_orders(
     return final
 ```
 
-Note that one of the advantages of Python is cleaner parametrization; whereas dbt relies
-upon Jinja templating to iterate over `payment_methods`, for loops are native to Python.
-
-As explained in the introduction to Ibis, one of the important features of the library
-is that it creates a query plan that is only executed when needed (i.e. at
-materialization time). We can visualize the IR constructed for the `orders` table
-[@kedroIbis]:
-
-:::{figure} ir-visualization.svg
-:label: fig:ir-visualization
-Ibis handles the complexity of converting user-friendly Python code into an IR that is
-eventually compiled to SQL for execution.
-:::
+One of the advantages of native Python is cleaner parametrization. In the above example,
+we iterate over `payment_methods` using a for loop. By comparison, a templating language
+like Jinja is necessary to extend the capabilities of SQL to support control structures,
+variable interpolation, and more in dbt [@dbtJinja]. Another benefit of Python as a data
+transformation language is that it supports unit tests. While dbt added support for unit
+tests in 2024, it has many limitations [@dbtUnitTests].
 
 A complete port of the Jaffle Shop project using Kedro and Ibis is available on GitHub
 [@kedroIbisJaffleShop].
@@ -410,7 +340,7 @@ pipelines, and these developments help enable cross-functional teams to write en
 data transformation pipelines using a single technology.
 
 That said, Ibis does integrate with a number of data visualization and dashboarding
-tools including Streamlit and Plotly [@ibis]. Furthermore, most BI tools support Python
+tools, including Streamlit and Plotly [@ibis]. Furthermore, most BI tools support Python
 to some extent, and Ibis can produce data in a supported dataframe format.
 
 ### Data observability

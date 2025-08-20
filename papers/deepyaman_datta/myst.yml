@@ -58,6 +58,8 @@ project:
         - lfaidataKedro
         - dbtJaffleShopDuckDB
         - dbtProfiles
+        - dbtJinja
+        - dbtUnitTests
         - kedroIbisJaffleShop
   exports:
     - id: pdf
