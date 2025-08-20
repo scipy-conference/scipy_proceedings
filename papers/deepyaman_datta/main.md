@@ -392,6 +392,42 @@ to the user. For more bespoke checks, the Ibis backend (similar to all of the
 previously-existing pandera backends) supports defining custom checks, and these do need
 to be written using Ibis syntax.
 
+```{code-block} python
+:linenos:
+:filename: pandera_example.py
+:caption: An example of validating data in DuckDB using the Ibis backend for pandera, including both built-in and custom checks.
+import ibis
+import pandera.ibis as pa
+from ibis import _
+from pandera.ibis import IbisData
+
+
+def total_amount_positive(data: IbisData) -> ibis.Table:
+    w = ibis.window(group_by="order_id")
+    with_total_amount = data.table.mutate(total_amount=data.table.amount.sum().over(w))
+    return with_total_amount.order_by("order_id").select(_.total_amount >= 0)
+
+
+schema = pa.DataFrameSchema(
+    columns={
+        "order_id": pa.Column(int),
+        "amount": pa.Column(float),
+        "status": pa.Column(
+            str,
+            pa.Check.isin(
+                ["placed", "shipped", "completed", "returned", "return_pending"]
+            ),
+        ),
+    },
+    checks=[pa.Check(total_amount_positive)],
+)
+
+con = ibis.duckdb.connect("jaffle_shop.duckdb")
+orders = con.table("orders")
+
+schema.validate(orders)
+```
+
 ## The future of the composable, Python-native data stack
 
 In this paper, we have laid out the foundations for the composable, Python-native data
