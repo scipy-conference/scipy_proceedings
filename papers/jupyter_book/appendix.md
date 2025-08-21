@@ -10,15 +10,17 @@ In this section, we share a brief history of the Jupyter Book project with the g
 
 JB2 is the third significant re-write of the Jupyter Book stack in the past decade, each of which involved hundreds of collaborators and users. The original version was built in 2018 as a loose collection of template files utilizing nbconvert for execution and Jekyll for rendering notebooks into websites, originally built for the [Data 8 textbook](http://inferentialthinking.com).
 
-In 2020, Jupyter Book was re-written and formally released as Jupyter Book 1 (JB1). This was built on the Sphinx documentation generator, and resulted in the creation of the [MyST Markdown syntax and parser](http://myst-parser.readthedocs.io) for Sphinx. This work was largely funded by the [Executable Books Project](http://executablebooks.org), a funded by the Sloan Foundation ([Grant \#9231](https://sloan.org/grant-detail/9231)), Jupyter Meets the Earth ([NSF grant \#1928406](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1928406)). While the Executable Books Project has completed, maintenance of the Jupyter Book 1 stack continues to this day.
+In 2020, Jupyter Book was re-written and formally released as Jupyter Book 1 (JB1). This was built on the Sphinx documentation generator, and resulted in the creation of the [MyST Markdown syntax and parser](http://myst-parser.readthedocs.io) for Sphinx. This work was largely funded by the [Executable Books Project](http://executablebooks.org), a funded by the Sloan Foundation ([Grant #9231](https://sloan.org/grant-detail/9231)), Jupyter Meets the Earth ([NSF grant #1928406](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1928406)). While the Executable Books Project has completed, maintenance of the Jupyter Book 1 stack continues to this day.
 
 Between 2020 and 2023, the Executable Books Project began a parallel collaboration with the company [Curvenote](http://curvenote.com) to explore a standards- and web-based workflow for the MyST Markup language (funded in part by Alberta Innovates and the Stanford Doerr School of Sustainability). As a result, Curvenote integrated their document engine as an upstream project in the `executablebooks/`organization and the project developed it together from there. This became the starting point for the `mystmd` stack described in this article.
 
-From 2023 onward, the wider community has invested in `mystmd` and improved the capabilities of the command line tool, parsing capabilities, templates, and web themes. The next version of JupyterBook, Jupyter Book 2 (JB2), is built on top of this engine. In 2024, the project moved from being an independent organization to being incorporated as an official Jupyter sub-project, standardizing on using and stewarding the MyST document engine ([See \#123](https://github.com/jupyter/enhancement-proposals/pull/123)).
+From 2023 onward, the wider community has invested in `mystmd` and improved the capabilities of the command line tool, parsing capabilities, templates, and web themes. The next version of JupyterBook, Jupyter Book 2 (JB2), is built on top of this engine. In 2024, the project moved from being an independent organization to being incorporated as an official Jupyter sub-project, standardizing on using and stewarding the MyST document engine ([See #123](https://github.com/jupyter/enhancement-proposals/pull/123)).
 
-\[Some sort of diagram of the major versions and underlying engines Jekyll → Sphinx → Mystmd\]
+[Some sort of diagram of the major versions and underlying engines Jekyll → Sphinx → Mystmd]
 
-![][image5]
+:::{figure} history.md
+:label: fig:history
+:::
 
 ### A note on migrating from Jupyter Book 1
 

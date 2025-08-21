@@ -171,6 +171,7 @@ project:
     AST: Abstract Syntax Tree
     DOI: Digital Object Identifier
     MyST: Markedly Structured Text
+    mystmd: MyST Document Engine
     CLI: Command Line Interface
     HTML: Hypertext Markup Language
     PDF: Portable Document Format
