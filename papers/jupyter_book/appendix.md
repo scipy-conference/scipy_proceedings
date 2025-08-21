@@ -1,0 +1,139 @@
+---
+title: Appendix
+---
+
+# Appendix
+
+## History & Background
+
+In this section, we share a brief history of the Jupyter Book project with the goal of providing context for the path that led to JB2, as well as to share credit and acknowledgement for the hundreds of contributors that have helped the project over the years.
+
+JB2 is the third significant re-write of the Jupyter Book stack in the past decade, each of which involved hundreds of collaborators and users. The original version was built in 2018 as a loose collection of template files utilizing nbconvert for execution and Jekyll for rendering notebooks into websites, originally built for the [Data 8 textbook](http://inferentialthinking.com).
+
+In 2020, Jupyter Book was re-written and formally released as Jupyter Book 1 (JB1). This was built on the Sphinx documentation generator, and resulted in the creation of the [MyST Markdown syntax and parser](http://myst-parser.readthedocs.io) for Sphinx. This work was largely funded by the [Executable Books Project](http://executablebooks.org), a funded by the Sloan Foundation ([Grant \#9231](https://sloan.org/grant-detail/9231)), Jupyter Meets the Earth ([NSF grant \#1928406](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1928406)). While the Executable Books Project has completed, maintenance of the Jupyter Book 1 stack continues to this day.
+
+Between 2020 and 2023, the Executable Books Project began a parallel collaboration with the company [Curvenote](http://curvenote.com) to explore a standards- and web-based workflow for the MyST Markup language (funded in part by Alberta Innovates and the Stanford Doerr School of Sustainability). As a result, Curvenote integrated their document engine as an upstream project in the `executablebooks/`organization and the project developed it together from there. This became the starting point for the `mystmd` stack described in this article.
+
+From 2023 onward, the wider community has invested in `mystmd` and improved the capabilities of the command line tool, parsing capabilities, templates, and web themes. The next version of JupyterBook, Jupyter Book 2 (JB2), is built on top of this engine. In 2024, the project moved from being an independent organization to being incorporated as an official Jupyter sub-project, standardizing on using and stewarding the MyST document engine ([See \#123](https://github.com/jupyter/enhancement-proposals/pull/123)).
+
+\[Some sort of diagram of the major versions and underlying engines Jekyll → Sphinx → Mystmd\]
+
+![][image5]
+
+### A note on migrating from Jupyter Book 1
+
+A key goal of Jupyter Book 2 was to leverage the design and standards from Jupyter Book 1 and the Sphinx stack in order to facilitate the upgrade process. As a result JB2 leverages the same MyST Markdown syntax as JB1 with minimal disruption. It also aims to expose a key subset of the extension points that were available in JB1 and Sphinx (for example, roles, directives, custom transforms, etc). While there is a subset of functionality that is still unique to Sphinx, the JB2 team is focusing their efforts on developing key missing functionality to narrow this gap. See the [Jupyter Book 2 migration guide](https://next.jupyterbook.org/upgrade/) for more information.
+
+## Examples of plugins
+
+**Directives:** Here is an example of a directive logic that generates an `{image}` node in the AST by pulling a random image from [picsum](https://picsum.photos/). Note how we define arguments and options, similar to how a function would be defined in a programming language.
+
+```
+const picsumDirective = {
+  name: 'picsum',
+  doc: 'An example directive for showing a nice random image at a custom size.',
+  alias: ['random-pic'],
+  arg: {
+    type: String,
+    doc: 'The ID of the image to use, e.g. 1',
+  },
+  options: {
+    size: { type: String, doc: 'Size of the image, for example, `500x200`.' },
+  },
+  run(data) {
+    // Parse size
+    const match = (data.options?.size ?? '').match(/^(\d+)(?:x(\d+))?$/);
+    let sizeQuery = '200/200';
+    if (match) {
+      const first = match[1];
+      const second = match[2];
+      sizeQuery = second ? `${first}/${second}` : first;
+    }
+
+    const idQuery = data.arg ? `id/${data.arg}/` : '';
+    const url = `https://picsum.photos/${idQuery}${sizeQuery}`;
+    const img = { type: 'image', url };
+    return [img];
+  },
+};
+
+const plugin = { name: 'Lorem Picsum Images', directives: [picsumDirective] };
+export default plugin;
+```
+
+**Transforms:** Here is an example of transform logic that parses the MyST AST and replaces **strong** styling with *emphasis* styling. It operates on all `node` objects in the document using the `selectAll` utility function.
+
+```
+const plugin = {
+  name: 'Strong to emphasis',
+  transforms: [
+    {
+      name: 'transform-typography',
+      doc: 'An example transform that rewrites bold text as text with emphasis.',
+      stage: 'document',
+      plugin: (_, utils) => (node) => {
+        utils.selectAll('strong', node).forEach((strongNode) => {
+          const childTextNodes = utils.selectAll('text', strongNode);
+          const childText = childTextNodes.map((child) => child.value).join('');
+          if (childText === 'special bold text') {
+            strongNode['type'] = 'span';
+            strongNode['style'] = {
+              background: '-webkit-linear-gradient(20deg, #09009f, #E743D9)',
+              '-webkit-background-clip': 'text',
+              '-webkit-text-fill-color': 'transparent',
+            };
+          }
+        });
+      },
+    },
+  ],
+};
+
+export default plugin;
+```
+
+## Composable Configuration
+
+MyST configuration files can be composed with one another using the `extends:` keyword. This allows configuration to be split across multiple files, or even downloaded from a remote source via the web. For example, an author might put their author affiliation information in a dedicated `authors.yml` file:
+
+```
+version: 1
+project:
+  contributors:
+    - id: person_a
+      name: First Last
+      email: person_a@org_a.org
+      orcid: XXXX-XXXX-XXXX-XXXX
+      github: person_a
+      affiliations:
+        - id: org_a
+        - id: org_b
+    - id: person_b
+      name: First Last
+      email: person_b@org_b.com
+      orcid: XXXX-XXXX-XXXX-XXXX
+      github: person_b
+      affiliations:
+        - id: org_b
+  affiliations:
+    - id: org_a
+      name: Organization A Incorporated
+    - id: org_b
+      name: Org B Inc.
+```
+
+And then re-use this affiliation information across multiple Jupyter Books or MyST Projects by “extending” the configuration like so:
+
+```
+version: 1
+extends:
+  # Our local authors file
+  - authors.yml
+  # A remote configuration file
+  - https://raw.githubusercontent.com/myorg/myrepo/refs/heads/main/funding.yaml
+# Any other MyST configuration here
+site: ...
+project: ...
+```
+
+By allowing configuration to be split across multiple files and re-used easily, communities can reduce the duplication and outdated content associated with having a copy of the same information in multiple places. This is particularly useful for communities that need centralized databases of community-wide information (like author information) that they wish to re-use in multiple places. It’s also useful to standardize community-specific configuration like branding or links in the site navigation bar.
