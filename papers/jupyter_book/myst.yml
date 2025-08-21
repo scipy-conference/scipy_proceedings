@@ -200,16 +200,9 @@ project:
     Q2F: QIIME 2 Framework
     JB1: Jupyter Book 1
     JB2: Jupyter Book 2
-  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
-  error_rules:
-    - rule: doi-exists
-      severity: ignore
-      keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+  references:
+    scipy: https://proceedings.scipy.org/articles/NKVC9349
+    docs: https://mystmd.org/guide
   exports:
     - id: pdf
       format: typst

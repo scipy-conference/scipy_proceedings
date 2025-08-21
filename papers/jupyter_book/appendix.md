@@ -4,6 +4,7 @@ title: Appendix
 
 # Appendix
 
+(appendix-history)=
 ## History & Background
 
 In this section, we share a brief history of the Jupyter Book project with the goal of providing context for the path that led to JB2, as well as to share credit and acknowledgement for the hundreds of contributors that have helped the project over the years.
@@ -16,16 +17,17 @@ Between 2020 and 2023, the Executable Books Project began a parallel collaborati
 
 From 2023 onward, the wider community has invested in `mystmd` and improved the capabilities of the command line tool, parsing capabilities, templates, and web themes. The next version of JupyterBook, Jupyter Book 2 (JB2), is built on top of this engine. In 2024, the project moved from being an independent organization to being incorporated as an official Jupyter sub-project, standardizing on using and stewarding the MyST document engine ([See #123](https://github.com/jupyter/enhancement-proposals/pull/123)).
 
-[Some sort of diagram of the major versions and underlying engines Jekyll → Sphinx → Mystmd]
-
-:::{figure} history.md
+:::{figure} history.png
 :label: fig:history
+
+Major phases of Jupyter Book development
 :::
 
 ### A note on migrating from Jupyter Book 1
 
 A key goal of Jupyter Book 2 was to leverage the design and standards from Jupyter Book 1 and the Sphinx stack in order to facilitate the upgrade process. As a result JB2 leverages the same MyST Markdown syntax as JB1 with minimal disruption. It also aims to expose a key subset of the extension points that were available in JB1 and Sphinx (for example, roles, directives, custom transforms, etc). While there is a subset of functionality that is still unique to Sphinx, the JB2 team is focusing their efforts on developing key missing functionality to narrow this gap. See the [Jupyter Book 2 migration guide](https://next.jupyterbook.org/upgrade/) for more information.
 
+(appendix-plugins)=
 ## Examples of plugins
 
 **Directives:** Here is an example of a directive logic that generates an `{image}` node in the AST by pulling a random image from [picsum](https://picsum.photos/). Note how we define arguments and options, similar to how a function would be defined in a programming language.
@@ -94,6 +96,7 @@ const plugin = {
 export default plugin;
 ```
 
+(appendix-composable)=
 ## Composable Configuration
 
 MyST configuration files can be composed with one another using the `extends:` keyword. This allows configuration to be split across multiple files, or even downloaded from a remote source via the web. For example, an author might put their author affiliation information in a dedicated `authors.yml` file:
@@ -139,3 +142,16 @@ project: ...
 ```
 
 By allowing configuration to be split across multiple files and re-used easily, communities can reduce the duplication and outdated content associated with having a copy of the same information in multiple places. This is particularly useful for communities that need centralized databases of community-wide information (like author information) that they wish to re-use in multiple places. It’s also useful to standardize community-specific configuration like branding or links in the site navigation bar.
+
+(appendix-jlab-myst)=
+## Authoring in computational environments with `jupyterlab-myst`
+
+A major motivation for rebuilding Jupyter Book 2 on the MyST ecosystem is to enable a truly **web-native runtime model**. The MyST stack is built in JavaScript, and leverages the `unist` syntax tree ecosystem, making it directly compatible with modern browser environments and frontend frameworks like React, as well as a host of other plugins and transformations (e.g. `unified-latex`). This also allows us to develop MyST-native authoring applications, such as `jupyterlab-myst`, a plugin that brings MyST rendering capabilities directly into JupyterLab.
+
+With `jupyterlab-myst`, authors can preview how their markdown content elements will appear in the rendered book—including directives, equations, citations, and even code outputs—without leaving the notebook environment. This tight feedback loop reduces friction during authoring, while preserving a single source of truth between exploratory notebooks and published outputs. The plugin is part of our vision to unify **authoring, execution, and publishing** in one environment. Rather than using separate tools for writing, developing, and rendering, the MyST ecosystem will allow interfaces like JupyterLab as a single full-featured writing and publishing environment. This lowers the barrier to creating high-quality computational narratives, especially for teams already working with Jupyter tools for their day-to-day research and teaching.
+
+:::{figure} xref:docs#fig-eval-array
+:label: fig:jlab-myst
+
+jupyterlab-myst in action
+:::

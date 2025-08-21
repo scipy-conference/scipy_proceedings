@@ -9,9 +9,9 @@ abstract: |
 
 ## Introduction
 
-Jupyter Book (@10.5281/zenodo.2561065) has become a widely used tool in computational science and open publishing, powering over 18,000 publicly available books[^1], lectures, tutorials, and knowledge repositories. It enables clear communication of both exploratory computation and narrative text, making it possible to document, share, and publish computational workflows in accessible formats.
+Jupyter Book (@10.5281/zenodo.2561065) has become a widely used tool in computational science and open publishing, powering over 18,000 publicly available books[^deps], lectures, tutorials, and knowledge repositories. It enables clear communication of both exploratory computation and narrative text, making it possible to document, share, and publish computational workflows in accessible formats.
 
-With Jupyter Book 2, the project has undergone a major transformation. Jupyter Book 2 is now a distribution of the MyST Document Engine[^2]; every book built with Jupyter Book 2 is also a MyST project, and building a book with Jupyter Book 2 means building a MyST project. Jupyter Book 2 heavily utilizes components from the MyST ecosystem - a collection of open source tools and standards for authoring open computational narratives. This is similar to the relationship between Jupyter Book 1 and Sphinx.
+With Jupyter Book 2, the project has undergone a major transformation. Jupyter Book 2 is now a distribution of the MyST Document Engine[^pronunciation]; every book built with Jupyter Book 2 is also a MyST project, and building a book with Jupyter Book 2 means building a MyST project. Jupyter Book 2 heavily utilizes components from the MyST ecosystem - a collection of open source tools and standards for authoring open computational narratives. This is similar to the relationship between Jupyter Book 1 and Sphinx.
 
 The goal of this overhaul is to make structured scientific content more interoperable, composable, extensible, and machine-readable. This enables researchers to publish high-quality, interactive content with support for standards-based reuse, full-text APIs, executable notebooks, and output formats like Websites, Typst, PDF, LaTeX, Microsoft Word, JATS XML, and more. It is a major step forward towards Jupyter’s vision of thinking and storytelling with code and data (@10.1109/MCSE.2021.3059263, @10.3233/978-1-61499-649-1-87).
 
@@ -44,6 +44,7 @@ This section describes the architectural structure and components that drive the
 Jupyter Book 2 combines these and other MyST components into an end-user application meant for community knowledge bases and books. This new architecture is designed to enable dynamic rendering, multi-format output, and composable content workflows—backed by a structured document model that makes metadata, structure, and computation portable and machine-readable.
 
 :::{figure} overview.png
+:label: fig:overview
 
 High-level overview of Jupyter Book 2 components.
 
@@ -122,6 +123,7 @@ This AST is then made available for renderers to export into various output form
 The **Book React Theme** defines the basic structure and styles of a Jupyter Book 2, and is the default result that most users get when they render their books as websites. The React component above is styled by the Book Theme into this final product:
 
 :::{figure} admonition.png
+:label: fig:admonition
 
 Example admonition component.
 
@@ -165,29 +167,13 @@ First and foremost, it should be simple and straightforward for authors to creat
 
 #### MyST’s plugin ecosystem
 
-The MyST Documentation engine has several key **extension points** that allow users to add new functionality in a controlled way. Below are a few key extension points:
+The MyST Documentation engine has several key **extension points** that allow users to add new functionality in a controlled way[^plugins]. Below are a few key extension points:
 
 **Roles and directives** are mechanisms for adding new types of in-line and block-level content (respectively), allowing developers to define content abstractions (similar to functions in a programming language) for use by authors. Users may define their own roles and directives using JavaScript, Python, or any other language that reads and writes from `stdout`. Building a new role or directive involves taking MyST AST as input, applying arbitrary transformations to it, and returning MyST AST as output.
 
 **Transforms** are a mechanism for transforming the content of one or more MyST ASTs. It is used to enrich and re-use content as part of the build process. For example, by collecting instances of a `{figure}` directive throughout the page and aggregating them all into a single gallery.
 
 **Renderers** are a way to export MyST AST into arbitrary types of outputs. They’re useful for converting the “Canonical document” into many different formats or styles without changing the original content. They are explained in sections below.
-
-#### Web-native and fast building
-
-Jupyter Book 2 is built around a cohesive, modular toolchain that enables fast builds, partial updates, and web-optimized outputs.
-
-- [ ] Describe speed with which you can install and build with MyST  
-- [ ] Describe the MyST *application* for orgs that want to build it into hosted products etc  
-- [ ] Describe any out-of-the-box optimization for the web
-
-#### Jupyter Book is designed for communities to make their own
-
-The Jupyter Book 2 technical stack is also designed to be extensible and reactive to community needs. Themes, plugins, and content directives can be customized or replaced entirely, allowing different communities to shape the tooling to fit their own needs. Journals can define their own publishing templates [e.g. NeuroLibre, Curvenote]. Lab groups can maintain shared standards across projects [e.g. pythia shared footers etc.]. There is still much work to be done to fully realize this vision, however, many of the lab-groups, independent publishers, and individuals have taken the tools as is and adapted them to their own workflows and requirements.
-
-- [ ] Describe implementation goals for theming and styling  
-- [ ] How could a community re-skin JB or MyST for themselves?  
-- [ ] Need to decide if this section is still too aspirational to be included
 
 ### Content Should be Canonical and Machine Readable 
 
@@ -208,6 +194,7 @@ By treating that document AST as a first-class build output, authors can write t
 Additionally, having a standard and metadata-rich AST structure allows many different workflows to be served from the same document engine. For example, while this article focuses on the multi-document workflow of Jupyter Book 2, the MyST Document Engine has also been used as part of *scholarly article publishing pipelines*, which are composed of independent articles that benefit from the same ability to cross-reference one another. For example the [Proceedings of SciPy](https://proceedings.scipy.org/) have been published with the MyST Document Engine for the last two years,the Notebooks Now project [@10.5281/zenodo.15061830]  incorporated MyST-based publishing into the American Geophysical Union proceedings for the last several years, the [NeuroLibre](https://neurolibre.org/) project has built a pre-print server using the MyST engine, and [Curvenote](https://curvenote.com/) builds a publishing platform using MyST components [@doi:10.25080/NKVC9349]. By enabling a variety of publication output types with the same underlying document engine, the MyST Ecosystem can reduce duplicated technology and streamline the workflow from data science and documentation to publishing.
 
 :::{figure} ast.png
+:label: fig:ast
 
 Rendering a single AST into many output types.
 
@@ -216,13 +203,13 @@ In this workflow, a single collection of source files (a) are built into a MyST 
 
 ### Content Should be Modular and Composable
 
-The MyST ecosystem is designed for composition. Documents are structured into small, addressable components—sections, figures, equations, terms, figures, outputs—that can be reused across books, projects, and publications. This modularity supports new patterns of collaboration and publication: a figure generated in a course textbook can be cited and embedded in a tutorial or a journal article without duplication or loss of provenance. A community policy or database can be re-used throughout many pages in its documentation without duplicating information and creating multiple sources of truth. Additionally, configuration for a collection of projects can be shared and reused (See Appendix).
+The MyST ecosystem is designed for composition. Documents are structured into small, addressable components—sections, figures, equations, terms, figures, outputs—that can be reused across books, projects, and publications. This modularity supports new patterns of collaboration and publication: a figure generated in a course textbook can be cited and embedded in a tutorial or a journal article without duplication or loss of provenance. A community policy or database can be re-used throughout many pages in its documentation without duplicating information and creating multiple sources of truth. Additionally, configuration for a collection of projects can be [shared and reused](#appendix-composable).
 
 #### The MyST AST modularizes content for easy parsing and re-mixing
 
-Each page or resource in a Jupyter Book project is assigned a unique slug and corresponding AST. These can be referenced across projects, embedded in-line with other page content, or previewed when users hover over links. This is based on both the MyST Specification ([mystmd.org/spec](http://mystmd.org/spec)) and a machine-readable cross-reference manifest `myst.xref.json`. Similar to intersphinx references, the `myst.xref.json` gives stable links to any aspect of the content. This makes it easy to programmatically learn the structure of a Jupyter Book, referenceable labels, and the location of the canonical content for each document.
+Each page or resource in a Jupyter Book project is assigned a unique slug and corresponding AST. These can be referenced across projects, embedded in-line with other page content, or previewed when users hover over links. This is based on both the [MyST Specification](http://mystmd.org/spec) and a machine-readable cross-reference manifest `myst.xref.json`. Similar to intersphinx references, the `myst.xref.json` gives stable links to any aspect of the content. This makes it easy to programmatically learn the structure of a Jupyter Book, referenceable labels, and the location of the canonical content for each document.
 
-Here’s an example of references in a `myst.xref.json` file from the MyST Guide ([`mystmd.org/guide/myst.xref.json`](http://mystmd.org/guide/myst.xref.json)), note both page references and “identifier” references (e.g., labels attached to a figure or header):
+Here’s an example of references in a `myst.xref.json` file from the [MyST Guide](http://mystmd.org/guide/myst.xref.json), note both page references and “identifier” references (e.g., labels attached to a figure or header):
 
 ```
 references:
@@ -241,7 +228,7 @@ An author can then reference labels in a different Jupyter Book or MyST project 
 [Link text](xref:other-project#label-name)
 ```
 
-This also allows authors to reference *any other MyST project* (a Jupyter Book, an article written with MyST, etc), and use `xref:` links to link or embed the content. These links are either generated at build- or render-time, and allow for dynamic linking between projects with a simple user interface. Paired with structured JSON APIs for document content (described below), it also allows machines to efficiently access data in a Jupyter Book (for example, to enable hover-previews or to identify source files for HTML pages for use by Large Language Models)[^3].
+This also allows authors to reference *any other MyST project* (a Jupyter Book, an article written with MyST, etc), and use `xref:` links to link or embed the content. These links are either generated at build- or render-time, and allow for dynamic linking between projects with a simple user interface. Paired with structured JSON APIs for document content (described below), it also allows machines to efficiently access data in a Jupyter Book (for example, to enable hover-previews or to identify source files for HTML pages for use by Large Language Models)[^hover-xref].
 
 #### API-Accessible and Federated by Design
 
@@ -252,6 +239,7 @@ Machine readable content accessible via an API is one of the most transformative
 Moreover, by aligning with community standards (e.g., JATS, DOIs, ORCID, ROR), the system supports today’s scholarly publishing workflows, remains grounded in lightweight, markdown-based authoring, and opens up new possibilities for more composable workflows in the future for scientific authoring. This approach lays the groundwork for a **federated publishing network**—where content from different lab groups, institutions, or journals can be referenced, reused, and remixed while maintaining proper attribution and structure.
 
 :::{figure} hover.png
+:label: fig:hover
 
 Example of how machine-readable AST enables cross-page and cross-project hover references.
 
@@ -270,7 +258,7 @@ A key challenge in communicating with data lies in the fact that tools and syste
 
 #### Execution and caching are built into the MyST Document Engine
 
-MyST comes with infrastructure to parse computational content, execute it[^4], cache the results, and insert them into the MyST AST so that they may be used and referenced. Computational content can come in two forms:
+MyST comes with infrastructure to parse computational content, execute it[^remote-exec], cache the results, and insert them into the MyST AST so that they may be used and referenced. Computational content can come in two forms:
 
 **Jupyter Notebooks** (`.ipynb` files)  
 : This is the standard structure for Jupyter Notebooks, and the MyST Document Engine will use the Jupyter kernel metadata in the notebook to execute each cell and embed its content in the output.
@@ -314,15 +302,11 @@ Beyond static computational outputs, Jupyter Book 2 embraces the web-native work
 
 Providing computational interactivity without leaving the page drastically reduces the friction required to interact with computational ideas. It gives authors the ability to power their computational content with arbitrary software, computational resources, or access to data (for example, authors could leverage a service that operates a BinderHub that provides access to GPUs and a 10 Terabyte dataset, and provide interactive kernels for their readers that are powered by that hub). Moreover, modern efforts to package computational environments in web-native toolchains like WebAssembly (via tools like JupyterLite) will allow for interactive execution that happens entirely in a reader’s browser, making it significantly more scalable and accessible.
 
-- [ ] ***[Movie of click and execute directly in line, something with widgets]***
+:::{figure} xref:scipy#fig:thebe
+:label: fig:interactivity
 
-#### Authoring in computational environments with JupyterLab-MyST
-
-A major motivation for rebuilding Jupyter Book 2 on the MyST ecosystem is to enable a truly **web-native runtime model**. The MyST stack is built in JavaScript, and leverages the `unist` syntax tree ecosystem, making it directly compatible with modern browser environments and frontend frameworks like React, as well as a host of other plugins and transformations (e.g. `unified-latex`). This also allows us to develop MyST-native authoring applications, such as `jupyterlab-myst`, a plugin that brings MyST rendering capabilities directly into JupyterLab.
-
-With `jupyterlab-myst`, authors can preview how their markdown content elements will appear in the rendered book—including directives, equations, citations, and even code outputs—without leaving the notebook environment. This tight feedback loop reduces friction during authoring, while preserving a single source of truth between exploratory notebooks and published outputs. The plugin is part of our vision to unify **authoring, execution, and publishing** in one environment. Rather than using separate tools for writing, developering, and rendering, the MyST ecosystem will allow interfaces like JupyterLab as a single full-featured writing and publishing environment. This lowers the barrier to creating high-quality computational narratives, especially for teams already working with Jupyter tools for their day-to-day research and teaching.
-
-- [ ] ***[Screenshot of jlab myst]***
+Example of in-page interactivity, from [@10.25080/NKVC9349]
+:::
 
 ### Open Science Infrastructure Should be Governed by an Open Community
 
@@ -342,7 +326,7 @@ Jupyter Book 2 sits among a number of tools for authoring and publishing computa
 
 **[Jupyter Book 1](http://jupyterbook.org/en/v1/)**, developed by the [Executable Books Project](https://executablebooks.org), is built on [Sphinx](https://www.sphinx-doc.org/), a Python documentation generator that enabled integration with reStructuredText, MyST extensions, and a range of HTML output themes. While powerful and extensible, Sphinx was originally designed as a documentation engine for software projects. Support for scientific markup and computation has been added by the community, extending its original design. However, its design principles and architecture are not optimized for the browser-based authoring, computation, content re-use, and efficient multi-output exporting workflows that are core to the Jupyter Book 2 stack.
 
-**[Jupyter Notebooks](https://jupyter-notebook.readthedocs.io/)**, developed by [Project Jupyter](https://jupyter.org), is a document format and web-based interface for authoring computational narratives with data. Jupyter Notebooks have support for interactive outputs and computation that is similar to Jupyter Book. However, they focus on individual documents rather than multi-page projects with references between them. They are also designed for data science and exploration rather than communicating more complex and re-usable computational narratives. Jupyter Book 2 *complements* the Jupyter Notebook by providing a more rich feature set and workflow that focuses on authoring and reading documents. A Jupyter Book can be written as a collection of *Jupyter Notebooks*, and knows how to parse MyST markdown in notebook cells. Jupyter Notebooks and Jupyter Lab can also incorporate some of Jupyter Book 2’s functionality into their interfaces via the jupyterlab-myst extension.
+**[Jupyter Notebooks](https://jupyter-notebook.readthedocs.io/)**, developed by [Project Jupyter](https://jupyter.org), is a document format and web-based interface for authoring computational narratives with data. Jupyter Notebooks have support for interactive outputs and computation that is similar to Jupyter Book. However, they focus on individual documents rather than multi-page projects with references between them. They are also designed for data science and exploration rather than communicating more complex and re-usable computational narratives. Jupyter Book 2 *complements* the Jupyter Notebook by providing a more rich feature set and workflow that focuses on authoring and reading documents. A Jupyter Book can be written as a collection of *Jupyter Notebooks*, and knows how to parse MyST markdown in notebook cells. Jupyter Notebooks and Jupyter Lab can also incorporate some of Jupyter Book 2’s functionality into their interfaces via the [jupyterlab-myst extension](#appendix-jlab-myst).
 
 **[Quarto](http://quarto.org)**, developed by [Posit PBC](http://posit.co), is a flexible publishing system supporting Jupyter notebooks, markdown, and multiple output formats including HTML, PDF, DOCX, and JATS. Quarto is built on top of [Pandoc](https://pandoc.org/) and is tightly integrated with the R, RStudio, and Positron ecosystems. At this time, Quarto is more polished and further in its development lifecycle, with better support for features like PDF rendering (e.g. sub-figures and tables), and presentation output formats. While Quarto has excellent support for static HTML outputs, it does not focus on the principles of modularity and composability which are core to Jupyter Book 2 (e.g., it does not have content APIs and structured build outputs meant for reuse, nor expose packages that can be used by other tools). Quarto is built directly on Pandoc, which uses a GPLv2 license; the Quarto command line tool is MIT licensed since version 1.4, however, many of the core packages, extensions, and utilities, however, are not permissively licensed. Finally, Quarto is developed by a single company, in contrast to Jupyter Book which is governed and developed by a multi-stakeholder community, and uses a permissive [MIT license](https://github.com/executablebooks/mystmd/blob/main/LICENSE) to maximize the re-use of its technology for individual and commercial purposes.
 
@@ -356,7 +340,7 @@ Jupyter Book 2 is already being used across a broad range of scientific and educ
 
 **The Turing Way** is an open guide to reproducible, ethical, accessible, and inclusive data science. With hundreds of contributors and a highly active community, the project has [adopted Jupyter Book 2](https://blog.jupyterbook.org/posts/2025-02-27-the-turing-way-upgrades-to-jb2) to manage its growing library of community-authored chapters and living documents. The structured document model and improved metadata handling in JB2 have made it easier for the Turing Way’s community members to learn from, reference, and leverage one another’s work. The move from Sphinx to MyST has greatly simplified the technology underlying The Turing Way, which makes it easier for new contributors to build the Turing Way locally and contribute to it. They have been able to reduce the complexity of their own infrastructure by implementing custom features as MyST plugins. This has simplified the book’s deployment process and better allowed these features to be shared as modular, generic plugins rather than Turing-Way-specific scripts.
 
-**Project Pythia** (@10.5281/ZENODO.8184298) is a community-driven effort to advance computational geoscience education, training, and knowledge-sharing through open-source learning materials. Pythia’s collection of cross-referenced Jupyter Book sites draw from over 75 repositories and large numbers of contributors, making the structured content model and cross-repository referencing features of JB2 particularly valuable. Pythia [recently transitioned to JB2](https://projectpythia.org/posts/2025/mystification/). There were two standout features to the community: (1) the ability to compose and share configuration between sites, including things like footers, shared references, navigation links (See appendix); and (2) the ability to cross-reference content between un-related projects. Both of these build on the composability and modularity designs that are at the core of JB2. As an inclusive open-geoscience community effort, Project Pythia aims to build tools and practices that reduce participation barriers and incentivize working geoscientists to share their discipline-specific data fluency. Shared configurations in JB2 substantially reduce the boilerplate code in individual repositories, clearing the way for contributors to focus on their science content while a core team of maintainers efficiently advances the shared computational and web-publishing infrastructure.
+**Project Pythia** (@10.5281/ZENODO.8184298) is a community-driven effort to advance computational geoscience education, training, and knowledge-sharing through open-source learning materials. Pythia’s collection of cross-referenced Jupyter Book sites draw from over 75 repositories and large numbers of contributors, making the structured content model and cross-repository referencing features of JB2 particularly valuable. Pythia [recently transitioned to JB2](https://projectpythia.org/posts/2025/mystification/). There were two standout features to the community: (1) the ability to [compose and share configuration between sites](#appendix-composable), including things like footers, shared references, navigation links; and (2) the ability to cross-reference content between un-related projects. Both of these build on the composability and modularity designs that are at the core of JB2. As an inclusive open-geoscience community effort, Project Pythia aims to build tools and practices that reduce participation barriers and incentivize working geoscientists to share their discipline-specific data fluency. Shared configurations in JB2 substantially reduce the boilerplate code in individual repositories, clearing the way for contributors to focus on their science content while a core team of maintainers efficiently advances the shared computational and web-publishing infrastructure.
 
 **The QIIME 2 Framework (Q2F)** is a platform for biological data science tools, originally developed for the QIIME 2 microbiome bioinformatics toolkit, but now supporting tools across diverse subdomains of biology including multiplexed serology and pathogen genomics. Q2F has adopted JB2 to support its documentation ecosystem which includes documentation that is general to users of all Q2F-based tools (e.g., creating and using a Q2F data artifact cache) and documentation that is specific to subdomains (e.g., an end-to-end tutorial for microbiome data analysis). JB2 enables embedding of content across documentation projects, such that general content can be embedded in domain-specific content where relevant, making it easier to hide the software stack complexity from end users while avoiding duplication of source content.
 
@@ -376,19 +360,21 @@ As scientific publishing continues to evolve, Jupyter Book offers a model for in
 
 ## Acknowledgements
 
-Jupyter Book has been developed over the course of nearly a decade, with contributions from dozens of individuals and organizations. We are grateful to the many collaborators, maintainers, and community members who have helped shape the project’s evolution—from its early days as a Jekyll-based tool for compiling notebooks into a textbook, through the Sphinx-based Jupyter Book 1 release, and now with the MyST Markdown and `mystmd`-based Jupyter Book 2 architecture. This article did not intend to capture those wide-ranging contributions and ideas or fully document the history of the project, but instead focused on the unique contributions of the Jupyter Book 2 stack (see the appendix for a brief description of the history of the project).
+Jupyter Book has been developed over the course of nearly a decade, with contributions from dozens of individuals and organizations. We are grateful to the many collaborators, maintainers, and community members who have helped shape the project’s evolution—from its early days as a Jekyll-based tool for compiling notebooks into a textbook, through the Sphinx-based Jupyter Book 1 release, and now with the MyST Markdown and `mystmd`-based Jupyter Book 2 architecture. This article did not intend to capture those wide-ranging contributions and ideas or fully document the [history of the project](#appendix-history), but instead focused on the unique contributions of the Jupyter Book 2 stack.
 
-This project has benefited from key financial support from multiple organizations. The development of MyST Markdown, the Executable Books ecosystem, and Jupyter Book 1 was supported by a grant from the **Alfred P. Sloan Foundation** [Grant #9231]. The development of `mystmd` and the rearchitecture of Jupyter Book 2 were made possible in-part by funding from the **Alfred P. Sloan Foundation** [Grant #9231], **Alberta Innovates, The Stanford Doerr School of Sustainability**, the **Chan Zuckerberg Initiative** (2i2c, [link](https://chanzuckerberg.com/science/programs-resources/open-science/grants/2i2c/)), and **The Navigation Fund** (2i2c, [link](https://doi.org/10.71707/r3sy-7371)). It also included in-kind support from **Curvenote**, **2i2c**, and the broader open-source community. The refactoring of the QIIME 2 Framework documentation ecosystem was supported in part by the **NIH National Cancer Institute** [Grant 1U24CA248454-01]. Project Pythia’s transition to Jupyter Book 2 was supported by the **National Science Foundation** [awards 2324302, 2324303 and 2324304].  **Notebooks Now** was supported by a grant from the **Alfred P. Sloan Foundation** ([link](https://sloan.org/grant-detail/g-2022-19361)).
+This project has benefited from key financial support from multiple organizations. The development of MyST Markdown, the Executable Books ecosystem, and Jupyter Book 1 was supported by a grant from the **Alfred P. Sloan Foundation** (Grant #9231). The development of `mystmd` and the rearchitecture of Jupyter Book 2 were made possible in-part by funding from the **Alfred P. Sloan Foundation** (Grant #9231), **Alberta Innovates, The Stanford Doerr School of Sustainability**, the **Chan Zuckerberg Initiative** (2i2c, [link](https://chanzuckerberg.com/science/programs-resources/open-science/grants/2i2c/)), and **The Navigation Fund** (2i2c, [link] (`https://doi.org/10.71707/r3sy-7371`)). It also included in-kind support from **Curvenote**, **2i2c**, and the broader open-source community. The refactoring of the QIIME 2 Framework documentation ecosystem was supported in part by the **NIH National Cancer Institute** (Grant 1U24CA248454-01). Project Pythia’s transition to Jupyter Book 2 was supported by the **National Science Foundation** (awards 2324302, 2324303 and 2324304).  **Notebooks Now** was supported by a grant from the **Alfred P. Sloan Foundation** ([link](https://sloan.org/grant-detail/g-2022-19361)).
 
 We especially acknowledge **Chris Sewell**, whose foundational work on the MyST Markdown specification, the Sphinx parser (`myst-parser`), and the wider Jupyter Book 1 ecosystem in Sphinx. Chris’s attention to these technical underpinnings laid the groundwork for many of the capabilities now realized in Jupyter Book 2. In addition, we acknowledge **John Stachurksi** for providing key leadership and securing the original funding that created the Jupyter Book 1 ecosystem built on Sphinx.
 
 We also acknowledge the work of the **Executable Books team**, the contributors to **Jupyter Frontends sub-project, Thebe**, and the maintainers of MyST-related tooling and plugins. The ongoing development of Jupyter Book 2 is supported and stewarded by the **Jupyter Book Community**, and is now a subproject of **Project Jupyter**.
 
 
-[^1]:  There are 18.152 dependencies of JupyterBook (v1 and v2, combined) based on GitHub dependency graph: [https://github.com/jupyter-book/jupyter-book/network/dependents](https://github.com/jupyter-book/jupyter-book/network/dependents).
+[^deps]:  There are 18.152 dependencies of JupyterBook (v1 and v2, combined) based on GitHub dependency graph: https://github.com/jupyter-book/jupyter-book/network/dependents.
 
-[^2]:  MyST is pronounced like “missed”.
+[^pronunciation]:  MyST is pronounced like “missed”.
 
-[^3]:  The hover-xref project in sphinx was an attempt at doing this [reference]
+[^plugins]: Examples are available in the [appendix](#appendix-plugins)
 
-[^4]:  The Jupyter Book team intends to extend computational capabilities to use kernels and execution services that are hosted elsewhere. This will make it possible for the computation in a Jupyter Book to be executed in a remote environment that may have access to more complex resources or sensitive data (for example, as part of a journal publication pipeline for reproducibility).
+[^hover-xref]:  The [hover-xref project in sphinx](https://sphinx-hoverxref.readthedocs.io/en/latest/) was an attempt at doing this
+
+[^remote-exec]:  The Jupyter Book team intends to extend computational capabilities to use kernels and execution services that are hosted elsewhere. This will make it possible for the computation in a Jupyter Book to be executed in a remote environment that may have access to more complex resources or sensitive data (for example, as part of a journal publication pipeline for reproducibility).
