@@ -72,7 +72,7 @@ The papers are published as true Open Access (OA) articles with Creative Commons
   - Reviewers and co-chairs volunteer their time.
   - Services with free tiers (like GitHub) allow distributing the underlying technologies with minimal cost.
 
-- Papers are openly available at http://proceedings.scipy.org, with no pay walls barring consumption or author processing charges.
+- Papers are openly available at <http://proceedings.scipy.org>, with no pay walls barring consumption or author processing charges.
 - All papers have DOIs (making them easily citable) and are also openly available from those DOIs.
 - From 2023 onwards, full HTML is the _preferred_ format in addition to the PDF being available.
 
@@ -256,13 +256,13 @@ git clone https://github.com/mpacer/scipy_proceedings
 - Add the `scipy-conference` repository as your `upstream` remote
   - `git remote add upstream <scheme>github.com/scipy-conference/scipy_proceedings`
 
-If you run `git remote -v ` you should see something like the following:
+If you run `git remote -v` you should see something like the following:
 
 ```
-origin	<scheme>github.com/<username>/scipy_proceedings.git (fetch)
-origin	<scheme>github.com/<username>/scipy_proceedings.git (push)
-upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (fetch)
-upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (push)
+origin <scheme>github.com/<username>/scipy_proceedings.git (fetch)
+origin <scheme>github.com/<username>/scipy_proceedings.git (push)
+upstream <scheme>github.com/scipy-conference/scipy_proceedings.git (fetch)
+upstream <scheme>github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
 #### Getting the latest branch
@@ -489,6 +489,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
   - Editors should verify that reviews have been completed
 - Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
+cd
 
 ## Instructions for Slides
 
