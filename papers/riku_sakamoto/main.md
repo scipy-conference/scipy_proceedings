@@ -16,7 +16,9 @@ The simulation of physical phenomena plays a critical role in various aspects of
 
 As shown in [](#physical_dimension), Physical dimensions are the fundamental quantities used to describe physical systems. These include time ( {math}`T` ), mass ( {math}`M` ), length ( {math}`L` ), electric current ( {math}`I` ), thermodynamic temperature ( {math}`\Theta` ), amount of substance ( {math}`N` ), and luminous intensity ( {math}`J` ). In numerical simulations of physical phenomena, physical dimensions ensure the correctness of computations. Extending this concept to deep learning provides several advantages, we can enhance the reliability of model architectures by preventing invalid operations between physically incompatible quantities. This capability helps avoid subtle implementation errors and improves code readability and maintainability, especially in scientific and engineering applications where preserving physical meaning is critical. 
 
-PyTorch [@NEURIPS2019_bdbca288] is a deep learning framework that provides tensor operations and automatic differentiation capabilities. However, it does not natively support physical dimensions. To fill this gap, we develop Phlower, which is an open-source deep learning framework, and introduce `PhlowerTensor` which is a wrapper class of PyTorch tensors and enables physical dimension tracking. This ensures that tensor operations adhere to dimensional consistency rules. Thanks to its lightweight implementation, converting between PyTorch's tensor object and `PhlowerTensor` is straightforward. Moreover, `PhlowerTensor` maintains compatibility with PyTorch’s autograd system and core tensor operations such as `sum()`, enabling seamless integration into existing PyTorch-based workflows with minimal code modifications. [](#example_phlower_tensor) illustrates its usage.
+PyTorch [@NEURIPS2019_bdbca288] is a deep learning framework that provides tensor operations and automatic differentiation capabilities. However, it does not natively support physical dimensions. To fill this gap, we develop Phlower, an open-source deep learning framework, and introduce `PhlowerTensor`, a wrapper class of PyTorch tensors and enables physical dimension tracking. This ensures that tensor operations adhere to dimensional consistency rules. 
+
+From an implementation perspective, `PhlowerTensor` holds an underlying PyTorch tensor, making conversion between PyTorch tensors and `PhlowerTensor` straightforward. Moreover, `PhlowerTensor` maintains compatibility with PyTorch’s autograd system and core tensor operations such as `sum()`, enabling seamless integration into existing PyTorch-based workflows with minimal code modifications. [](#example_phlower_tensor) illustrates its usage.
 
 :::{table} Physical Dimensions [@newell2019si]
 :label: physical_dimension
@@ -201,8 +203,7 @@ In physics-informed neural networks (PINNs), the loss function often includes te
 
 ### Enforcing Dimensional Validity in Feature Engineering
 
-Phlower can reject invalid operations in feature engineering (e.g., subtracting pressure from velocity) due to its enforcement of dimensional consistency. This capability is particularly useful in domains where data includes a variety of physical quantities with different dimensions.
-
+Phlower can reject invalid operations in feature engineering (e.g., subtracting pressure from velocity) due to its enforcement of dimensional consistency. This capability is particularly useful in domains such as fluid dynamics (e.g., aerodynamic analysis of vehicles), where data includes a variety of physical quantities with different dimensions.
 
 ## Additional Features
 
@@ -283,7 +284,7 @@ Several libraries and frameworks have been developed to support physical dimensi
 
 * **Python Quantities** [@python-quantities]: A library that extends NumPy to support physical quantities with units. It enables dimensional analysis and unit conversions in scientific computations. `Python Quantities` is designed to be compatible with NumPy arrays, allowing seamless integration with NumPy operations.
 
-In contrast to these libraries, Phlower does not aim to provide unit conversion functionalities. Instead, it focuses on enforcing **dimensional consistency** in tensor operations. `PhlowerTensor` is designed to integrate seamlessly with PyTorch, allowing users to leverage existing PyTorch functionalities while tracking and validating the physical dimensions of tensor computations.
+In contrast to Pint or Python Quantities, Phlower has two key differences. First, it does not provide unit conversion functionalities; instead, it focuses on enforcing **dimensional consistency** in tensor operations. Second, `PhlowerTensor` represents physical dimensions as an exponent vector of physical quantities (such as mass, length, and time) and stores this metadata alongside a PyTorch tensor. This design enables seamless integration with PyTorch, supporting GPU acceleration and automatic differentiation while tracking and validating the physical dimensions of tensor computations.
 
 
 ## Limitations
