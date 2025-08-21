@@ -72,7 +72,7 @@ The papers are published as true Open Access (OA) articles with Creative Commons
   - Reviewers and co-chairs volunteer their time.
   - Services with free tiers (like GitHub) allow distributing the underlying technologies with minimal cost.
 
-- Papers are openly available at <http://proceedings.scipy.org>, with no pay walls barring consumption or author processing charges.
+- Papers are openly available at http://proceedings.scipy.org, with no pay walls barring consumption or author processing charges.
 - All papers have DOIs (making them easily citable) and are also openly available from those DOIs.
 - From 2023 onwards, full HTML is the _preferred_ format in addition to the PDF being available.
 
@@ -108,25 +108,19 @@ In addition to the following list, we break up the deadlines in the respective d
 - Jun 13: Deadline to submit first draft by authors, as GitHub pull request
 - Jun 15: Assignment of reviewers to papers
 - Jun 15: Open Review Period begins
-  - During this initial review period, authors may still refine their first draft.
-  - Reviewers may comment on papers during this period, with the understanding that authors may
-    still be working on substantial additions and edits.
-  - Authors and reviewers should be in open communication so reviewers do not spend all their energy
-    on an unfinished draft.
-  - Reviewers should at least provide initial, high-level feedback during this period.
+  - Reviewers comment on papers to authors during this period.
+  - Authors also respond to review comments with improvements to papers during this period.
 - Jul 10: Initial complete review
-  - At this point, the author should consider their submission a final draft.
-  - Reviewers continue to comment on the paper during this period.
-  - Any author revisions should only be in response to reviewer comments.
+  - Reviewers continue to comment on paper improvements during this period.
+  - Authors also respond to review comments with further improvements to papers during this period.
 - Aug 9: Final review deadline
-  - Reviewers must be done with their reviews at this point.
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 22: Final author revision deadline
-- Aug 22: Open Review Period ends
+- Aug 15: Final author revision deadline
+- Aug 15: Open Review Period ends
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 30: Final reviewer decision deadline
-- Sept 6: Proceedings final sign-off by editors
+- Aug 23: Final reviewer decision deadline
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ## Instructions for Authors
@@ -139,9 +133,10 @@ Please only use LaTeX if you are already familiar with writing papers in LaTeX.
 The build process uses the `mystmd` CLI, which allows us to support
 a web-first reading experience.
 
-If you are submitting a Jupyter Notebook, the SciPy Proceedings supports executable content and interactive widgets.
+This is the first year the SciPy proceedings are accepting interactive notebooks and computational environments.
+These are also supported natively by the `mystmd` tools.
 By submitting a Jupyter Notebook, you are bringing your publication closer to your research, facilitating reproducibility, and allowing for interactive figures that more deeply communicate your results.
-If you are interested in submitting an executable, interactive notebook, please contact the Proceedings Co-chairs using the `@scipy-conference/2025-proceedings` team.
+If you are interested in submitting an interactive notebook, please contact the Proceedings Co-chairs using the `@scipy-conference/2025-proceedings` team.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
@@ -177,13 +172,9 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - May 2: Authors invited to submit full papers
 - May 9: Webinar offered to authors
 - Jun 13: Deadline to submit first draft by authors
-  - During this initial review period, authors may still refine their first draft.
-  - Authors and reviewers should be in open communication so reviewers do not spend all their energy
-    on an unfinished draft.
-- Jul 10: Initial complete review
-  - At this point, the author should consider their submission a final draft.
-  - Any author revisions should only be in response to reviewer comments.
-- Aug 22: Final author revision deadline
+  - Reviewers comment on papers to authors during this period.
+  - Authors also respond to review comments with improvements to papers during this period.
+- Aug 15: Final author revision deadline
   - Authors put down their pens.
 
 ### General Information and Guidelines for Authors
@@ -212,12 +203,6 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
   - SciPy is supporting _HTML_. LaTeX is not involved in reading or rendering; we use [Typst for building PDFs](https://github.com/curvenote-templates/scipy)
   - Custom LaTeX macros are **not** supported and some packages may not be supported
 - The paper should be at most 6000 words including figures but not including references; this is about 8 pages for the published PDF.
-
-### Policy on Previously Published Material
-
-Submissions to the SciPy Proceedings should be novel scientific articles that have not previously been reviewed and published. Submitting un-reviewed preprints is acceptable. You may also include content published in other contexts, e.g. software documentation, but it must be presented in a distinct way, as a scientific article.
-
-Final submission acceptance will be at the discretion of the Proceedings Co-Chairs. Please contact them if you have any worries about the novelty or publication history of your submission.
 
 ### Author Workflow
 
@@ -272,13 +257,13 @@ git clone https://github.com/mpacer/scipy_proceedings
 - Add the `scipy-conference` repository as your `upstream` remote
   - `git remote add upstream <scheme>github.com/scipy-conference/scipy_proceedings`
 
-If you run `git remote -v` you should see something like the following:
+If you run `git remote -v ` you should see something like the following:
 
 ```
-origin <scheme>github.com/<username>/scipy_proceedings.git (fetch)
-origin <scheme>github.com/<username>/scipy_proceedings.git (push)
-upstream <scheme>github.com/scipy-conference/scipy_proceedings.git (fetch)
-upstream <scheme>github.com/scipy-conference/scipy_proceedings.git (push)
+origin	<scheme>github.com/<username>/scipy_proceedings.git (fetch)
+origin	<scheme>github.com/<username>/scipy_proceedings.git (push)
+upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (fetch)
+upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
 #### Getting the latest branch
@@ -418,10 +403,10 @@ _Final Reviewer Decision_ deadline.
   - Authors also respond to review comments with further improvements to papers during this period.
 - Aug 9: Final review deadline
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 22: Final author revision deadline
+- Aug 15: Final author revision deadline
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 30: Final reviewer decision deadline
+- Aug 23: Final reviewer decision deadline
 
 ### Reviewer Workflow
 
@@ -475,7 +460,7 @@ To information about how to manage the whole proceedings, please see
 
 - May 2: Authors invited to submit full papers
   - The [build process](#build-process) is supported by Curvenote (a SciPy sponsor) and it is maintained throughout this period.
-- Sept 6: Proceedings final sign-off by editors
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ### Instructions for Editors
@@ -503,9 +488,8 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
   - Editors should verify that reviews have been completed
-- Sept 6: Proceedings final sign-off by editors
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
-cd
 
 ## Instructions for Slides
 
