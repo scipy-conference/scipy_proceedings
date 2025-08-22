@@ -24,7 +24,7 @@ transform (ELT) paradigm. Compared to the extract, transform, load (ETL) workflo
 had become ubiquitous since their invention in the 1970s [@fivetranETLvsELT], ELT
 leveraged the power and efficiency of cloud data warehouses in performing
 transformations [@dataWarehousingOnAWS], combined with the simplicity of managed compute
-and processes.
+and processes. The differences between ETL and ELT can be seen in @fig:etl-vs-elt below.
 
 :::{figure} etl-vs-elt.png
 :label: fig:etl-vs-elt
@@ -87,13 +87,13 @@ use the name "Python analytics stack" or "Python data stack."
 
 In 2021, engineering leaders from Meta, Voltron Data, Databricks, and Sundeck published
 a joint paper outlining a vision for a modular data stack of reusable components built
-on open standards [@doi:10.14778/3603581.3603604]. In short, they posited that modern
-data systems all share a common set of logical components, and developers of modern data
-management systems should take advantage of these similarities instead of reinventing
-the wheel and further fragmenting the ecosystem. They argued that a paradigm shift
-towards composable data systems would not only benefit those building such products but
-also user experience by improving consistency and reducing the learning curve across
-libraries.
+on open standards [@doi:10.14778/3603581.3603604], as seen in @fig:modular-data-stack.
+In short, they posited that modern data systems all share a common set of logical
+components, and developers of modern data management systems should take advantage of
+these similarities instead of reinventing the wheel and further fragmenting the
+ecosystem. They argued that a paradigm shift towards composable data systems would not
+only benefit those building such products but also user experience by improving
+consistency and reducing the learning curve across libraries.
 
 :::{figure} modular-data-stack.png
 :label: fig:modular-data-stack
