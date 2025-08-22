@@ -169,7 +169,7 @@ A major motivation for rebuilding Jupyter Book on the MyST ecosystem is to enabl
 
 With `jupyterlab-myst`, authors can preview how their markdown content elements will appear in the rendered book—including directives, equations, citations, and even code outputs—without leaving the notebook environment. This tight feedback loop reduces friction during authoring, while preserving a single source of truth between exploratory notebooks and published outputs. The plugin is part of our vision to unify **authoring, execution, and publishing** in one environment. Rather than using separate tools for writing, developing, and rendering, the MyST ecosystem will allow interfaces like JupyterLab as a single full-featured writing and publishing environment. This lowers the barrier to creating high-quality computational narratives, especially for teams already working with Jupyter tools for their day-to-day research and teaching.
 
-:::{figure} jupyterlab-myst.mp4
+:::{figure} jupyterlab-myst
 :label: fig:jlab-myst
 Using `jupyterlab-myst` to edit MyST content with embedded widgets and interactivity in the markdown cells.
 :::

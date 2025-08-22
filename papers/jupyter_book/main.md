@@ -380,7 +380,7 @@ Providing computational interactivity without leaving the page drastically reduc
 It gives authors the ability to power their computational content with arbitrary software, computational resources, or access to data (for example, authors could leverage a service that operates a BinderHub that provides access to GPUs and a 10 Terabyte dataset, and provide interactive kernels for their readers that are powered by that hub).
 Moreover, modern efforts to package computational environments in web-native toolchains like WebAssembly (via tools like JupyterLite) will allow for interactive execution directly in a reader's browser.
 
-:::{figure} thebe.mp4
+:::{figure} thebe
 :label: fig:interactivity
 Embedded notebook cells with live computation directly in an articles with computation backed by Jupyter. These can be running on BinderHub or directly in your browser through JupyterLite. Originally published in @10.25080/NKVC9349.
 :::
