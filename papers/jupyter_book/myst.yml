@@ -9,15 +9,25 @@ project:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - jupyter
+    - evan
     - greg
-    - rowan
+    - rowanc1
+    - danny
     - chris
     - angus
+    - julia
     - franklin
+    - jim
     - matt
     - mike
-    - steve
     - fernando
+    - steve
+    - min
+    - brian
+    - malvika
+    - brigitta
+    - stafan
+    - kirstie
   contributors:
     - id: jupyter
       name: Project Jupyter
@@ -25,13 +35,20 @@ project:
         - jupyter
       roles:
         - Project administration
+    - id: evan
+      name: Evan Bolyen
+      email: evan.bolyen@nau.edu
+      affiliations:
+        - nau
+      roles:
+        - Writing – review & editing
     - id: greg
       name: Greg Caporaso
+      email: greg.caporaso@nau.edu
       orcid: 0000-0002-8865-1670
       affiliation:
         - jupyter
-        - name: Northern Arizona University
-          ror: https://ror.org/0272j5188
+        - nau
       roles:
         - Conceptualization
         - Funding acquisition
@@ -39,7 +56,7 @@ project:
         - Project administration
         - Supervision
         - Writing – review & editing
-    - id: rowan
+    - id: rowanc1
       name: Rowan Cockett
       email: rowan@curvenote.com
       corresponding: true
@@ -59,12 +76,26 @@ project:
         - Visualization
         - Writing – original draft
         - Writing – review & editing
+    - id: danny
+      name: Danny Garside
+      email: dannygarside@outlook.com
+      orcid: 0000-0002-4579-003X
+      github: da5nsy
+      affiliations:
+        - ttw
+        - dra
+      roles:
+        - Software
+        - Investigation
+        - Writing – review & editing
     - id: chris
       name: Chris Holdgraf
+      email: choldgraf@2i2c.org
       orcid: 0000-0002-2391-0678
+      github: choldgraf
       affiliations:
-        - id: jupyter
         - id: 2i2c
+        - id: jupyter
       roles:
         - Conceptualization
         - Funding acquisition
@@ -73,6 +104,82 @@ project:
         - Software
         - Supervision
         - Writing – original draft
+        - Writing – review & editing
+    - id: angus
+      name: Angus Hollands
+      email: ahollands@2i2c.org
+      orcid: 0000-0003-0788-3814
+      affiliations:
+        - id: 2i2c
+        - id: jupyter
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: julia
+      name: Julia Kent
+      email: jkent@ucar.edu
+      orcid: 0000-0002-5611-8986
+      github: jukent
+      affiliations:
+        - ncar
+      roles:
+        - Writing – review & editing
+    - id: franklin
+      name: Franklin Koch
+      orcid: 0000-0002-6393-7058
+      github: fwkoch
+      affiliation:
+        - id: curvenote
+        - id: jupyter
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: jim
+      name: Jim Madge
+      email: jim@jmadge.com
+      orcid: 0000-0001-6044-164X
+      github: JimMadge
+      affiliations:
+        - alanturinginstitute
+        - ttw
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: matt
+      name: Matthew McKay
+      email: mamckay@gmail.com
+      github: mmcky
+      affiliations:
+        - quantecon
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Supervision
+        - Writing – review & editing
+    - id: mike
+      name: Mike Morrison
+      email: mike@curvenote.com
+      orcid: 0000-0002-1324-8801
+      affiliation:
+        - curvenote
+      roles:
+        - Validation
+        - Writing – review & editing
+    - id: fernando
+      name: Fernando Pérez
+      orcid: 0000-0002-1725-9815
+      email: fernando.perez@berkeley.edu
+      affiliations:
+        - id: berkeley-stats
+        - id: berkeley-bids
+        - id: berkeley-dse
+        - id: lbl
+        - id: jupyter
+      roles:
         - Writing – review & editing
     - id: steve
       name: Steve Purves
@@ -91,49 +198,60 @@ project:
         - Software
         - Supervision
         - Writing – review & editing
-    - id: franklin
-      name: Franklin Koch
-      orcid: 0000-0002-6393-7058
-      affiliation:
-        - id: jupyter
-        - id: curvenote
-      github: fwkoch
+    - id: min
+      name: Min Ragan Kelley
+      email: benjaminrk@gmail.com
+      affiliations:
+        - jupyter
       roles:
-        - Investigation
+        - Writing – review & editing
+    - id: brian
+      name: Brian E. J. Rose
+      email: brose@albany.edu
+      orcid: 0000-0002-9961-3821
+      github: brian-rose
+      affiliations:
+        - ualbany
+      roles:
+        - Writing – review & editing
+    - id: malvika
+      name: Malvika Sharan
+      email: malvikasharan@gmail.com
+      affiliations:
+        - jupyter
+      roles:
+        - Writing – review & editing
+    - id: brigitta
+      name: Brigitta Sipőcz
+      email: bsipocz@gmail.com
+      orcid: 0000-0002-3713-6337
+      github: bsipocz
+      affiliations:
+        - iapc
+      roles:
         - Software
         - Writing – review & editing
-    - id: mike
-      name: Mike Morrison
-      orcid: 0000-0002-1324-8801
-      affiliation:
-        - id: curvenote
-      roles:
-        - Validation
-        - Writing – review & editing
-    - id: angus
-      name: Angus Hollands
-      orcid: 0000-0003-0788-3814
+    - id: stafan
+      name: Stéfan van der Walt
+      email: stefanv@berkeley.edu
+      orcid: 0000-0001-9276-1891
+      github: stefanv
       affiliations:
-        - id: jupyter
-        - id: 2i2c
+        - berkeley-bids
+        - scientificpython
       roles:
-        - Investigation
         - Software
         - Writing – review & editing
-    - id: matt
-      name: Matthew McKay
+    - id: kirstie
+      name: Kirstie Whitaker
+      email: kirstie.whitaker@berkeley.edu
+      orcid: 0000-0001-8498-4059
+      github: KirstieJane
       affiliations:
-        - name: QuantEcon
-    - id: fernando
-      name: Fernando Pérez
-      orcid: 0000-0002-1725-9815
-      email: fernando.perez@berkeley.edu
-      affiliations:
-        - id: berkeley-stats
-        - id: berkeley-bids
-        - id: berkeley-dse
-        - id: lbl
-        - id: jupyter
+        - berkeley-bids
+        - jupyter
+      roles:
+        - Writing – review & editing
   affiliations:
     - id: jupyter
       name: Project Jupyter
@@ -148,6 +266,7 @@ project:
       name: 2i2c
       ror: https://ror.org/050gv4c78
       url: https://2i2c.org
+      email: hello@2i2c.org
     - id: csf
       name: Continuous Science Foundation
       url: https://continuousfoundation.org
@@ -159,6 +278,40 @@ project:
       institution: Eric and Wendy Schmidt Data Science & Environment Center (DSE), UC Berkeley
     - id: lbl
       institution: Data Science and Technology, Lawrence Berkeley National Lab
+    - id: nau
+      name: Northern Arizona University
+      ror: https://ror.org/0272j5188
+      url: https://nau.edu/
+    - id: ttw
+      name: The Turing Way
+      url: https://book.the-turing-way.org/
+      email: theturingway@gmail.com
+    - id: dra
+      name: Digital Research Academy
+      url: https://digital-research.academy/
+      email: hello@digiresacademy.org
+    - id: ncar
+      name: NSF National Center for Atmospheric Research
+      url: https://ncar.ucar.edu/
+      country: USA
+    - id: alanturinginstitute
+      name: Alan Turing Institute
+      url: https://www.turing.ac.uk/
+    - id: quantecon
+      name: QuantEcon
+      url: https://quantecon.org/
+    - id: ualbany
+      name: University at Albany (State University of New York)
+      url: https://www.albany.edu/
+      country: USA
+    - id: iapc
+      name: Caltech/IPAC - NASA/IPAC Infrared Science Archive
+      url: https://ipac.caltech.edu/
+      country: USA
+    - id: scientificpython
+      name: Scientific Python
+      url: https://scientific-python.org/
+      email: info@scientific-python.org
   keywords:
     - open science
     - jupyter
