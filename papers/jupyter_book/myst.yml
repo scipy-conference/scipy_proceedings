@@ -356,6 +356,11 @@ project:
   references:
     scipy: https://proceedings.scipy.org/articles/NKVC9349
     docs: https://mystmd.org/guide
+  error_rules:
+    - rule: link-resolves
+      severity: ignore
+      keys:
+        - https://sloan.org/grant-detail/g-2022-19361
   exports:
     - id: pdf
       format: typst

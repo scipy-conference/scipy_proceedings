@@ -96,6 +96,22 @@ const plugin = {
 export default plugin;
 ```
 
+(appendix-myst-xref)=
+## Example myst.xref.json
+
+Here’s an example of references in a `myst.xref.json` file from the [MyST Guide](http://mystmd.org/guide/myst.xref.json), note both page references and “identifier” references (e.g., labels attached to a figure or header):
+
+```json
+references:
+{ kind: "page", data: "/index.json", url: "/" }
+{ identifier: "cool-myst-features", kind: "heading", data: "/index.json", … }
+{ identifier: "quickstart-tutorials", kind: "heading", data: "/index.json", … }
+{ identifier: "cite-mystmd", kind: "heading", data: "/index.json", … }
+{ identifier: "project-goals", kind: "heading", data: "/index.json", … }
+{ kind: "page", data: "/installing.json", url: "/installing" }
+{ identifier: "installing-myst-tabs", kind: "tabSet", data: "/installing.json", … }
+```
+
 (appendix-composable)=
 
 ## Composable Configuration
