@@ -230,7 +230,7 @@ Future work will explore theoretical guarantees on the approximation quality and
 The implementation will continue to be optimized for speed in subsequent versions.
 Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against Multiple Imputation by Chained Equations ("MICE", [@white2011multiple]) to evaluate whether it can achieve better or faster results.
 
-## Aknowledgements
+## Acknowledgements
 
 This work was funded by Airparif.
 I'd like to thank Paul Catala (Université de Lorraine) and Alexis Lebeau (RTE) for their assistance and review.
