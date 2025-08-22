@@ -94,6 +94,7 @@ project:
       email: choldgraf@2i2c.org
       orcid: 0000-0002-2391-0678
       github: choldgraf
+      corresponding: true
       affiliations:
         - id: 2i2c
         - id: jupyter
