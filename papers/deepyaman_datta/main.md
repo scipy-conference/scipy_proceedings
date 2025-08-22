@@ -464,7 +464,3 @@ provides a unified API, data transformation and data validation using Ibis is po
 meaning you can develop using local engines and run in production using other engines.
 By extension, the Python-first analytics stack is well-positioned with increasing
 interest in multi-engine stacks.
-
-## Acknowledgments
-
-We would like to thank the reviewers.
