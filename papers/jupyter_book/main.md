@@ -515,7 +515,7 @@ We also acknowledge the work of the Executable Books team, the contributors to J
 The ongoing development of Jupyter Book 2 is supported and stewarded by the Jupyter Book Community, and is now a subproject of Project Jupyter.
 
 Authors are in alphabetical order after "Project Jupyter" following Project Jupyter's approved [process for authoring Jupyter related academic papers](https://jupyter.org/governance/papers.html) and aligned with our shared values of inclusivity and generosity in authorship, following clear, explicit criteria for authorship, openness, and personal accountability.
-[^deps]: There are 18.152 dependencies of JupyterBook (v1 and v2, combined) based on GitHub dependency graph: https://github.com/jupyter-book/jupyter-book/network/dependents.
+[^deps]: There are 18,152 dependencies of JupyterBook (v1 and v2, combined) based on GitHub dependency graph: https://github.com/jupyter-book/jupyter-book/network/dependents.
 [^pronunciation]: MyST is pronounced like “missed” (see [the docs](https://mystmd.org/guide/guiding-principles#how-do-i-pronounce-myst)).
 [^plugins]: Examples are available in the [appendix](#appendix-plugins)
 [^myst-xref]: An example is available in the [appendix](#appendix-myst-xref)
