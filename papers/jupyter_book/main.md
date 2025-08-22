@@ -216,11 +216,11 @@ Below are a few key extension points:
 (roles-and-directives)=
 **Roles and directives** are mechanisms for adding new types of in-line and block-level content (respectively), allowing developers to define content abstractions (similar to functions in a programming language) for use by authors.
 Users may define their own roles and directives using JavaScript, Python, or any other language that reads and writes from `stdout`.
-Building a new role or directive involves taking MyST AST as input, applying arbitrary transformations to it, and returning MyST AST as output.
+Building a new role or directive involves taking MyST AST as input, applying transformations, and returning AST.
 
 **Transforms** are a mechanism for transforming the content of one or more MyST ASTs.
-It is used to enrich and re-use content as part of the build process.
-For example, by collecting instances of a `{figure}` directive throughout the page and aggregating them all into a single gallery.
+It is used to enrich content as part of the build process.
+For example, by collecting `{figure}` nodes throughout the page and aggregating them into a single gallery.
 
 **Renderers** are a way to export MyST AST into arbitrary types of outputs.
 They're useful for converting the "Canonical document" into many different formats or styles without changing the original content.
@@ -250,7 +250,7 @@ Our attention is primarily focused on the React-renderers, Typst PDF templates (
 For example, the SciPy Proceedings for 2024 and 2025 both use the React renderers, the Typst renderer for PDF creation, and JATS XML for all articles [@doi:10.25080/NKVC9349].
 
 By treating that document AST as a first-class build output, authors can write their content once, and publish in multiple places without manually adapting their content for each target format.
-For example, a MyST Document can be built once, and then the resulting `.json` AST can be rendered into an HTML website for reading and multiple LaTeX documents meant for submission to a variety of journals.
+For example, a MyST Document can be built once, and the resulting AST can be rendered into an HTML website as well as multiple LaTeX documents for submission to various journals.
 Paired with the machine readability of the AST (the `.json` file served with websites), it is possible to render multiple "views" of the same underlying content without creating confusion for where the source of truth lies.
 
 Additionally, having a standard and metadata-rich AST structure allows many different workflows to be served from the same document engine.
@@ -304,7 +304,7 @@ By making each canonical document accessible via a `.json` API endpoint that exp
 Readers and developers can query structure, citations, and content across books, enabling new tools like federated search, content previews, and live citation graphs.
 It also enhances the reading experience by enabling full-text search, granular cross-referencing, and live content embedding across projects.
 
-Moreover, by aligning with community standards (e.g., JATS, DOIs, ORCID, ROR), the system supports today's scholarly publishing workflows, remains grounded in lightweight, markdown-based authoring, and opens up new possibilities for more composable workflows in the future for scientific authoring.
+Moreover, by aligning with community standards (e.g., JATS, DOIs, ORCID, ROR), the system supports today's scholarly publishing workflows, remains grounded in lightweight, markdown-based authoring, and opens up possibilities for more composable workflows in the future for scientific authoring [@10.62329/hytv4378].
 This approach lays the groundwork for a **federated publishing network** where content from different lab groups, institutions, or journals can be referenced, reused, and remixed while maintaining proper attribution and structure.
 
 :::{figure} hover.png
@@ -319,7 +319,7 @@ The AST specification is versioned and documented, and efforts are underway to s
 We are also investing in forward-and-backwards interoperability in this specification in the MyST Document Engine.
 
 By creating a community process for defining the evolution of the MyST Document and Markdown standards, we aim to create a participatory process to ensure that this ecosystem continues to serve the needs of its key stakeholders: members of open science, open source, and open knowledge communities who are passionate about communicating with computational narratives.
-Coupled with the dependability of a stable specification, and a technology stack that allows for graceful upgrading and downgrading, this allows developers, publishers, and downstream platforms to build confidently on top of Jupyter Book 2 and the MyST ecosystem without fear of breaking changes.
+Coupled with the dependability of a stable specification, and a technology stack that allows for graceful upgrading and downgrading, this allows developers, publishers, and downstream platforms to build confidently on top of the MyST ecosystem.
 
 ### Computation should be first-class
 
@@ -378,7 +378,7 @@ Thebe can leverage kernel providers from sources like Binder [@10.25080/Majora-4
 
 Providing computational interactivity without leaving the page drastically reduces the friction required to interact with computational ideas.
 It gives authors the ability to power their computational content with arbitrary software, computational resources, or access to data (for example, authors could leverage a service that operates a BinderHub that provides access to GPUs and a 10 Terabyte dataset, and provide interactive kernels for their readers that are powered by that hub).
-Moreover, modern efforts to package computational environments in web-native toolchains like WebAssembly (via tools like JupyterLite) will allow for interactive execution that happens entirely in a reader's browser, making it significantly more scalable and accessible.
+Moreover, modern efforts to package computational environments in web-native toolchains like WebAssembly (via tools like JupyterLite) will allow for interactive execution directly in a reader's browser.
 
 :::{figure} thebe.mp4
 :label: fig:interactivity
