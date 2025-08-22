@@ -97,6 +97,7 @@ export default plugin;
 ```
 
 (appendix-myst-xref)=
+
 ## Example myst.xref.json
 
 Here’s an example of references in a `myst.xref.json` file from the [MyST Guide](http://mystmd.org/guide/myst.xref.json), note both page references and “identifier” references (e.g., labels attached to a figure or header):
@@ -168,8 +169,7 @@ A major motivation for rebuilding Jupyter Book 2 on the MyST ecosystem is to ena
 
 With `jupyterlab-myst`, authors can preview how their markdown content elements will appear in the rendered book—including directives, equations, citations, and even code outputs—without leaving the notebook environment. This tight feedback loop reduces friction during authoring, while preserving a single source of truth between exploratory notebooks and published outputs. The plugin is part of our vision to unify **authoring, execution, and publishing** in one environment. Rather than using separate tools for writing, developing, and rendering, the MyST ecosystem will allow interfaces like JupyterLab as a single full-featured writing and publishing environment. This lowers the barrier to creating high-quality computational narratives, especially for teams already working with Jupyter tools for their day-to-day research and teaching.
 
-:::{figure} xref:docs#fig-eval-array
+:::{figure} jupyterlab-myst.mp4
 :label: fig:jlab-myst
-
-`jupyterlab-myst` in action.
+Using `jupyterlab-myst` to edit MyST content with embedded widgets and interactivity in the markdown cells.
 :::
