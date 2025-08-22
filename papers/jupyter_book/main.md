@@ -80,7 +80,7 @@ The engine then renders this AST to React components that are bundled with the B
 
 The MyST Document Engine allows users to **parse** documents into a structured format, **execute** computational content, **transform** them to include metadata and resolve references, and **output** a resolved MyST Abstract Syntax Tree (AST, described in more detail below).
 It is run via the command-line and is written in TypeScript.
-It parses many types of inputs—markdown files, Jupyter Notebooks, LaTeX documents, external MyST projects, configuration files, etc—and ensures that all of their content is embedded in this output AST.
+It parses many types of inputs—Markdown files, Jupyter Notebooks, LaTeX documents, external MyST projects, configuration files, etc—and ensures that all of their content is embedded in this output AST.
 
 ### The MyST Specification: A Structured Computational Document Format
 
@@ -93,7 +93,7 @@ It preserves not only the narrative content, but also computational blocks, comp
 These are all built into a structured, versioned AST.
 It is a **Canonical Document Representation** that can be parsed and rendered into user-facing outputs by renderers and themes.
 
-**MyST Markdown** is a flavor of markdown written for the MyST Specification that gives authors quick access to these and other extension points.
+**MyST Markdown** is a flavor of Markdown written for the MyST Specification that gives authors quick access to these and other extension points.
 MyST Markdown supports syntax for all of the content types supported in the MyST Specification.
 It is used both in Jupyter Book 2 and the MyST Engine, as well as in the Sphinx ecosystem via the [myst-parser extension](https://myst-parser.readthedocs.io/en/latest/).
 
@@ -105,7 +105,7 @@ Admonition **body**.
 :::
 ```
 
-The MyST Document Engine parses this markdown content into an AST that follows the MyST Specification.
+The MyST Document Engine parses this Markdown content into an AST that follows the MyST Specification.
 It looks like this:
 
 ```yaml
@@ -304,7 +304,7 @@ By making each canonical document accessible via a `.json` API endpoint that exp
 Readers and developers can query structure, citations, and content across books, enabling new tools like federated search, content previews, and live citation graphs.
 It also enhances the reading experience by enabling full-text search, granular cross-referencing, and live content embedding across projects.
 
-Moreover, by aligning with community standards (e.g., JATS, DOIs, ORCID, ROR), the system supports today's scholarly publishing workflows, remains grounded in lightweight, markdown-based authoring, and opens up possibilities for more composable workflows in the future for scientific authoring [@10.62329/hytv4378].
+Moreover, by aligning with community standards (e.g., JATS, DOIs, ORCID, ROR), the system supports today's scholarly publishing workflows, remains grounded in lightweight, Markdown-based authoring, and opens up possibilities for more composable workflows in the future for scientific authoring [@10.62329/hytv4378].
 This approach lays the groundwork for a **federated publishing network** where content from different lab groups, institutions, or journals can be referenced, reused, and remixed while maintaining proper attribution and structure.
 
 :::{figure} hover.png
@@ -337,7 +337,7 @@ Jupyter Notebooks (`.ipynb` files)
 : This is the standard structure for Jupyter Notebooks, and the MyST Document Engine will use the Jupyter kernel metadata in the notebook to execute each cell and embed its content in the output.
 
 MyST Markdown Notebooks (`.md` files)
-: The MyST Engine allows authors to define the structure of a Jupyter Notebook with a markdown file, using a special directive called `{code-cell}`.
+: The MyST Engine allows authors to define the structure of a Jupyter Notebook with a Markdown file, using a special directive called `{code-cell}`.
 Paired with text-to-notebook conversion tools like Jupytext, this allows for two-directional conversion between `.ipynb` files and MyST Markdown Notebooks.
 
 #### Computational outputs are treated like any other content
@@ -393,7 +393,7 @@ The tools in the Jupyter Book 2 stack are maintained by a contributor community 
 
 To facilitate participatory and collaborative design as the Jupyter Book 2 ecosystem evolves, all team practices and policies are defined in the [Jupyter Book Team Compass](https://compass.jupyterbook.org/), which inherits its open [governance and practices from Project Jupyter](https://jupyter.org/governance).
 The [contributing guide](https://mystmd.org/guide/developer) provides detail of the overall stack to help others understand and participate in the development.
-The [MyST Enhancement Proposal process](https://github.com/jupyter-book/myst-enhancement-proposals/) facilitates community feedback to evolve the MyST Specification and markdown language.
+The [MyST Enhancement Proposal process](https://github.com/jupyter-book/myst-enhancement-proposals/) facilitates community feedback to evolve the MyST Specification and Markdown language.
 These practices aim to allow the MyST ecosystem to remain a community-supported standard while continuing to evolve to meet the needs of its users.
 
 ### Next directions for Jupyter Book 2
@@ -430,7 +430,7 @@ Jupyter Book 2 _complements_ the Jupyter Notebook by providing a more rich featu
 A Jupyter Book can be written as a collection of _Jupyter Notebooks_, and knows how to parse MyST Markdown in notebook cells.
 Jupyter Notebooks and Jupyter Lab can also incorporate some of Jupyter Book 2's functionality into their interfaces via the [`jupyterlab-myst` extension](#appendix-jlab-myst).
 
-**[Quarto](http://quarto.org)**, developed by [Posit PBC](http://posit.co), is a flexible publishing system supporting Jupyter notebooks, markdown, and multiple output formats including HTML, PDF, DOCX, and JATS.
+**[Quarto](http://quarto.org)**, developed by [Posit PBC](http://posit.co), is a flexible publishing system supporting Jupyter notebooks, Markdown, and multiple output formats including HTML, PDF, DOCX, and JATS.
 Quarto is built on top of [Pandoc](https://pandoc.org/) and is tightly integrated with the R, RStudio, and Positron ecosystems.
 At this time, Quarto is more polished and further in its development lifecycle, with better support for features like PDF rendering (e.g., sub-figures and tables), and presentation output formats.
 While Quarto has excellent support for static HTML outputs, it does not focus on the principles of modularity and composability which are core to Jupyter Book 2 (e.g., it does not have content APIs and structured build outputs meant for reuse, nor expose packages that can be used by other tools).
@@ -478,7 +478,7 @@ Each project benefits from the same core strengths: modular content, structured 
 ## Conclusion
 
 Jupyter Book 2 is an open-source publishing system for computational and scientific content.
-It enables authors to combine markdown, notebooks, structured metadata, and executable code into documents that can be rendered as websites, PDFs, JATS XML, Word documents, and more.
+It enables authors to combine Markdown, notebooks, structured metadata, and executable code into documents that can be rendered as websites, PDFs, JATS XML, Word documents, and more.
 By rebuilding the system around a structured document model and a web-native engine, MyST Document Engine, JB2 supports workflows that are modular, reproducible, and extensible.
 These qualities are essential for modern research and education, and bridge the gap between exploratory computation and formal, published communication, enabling authors to spend more time on data-driven discovery and communicating ideas, and less time re-purposing their workflows for publication.
 
