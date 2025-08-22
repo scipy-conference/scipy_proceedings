@@ -23,7 +23,7 @@ Jupyter Book 2 heavily utilizes components from the MyST ecosystem—a collectio
 This is similar to the relationship between Jupyter Book 1 and Sphinx.
 
 The goal of this overhaul is to make structured scientific content more interoperable, composable, extensible, and machine-readable.
-This enables researchers to publish high-quality, interactive content with support for standards-based reuse, full-text APIs, executable notebooks, and output formats like Websites, Typst, PDF, LaTeX, Microsoft Word, JATS XML, and more.
+This enables researchers to publish high-quality, interactive content with support for standards-based reuse, full-text APIs, executable notebooks, and output formats like Websites, Typst, PDF, LaTeX, Microsoft Word, JATS XML (Journal Article Tag Suite, used in scientific publishing), and more.
 It is a major step forward towards Jupyter's vision of thinking and storytelling with code and data [@10.1109/MCSE.2021.3059263; @10.3233/978-1-61499-649-1-87].
 
 In this article, we: (a) document the guiding principles and design thinking behind this major release; (b) present the high-level architecture behind Jupyter Book and the MyST Markdown ecosystem; (c) compare our tools to others in the scientific publishing ecosystem; and (d) highlight case studies of notable projects.
