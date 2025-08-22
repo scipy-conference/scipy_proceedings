@@ -2,8 +2,6 @@
 title: Appendix
 ---
 
-# Appendix
-
 (appendix-history)=
 
 ## History & Background
@@ -21,7 +19,7 @@ From 2023 onward, the wider community has invested in `mystmd` and improved the 
 :::{figure} history.png
 :label: fig:history
 
-Major phases of Jupyter Book development
+Major phases of Jupyter Book development.
 :::
 
 ### A note on migrating from Jupyter Book 1
@@ -34,7 +32,7 @@ A key goal of Jupyter Book 2 was to leverage the design and standards from Jupyt
 
 **Directives:** Here is an example of a directive logic that generates an `{image}` node in the AST by pulling a random image from [picsum](https://picsum.photos/). Note how we define arguments and options, similar to how a function would be defined in a programming language.
 
-```
+```javascript
 const picsumDirective = {
   name: 'picsum',
   doc: 'An example directive for showing a nice random image at a custom size.',
@@ -69,7 +67,7 @@ export default plugin;
 
 **Transforms:** Here is an example of transform logic that parses the MyST AST and replaces **strong** styling with _emphasis_ styling. It operates on all `node` objects in the document using the `selectAll` utility function.
 
-```
+```javascript
 const plugin = {
   name: 'Strong to emphasis',
   transforms: [
@@ -104,7 +102,7 @@ export default plugin;
 
 MyST configuration files can be composed with one another using the `extends:` keyword. This allows configuration to be split across multiple files, or even downloaded from a remote source via the web. For example, an author might put their author affiliation information in a dedicated `authors.yml` file:
 
-```
+```yaml
 version: 1
 project:
   contributors:
@@ -132,7 +130,7 @@ project:
 
 And then re-use this affiliation information across multiple Jupyter Books or MyST Projects by “extending” the configuration like so:
 
-```
+```yaml
 version: 1
 extends:
   # Our local authors file
@@ -150,7 +148,7 @@ By allowing configuration to be split across multiple files and re-used easily, 
 
 ## Authoring in computational environments with `jupyterlab-myst`
 
-A major motivation for rebuilding Jupyter Book 2 on the MyST ecosystem is to enable a truly **web-native runtime model**. The MyST stack is built in JavaScript, and leverages the `unist` syntax tree ecosystem, making it directly compatible with modern browser environments and frontend frameworks like React, as well as a host of other plugins and transformations (e.g. `unified-latex`). This also allows us to develop MyST-native authoring applications, such as `jupyterlab-myst`, a plugin that brings MyST rendering capabilities directly into JupyterLab.
+A major motivation for rebuilding Jupyter Book 2 on the MyST ecosystem is to enable a truly **web-native runtime model**. The MyST stack is built in JavaScript, and leverages the `unist` syntax tree ecosystem, making it directly compatible with modern browser environments and frontend frameworks like React, as well as a host of other plugins and transformations (e.g., `unified-latex`). This also allows us to develop MyST-native authoring applications, such as `jupyterlab-myst`, a plugin that brings MyST rendering capabilities directly into JupyterLab.
 
 With `jupyterlab-myst`, authors can preview how their markdown content elements will appear in the rendered book—including directives, equations, citations, and even code outputs—without leaving the notebook environment. This tight feedback loop reduces friction during authoring, while preserving a single source of truth between exploratory notebooks and published outputs. The plugin is part of our vision to unify **authoring, execution, and publishing** in one environment. Rather than using separate tools for writing, developing, and rendering, the MyST ecosystem will allow interfaces like JupyterLab as a single full-featured writing and publishing environment. This lowers the barrier to creating high-quality computational narratives, especially for teams already working with Jupyter tools for their day-to-day research and teaching.
 
