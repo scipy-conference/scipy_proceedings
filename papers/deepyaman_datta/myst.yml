@@ -16,9 +16,12 @@ project:
       affiliation:
         - Kedro
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - data engineering
+    - modern data stack
+    - composable data stack
+    - data ingestion
+    - data transformation
+    - data validation
   # Add the abbreviations that you use in your paper here
   abbreviations:
     SQL: Structured Query Language
