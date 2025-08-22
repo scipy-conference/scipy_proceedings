@@ -98,7 +98,9 @@ consistency and reducing the learning curve across libraries.
 :::{figure} modular-data-stack.png
 :label: fig:modular-data-stack
 The emerging modular data stack can be distilled into a general model comprised of five
-layers.
+layers. A language component generates an intermediate representation (IR) that serves
+as input to a query optimizer. The optimizer produces query framents that are passed to
+an execution engine.
 :::
 
 One of the key results of this architecture is that users should be empowered to use the
