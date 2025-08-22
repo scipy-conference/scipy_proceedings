@@ -276,7 +276,7 @@ Additionally, configuration for a collection of projects can be [shared and reus
 
 #### The MyST AST modularizes content for easy parsing and re-mixing
 
-Each page or resource in a Jupyter Book project is assigned a unique slug and corresponding AST.
+Each page or resource in a Jupyter Book project is assigned a unique slug (a [human-readable URL](https://en.wikipedia.org/wiki/Clean_URL#Slug)) and corresponding AST.
 These can be referenced across projects, embedded in-line with other page content, or previewed when users hover over links.
 This is based on both the [MyST Specification](http://mystmd.org/spec) and a machine-readable cross-reference manifest `myst.xref.json`[^myst-xref].
 Similar to intersphinx references, a feature for cross-project linking in the Sphinx documentation generator, the `myst.xref.json` gives stable links to any aspect of the content.
