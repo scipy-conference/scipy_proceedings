@@ -40,10 +40,10 @@ data quality and observability vendors offered solutions for ensuring data corre
 and completeness as part of the end-to-end process. Business intelligence (BI) tools
 that offered cloud-native analytics workflows, such as Looker, rose in popularity, while
 established players like Tableau evolved (out of necessity) to become more cloud-native.
-dbt became the de facto standard for SQL-based transformation in the cloud. By 2024, the
-tenets of the modern data stack were so widely accepted and adopted that Tristan Handy,
-the individual who initially coined the term, wrote that the idea of distinguishing the
-"modern" data stack had outlived it's usefulness:
+Last but not least, dbt became the de facto standard for SQL-based transformation in the
+cloud. By 2024, the tenets of the modern data stack were so widely accepted and adopted
+that Tristan Handy, the individual who initially coined the term, wrote that the idea of
+distinguishing the "modern" data stack had outlived it's usefulness:
 
 > When I was a consultant, helping small companies build analytics capabilities, I would
 > only work with MDS tooling. It was so much better that I simply wouldn't take on a
