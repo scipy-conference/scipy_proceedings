@@ -89,7 +89,7 @@ $$
 \min \sum_{i=1}^{m} \sum_{j=1}^{n} e_{i,j}
 $$
 
-This formulation can be solved using integer linear programming solvers (e.g., GLPK [@makhorin2012glpk], Gurobi [@gurobi2023gurobi], CPLEX [@cplex2009v12]), often interfaced via modeling languages like Pyomo [@hart2017pyomo] or PuLP [@mitchell2011pulp] in Python for data science practioners.
+This formulation can be solved using integer linear programming solvers (e.g., GLPK [@makhorin2012glpk], Gurobi [@gurobi2023gurobi], CPLEX [@cplex2009v12]), often interfaced via modeling languages like Pyomo [@hart2017pyomo] or PuLP [@mitchell2011pulp] in Python for data science practitioners.
 However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.
 
 ## Algorithm
