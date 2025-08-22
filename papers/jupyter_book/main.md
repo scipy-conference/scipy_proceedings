@@ -82,7 +82,7 @@ The MyST Document Engine allows users to **parse** documents into a structured f
 It is run via the command-line and is written in TypeScript.
 It parses many types of inputs—markdown files, Jupyter Notebooks, LaTeX documents, external MyST projects, configuration files, etc—and ensures that all of their content is embedded in this output AST.
 
-### The MyST Specification: A Foundational Structured Document Specification
+### The MyST Specification: A Structured Computational Document Format
 
 The **MyST Specification** defines all of the types of content and metadata that make up a computational narrative.
 It is meant to be a cross-platform standard that can be used by various applications and parsers in order to facilitate sharing and re-use of content.
@@ -195,7 +195,7 @@ Content should be modular and composable
 : Canonical content should be made up of small, reusable components to enable reuse, cross-referencing, and re-mixing into diverse outputs.
 
 Computation should be first-class
-: Code, data, and outputs are treated as integral to the narrative—not hidden, summarized, or stripped away.
+: Code, data, and outputs are treated as integral components of the research narrative, for example, integrated and reproducible ways to calculate figures, show inline values, and cache computations.
 
 Open science infrastructure should be governed by an open community
 : Jupyter Book and MyST should be stakeholder-led, with a diverse community of organizations and people from the open science community that guide its development.
@@ -255,7 +255,7 @@ Paired with the machine readability of the AST (the `.json` file served with web
 
 Additionally, having a standard and metadata-rich AST structure allows many different workflows to be served from the same document engine.
 For example, while this article focuses on the multi-document workflow of Jupyter Book 2, the MyST Document Engine has also been used as part of _scholarly article publishing pipelines_, which are composed of independent articles that benefit from the same ability to cross-reference one another.
-For example the [Proceedings of SciPy](https://proceedings.scipy.org/) have been published with the MyST Document Engine for the last two years, the Notebooks Now project [@10.5281/zenodo.15061830] incorporated MyST-based publishing into the American Geophysical Union proceedings for the last several years, the [NeuroLibre](https://neurolibre.org/) project has built a pre-print server using the MyST engine, and [Curvenote](https://curvenote.com) builds a publishing platform using MyST components [@doi:10.25080/NKVC9349].
+For example the [Proceedings of SciPy](https://proceedings.scipy.org/) have been published with the MyST Document Engine for the last two years, the [Notebooks Now!](https://data.agu.org/notebooks-now/about.html) project [@10.5281/zenodo.15061830] incorporated MyST-based publishing into the American Geophysical Union proceedings for the last several years, the [NeuroLibre](https://neurolibre.org/) project has built a pre-print server using the MyST engine, and [Curvenote](https://curvenote.com) builds a publishing platform using MyST components [@doi:10.25080/NKVC9349].
 By enabling a variety of publication output types with the same underlying document engine, the MyST ecosystem can reduce duplicated technology and streamline the workflow from data science and documentation to publishing.
 
 :::{figure} ast.png
@@ -505,7 +505,7 @@ The development of the MyST Document Engine and the re-architecture of Jupyter B
 It also included in-kind support from Curvenote, 2i2c, and the broader open-source community.
 The refactoring of the QIIME 2 Framework documentation ecosystem was supported in part by the NIH National Cancer Institute (Grant 1U24CA248454-01).
 Project Pythia's transition to Jupyter Book 2 was supported by the National Science Foundation (awards 2324302, 2324303 and 2324304).
-Notebooks Now was supported by a grant from the Alfred P. Sloan Foundation ([#19361](https://sloan.org/grant-detail/g-2022-19361)).
+[Notebooks Now!](https://data.agu.org/notebooks-now) was supported by a grant from the Alfred P. Sloan Foundation ([#19361](https://sloan.org/grant-detail/g-2022-19361)).
 
 We especially acknowledge Chris Sewell, whose foundational work on the MyST Markdown specification, the Sphinx parser (`myst-parser`), and the wider Jupyter Book 1 ecosystem in Sphinx.
 Chris’s attention to these technical underpinnings laid the groundwork for many of the capabilities now realized in Jupyter Book 2.
@@ -516,7 +516,7 @@ The ongoing development of Jupyter Book 2 is supported and stewarded by the Jupy
 
 Authors are in alphabetical order after "Project Jupyter" following Project Jupyter's approved [process for authoring Jupyter related academic papers](https://jupyter.org/governance/papers.html) and aligned with our shared values of inclusivity and generosity in authorship, following clear, explicit criteria for authorship, openness, and personal accountability.
 [^deps]: There are 18.152 dependencies of JupyterBook (v1 and v2, combined) based on GitHub dependency graph: https://github.com/jupyter-book/jupyter-book/network/dependents.
-[^pronunciation]: MyST is pronounced like “missed”.
+[^pronunciation]: MyST is pronounced like “missed” (see [the docs](https://mystmd.org/guide/guiding-principles#how-do-i-pronounce-myst)).
 [^plugins]: Examples are available in the [appendix](#appendix-plugins)
 [^myst-xref]: An example is available in the [appendix](#appendix-myst-xref)
 [^hover-xref]: The [hover-xref project in sphinx](https://sphinx-hoverxref.readthedocs.io/en/latest/) was an attempt at doing this
