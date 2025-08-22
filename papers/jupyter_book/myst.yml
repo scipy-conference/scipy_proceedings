@@ -4,7 +4,7 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-jupyter_book
   title: Jupyter Book 2 and the MyST Document Stack
-  subtitle: A composable, extensible, machine-readable, next-generation stack for authoring and sharing computational content
+  subtitle: A modular, extensible, web-native stack for authoring and publishing computational narratives
   description: Jupyter Book allows researchers and educators to create books and knowledge bases that are reusable, reproducible, and interactive. This new foundation introduces a scalable way to publish interactive computational content, support structured metadata, and enable content reuse across contexts.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
