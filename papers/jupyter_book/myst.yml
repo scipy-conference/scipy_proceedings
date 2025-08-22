@@ -26,7 +26,7 @@ project:
     - brian
     - malvika
     - brigitta
-    - stafan
+    - stefan
     - kirstie
   contributors:
     - id: jupyter
@@ -43,7 +43,8 @@ project:
       roles:
         - Writing – review & editing
     - id: greg
-      name: Greg Caporaso
+      name: J Gregory Caporaso
+      github: gregcaporaso
       email: greg.caporaso@nau.edu
       orcid: 0000-0002-8865-1670
       affiliation:
@@ -201,6 +202,8 @@ project:
     - id: min
       name: Min Ragan Kelley
       email: benjaminrk@gmail.com
+      orcid: 0000-0002-1023-7082
+      github: minrk
       affiliations:
         - jupyter
       roles:
@@ -217,21 +220,25 @@ project:
     - id: malvika
       name: Malvika Sharan
       email: malvikasharan@gmail.com
+      orcid: 0000-0001-6619-7369
+      github: malvikasharan
       affiliations:
-        - jupyter
+        - ttw
       roles:
         - Writing – review & editing
     - id: brigitta
-      name: Brigitta Sipőcz
+      name: Brigitta M. Sipőcz
       email: bsipocz@gmail.com
       orcid: 0000-0002-3713-6337
       github: bsipocz
       affiliations:
-        - iapc
+        - ipac
+        - ttw
+        - scientificpython
       roles:
         - Software
         - Writing – review & editing
-    - id: stafan
+    - id: stefan
       name: Stéfan van der Walt
       email: stefanv@berkeley.edu
       orcid: 0000-0001-9276-1891
@@ -250,6 +257,7 @@ project:
       affiliations:
         - berkeley-bids
         - jupyter
+        - ttw
       roles:
         - Writing – review & editing
   affiliations:
@@ -304,7 +312,7 @@ project:
       name: University at Albany (State University of New York)
       url: https://www.albany.edu/
       country: USA
-    - id: iapc
+    - id: ipac
       name: Caltech/IPAC - NASA/IPAC Infrared Science Archive
       url: https://ipac.caltech.edu/
       country: USA
