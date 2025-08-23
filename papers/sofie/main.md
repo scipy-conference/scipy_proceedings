@@ -12,7 +12,7 @@ abstract: |
 ## Introduction
 
 Machine Learning inference is becoming increasingly critical across various domains, particularly in High-energy Physics, where efficient model evaluation is essential for production workflows. Integrating inference seamlessly into existing software systems, such as reconstruction, simulation, and analysis software, requires support for evaluating models directly within C++ code,
-beyond the typical Python-based ML environments. Furthermore, effective thread management is crucial for leveraging models in multi-threaded environments, ensuring optimal performance in large-scale data processing tasks. In many HEP applications, inference must be
+beyond the typical Python-based ML environments. Furthermore, effective thread management is crucial for leveraging models in multi-threaded environments, ensuring optimal performance in large-scale data processing tasks. In many HEP(High-energy Physics) applications, inference must be
 performed at the event level, often requiring single-batch processing while maintaining both
 computational speed and memory efficiency. Addressing these challenges is key to enabling
 fast and resource-efficient inference of ML models within complex scientific workflows.
