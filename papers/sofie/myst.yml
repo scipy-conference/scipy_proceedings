@@ -62,6 +62,7 @@ project:
         - keras
         - pytorch
         - onnx
+        - bai2019
   exports:
     - id: pdf
       format: typst
