@@ -65,11 +65,11 @@ Querying the WQP for Chl-a measurements within the bounds of New York State betw
 
 To reduce the effect of repeated measurements from the same water body and around the same time, we deduplicate data by removing consecutive values with the same date and time if the relative standard deviation (RSD) of those values was less than 10. Passive remote sensing measurements like Landsat are not sensitive to measuring water quality beyond 100 meters depth. So, we removed all measurements that were reported to be measured beyond 100m in depth. After applying these filters and removing unclean values (where measurement values were not numerical), we are left with 13,717 measurements.
 
-Based on the locations and measurements of each of these values, we find the metadata from Landsat missions 7, 8 and 9 (tier 1 imagery) for +- 1 day of the measurement date using publicly accessible USGS APIs. If no coincident Landsat scenes existed, we discard the measurement. This condition further reduces the number of usable measurements to 8295.
+Each record in our WQP dataset is indexed by a unique combination of location (latitude and longitude) and date. For each such unique combination, we query Landsat data to find coincident measurements. We begin by querying Landsat metadata, mainly the scene ID, for each row of our Chl-a WQP dataset. We find all Landsat scenes which included the location of interest and that were imaged within ±1 day of the WQP measurement date using publicly accessible USGS APIs. If no coincident Landsat scenes existed, we discard the measurement. This condition further reduces the number of usable measurements to 8295.
 
-Before querying the actual Landsat data, we further filter out the unnecessary parts from each of these Landsat scenes since we only care about the part that images the area of the water body where the WQP measurement was recorded. We use Google Earth Engine ([](https://doi.org/10.1016/j.rse.2017.06.031)) to write a data query and pull Landsat imaged data into a tabular featurized form. To do that, we start by creating a 200-meter buffer around the point of interest (WQP measurement location) and remove the rest. Next, we remove all bits classified as cloud, cloud shadow, or cirrus. We also remove all pixels within 30 meters of major national roads and rail routes ([TIGER Roads data](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html)). To ensure we do not inadvertently consider any land pixels in our data, we retain pixels corresponding to geographies marked with more than 80% confidence as water in [](https://doi.org/10.1038/nature20584). 4307 measurements remain after applying all these filters.
+Before querying the actual Landsat data, we further filter out the unnecessary parts from each of these Landsat scenes since we only care about the part that images the area of the water body where the WQP measurement was recorded. We use Google Earth Engine ([](https://doi.org/10.1016/j.rse.2017.06.031)) to write a data query and pull Landsat imaged data into a tabular featurized form. To do that, we start by creating a 200-meter buffer around the point of interest (WQP measurement location) and removing the region that falls outside this buffer. Next, we remove all bits classified as cloud, cloud shadow, or cirrus. We also remove all pixels within 30 meters of major national roads and rail routes ([TIGER Roads data](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html)). To ensure we do not inadvertently consider any land pixels in our data, we remove all pixels corresponding to geographies not marked as water with a confidence value of 80% or more in [](https://doi.org/10.1038/nature20584). 4307 measurements remain after applying all these filters.
 
-Finally, we do a spatial join with the USGS NHD dataset to keep measurements corresponding to lakes, ponds, and reservoirs in NY state with an area of more than 0.005 sq. km but less than 1000 sq. km. That leaves us with 428 readings. Each row in this tabular dataset indicate one reading at a unique location and day. The feature values are surface reflectance from different Landsat bandwidths—Blue, Green, Red, Nir, Swir1, and Swir2.
+Finally, we do a spatial join with the USGS NHD dataset to keep measurements corresponding to lakes, ponds, and reservoirs in NY state with an area of more than 0.005 sq. km but less than 1000 sq. km. That leaves us with 428 readings. Each row in this tabular dataset indicates one reading at a unique location and day. The feature values are surface reflectance from different Landsat bandwidths—Blue, Green, Red, Nir, Swir1, and Swir2.
 
 ### Statistical modeling
 
@@ -85,7 +85,7 @@ Training and cross-validation experiment setup
 
 ### Model selection
 
-Based on 10-fold cross-validation results for each algorithm, we find the random forest model performed the best (@table:results). We choose this model for further inferencing on other Landsat water body scenes with no matching WQP measurements for Chl-a. @fig:predvsactual shows a comparison of the values predicted by this model and the actual Chl-a measurements from WQP.
+Based on 10-fold cross-validation results for each algorithm, we find the random forest model performed the best (@table:results) with 500 decision tree estimators. Model algorithm and optimization setup available as part of the scikit-learn project ([Pedregosa _et al._ (2011)](https://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html)) in Python was used for model training. We choose this model for further inferencing on other Landsat water body scenes with no matching WQP measurements for Chl-a. @fig:predvsactual shows a comparison of the values predicted by this model and the actual Chl-a measurements from WQP.
 
 :::{table} Cross-validation results. The regression metrics shown below are for the best set of hyperparameters for the displayed algorithm.
 :label: table:results
@@ -105,11 +105,11 @@ Based on 10-fold cross-validation results for each algorithm, we find the random
 Values of Chl-a predicted by the best performance model plotted against actual values.
 :::
 
-Furthermore, using Landsat-based satellite remote sensing insights is scalable and yields more than 30 times as many Chl-a readings as in-situ readings obtained from WQP (@fig:nycomparison).
+By training models on in-situ WQP data and applying them to Landsat satellite imagery, we can estimate Chlorophyll-a concentrations for over 30 times more locations and days than those directly measured in the WQP dataset. This expanded coverage is shown in @fig:nycomparison.
 
 :::{figure} nycomparison.png
 :label: fig:nycomparison
-The number of remotely sensed Chl-a estimations (B) is more than 30x the number of in-situ measurements obtained from the Water Quality Portal (A) across NY’s 200 biggest lakes and in the same 8-year period (2015-2023).
+Panel A shows the number of in-situ Chl-a measurements from the Water Quality Portal across New York’s 200 largest lakes between 2015 and 2023. Panel B demonstrates that using remote sensing, we can estimate Chl-a concentrations at over 30 times more locations and dates within the same lakes and time period. Each bubble represents the center of water body and the size of the bubble is proportional to the number of measurements.
 :::
 
 
