@@ -25,7 +25,7 @@ Another crucial area is trigger systems, which must make real-time decisions on 
 
 At a higher level, ML contributes to detector calibration, uncertainty estimation, and data compression, ensuring more efficient use of resources and improving the reliability of results. Together, these applications illustrate how ML not only accelerates workflows in HEP but also expands the discovery potential by enabling analyses that would otherwise be computationally infeasible.
 
-While TensorFlow[@tensorflow2015-whitepaper] and PyTorch[@10.5555/3454287.3455008] provide robust inference capabilities, their use in C++
+While TensorFlow [@tensorflow2015-whitepaper] and PyTorch [@10.5555/3454287.3455008] provide robust inference capabilities, their use in C++
 environments presents several challenges. These frameworks are primarily designed around
 their native model formats, limiting flexibility when integrating externally trained models.
 Using TensorFlow within a C++ environment is particularly challenging, as its C++ API is
@@ -74,8 +74,8 @@ ALICE (A Large Ion Collider Experiment) is the other specialized experiment at t
 Studying the Machine Learning requirements for the experiments and how they run inference indicated the extensive usage of tools such as ONNXRuntime and TensorRT. 
 
 ### ONNXRuntime
-ONNX (Open Neural Network eXchange)[@bai2019] provides a standardized format for describing and sharing deep learning models, facilitating interoperability across different frameworks. However, ONNX cannot fully represent all model architectures, particularly those
-used in Graph Neural Networks. To enable the efficient inference of ONNX models, Microsoft developed ONNX Runtime[@onnxruntime], an open-source inference engine that supports both
+ONNX (Open Neural Network eXchange) [@bai2019] provides a standardized format for describing and sharing deep learning models, facilitating interoperability across different frameworks. However, ONNX cannot fully represent all model architectures, particularly those
+used in Graph Neural Networks. To enable the efficient inference of ONNX models, Microsoft developed ONNX Runtime [@onnxruntime], an open-source inference engine that supports both
 C++ and Python environments. It offers flexibility by running on both CPUs and GPUs, with
 NVIDIA GPU acceleration via TensorRT[5] and AMD support through ROCm[6].
 ONNX Runtime has already been successfully integrated into HEP software frameworks, including ATLAS and CMS, where its convenient C++ API and fine-grained thread control
