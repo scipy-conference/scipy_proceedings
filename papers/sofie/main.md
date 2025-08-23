@@ -30,8 +30,7 @@ environments presents several challenges. These frameworks are primarily designe
 their native model formats, limiting flexibility when integrating externally trained models.
 Using TensorFlow within a C++ environment is particularly challenging, as its C++ API is
 not trivial to use and introduces significant dependencies, making deployment more complex.
-Additionally, TensorFlow’s thread management can be challenging to control, and its inference engine is often not optimized for specific use cases, such as single-event evaluation in
-HEP workflows.  
+Additionally, TensorFlow’s thread management can be challenging to control, and its inference engine is often not optimized for specific use cases, such as single-event evaluation, that requires fast, one-at-a-time processing of individual collision events, as is common in HEP workflows.
 
 PyTorch, on the other hand, offers the Torch C++ library (LibTorch), which provides a more
 convenient interface for C++ integration. It is generally easier to install and requires fewer
