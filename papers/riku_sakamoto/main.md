@@ -163,6 +163,33 @@ except ValueError as e:
 
 ```
 
+PhlowerTensor supports in-place operations (e.g., +=, *=) while enforcing dimensional consistency. [](#inplace_operation_example) illustrates an example of in-place operations for `PhlowerTensor`.
+
+```{code} python
+:label: inplace_operation_example
+:caption: In-place operation with dimensions
+
+# Example: In-place operation for non-dimensional tensor
+# Objects other than PhlowerTensor (e.g., float) are treated as non-dimensional
+non_dimensional_value = phlower_tensor(torch.rand(10, 3),  dimension={})
+non_dimensional_value += 5.0 
+
+# Example: A tensor representing pressure with dimensions M^1 T^-2 L^-1
+pressure = phlower_tensor(torch.rand(10, 1),  dimension={"M": 1, "T": -2, "L": -1})
+
+# In-place subtraction with compatible dimensions
+pressure -= phlower_tensor(torch.tensor(1.0),  dimension={"M": 1, "T": -2, "L": -1})
+
+# Attempting in-place addition with incompatible dimensions
+try:
+    pressure += 5.0
+except ValueError as e:
+    print(f"Error: {e}")
+    # Output: Error: Add operation for different physical dimensions is not allowed.
+
+```
+
+
 ### Array Operations
 
 This section demonstrates how `PhlowerTensor` supports array operations while maintaining dimensional consistency.
@@ -285,6 +312,8 @@ Several libraries and frameworks have been developed to support physical dimensi
 * **Python Quantities** [@python-quantities]: A library that extends NumPy to support physical quantities with units. It enables dimensional analysis and unit conversions in scientific computations. `Python Quantities` is designed to be compatible with NumPy arrays, allowing seamless integration with NumPy operations.
 
 In contrast to Pint or Python Quantities, Phlower has two key differences. First, it does not provide unit conversion functionalities; instead, it focuses on enforcing **dimensional consistency** in tensor operations. Second, `PhlowerTensor` represents physical dimensions as an exponent vector of physical quantities (such as mass, length, and time) and stores this metadata alongside a PyTorch tensor. This design enables seamless integration with PyTorch, supporting GPU acceleration and automatic differentiation while tracking and validating the physical dimensions of tensor computations.
+
+Thus, while Pint and Python Quantities aim to provide general-purpose unit handling and conversions in scientific computing built on NumPy, Phlower is specifically designed to integrate dimension checking into deep learning workflows built on PyTorch.
 
 
 ## Limitations
