@@ -238,6 +238,13 @@ The performance of the model on the test set is shown in {numref}`fig:bank-marke
 
 ### SHAP Explanations
 
+In this section, we demonstrate how to apply SHAP to interpret the XGBoost model's predictions on the 
+dataset. We explore both global and local explanations to understand model behavior at different 
+levels of granularity. Global explanations reveal which features are most influential across the entire dataset and 
+how they generally affect predictions, while local explanations show feature contributions for individual 
+predictions. Additionally, we examine dependency plots to understand the relationship between specific 
+feature values and their impact on model predictions.
+
 We use the `shap` Python library [@lundberg2020local2global] to compute the SHAP values for the XGBoost model.
 
 ```{code-block} python
