@@ -940,7 +940,14 @@ strengths and limitations.
    additional feature engineering.
 
 3. While SHAP values quantify the impact of features on model predictions, it is important to understand that they 
-   do not directly indicate causality.
+   do not directly indicate causality. SHAP values measure statistical associations between features and predictions 
+   based on patterns learned from training data, but correlation does not imply causation. A feature may have high 
+   SHAP values due to confounding variables, spurious correlations, or because it serves as a proxy for the true 
+   causal factor. For example, in the bank marketing case, the `contact` method might show strong SHAP values not 
+   because the communication channel directly causes subscription decisions, but might be because it correlates with other 
+   unmeasured or hidden variables like the timing of the campaigns or other macroeconomic factors. Establishing 
+   causality requires additional considerations such as controlled experiments, temporal relationships, and domain 
+   expertise beyond what SHAP analysis alone can provide.
 
 ## Conclusion
 
