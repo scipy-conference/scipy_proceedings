@@ -16,7 +16,6 @@ An alternative strategy is to identify the largest possible NaN-free submatrix, 
 
 This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN.
 Exact solutions (e.g., linear programming) guarantee optimality but are prohibitively expensive for large matrices.
-Heuristic methods like OptiMask provide near-optimal solutions efficiently.
 
 OptiMask is a heuristic method which closely, efficiently approximates these exact solutions.
 It iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix.
