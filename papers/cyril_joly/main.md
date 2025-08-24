@@ -12,8 +12,7 @@ Many algorithms and statistical methods require complete datasets, necessitating
 Traditional approaches include imputation (replacing missing values with estimates) and complete-case analysis (discarding rows/columns with any NaN) [@schafer1997analysis; @van2018flexible].
 However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are evenly distributed [@enders2010applied].
 
-An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered.
-This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size.
+An alternative strategy is to identify the largest possible NaN-free submatrix, while preserving as much of the original, unaltered data as possible. This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size.
 
 This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN.
 Exact solutions (e.g., linear programming) guarantee optimality but are prohibitively expensive for large matrices.
