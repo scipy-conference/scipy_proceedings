@@ -153,7 +153,7 @@ more principled approach like SHAP for interpretation.
 The Bank Marketing dataset [@bank_marketing_222] contains information about direct marketing campaigns (phone calls)
 of a Portuguese banking institution. It contains customer demographic information, financial details and interation
 history. The goal is to predict whether a customer will subscribe to a term deposit [@Moro2014ADA]. The dataset is 
-available on the UCI Machine Learning Repository.
+available on the UCI Machine Learning Repository [@UCI_ML_Repository].
 
 The key details of the dataset are:
 
