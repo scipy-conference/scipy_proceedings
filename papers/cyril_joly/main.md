@@ -115,7 +115,7 @@ OptiMask employs an iterative permutation-based algorithm to identify the larges
 
 2. **Frontier Detection**:
 
-   - Compute `hx`: column-wise highest NaN index (from the bottom).
+   - Compute `hx`: column-wise, NaN cell with highest row index (i.e., furthest bottom).
    - Compute `hy`: row-wise rightmost NaN index (from the left).
    - These define the current "NaN frontier" of the matrix.
 
