@@ -226,7 +226,7 @@ The Python implementation supports common data structures (numpy, pandas, polars
 
 Future work will explore theoretical guarantees on the approximation quality and extensions to weighted optimization problems.
 The implementation will continue to be optimized for speed in subsequent versions.
-Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against Multiple Imputation by Chained Equations ("MICE", [@white2011multiple]) to evaluate whether it can achieve better or faster results.
+Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against MICE (Multiple Imputation by Chained Equations, [@white2011multiple]) to evaluate whether it can achieve better or faster results.
 
 ## Acknowledgements
 
