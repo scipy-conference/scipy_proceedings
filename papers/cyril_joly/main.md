@@ -17,8 +17,8 @@ An alternative strategy is to identify the largest possible NaN-free submatrix, 
 This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN.
 Exact solutions (e.g., linear programming) guarantee optimality but are prohibitively expensive for large matrices.
 
-OptiMask is a heuristic method which closely, efficiently approximates these exact solutions.
-It iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix.
+Heuristic methods like OptiMask provide near-optimal solutions efficiently.
+OptiMask iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix.
 By combining randomization with multiple restarts, it reliably finds high-quality solutions.
 This paper explores the OptiMask algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices. It also discusses the `optimask` Python package (<https://pypi.org/project/optimask/>), which enables applying the algorithm to matrix-like data structures popular with Python programmers.
 
