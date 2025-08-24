@@ -179,7 +179,7 @@ np.isnan(x[np.ix_(rows, cols)]).any()  # False
 len(rows), len(cols)  # (37386, 49)
 ```
 
-This computation takes approximately ~200ms on an average personal computer.
+This computation takes approximately 200ms on an average personal computer.
 The implementation provides the sorted indices of the rows and columns to retain, ensuring that the relative order of the elements is preserved.
 
 ### Handling Missing Data for Machine Learning
