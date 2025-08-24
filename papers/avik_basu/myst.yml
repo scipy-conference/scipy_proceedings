@@ -42,6 +42,7 @@ project:
         - sklearn2
         - NIPS2017_6449f44a
         - molnar2025
+        - UCI_ML_Repository
   exports:
     - id: pdf
       format: typst
