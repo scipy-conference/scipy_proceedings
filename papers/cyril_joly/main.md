@@ -10,7 +10,7 @@ abstract: |
 Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames.
 Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values [@little2019statistical; @rubin2004multiple].
 Traditional approaches include imputation (replacing missing values with estimates) and complete-case analysis (discarding rows/columns with any NaN) [@schafer1997analysis; @van2018flexible].
-However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are widespread [@enders2010applied].
+However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are evenly distributed [@enders2010applied].
 
 An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered.
 This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).
