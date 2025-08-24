@@ -307,10 +307,16 @@ different instances, while features tightly clustered near zero exert relatively
 
 In terms of insights, the beeswarm plot {numref}`fig:beeswarm-xgb` shows some interesting observations. For example,
 customers with more balance (`balance` feature) in their account are more likely to subscribe to a term deposit. 
-On the other hand, customers who have been contacted more frequently in the current compaign (`campaign` feature) 
-are less likely to subscribe to a term deposit. However, the plot is not able to convey a deeper insight into the
-top categorical features and how they affect the model's predictions. For that, we need to look at the dependency
-plots.
+On the other hand, customers who have been contacted more frequently in the current campaign (`campaign` feature) 
+are less likely to subscribe to a term deposit. 
+
+However, the beeswarm plot has limitations when interpreting categorical features. Unlike numerical features 
+where color coding represents the magnitude of feature values (red for high, blue for low), categorical features 
+are displayed in gray since they lack a natural ordering or continuous scale. This makes it difficult to understand 
+which specific categories within a feature drive positive or negative SHAP values. For instance, while we can 
+see that `contact` is at the top of feature importance, the beeswarm plot doesn't reveal whether customers 
+contacted via `cellular` or `telephone` are more likely to subscribe. Dependency plots help address this limitation 
+by explicitly showing the relationship between each category value of the feature and its corresponding SHAP values.
 
 #### Dependency
 
