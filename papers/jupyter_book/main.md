@@ -346,11 +346,11 @@ Aside from simply executing and inserting outputs into a MyST document, these ou
 For example, authors can **attach a label to a notebook cell** in order to **reference its outputs** like they would any other kind of content.
 For example, the `{code-cell}` directive below creates a plot with `matplotlib` in `computational-page.md`:
 
-````{code filename="computational-page.md"}
+````{code filename="computational-page.md"} markdown
 (full-plot-context)=
 This code generates an image:
 
-```{code-cell}
+```{code-cell} python
 :label: my-plot
 plt.scatter([1, 2, 3], [4, 5, 6])
 ```
@@ -358,7 +358,7 @@ plt.scatter([1, 2, 3], [4, 5, 6])
 
 In `another-page.md`, the author is able to insert this output into a figure with a caption like so:
 
-```{code filename="another-page.md"}
+```{code filename="another-page.md"} markdown
 Below you see the results of my computation:
 
 :::{figure} #my-plot
@@ -439,7 +439,7 @@ Finally, Quarto is developed by a single company, in contrast to Jupyter Book wh
 
 **Other documentation and markup systems** like [Docusaurus](https://docusaurus.io/), [MkDocs](https://www.mkdocs.org/), [Hugo](https://gohugo.io/), [quarkdown](https://github.com/iamgio/quarkdown), [typst](https://typst.app), and [djot](https://github.com/jgm/djot) are popular choices for technical documentation, developer blogs, PDF generation, and websites.
 These tools offer good performance, templating, and theming options, and in some cases also focus on extensibility.
-They are not designed for scientific publishing or computational narratives and they lack features such as executable content, math, and citation handling, semantic metadata, or integrating with persistent identifiers in the scholarly ecosystem (e.g., [DOIs](https://doi.org/), [RRIDs](https://www.rrids.org/), or [RORs](https://ror.org/)) - all of which are built into the JB2 ecosystem.
+They are not designed for scientific publishing or computational narratives and they lack features such as executable content, math, and citation handling, semantic metadata, or integrating with persistent identifiers in the scholarly ecosystem (e.g., [DOIs](https://doi.org), [RRIDs](https://www.rrids.org), or [RORs](https://ror.org)) - all of which are built into the JB2 ecosystem.
 
 While these tools each serve their respective audiences well, JB2 is focused specifically on the needs of computational and scientific communities.
 It supports both narrative and executable content, prioritizes open infrastructure and interoperability, and is designed to integrate with existing Jupyter workflows and the wider open-science ecosystems.
