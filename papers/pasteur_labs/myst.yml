@@ -15,15 +15,15 @@ project:
     - name: Andrin Rehmann
       email: andrin.rehmann@simulation.science
       orcid: 0009-0001-6002-5096
+      equal_contributor: true
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
-        - Shared first author
     - name: Dion Häfner
       email: dion.haefner@simulation.science
       orcid: 0000-0002-4465-7317
+      equal_contributor: true
       affiliations:
         - Pasteur Labs, Brooklyn, NY, USA
-        - Shared first author
     - name: Alessandro Angioi
       email: alessandro.angioi@simulation.science
       orcid: 0000-0003-4653-8036
