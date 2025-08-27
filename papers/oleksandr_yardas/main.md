@@ -67,7 +67,7 @@ recently added [@romano_depletion_2021] to OpenMC
 [@romano_openmc_2015], an open source, community developed Monte Carlo
 particle transport code. The depletion solver utilizes OpenMC's Python API
 to iteratively run a transport simulation, calculate transmutation reaction
-rates, solve the depletion matrix ([Eq. %s](eq:depletion-matrix-t)), and
+rates, solve the depletion matrix ([Eq. %s](#eq:depletion-matrix-t)), and
 update the material composition. This makes transport-coupled depletion
 calculations computationally expensive, expecially for large reactor models.
 
@@ -142,9 +142,9 @@ where
     n &\equiv \text{total number of nuclides.}
   \end{split}
 \end{equation*}
-The summations in Equation [](eq:depletion) are effectively over all
+The summations in Equation [](#eq:depletion) are effectively over all
 nuclides except $i$, as $f_{i \rightarrow i}(E)$ and $\lambda_{i \rightarrow i}$ must
-be zero by definition. Equation [](eq:depletion) can be condensed into a
+be zero by definition. Equation [](#eq:depletion) can be condensed into a
 matrix-vector equation:
 \begin{equation}
   \label{eq:depletion-matrix-t}
@@ -194,7 +194,7 @@ achieve these design goals.
   The `Operator` class contains data and methods for running
   transport-coupled depletion calculations and runtime processing of
   OpenMC statepoint files to extract the data needed to solve Equation
-  [](eq:depletion-matrix-t). In this work, we refactored the
+  [](#eq:depletion-matrix-t). In this work, we refactored the
   `Operator` class into a `CoupledOperator`  class maintaining
   the existing depletion capability. We implemented the
   transport-independent depletion machinery in a new class,
@@ -223,8 +223,8 @@ achieve these design goals.
       N_{i}(t) 
   \end{equation}
   In practice, this introduces a discretization error, but in the limit of
-  infinitely small energy groups, Equation [](eq:mg-rxn-rate) is
-  equivalent to Equation [](eq:cont-rxn-rate). To get a time-dependent
+  infinitely small energy groups, Equation [](#eq:mg-rxn-rate) is
+  equivalent to Equation [](#eq:cont-rxn-rate). To get a time-dependent
   microscopic cross section or flux, we must perform transport
   calculations (and in the case of time-varying microscopic cross
   sections, incorporate thermal feedbacks). Herein lies the primary
@@ -271,90 +271,85 @@ case results in limit of infinite particles, but we would expect it to
 converge in the limit of infinite particles _and_ energy groups. The
 third case only ran for one-group transport-independent depletion. 
 
-[](tab:mat-params) and [](tab:mat-comps) contain the material parameters and
-compositions of our model, and [](tab:geo-params) contains the geometric
+[](#tab:mat-params) and [](#tab:mat-comps) contain the material parameters and
+compositions of our model, and [](#tab:geo-params) contains the geometric
 parameters.  We used the ENDF/B-VII.1 nuclear data library available at
 openmc.org/official-data-libraries. We used the ENDF/B-VII.1 depletion
 chain in the PWR spectrum available at openmc.org/depletion-chains.
 
 ```{raw} latex
-\begin{table*}
+\begin{longtable*}{|c|c|c|c|}
     \caption{Material Parameters}
     \label{tab:mat-params}
-    \begin{longtable*}{|c|c|c|c|}
-        \toprule
-        {\bf Item} & {\bf Fuel} & {\bf Cladding} & {\bf Water} \\ % Table header row
-        \midrule
-         Density [g cm$^{-3}$] & 10.4 & 6 & 1.0\\
-         Volume [cm$^{3}$] & 0.1764$\pi$ & -- & -- \\
-         S($\alpha$,$\beta$) & --  & -- & `c_H_in_H2O`\\
-    \end{longtable*}
-\end{table*}
+    \toprule
+    {\bf Item} & {\bf Fuel} & {\bf Cladding} & {\bf Water} \\ % Table header row
+    \midrule
+      Density [g cm$^{-3}$] & 10.4 & 6 & 1.0\\
+      Volume [cm$^{3}$] & 0.1764$\pi$ & -- & -- \\
+      S($\alpha$,$\beta$) & --  & -- & `c_H_in_H2O`\\
+\end{longtable*}
 ```
 
-:::::{table} Material Compositions
+:::{table} Material Compositions
 :label: tab:mat-comps
-::::{list-table}
-- - :::{list-table} Fuel composition 
-    :header-rows: 1
-    - - Nuclide
-      - Composition [atom %]
-    - - $^{15}$O 
-      - 0.000758
-    - - $^{16}$O 
-      - 1.999242
-    - - $^{234}$U 
-      - 0.000385
-    - - $^{235}$U 
-      - 0.043020
-    - - $^{236}$U 
-      - 0.000197 
-    - - $^{238}$U 
-      - 0.956398
-    :::
-  - :::{list-table} Cladding composition 
-    :header-rows: 1
-    - - Nuclide
-      - Composition [atom %]
-    - - $^{90}$Zr 
-      - 0.5145
-    - - $^{91}$Zr 
-      - 0.1122
-    - - $^{92}$Zr 
-      - 0.1715
-    - - $^{94}$Zr 
-      - 0.1738
-    - - $^{96}$Zr 
-      - 0.028 
-    :::
-  - :::{list-table} Water composition 
-    :header-rows: 1
-    - - Nuclide
-      - Composition [atom %]
-    - - $^{1}$H 
-      - 1.999689
-    - - $^{2}$H 
-      - 0.000311 
-    - - $^{15}$O 
-      - 0.999621 
-    - - $^{16}$O 
-      - 0.000379 
-    :::
-::::
-:::::
+
+<table>
+<tr>
+<th colspan="2">Fuel composition</th>
+<th colspan="2">Cladding composition</th>
+<th colspan="2">Water composition</th>
+</tr>
+<tr>
+<th>Nuclide</th>
+<th>Composition [atom %]</th>
+<th>Nuclide</th>
+<th>Composition [atom %]</th>
+<th>Nuclide</th>
+<th>Composition [atom %]</th>
+</tr>
+<tr>
+<td><sup>15</sup>O</td><td>0.000758</td>
+<td><sup>90</sup>Zr</td><td>0.5145</td>
+<td><sup>1</sup>H</td><td>1.999689</td>
+</tr>
+<tr>
+<td><sup>16</sup>O</td><td>1.999242</td>
+<td><sup>91</sup>Zr</td><td>0.1122</td>
+<td><sup>2</sup>H</td><td>0.000311</td>
+</tr>
+<tr>
+<td><sup>234</sup>U</td><td>0.000385</td>
+<td><sup>92</sup>Zr</td><td>0.1715</td>
+<td><sup>15</sup>O</td><td>0.999621</td>
+</tr>
+<tr>
+<td><sup>235</sup>U</td><td>0.043020</td>
+<td><sup>94</sup>Zr</td><td>0.1738</td>
+<td><sup>16</sup>O</td><td>0.000379</td>
+</tr>
+<tr>
+<td><sup>236</sup>U</td><td>0.000197</td>
+<td><sup>96</sup>Zr</td><td>0.028</td>
+<td></td><td></td>
+</tr>
+<tr>
+<td><sup>238</sup>U</td><td>0.956398</td>
+<td></td><td></td>
+<td></td><td></td>
+</tr>
+</table>
+:::
 
 ```{raw} latex
-\begin{table*}[<options>
+\begin{longtable*}{|c|c|c|}
     \caption{Geometric Parameters}
     \label{tab:geo-params}
-    \begin{longtable*}{|c|c|c|c|}
-        \toprule
-        {\bf Fuel Radius} [cm] & {\bf Clad Radius} [cm] & {\bf Water Bounding Box dimensions}
-        [cm  $\times$ cm]\\
-        \midrule
-        0.42 & 0.45 &  1.24 $\times$ 1.24\\
-    \end{longtable*}
-\end{table*}
+    \toprule
+    {\bf Fuel Radius} [cm] & {\bf Clad Radius} [cm] & {\bf Water Bounding Box dimensions}
+    [cm  $\times$ cm]\\
+    \midrule
+    0.42 & 0.45 &  1.24 $\times$ 1.24\\
+\end{longtable*}
 ```
 
 Depletion is a slow process whose effects on neutronics only start to apply
@@ -382,12 +377,16 @@ steps, however some nuclides exhibit more complicated behavior.
 ::::{figure}
 :label: actinide-error-days
 
-:::{list-table}
-- - (fig:actinides-error-constant-xs-days)=
-    ![ ](figs/actinides_constant_xs_predictor_fission_q_days.*)
-  - (fig:actinides-error-updating-xs-days)=
-    ![ ](figs/actinides_updating_xs_predictor_fission_q_days.*)
-:::
+```{figure} figs/actinides_constant_xs_predictor_fission_q_days.*
+:label: fig:actinides-error-constant-xs-days
+:width: 50%
+```
+
+```{figure} figs/actinides_updating_xs_predictor_fission_q_days.*
+:label: fig:actinides-error-updating-xs-days
+:width: 50%
+```
+
 Relative actinide concentration error using 3-day time steps at 3, 12, 21, and
 30 days of depletion for [({subEnumerator})](#fig:actinides-error-constant-xs-days) constant
 cross sections; [({subEnumerator})](#fig:actinides-error-updating-xs-days) updating cross
@@ -405,7 +404,7 @@ the order of a fraction of a percent. The error trend for constant cross
 sections depends both on the cross section and time step size. For example,
 constant cross sections using a 3-day time step
 underpredicts the $^{241}$Pu concentration, but at longer time steps
-overpredicts the concentration. Figure \ref{fig:pu240-n-gamma-months} shows
+overpredicts the concentration. [](#fig:pu240-n-gamma-months) shows
 the overprediction is due to overcalculating the rate of ($n,\gamma$) reactions
 that occur on $^{240}$Pu. 
 
@@ -431,12 +430,16 @@ than 10\%) concentration errors depending on the nuclide of interest.
 ::::{figure}
 :label: actinide-error-months
 
-::::{list-table}
-- - (fig:actinides-error-constant-xs-months)=
-    ![  ](figs/actinides_constant_xs_predictor_fission_q_months.*)
-  - (fig:actinides-error-updating-xs-months)=
-     ![ ](figs/actinides_updating_xs_predictor_fission_q_months.*)
-:::
+```{figure} figs/actinides_constant_xs_predictor_fission_q_months.*
+:label: fig:actinides-error-constant-xs-months
+:width: 50%
+```
+
+```{figure} figs/actinides_updating_xs_predictor_fission_q_months.*
+:label: fig:actinides-error-updating-xs-months
+:width: 50%
+```
+
 Relative actinide concentration error using 30-day time steps at 30, 120, 210, and
 300 days of depletion for [({subEnumerator})](#fig:actinides-error-constant-xs-months) constant
 cross sections; [({subEnumerator})](#fig:actinides-error-updating-xs-months) updating cross
@@ -467,12 +470,16 @@ net production of the low-abundance nuclides decreases over time.
 ::::{figure}
 :label: fp-error-days
 
-:::{list-table}
-- - (fig:fp-error-constant-xs-days)=
-     ![  ](figs/fission_products_constant_xs_predictor_fission_q_days.*)
-  - (fig:fp-error-updating-xs-days)=
-    ![ ](figs/fission_products_updating_xs_predictor_fission_q_days.*)
-:::
+```{figure} figs/fission_products_constant_xs_predictor_fission_q_days.*
+:label: fig:fp-error-constant-xs-days
+:width: 50%
+```
+
+```{figure} figs/fission_products_updating_xs_predictor_fission_q_days.*
+:label: fig:fp-error-updating-xs-days
+:width: 50%
+```
+
 Relative fission produt concentration error using 3-day time steps at 3, 12, 21, and
 30 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-days) constant
 cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-days) updating cross
@@ -482,12 +489,16 @@ sections.
 ::::{figure}
 :label: fp-error-months
 
-:::{list-table}
-- - (fig:fp-error-constant-xs-months)=
-    ![  ](figs/fission_products_constant_xs_predictor_fission_q_months.*)
-  - (fig:fp-error-updating-xs-months)=
-    ![ ](figs/fission_products_updating_xs_predictor_fission_q_months.*)
-:::
+```{figure} figs/fission_products_constant_xs_predictor_fission_q_months.*
+:label: fig:fp-error-constant-xs-months
+:width: 50%
+```
+
+```{figure} figs/fission_products_updating_xs_predictor_fission_q_months.*
+:label: fig:fp-error-updating-xs-months
+:width: 50%
+```
+
 Relative fission produt concentration error using 30-day time steps at 30, 120, 210, and
 300 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-months) constant
 cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-months) updating cross
@@ -498,11 +509,11 @@ Repeating this analysis for both the CASMO-8 and CASMO-40 multi-group
 structures did not yield noticeable decreases in nuclide concentration
 errors for transport-independent depletion over the one-group case.
 [](#fig:actinides-error-casmo8-constant-xs-days) and
-[](#fig:actinides-error-casmo40-xs-days) show the relative error in
+[](#fig:actinides-error-casmo40-constant-xs-days) show the relative error in
 predicted actinide concentration using the CASMO-8 and CASMO-40 group
 structures, respectively, using 3-day time steps.
-[](#fig:actinides-error-casmo8-constatn-xs-months) and
-[](#fig:actinides-error-casmo40-xs-months) show the same respective
+[](#fig:actinides-error-casmo8-constant-xs-months) and
+[](#fig:actinides-error-casmo40-constant-xs-months) show the same respective
 quantities for 30-day time steps.  It is possible in more complex models,
 like full reactor depletion, that the multi-group structure could become more
 important.
@@ -510,12 +521,16 @@ important.
 ::::{figure}
 :label: actinide-error-casmo-days
 
-:::{list-table}
-- - (fig:actinides-error-casmo8-constant-xs-days)=
-    ![  ](figs/actinides_casmo8_constant_xs_predictor_fission_q_days.*)
-  - (fig:actinides-error-casmo40-constant-xs-days)=
-    ![ ](figs/actinides_casmo40_constant_xs_predictor_fission_q_days.*)
-:::
+```{figure} figs/actinides_casmo8_constant_xs_predictor_fission_q_days.*
+:label: fig:actinides-error-casmo8-constant-xs-days
+:width: 50%
+```
+
+```{figure} figs/actinides_casmo40_constant_xs_predictor_fission_q_days.*
+:label: fig:actinides-error-casmo40-constant-xs-days
+:width: 50%
+```
+
 Relative actinide concentration error using constant cross sections and 3-day
 time steps at 3, 12, 21, and 30 days of depletion for the
 [({subEnumerator})](#fig:actinides-error-casmo8-constant-xs-days) CASMO-8 group
@@ -526,12 +541,16 @@ CASMO-40 group structure.
 ::::{figure}
 :label: actinide-error-casmo-months
 
-:::{list-table}
-- - (fig:actinides-error-casmo8-constant-xs-months)=
-    ![  ](figs/actinides_casmo8_constant_xs_predictor_fission_q_months.*)
- -  (fig:actinides-error-casmo40-constant-xs-months)=
-    ![ ](figs/actinides_casmo40_constant_xs_predictor_fission_q_months.*)
-:::
+```{figure} figs/actinides_casmo8_constant_xs_predictor_fission_q_months.*
+:label: fig:actinides-error-casmo8-constant-xs-months
+:width: 50%
+```
+
+```{figure} figs/actinides_casmo40_constant_xs_predictor_fission_q_months.*
+:label: fig:actinides-error-casmo40-constant-xs-months
+:width: 50%
+```
+
 Relative actinide concentration error using constant cross sections and 3-day
 time steps at 30, 120, 210, and 300 days of depletion for the
 [({subEnumerator})](#fig:actinides-error-casmo8-constant-xs-months) CASMO-8 group
