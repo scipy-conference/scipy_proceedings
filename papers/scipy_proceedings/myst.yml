@@ -5,11 +5,11 @@ project:
   title: 'SciPy Proceedings: An Exemplar for Publishing Computational Open Science'
   description: Add a two sentence description about your article.
   authors:
-    - rowan
+    - rowan1
     - franklin
     - steve
   contributors:
-    - id: rowan
+    - id: rowan1
       name: Rowan Cockett
       email: rowan@curvenote.com
       corresponding: true
@@ -110,19 +110,16 @@ project:
     Q2F: QIIME 2 Framework
     JB1: Jupyter Book 1
     JB2: Jupyter Book 2
-  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
-  error_rules:
-    - rule: doi-exists
-      severity: ignore
-      keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+    CI: Continuous Integration
+    POC: Proof of Concept
   exports:
     - id: pdf
       format: typst
       template: https://github.com/curvenote-templates/scipy.git
       article: main.md
       output: full_text.pdf
+  references:
+    multinterp: https://proceedings.scipy.org/articles/FGCJ9164
+    continuous: https://proceedings.scipy.org/articles/NKVC9349
+    itk: https://proceedings.scipy.org/articles/TCFJ5130
+    funix: https://proceedings.scipy.org/articles/JFYN3740
