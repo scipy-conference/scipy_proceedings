@@ -389,16 +389,16 @@ steps, however some nuclides exhibit more complicated behavior.
     ![ ](figs/actinides_updating_xs_predictor_fission_q_days.*)
 :::
 Relative actinide concentration error using 3-day time steps at 3, 12, 21, and
-30 days of depletion for [({subEnumerator})](fig:actinides-error-constant-xs-days) constant
-cross sections; [({subEnumerator})](fig:actinides-error-updating-xs-days) updating cross
+30 days of depletion for [({subEnumerator})](#fig:actinides-error-constant-xs-days) constant
+cross sections; [({subEnumerator})](#fig:actinides-error-updating-xs-days) updating cross
 sections.
 ::::
 
-[](fig:actinides-error-constant-xs-days) and
-[](fig:actinides-error-updating-xs-days) show the relative error in predicted
+[](#fig:actinides-error-constant-xs-days) and
+[](#fig:actinides-error-updating-xs-days) show the relative error in predicted
 actinide concentration for constant cross sections and updating cross sections,
-respectively, using 3-day time steps. [](fig:actinides-error-constant-xs-months)
-and [](fig:actinides-error-updating-xs-months) show the same respective
+respectively, using 3-day time steps. [](#fig:actinides-error-constant-xs-months)
+and [](#fig:actinides-error-updating-xs-months) show the same respective
 quantities for 30-day time steps. As expected, updating the cross sections at
 each depletion step results in low predicted nuclide concentration errors, on
 the order of a fraction of a percent. The error trend for constant cross
@@ -438,16 +438,16 @@ than 10\%) concentration errors depending on the nuclide of interest.
      ![ ](figs/actinides_updating_xs_predictor_fission_q_months.*)
 :::
 Relative actinide concentration error using 30-day time steps at 30, 120, 210, and
-300 days of depletion for [({subEnumerator})](fig:actinides-error-constant-xs-months) constant
-cross sections; [({subEnumerator})](fig:actinides-error-updating-xs-months) updating cross
+300 days of depletion for [({subEnumerator})](#fig:actinides-error-constant-xs-months) constant
+cross sections; [({subEnumerator})](#fig:actinides-error-updating-xs-months) updating cross
 sections.
 ::::
 
-[](fig:fp-error-constant-xs-days) and [](fig:fp-error-updating-xs-days) show the
+[](#fig:fp-error-constant-xs-days) and [](#fig:fp-error-updating-xs-days) show the
 relative error in predicted fission product concentration using constant cross
 sections and updating cross sections, respectively, using 3-day time steps.
-Figures [](fig:fp-error-constant-xs-months) and
-[](fig:fp-error-updating-xs-months) show the same respective quantities for
+[](#fig:fp-error-constant-xs-months) and
+[](#fig:fp-error-updating-xs-months) show the same respective quantities for
 30-day time steps. Similar to the actinides, updating the cross sections at each
 depletion step results in low predicted nuclide concentration errors. There is a
 lower concentration error across the board for many of these fission products
@@ -474,8 +474,8 @@ net production of the low-abundance nuclides decreases over time.
     ![ ](figs/fission_products_updating_xs_predictor_fission_q_days.*)
 :::
 Relative fission produt concentration error using 3-day time steps at 3, 12, 21, and
-30 days of depletion for [({subEnumerator})](fig:fp-error-constant-xs-days) constant
-cross sections; [({subEnumerator})](fig:fp-error-updating-xs-days) updating cross
+30 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-days) constant
+cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-days) updating cross
 sections.
 ::::
 
@@ -489,20 +489,20 @@ sections.
     ![ ](figs/fission_products_updating_xs_predictor_fission_q_months.*)
 :::
 Relative fission produt concentration error using 30-day time steps at 30, 120, 210, and
-300 days of depletion for [({subEnumerator})](fig:fp-error-constant-xs-months) constant
-cross sections; [({subEnumerator})](fig:fp-error-updating-xs-months) updating cross
+300 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-months) constant
+cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-months) updating cross
 sections.
 ::::
 
 Repeating this analysis for both the CASMO-8 and CASMO-40 multi-group
 structures did not yield noticeable decreases in nuclide concentration
-errors for transport-independent depletion over the one-group case.  Figures
-[](fig:actinides-error-casmo8-constant-xs-days) and
-[](fig:actinides-error-casmo40-xs-days) show the relative error in
+errors for transport-independent depletion over the one-group case.
+[](#fig:actinides-error-casmo8-constant-xs-days) and
+[](#fig:actinides-error-casmo40-xs-days) show the relative error in
 predicted actinide concentration using the CASMO-8 and CASMO-40 group
-structures, respectively, using 3-day time steps. Figures
-[](fig:actinides-error-casmo8-constatn-xs-months) and
-[](fig:actinides-error-casmo40-xs-months) show the same respective
+structures, respectively, using 3-day time steps.
+[](#fig:actinides-error-casmo8-constatn-xs-months) and
+[](#fig:actinides-error-casmo40-xs-months) show the same respective
 quantities for 30-day time steps.  It is possible in more complex models,
 like full reactor depletion, that the multi-group structure could become more
 important.
@@ -518,8 +518,8 @@ important.
 :::
 Relative actinide concentration error using constant cross sections and 3-day
 time steps at 3, 12, 21, and 30 days of depletion for the
-[({subEnumerator})](fig:actinides-error-casmo8-constant-xs-days) CASMO-8 group
-structure; [({subEnumerator})](fig:actinides-error-casmo40-constant-xs-days)
+[({subEnumerator})](#fig:actinides-error-casmo8-constant-xs-days) CASMO-8 group
+structure; [({subEnumerator})](#fig:actinides-error-casmo40-constant-xs-days)
 CASMO-40 group structure.
 ::::
 
@@ -534,8 +534,8 @@ CASMO-40 group structure.
 :::
 Relative actinide concentration error using constant cross sections and 3-day
 time steps at 30, 120, 210, and 300 days of depletion for the
-[({subEnumerator})](fig:actinides-error-casmo8-constant-xs-months) CASMO-8 group
-structure; [({subEnumerator})](fig:actinides-error-casmo40-constant-xs-months)
+[({subEnumerator})](#fig:actinides-error-casmo8-constant-xs-months) CASMO-8 group
+structure; [({subEnumerator})](#fig:actinides-error-casmo40-constant-xs-months)
 CASMO-40 group structure.
 ::::
 
