@@ -49,7 +49,7 @@ This automated quality assurance process serves multiple purposes. It catches co
 The GitHub-based workflow, popularized by the Journal of Open Source Software ([JOSS](https://joss.theoj.org/)) [@10.7717/peerj-cs.147;@10.31274/jlsc.18285], enables a collaborative review that is more transparent and effective than traditional peer review processes. Reviewers often leave line-level comments directly on the source content, enabling precise feedback, suggest changes through GitHub's suggestion feature, making it easy for authors to accept improvements, track the evolution of articles through the commit history, understanding how feedback was incorporated, and collaborate with other reviewers through threaded discussions, building consensus on improvements.
 
 :::{figure #pull-request} pull-request.png
-Screenshot of a GitHub Pull Request showing CI failure due to missing ORCID metadata, with the corrected version in a follow-up commit ([Cervantes-Sanchez, 2025](https://github.com/scipy-conference/scipy_proceedings/pull/1090))
+Screenshot of a GitHub Pull Request showing CI failure due to missing ORCID metadata, with the corrected version in a follow-up commit ([Cervantes-Sanchez, 2025](https://github.com/scipy-conference/scipy_proceedings/pull/1090)).
 :::
 
 # Technical Foundation
@@ -104,7 +104,7 @@ Hover cross-references between articles, using the MyST metadata and content sta
 
 ## Demonstrating Accessibility
 
-The SciPy Proceedings model provides a replicable template for other conferences and journals seeking to modernize their publishing practices. The modular architecture and open-source foundation enable easy adoption by other scientific communities. The accessibility of this publishing model is perhaps best demonstrated by [Morganton Scientific](https://morgantonscientific.org), a high school science journal that publishes using the same infrastructure as the SciPy Proceedings. The fact that high school students can successfully publish scientific content using the same tools and workflows as professional researchers demonstrates how intuitive and accessible this approach is. This accessibility is crucial for democratizing scientific publishing and ensuring that valuable contributions from diverse communities can be shared and recognized.
+The SciPy Proceedings model provides a replicable template for other conferences and journals seeking to modernize their publishing practices. The modular architecture and open-source foundation enable easy adoption by other scientific communities. The accessibility of this publishing model is perhaps best demonstrated by [Morganton Scientific](https://morgantonscientific.ncssm.edu), a high school science journal that publishes using the same infrastructure as the SciPy Proceedings [@10.62329/dwgm3685]. The fact that high school students can successfully publish scientific content using the same tools and workflows as professional researchers demonstrates how intuitive and accessible this approach is. This accessibility is crucial for democratizing scientific publishing and ensuring that valuable contributions from diverse communities can be shared and recognized.
 
 The success of Morganton Scientific shows that the barrier to entry for modern scientific publishing can be remarkably low when the right infrastructure is in place. This has implications for educational institutions, citizen science projects, and emerging research communities that might otherwise struggle to establish traditional publishing channels.
 
