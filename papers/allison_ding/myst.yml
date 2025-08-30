@@ -10,27 +10,39 @@ project:
   # Authors should have affiliations, emails and ORCIDs if available
   bibtex: references.bib
   authors:
-    - name: Allison Ding
+    - name: Jiajia Ding
       email: allisond@nvidia.com
       affiliations:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0000
       roles:
-        - Developer Advocate, Data Science
+        - conceptualization
+        - data curation
+        - methodology
+        - project administration
+        - software
+        - visualization
+        - writing - original draft
+        - writing - review & editing
     - name: Arham Mehta
       email: arhamm@nvidia.com
       affiliations:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0001
       roles:
-        - Product Manager, NeMo
+        - conceptualization
+        - methodology
+        - writing - original draft
+        - writing - review & editing
     - name: Nirmal Juluru
       email: njuluru@nvidia.com
       affiliations:
         - NVIDIA Corporation
       orcid: 0000-0000-0000-0002
       roles:
-        - Product Manager, NeMo
+        - conceptualization
+        - writing - original draft
+        - writing - review & editing
   keywords:
     - Synthetic Data Generation
     - Reward Scoring 
@@ -51,6 +63,7 @@ project:
         - nvidia2023nemo
         - rapids2023
         - sdv2020
+        - huggingface2024rewardbench
   exports:
     - id: pdf
       format: typst
