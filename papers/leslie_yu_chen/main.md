@@ -33,7 +33,7 @@ It is therefore challenging to formulate suitable uncertainty models given parti
 These constructs are closely related to each other: an interval indicates a value imprecisely known within a range where no assumptions of likelihood about the enclosed values are made; P-boxes can be considered as interval bounds on cumulative distributions and a DSS can be deemed as a discrete distribution with interval quantiles.
 Parametric p-boxes $F_{X}(x|\theta^{I})$ are probability distributions whose parameters $\theta^{I}$ and samples are intervals, and an interval ($I = [a, b]$) can be identified as a p-box $[H_a(x), H_b(x)]$ whose bounds are unit step functions denoted by $H(x)$; a p-box can be discretised into a DSS with pairs of intervals (focal elements) and probability masses  $\{([a_i, b_i],  p_i)_{1}^{N}\}$, and conversely a DSS can be stacked with a list of intervals. Importantly, all of these constructs are special cases of free p-boxes which effectively represents a set of distributions.
 
-@fig:uc_constructs visually illustrates the notion of an `uncertain number`, which is underpinned by a probability bounding approach [@Williamson_1990; @ferson2003constructing; gray2022probability] that allows for a faithful representation of the state of empirical information. For example, it can be characterised as a real number (a *degenerate* of an interval) when there is no uncertainty, a precise distribution (a *degenerate* of a p-box) when there is abundant data, and a set of distributions (e.g. a p-box) when there is partial information.
+@fig:uc_constructs visually illustrates the notion of an `uncertain number`, which is underpinned by a probability bounding approach [@Williamson_1990; @ferson2003constructing; @gray2022probability] that allows for a faithful representation of the state of empirical information. For example, it can be characterised as a real number (a *degenerate* of an interval) when there is no uncertainty, a precise distribution (a *degenerate* of a p-box) when there is abundant data, and a set of distributions (e.g. a p-box) when there is partial information.
 
 :::{figure} uc_diagram.png
 :label: fig:uc_constructs
@@ -180,7 +180,7 @@ Illustration of p-box arithmetic under various dependency structure. The left fo
 :::
 
 
-Probability bounds anlaysis (PBA) combines both interval analysis and probability theory, allowing rigorous bounds of (arithmetic) functions of random variables to be computed even with partial information [@ferson2003constructing; @ferson2004arithmetic; gray2022probability]. 
+Probability bounds anlaysis (PBA) combines both interval analysis and probability theory, allowing rigorous bounds of (arithmetic) functions of random variables to be computed even with partial information [@ferson2003constructing; @ferson2004arithmetic; @gray2022probability]. 
 Intuitively, as interval arithmetic enables rigorous calculation for sets of real numbers, PBA accomplish the same for sets of distributions. 
 P-box arithmetic is built upon generalised probability convolutions, which through further extensions cover a wide spectrum of arithmetic operations: unary transformations, binary operations between p-boxes or Dempster-Shafer structures, and general functions composed of a series of base operations. It also covers a wide spectrum of dependency structures which could be fully known (specified copula $C$), partially known (lower bound copula $\underline{C}$), or even unknown ($\text{Fr\'{e}chet}$ bounds [@oberkampf2004dependence]).
 
