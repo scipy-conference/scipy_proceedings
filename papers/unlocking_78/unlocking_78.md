@@ -153,7 +153,7 @@ The following figures visually illustrate the conceptual synthesis (Figure&nbsp;
 <table>
   <tr>
     <!-- ---------- Column 1 ---------- -->
-    <td style="width:30%; vertical-align:top; text-align:center; padding:0 1rem;">
+    <td style="width:50%; vertical-align:top; text-align:center; padding:0 1rem;">
       <figure>
         <img src="Venn_Diagram.png"
              alt="Venn diagram illustrating the conceptual overlap of CoP, CHAOSS DEI, and VIM frameworks"
@@ -166,11 +166,11 @@ The following figures visually illustrate the conceptual synthesis (Figure&nbsp;
     </td>
   <tr>
     <!-- ---------- Column 2 ---------- -->
-    <td style="width:50%; vertical-align:top; text-align:center; padding:0 1rem;">
+    <td style="width:15%; vertical-align:top; text-align:center; padding:0 1rem;">
       <figure>
         <img src="Spider.png"
              alt="Radar chart comparing CoP, CHAOSS DEI, and VIM across five inclusion dimensions"
-             style="width:30%; height:auto;" />
+             style="width:20%; height:auto;" />
         <figcaption>
           <strong>Figure&nbsp;2.</strong> Radar chart comparing CoP, CHAOSS DEI, and VIM across five inclusion
           dimensions: Social, Structural, Actionability, Metrics, and Subjective Experience.
@@ -501,6 +501,13 @@ Several Data/AI communities have already piloted VIM-aligned elements. Sharing t
 | Data Umbrella     | Incorporated inclusion dashboard into volunteer onboarding; automated “welcome guide” distribution (Action 7 pilot).         |
 
 **Next steps:** Encourage each adopter to submit a brief case study (2 – 3 slides) on their experience—tools used, challenges, and impact metrics—so we can refine the toolkit further (feeds back into Action 1 & 7).
+
+#### Feasibility and Time Horizons
+While all seven actions are critical, they differ in feasibility and time horizon:
+
+- **Short-term / Plug-and-play (0–6 months):** Actions 1, 3, and 5 can be implemented quickly with existing templates and event formats.  
+- **Medium-term / Community strengthening (6–18 months):** Actions 2, 6, and 7 require coordination and adoption cycles but provide self-sustaining feedback once established.  
+- **Long-term / Institutional support (18+ months):** Action 4 requires sustained buy-in across industry, academia, and nonprofits to scale impact.
 
 ### Conclusion and Future Directions
 
