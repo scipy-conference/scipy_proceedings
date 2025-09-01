@@ -5,11 +5,11 @@ title: 'CFSpy: A Python Library for the Computation of Chen-Fliess Series'
 abstract: |
   In this paper, CFSpy a package in Python that numerically computes Chen-Fliess series
   is presented. The reachable sets of non-linear systems are also
-  calculated with this package. The method used obtains batches of iterative integrals
+  calculated with this package. The method used obtains batches of iterated integrals
   of the same length instead one of at a time. For this, we consider the alphabetical
-  order of the words that index the series. By redefining the iterative
+  order of the words that index the series. By redefining the iterated
   integral reading the index word in the opposite direction from right
-  to left, we allow the broadcasting of the computation of the iterative
+  to left, we allow the broadcasting of the computation of the iterated
   integral to all permutations of a length. Assuming the input
   is sufficiently well approximated by piecewise step functions in 
   a fine partition of the time interval, the minimum bounding box of a 
@@ -79,7 +79,7 @@ The SciPy package [@scipy] is used to performed the optimization.
 The outline of the paper is the following: in [](#sec_preliminaries),
 the preliminary concepts and results in reachability, formal languages and CFS
 are presented. In [](#sec_results), the algorithms for the computation of
-the iterative integrals and the lie derivatives are provided which are 
+the iterated integrals and the lie derivatives are provided which are 
 the components of CFS. Then, the numerical computation of CFS is shown
 and examples are given. Finally, in [](#sec_conclusions), the conclusions are stated.
 
@@ -140,7 +140,7 @@ B
 
 
 
-The next operation is useful to perfom the iterative integration
+The next operation is useful to perfom the iterated integration
 of the inputs represented as matrices.
 
 :::{prf:definition} Hadamard Product
@@ -307,7 +307,7 @@ the following:
 :::{prf:definition}
 :label: def_iterint
 
-Given the free monoid $(X^*, \cdot,\empty)$, and the word $\xi = x_{i}\eta \in X^*$, the *iterative integral*
+Given the free monoid $(X^*, \cdot,\empty)$, and the word $\xi = x_{i}\eta \in X^*$, the *iterated integral*
 of $u\in L^m[0, T]$ associated to $\xi$ is the operator $E_{\xi}:L^m[0, T]\rightarrow C[0,T]$, described
 recursively by
 
@@ -390,7 +390,7 @@ if and only if
 ## Main Results
 
 In the current section, the numerical computation of the Chen-Fliess series is addressed.
-For this, the iterative integral and the Lie derivative are reformulated to allow for
+For this, the iterated integral and the Lie derivative are reformulated to allow for
 easier algorithm implementations. In [](#sec_CFS), they are written recursively.  In this section, we changed
 the direction of the expressions to compute them iteratively. 
 Instead of looking at the definition of the components forwardly, 
@@ -408,7 +408,7 @@ componentwise to obtain the final output. This increases the speed of the algori
 
 
 Consider the partition $\mathcal{P} = \lbrace t_0, \cdots, t_R\rbrace$ of the time interval $[0, T]$ 
-and the input vector function $u = (u_0, \cdots, u_m) \in L^{m+1}_p[0,T]$. To avoid computing each iterative integral
+and the input vector function $u = (u_0, \cdots, u_m) \in L^{m+1}_p[0,T]$. To avoid computing each iterated integral
 one word at the time and, instead, obtain the batch of all words of a fixed length, we need to consider
 the alphabetical order of the words. First, broadcast the integration of the input function 
 
@@ -500,6 +500,11 @@ to obtain the list of $E_{\eta}[u]$ for $\eta\in X^2$. This is,
 \Delta.
 ```
 
+This way of computing the iterated integral assumes and takes advantage of
+the lexicographical order of words. This avoids having to compute
+the same iterated integrals several times and instead uses the current block
+of iterated integrals of certain size $N$ to compute the whole batch of the 
+iterated integrals of size $N+1$.
 The algorithm is given in the next section.
 
 (sec_compiterint)=
@@ -512,7 +517,7 @@ compute the iterated integrals. Following the notation of the previous section, 
 :::{prf:definition}
 :label: def_newiterint
 
-Consider the word $\eta = x_{i_1}\cdots x_{i_{r}} \in X^*$, the *backward* iterative integral
+Consider the word $\eta = x_{i_1}\cdots x_{i_{r}} \in X^*$, the *backward* iterated integral
 of $u\in L^p[0, T]$ associated with $\eta$ is the operator $H_{\eta}(\cdot)$ described
 recursively by
 
@@ -544,7 +549,7 @@ of the corresponding matrix.
 
 **Inputs** Given the truncation length $N$, the inputs $u$ of the system in [](#nonlinsys)   
 
-**Output** The matrix $\mathcal{U}$ of the stacking of iterative integrals $E_\eta[u](t)$ for $|\eta|\leq N$
+**Output** The matrix $\mathcal{U}$ of the stacking of iterated integrals $E_\eta[u](t)$ for $|\eta|\leq N$
 
 $U_0 \leftarrow 1 \oplus_v u$
 
@@ -656,7 +661,7 @@ def iter_int(u,t0, tf, dt, Ntrunc):
     for i in range(Ntrunc):
         ctrEtemp[i+1] = ctrEtemp[i]+pow(num_input,i+1)
 
-    # The iterative integrals of the words of length 1, E_{x_i}[u](t0, tf) for all i in {0, ..., m}, are computed.
+    # The iterated integrals of the words of length 1, E_{x_i}[u](t0, tf) for all i in {0, ..., m}, are computed.
     
     # First, E_{x_i}[u](t0, tf) for all i in {0, ..., m} are computed 
     # for all tf neq t0
@@ -787,7 +792,8 @@ def iter_int(u,t0, tf, dt, Ntrunc):
 (sec_complie)=
 ### Computation of Lie Derivatives
 
-Similarly to the stacked list of iterated integrals,
+As in the previous section, we take advantage of 
+the lexicographical order of words. Similarly to the stacked list of iterated integrals,
 the following algorithm provides the list of the stacked Lie derivatives:
 
 :::{prf:algorithm} 
@@ -992,12 +998,27 @@ def iter_lie(h,vector_field,z,Ntrunc):
 ```
 
 
+Notice that the definition of the Lie derivative in [](#def_liederiv) does not require
+a modification since its computation is performed backwards from the last letter of the flipped word
+to the first letter.
+
 (sec_numCFS)=
 ### Numerical Computation of Chen-Fliess Series
 
-From [](#sec_compiterint) and [](#sec_complie),
-we have the following equivalent representation of the 
-CFS truncated word length $N$:
+In section [](#sec_compiterint), we obtained the
+iterated integral and in section [](#sec_complie), the Lie derivative. Alternatively
+to [](#def_cfs), the CFS
+is represented as the inner product of the vector with coordinates equal to all the iterated integrals 
+and the vector with coordinates equal to all the Lie derivatives. This is,
+
+$$
+\begin{align*}
+F_c[u](t) = \left( \sum_{\eta \in X^*} (c, \eta) \eta \right) \cdot \left(\sum_{\eta \in X^*} E_{\eta}[u](t) \eta\right).
+\end{align*}
+$$
+
+We obtain a similar version for the truncated CFS. From this and the previous sections, we have the following approximation of the 
+CFS truncated to word length $N$:
 
 :::{prf:theorem} 
 :label: my-theorem
@@ -1036,6 +1057,12 @@ and takes as arguments the output function $h:\mathbb{R}^n \rightarrow \mathbb{R
 the vector fields $g_i(z)$, the state variable $z$,
 and the truncation length $N$ of the series. The functions are entered
 as symbolic functions.
+
+* The function *pol_inputs* is the symbolic version of iter_int that assumes
+the input functions are constants. It takes a set of symbolic inputs and 
+the truncation length $N$ of the series. The output is the list of symbolic 
+commutative monomials of degree less or equal to $N$.
+
 
 
 
@@ -1275,8 +1302,17 @@ print("Maximum value:", -result_max.fun)
 (sec_conclusions)=
 ## Conclusions
 
-This work presented a Python package to numerically compute the Chen-Fliess series
-and performed reachability analysis.
-For this, the definition of the iterative integral has been equivalently modified similar
-to the Lie derivative. The algorithms of the functions are provided. The SEIRS epidemiological model
-is used to compare the results. 
+This work presented the CFSpy Python package to numerically compute the Chen-Fliess series
+and perform reachability analysis.
+For this, the definition of the iterated integral has been modified similarly
+to the Lie derivative: iterating the letters of the word backwards instead of forwardly as 
+it is originally defined. The iterated integrals and the Lie derivatives are computed
+in batches of the same wordth length. Taking advantage of the lexicographical order of
+the words, the computation of each batch is done recursively. This reduces the computational
+time compared to the straight forward approach of iterating word by word. 
+The algorithms of the iterated integral and the Lie derivatives are provided as well as their
+implementation. 
+The functions of the CFSpy package are described. Finally,
+the SEIRS epidemiological model
+is used to show the simulations and compare the accuracy of the package. 
+
