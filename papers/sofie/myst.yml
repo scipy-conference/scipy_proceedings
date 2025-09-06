@@ -65,6 +65,30 @@ project:
         - pytorch
         - onnx
         - bai2019
+        - clarke_big_data_physical_sciences
+        - Fraser2023
+        - tensorflow2015-whitepaper
+        - Gonski2024ATLASML
+        - Elmsheuser2023_ATHENAconfig
+        - Chou2024AthenaTriton
+        - Ju2025_ATLASInference
+        - Nvidia2024_TensorRT_devguide
+        - KasieczkaVlimant2022
+        - CMS2024AIAnomaly
+        - cms_sw_cmssw
+        - valsecchi2025iml
+        - Chou2025_SuperSONIC
+        - LHCB_introduction
+        - vanVeghel2025_LHCbInference
+        - a2b7915800864c91b2389834659bb2ab
+        - Jowett2025_IntroLHC_ALICE
+        - Haake2018MLinAlice
+        - Sonnabend2025MLinALICE
+        - Albertsson2020_TMVAGuide
+        - Moneta2024_SOFIEinference
+        - Fahim:2021cic
+        - PQuantGitHub
+        - ConiferGitHub
   exports:
     - id: pdf
       format: typst
