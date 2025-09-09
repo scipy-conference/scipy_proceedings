@@ -1,0 +1,17 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Explaining ML predictions with SHAP'
+  authors:
+    - name: Avik Basu
+      orcid: 0009-0002-4489-378X
+      affiliations:
+        - Intuit, Inc.
+        - PyOpenSci
+  abstract: |
+    As machine learning models become increasingly accurate and complex, 
+    explainability has become essential to ensure trust, transparency, and informed decision-making. 
+    SHapley Additive exPlanations (SHAP) provide a rigorous and intuitive approach for 
+    interpreting model predictions, delivering consistent and theoretically grounded feature attributions. 
+    This article demonstrates the application of SHAP across two representative model types: 
+    boosted decision trees and neural networks.
