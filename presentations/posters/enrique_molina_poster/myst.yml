@@ -1,0 +1,17 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Serverless Data Processing with Lithops'
+  authors:
+    - name: Enrique Molina-Giménez
+      email: enrique.molina@urv.cat
+      orcid: 0009-0005-2597-3815
+      affiliations:
+        - Universitat Rovira i Virgili, Tarragona, Spain
+    - name: Pedro García-López
+      email: pedro.garcia@urv.cat
+      orcid: 0000-0002-9848-1492
+      affiliations:
+        - Universitat Rovira i Virgili, Tarragona, Spain
+  abstract: |
+    Lithops enables users to seamlessly scale single-machine Python code across thousands of serverless functions on AWS Lambda, IBM Cloud Functions, and Google Cloud Functions—eliminating the need to manage clusters. It automates function deployment, dependency management, and data partitioning, allowing fast and scalable execution of tasks such as exploratory data analysis, Monte Carlo simulations, sentiment analysis, and hyperparameter tuning. By integrating directly with Jupyter notebooks, Lithops democratizes access to cloud-scale computing, making high-performance distributed processing accessible to any Python user.
