@@ -1,0 +1,12 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Building Responsible AI: An AI-Driven Framework for Sustainable, Ethical, and Privacy-Preserving IoT Systems
+
+  authors:
+    - name: Ying-Jung Chen
+      affiliation: Georgia Institute of Technology
+      orcid: 0000-0002-5946-7831
+    
+  abstract: |
+    This study presents a multidisciplinary approach to AI system design in IoT ecosystems, focusing on computational efficiency, environmental sustainability, and ethical responsibility. The framework emphasizes four key components: multidisciplinary integration, which utilizes low-power systems, privacy-preserving machine learning architectures, and transparent governance for efficiency and oversight; sustainable practices, which align IoT/AI solutions with ethical principles and privacy preservation; practical implementation, leveraging tools like CarbonTracker for emission tracking, SHAP for interpretability, and PySyft for secure computation in healthcare and urban management; and measurable performance, ensuring accountability through benchmarks. This approach harmonizes technological innovation with sustainability, privacy, and ethical responsibility.
