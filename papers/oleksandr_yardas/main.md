@@ -26,7 +26,7 @@ abstract: |
   extraordinary time savings for low and medium fidelity simulations.
   Concentration error characterization on larger models remains an open area of
   interest.
-acknowledgements: |
+acknowledgment: |
   This work was by the Exascale Computing Project (17-SC-20-SC), a collaborative
   effort of the U.S. Department of Energy Office of Science and the National
   Nuclear Security Administration. This work was additionally supported through
@@ -47,6 +47,9 @@ acknowledgements: |
 data_availability: |
   The data that support the findings of this study are openly available at the
   following DOI: 10.5281/zenodo.15103379
+abbreviations:
+  PWR: Pressurized Water Reactor
+  CRAM: Chebyshev Rational Approximation Method
 ---
 
 (introduction)= 
@@ -69,7 +72,7 @@ particle transport code. The depletion solver utilizes OpenMC's Python API
 to iteratively run a transport simulation, calculate transmutation reaction
 rates, solve the depletion matrix ([Eq. %s](#eq:depletion-matrix-t)), and
 update the material composition. This makes transport-coupled depletion
-calculations computationally expensive, expecially for large reactor models.
+calculations computationally expensive, especially for large reactor models.
 
 In the present work, we describe a new method for running depletion
 calculations without the need to iteratively run transport calculations by
@@ -116,7 +119,7 @@ of the new feature.
 
 (methods)=
 ## Methods
-Depletion is typically done in subregions that are small enough to have
+Depletion is typically done in sub-regions that are small enough to have
 little spatial variation in the flux (and hence in the reaction rates). For
 example, in a model of a full reactor core, depletion regions may correspond to
 individual fuel pins, or even smaller sub-pin regions of radial rings and
@@ -184,7 +187,7 @@ achieve these design goals.
   multi-group flux profile for each user-specified domain.
 
   In the initial release of this feature in OpenMC v0.13.1, `MicroXS`
-  subclassed the `pandas.DataFrame`. class to store data and assumed a
+  sub-classed the `pandas.DataFrame`. class to store data and assumed a
   one-group structure. The v0.14.0 release removed the `pandas` dependency
   and refactored `MicroXS` class to store multi-group cross section
   data.
@@ -265,11 +268,11 @@ group, CASMO-8, and CASMO-40. The third case is much slower than the first
 case as the cross sections need to be reloaded after each depletion step.
 The third case is a sanity check that the cross sections are being computed
 correctly, as it should have a smaller error than the second case.
-Due to the cross section discretization that occurs before peforming
+Due to the cross section discretization that occurs before performing
 depletion, we do not expect the third case results to converge to the first
 case results in limit of infinite particles, but we would expect it to
 converge in the limit of infinite particles _and_ energy groups. The
-third case only ran for one-group transport-independent depletion. 
+third case was only run for one-group transport-independent depletion. 
 
 [](#tab:mat-params) and [](#tab:mat-comps) contain the material parameters and
 compositions of our model, and [](#tab:geo-params) contains the geometric
@@ -415,7 +418,7 @@ Relative $^{240}$Pu ($n,\gamma$) reaction rate error using constant cross
 sections and 30-day time steps.
 :::
 
-The error in $^{241}$Pu concentration propogates to daughter nuclides
+The error in $^{241}$Pu concentration propagates to daughter nuclides
 that are related to the amount of $^{241}$Pu, such as isotopes of Cm
 and Am. We observe a general trend that the less abundant
 nuclides have higher concentration error relative to transport-coupled
@@ -480,7 +483,7 @@ net production of the low-abundance nuclides decreases over time.
 :width: 50%
 ```
 
-Relative fission produt concentration error using 3-day time steps at 3, 12, 21, and
+Relative fission product concentration error using 3-day time steps at 3, 12, 21, and
 30 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-days) constant
 cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-days) updating cross
 sections.
@@ -499,7 +502,7 @@ sections.
 :width: 50%
 ```
 
-Relative fission produt concentration error using 30-day time steps at 30, 120, 210, and
+Relative fission product concentration error using 30-day time steps at 30, 120, 210, and
 300 days of depletion for [({subEnumerator})](#fig:fp-error-constant-xs-months) constant
 cross sections; [({subEnumerator})](#fig:fp-error-updating-xs-months) updating cross
 sections.
@@ -571,10 +574,11 @@ calculate reaction rates for a depletion calculation. The new method is much
 faster than running a transport-coupled depletion simulation, albeit with a
 penalty to accuracy. Better accuracy will be obtained for models where the
 neutron flux spectrum will be constant, i.e. in fusion systems and low power
-fission reactors.
+fission reactors, so this new method should be used judiciously on problems
+where they are applicable.
 
 This study focused exclusively on nuclide compositions. Future work may include
-building machieinery to monitor criticality as the fuel depletes. A good
+building machinery to monitor criticality as the fuel depletes. A good
 starting point may be in implementing a method similar to the method to estimate
 $k_{\infty}$ used in [@LOVECKY2014333], wherein
 \begin{equation}
@@ -596,10 +600,10 @@ all $x$, and we would use an 'effective' absorption cross section
 $\overline{\sigma}_{a} = \sigma_{a} - \sigma_{(n,2n)} - 2\sigma_{(n,3n)} -
 3\sigma_{(n,4n)}$. 
 
-Future work could focus on characterizing the effect of subregions on the
+Future work could focus on characterizing the effect of sub-regions on the
 concentration errors. The geometry used in this study is a simple PWR
 pincell. It is possible that the error due to static fluxes could be reduced
-by dividing the pincell into subregions to better capture radial and axial
+by dividing the pincell into sub-regions to better capture radial and axial
 variations as is done in high-fidelity depletion of large reactor models.
 Another area for future work could be on studying the importance of energy
 group discretization for more complex reactor models. We did not find a
