@@ -1,0 +1,26 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'zfit: scalable pythonic likelihood fitting'
+  authors:
+    - name: Jonas Eschle
+      orcid: 0000-0002-7312-3699
+      affiliation: CERN
+    - name: Albert Puig Navarro
+      orcid: 0000-0001-8868-2947
+      affiliation: ''
+    - name: Rafael Silva Coutinho
+      orcid: 0000-0002-1545-959X
+      affiliation: 'Centro Brasileiro de Pesquisas Físicas'
+    - name: Nicola Serra
+      orcid: 0000-0002-5033-0580
+      affiliation: 'University of Zurich'
+    - name: Matthieu Marinangeli
+      orcid: 0000-0002-8361-9356
+      affiliation: ''
+    - name: Iason Krommydas
+      orcid: 0000-0001-7849-8863
+      affiliation: 'Rice University'
+  abstract: |
+    This talk presents zfit with the newest improvements, a general purpose distribution fitting library for complicated model building beyond fitting a normal distribution. The talk will cover all aspects of fitting with a focus on the strong model building part in zfit; composable distributions with sums, products and more, build and mix binned and unbinned, analytic and templated functions in multiple dimensions. This includes the creation of arbitrary, custom distributions with minimal effort that fulfils everyones need.
+Thanks to the numpy-like backend used by TensorFlow, zfit is highly performant by using JIT compiled code on CPUs and even GPUs, a showcase for scientific computing faster than numpy.
