@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: ''
+  authors:
+    - name: First author or presenter
+      orcid: 0000-0000-0000-0000
+      affiliation: University of SciPy
+    - name: Second author or presenter
+      orcid: 0000-0000-0000-0001
+      affiliations:
+        - University of SciPy
+        - National Academy of NumFocus
+  abstract: |
+    The abstract or description of your talk/poster.
