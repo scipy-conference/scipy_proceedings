@@ -87,8 +87,8 @@ project:
         - Albertsson2020_TMVAGuide
         - Moneta2024_SOFIEinference
         - Fahim:2021cic
-        - PQuantGitHub
-        - ConiferGitHub
+        - Niemi2025PQuant
+        - Summers2024Conifer
         - moneta2024benchmark
         - Sengupta2025TMVASOFIE
   exports:
