@@ -89,6 +89,8 @@ project:
         - Fahim:2021cic
         - PQuantGitHub
         - ConiferGitHub
+        - moneta2024benchmark
+        - Sengupta2025TMVASOFIE
   exports:
     - id: pdf
       format: typst
