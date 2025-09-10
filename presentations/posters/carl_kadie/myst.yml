@@ -1,0 +1,10 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Explore Solvable and Unsolvable Equations with SymPy'
+  authors:
+    - name: Carl Kadie
+      orcid: 0009-0001-5663-2176
+      affiliation: Independent Researcher
+  abstract: |
+    Why can we solve some equations easily while others seem impossible? This poster explores how Python's free computer algebra system, SymPy, helps determine when a closed-form solution exists and when numerical methods are necessary. Instead of relying on advanced mathematics like Galois theory, we take a fun, hacker-style approach—letting SymPy do the work. We’ll analyze different equation types, from polynomials to exponentials and trigonometric functions, using real-world examples like Kepler’s equation. Whether you’re a scientist, engineer, or Python enthusiast, this poster will sharpen your intuition about solvability and show how to make the most of symbolic and numerical solutions in SymPy.
