@@ -108,19 +108,25 @@ In addition to the following list, we break up the deadlines in the respective d
 - Jun 13: Deadline to submit first draft by authors, as GitHub pull request
 - Jun 15: Assignment of reviewers to papers
 - Jun 15: Open Review Period begins
-  - Reviewers comment on papers to authors during this period.
-  - Authors also respond to review comments with improvements to papers during this period.
+  - During this initial review period, authors may still refine their first draft.
+  - Reviewers may comment on papers during this period, with the understanding that authors may
+    still be working on substantial additions and edits.
+  - Authors and reviewers should be in open communication so reviewers do not spend all their energy
+    on an unfinished draft.
+  - Reviewers should at least provide initial, high-level feedback during this period.
 - Jul 10: Initial complete review
-  - Reviewers continue to comment on paper improvements during this period.
-  - Authors also respond to review comments with further improvements to papers during this period.
+  - At this point, the author should consider their submission a final draft.
+  - Reviewers continue to comment on the paper during this period.
+  - Any author revisions should only be in response to reviewer comments.
 - Aug 9: Final review deadline
+  - Reviewers must be done with their reviews at this point.
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 15: Final author revision deadline
-- Aug 15: Open Review Period ends
+- Aug 22: Final author revision deadline
+- Aug 22: Open Review Period ends
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 23: Final reviewer decision deadline
-- Aug 30: Proceedings final sign-off by editors
+- Aug 30: Final reviewer decision deadline
+- Sept 6: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ## Instructions for Authors
@@ -171,9 +177,13 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - May 2: Authors invited to submit full papers
 - May 9: Webinar offered to authors
 - Jun 13: Deadline to submit first draft by authors
-  - Reviewers comment on papers to authors during this period.
-  - Authors also respond to review comments with improvements to papers during this period.
-- Aug 15: Final author revision deadline
+  - During this initial review period, authors may still refine their first draft.
+  - Authors and reviewers should be in open communication so reviewers do not spend all their energy
+    on an unfinished draft.
+- Jul 10: Initial complete review
+  - At this point, the author should consider their submission a final draft.
+  - Any author revisions should only be in response to reviewer comments.
+- Aug 22: Final author revision deadline
   - Authors put down their pens.
 
 ### General Information and Guidelines for Authors
@@ -202,6 +212,12 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
   - SciPy is supporting _HTML_. LaTeX is not involved in reading or rendering; we use [Typst for building PDFs](https://github.com/curvenote-templates/scipy)
   - Custom LaTeX macros are **not** supported and some packages may not be supported
 - The paper should be at most 6000 words including figures but not including references; this is about 8 pages for the published PDF.
+
+### Policy on Previously Published Material
+
+Submissions to the SciPy Proceedings should be novel scientific articles that have not previously been reviewed and published. Submitting un-reviewed preprints is acceptable. You may also include content published in other contexts, e.g. software documentation, but it must be presented in a distinct way, as a scientific article.
+
+Final submission acceptance will be at the discretion of the Proceedings Co-Chairs. Please contact them if you have any worries about the novelty or publication history of your submission.
 
 ### Author Workflow
 
@@ -402,10 +418,10 @@ _Final Reviewer Decision_ deadline.
   - Authors also respond to review comments with further improvements to papers during this period.
 - Aug 9: Final review deadline
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 15: Final author revision deadline
+- Aug 22: Final author revision deadline
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 23: Final reviewer decision deadline
+- Aug 30: Final reviewer decision deadline
 
 ### Reviewer Workflow
 
@@ -459,7 +475,7 @@ To information about how to manage the whole proceedings, please see
 
 - May 2: Authors invited to submit full papers
   - The [build process](#build-process) is supported by Curvenote (a SciPy sponsor) and it is maintained throughout this period.
-- Aug 30: Proceedings final sign-off by editors
+- Sept 6: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ### Instructions for Editors
@@ -487,7 +503,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
   - Editors should verify that reviews have been completed
-- Aug 30: Proceedings final sign-off by editors
+- Sept 6: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ## Instructions for Slides
@@ -504,7 +520,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
    4. SciPy tools plenary slide decks (tools)
    5. 45-minute keynote slide decks (keynote)
 5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
-6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
+6. Copy your slide deck or poster into the directory, and add a file called `myst.yml` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
    affiliation if these cannot be provided):
 
 ```yaml
