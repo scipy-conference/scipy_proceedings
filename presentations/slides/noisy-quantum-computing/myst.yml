@@ -1,0 +1,14 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Noise Resilient Quantum Computing with Python'
+  authors:
+    - name: Nate Stemen
+      affiliation: Unitary Foundation
+      orcid: 0009-0004-9505-0509
+  abstract: |
+    Today's quantum computers are far noisier than their classical counterparts.
+    Unlike traditional computing errors, quantum noise is more complex, arising from decoherence, crosstalk, and gate imperfections that corrupt quantum states.
+    Error mitigation has become a rapidly evolving field, offering ways to address these errors on existing devices.
+    New techniques emerge regularly, requiring flexible tools for implementation and testing.
+    This talk explores the challenges of mitigating noise and how researchers and engineers use Python to iterate quickly while maintaining reliable and reproducible workflows.
