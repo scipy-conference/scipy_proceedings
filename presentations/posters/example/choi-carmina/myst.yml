@@ -1,0 +1,10 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Carmina: Introducing Programming to Latin Poetry'
+  authors:
+    - name: Suh Young Choi
+      orcid: 0009-0006-2247-2254
+      affiliation: University of Washington
+  abstract: |
+    Computational thinking is a problem-solving framework traditionally associated with computer science, but it can be applied to other fields such as humanities computing. Carmina, whose name comes from the Latin word for "songs" or "poems", is a new library under development to demonstrate the algorithmic nature of analytic tasks related to Latin poetry. Carmina has practical use in automating processes like scansion and alliteration finding; further, it has educational utility for classical scholars by translating familiar tasks to a coding context.
