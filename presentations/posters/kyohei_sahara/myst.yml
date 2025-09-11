@@ -1,0 +1,17 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: "Quantum Chemistry Acceleration: Comparative Performance Analysis of Modern DFT Implementations"
+  authors:
+    - name: Kyohei Sahara
+      affiliation: Kyoto University
+      orcid: 0009-0003-4407-3738
+  abstract: |
+    This poster examines the acceleration of quantum chemistry calculations
+    through modern implementations of Density Functional Theory (DFT). We
+    present a comparative performance analysis between traditional frameworks
+    and optimized implementations, demonstrating substantial computational
+    efficiency gains. Applications to electrolyte membrane structure analysis
+    illustrate practical benefits, enabling more extensive simulations in
+    reduced timeframes. Benchmarks highlight speedups achieved via modern code
+    optimization techniques in Python-based quantum chemistry environments.
