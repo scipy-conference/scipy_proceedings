@@ -1,0 +1,14 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: Imprecise uncertainty management with uncertain numbers to facilitate trustworthy computations
+  authors:
+    - name: Yu Chen
+      orcid: 0000-0001-6617-2946
+      affiliation: University of Liverpool
+    - name: Scott Ferson
+      orcid: 0000-0002-2613-0650
+      affiliations:
+        - University of Liverpool
+  abstract: |
+    Uncertain number enables faithful characterization and rigorous computation under mixed uncertainties and unknown dependencies, given partial information.
