@@ -191,7 +191,7 @@ The bounding boxes that were output using this workflow (against which we are be
 18 FP were observed in the output produced using the open source workflow. 
 :::
 
-Merging the overlapping geometry and filtering out the empircially observed FP allowed for us to ascertain exactly how many TP (18,736) there are in the benchmark output and derive how many FP (18) and FN (65) there are in our workflow output, which enabled us to conduct our performance comparison.
+Merging the overlapping geometry and filtering out the empirically observed FP allowed for us to ascertain exactly how many TP (18,736) there are in the benchmark output and derive how many FP (18) and FN (65) there are in our workflow output, which enabled us to conduct our performance comparison.
 
 :::{table} Performance Comparison  
 :label: tbl:performance-comparison
@@ -263,7 +263,7 @@ Meeting professional-grade tolerance requirements (e.g., < 3 cm) enables real-wo
 
 Our approach to tiling ("chipping") high-resolution orthomosaics, processing 588 individual 1280-by-1280px tiles at an average pace of 11 seconds per tile, required a total processing time of ~110 minutes running on a Colab single `T4` GPU instance. It is important to note that an overlap of 25% (320px) between tiles during processing was required to ensure that geometry was not produced containing "holes" or malformations; merging overlapping polygons after filtering (based on area and compactness calculations, in this case) helped us ensure the overall quality of the geometric output.
 
-Future work will be centered on building an open source CLI and Python package[^footnote-6], which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatail charactersitics as an output.
+Future work will be centered on building an open source CLI and Python package[^footnote-6], which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatial charactersitics as an output.
 
 [^footnote-6]: We have since open-sourced the [`orthomasker`](https://pypi.org/project/orthomasker) Python package and CLI; work on a GUI is currently underway.
 
