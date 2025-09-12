@@ -183,7 +183,7 @@ The following figures visually illustrate the conceptual synthesis (Figure&nbsp;
 
 
 ### Systemic Barriers  
-Five mutually reinforcing hurdles keep women from fully participating in scientific Python. Each erodes one or more pillars of the Visibility–Invitation–Mechanism (VIM) framework.
+Five mutually reinforcing hurdles keep women from fully participating in scientific Python. Each erodes one or more pillars of the Visibility–Invitation–Mechanism (VIM) framework. These barriers mirror broader patterns in open-source participation, underscoring that the challenges are systematic rather than isolated.
 
 ::: {table} How five barriers erode VIM pillars
 :label: tbl:barriers
