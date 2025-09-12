@@ -1,0 +1,20 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'SciPy Optimize and Reachability of Nonlinear Systems '
+  authors:
+    - name: Ivan Perez Avellaneda
+      orcid: 0000-0003-3127-8454
+      affiliation: 
+  abstract: |
+    In this paper, CFSpy a package in Python that numerically computes Chen-Fliess series
+    is presented. The reachable sets of non-linear systems are also
+    calculated with this package. The method used obtains batches of iterated integrals
+    of the same length instead one of at a time. For this, we consider the alphabetical
+    order of the words that index the series. By redefining the iterated
+    integral reading the index word in the opposite direction from right
+    to left, we allow the broadcasting of the computation of the iterated
+    integral to all permutations of a length. Assuming the input
+    is sufficiently well approximated by piecewise step functions in 
+    a fine partition of the time interval, the minimum bounding box of a 
+    reachable set is computed by means of polynomials in terms of the inputs. To solve the optimization problem, the SciPy library is used.
