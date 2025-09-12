@@ -1,0 +1,12 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: "Phlower: A Deep Learning Framework Supporting PyTorch Tensors with Physical Dimensions"
+  authors:
+    - name: Riku Sakamoto
+      email: sakamoto@ricos.co.jp
+      orcid: 0009-0002-3866-7073
+  abstract: |
+    We present [Phlower](https://github.com/ricosjp/phlower), an open-source deep learning library that extends PyTorch tensors to incorporate physical dimensions — such as time ( _T_ ), mass ( _M_ ), and length ( _L_ ) — and enforces dimensional consistency throughout computations. 
+    When applying deep learning to physical systems, tensors often represent quantities with physical dimensions. Ensuring dimensional correctness in such operations is crucial to maintaining physical validity. To address this challenge, Phlower provides `PhlowerTensor`, a wrapper class of PyTorch tensor that tracks physical dimensions and ensures that tensor operations comply with dimensional consistency rules.
+    This poster introduces the core features of Phlower and demonstrates its capability to maintain dimensional correctness through representative examples.
