@@ -1,0 +1,24 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Performing Object Detection on Drone Orthomosaics with Meta's Segment Anything Model (SAM)
+  authors:
+    - name: Nicholas McCarty
+      affiliation: Upskilled Consulting
+      orcid: 0009-0001-3727-9178
+  abstract: |
+    Accurate and efficient object detection and spatial localization in remote sensing imagery is a 
+    persistent challenge. In the context of precision agriculture, the extensive data annotation 
+    required by conventional deep learning models poses additional challenges. This paper presents 
+    a fully open source workflow leveraging Meta AI’s Segment Anything Model (SAM) for zero-shot 
+    segmentation, enabling scalable object detection and spatial localization in high-resolution 
+    drone orthomosaics without the need for annotated image datasets. Model training and/or fine-tuning 
+    is rendered unnecessary in our precision agriculture-focused use case. The presented end-to-end workflow 
+    takes high-resolution images and quality control (QC) check points as inputs, automatically generates 
+    masks corresponding to the objects of interest (empty plant pots, in our given context), and outputs 
+    their spatial locations in real-world coordinates. Detection accuracy (required in the given context to 
+    be within 3 cm) is then quantitatively evaluated using the ground truth QC check points and benchmarked 
+    against object detection output generated using commercially available software. Results demonstrate that 
+    the open source workflow achieves superior spatial accuracy — producing output 20% more spatially accurate, 
+    with 400% greater IoU — while providing a scalable way to perform spatial localization on high-resolution 
+    aerial imagery (with ground sampling distance, or GSD, < 30 cm).
