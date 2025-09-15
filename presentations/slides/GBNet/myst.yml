@@ -1,0 +1,10 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'GBNet: XGBoost and LightGBM PyTorch Modules'
+  authors:
+    - name: Michael Horrell
+      orcid: 0009-0001-3091-0342
+      affiliation: AlixPartners
+  abstract: |
+    GBNet is a Python package that integrates XGBoost and LightGBM with PyTorch. By leveraging PyTorch auto-differentiation, GBNet enables novel architectures for GBMs that were previously exclusive to pure Neural Networks. The result is a greatly expanded set of applications for GBMs and an improved ability to interpret expressive architectures due to the use of GBMs.
