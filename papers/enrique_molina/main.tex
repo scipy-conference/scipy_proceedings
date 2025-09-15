@@ -121,8 +121,8 @@ if __name__ == "__main__":
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.4\textwidth]{assets/cdf_activation.pdf}\label{fig:cdf}
-\includegraphics[width=0.4\textwidth]{assets/read_write.pdf}\label{fig:rw}
+\includegraphics[width=0.7\textwidth]{assets/cdf_activation.pdf}\label{fig:cdf}
+\includegraphics[width=0.7\textwidth]{assets/read_write.pdf}\label{fig:rw}
 
 \caption{Lithops performance: invocation latency (a) and aggregate bandwidth (b).}
 \end{figure}
@@ -207,13 +207,6 @@ There are three essential building blocks that, in turn, compose the three key d
 
 The partitioning and getting of slices mechanism is illustrated in Figure~\ref{fig:dataplug_workflow}. 
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{assets/dataplug.pdf}
-\caption{Dataplug workflow.}
-\label{fig:dataplug_workflow}
-\end{figure}
-
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily\small, commentstyle=\color{gray}]
 from dataplug import CloudObject
 from dataplug.formats.genomics.fastq import FASTQGZip, partition_reads_batches
@@ -243,6 +236,14 @@ with FunctionExecutor() as fexec:
 
 At the same time, the entire workflow explained in previous lines is straightforward to use via Dataplug API. The above code snippet illustrates how to use Dataplug to partition one genomic (FASTQGZip) file into several slices, and then process each slice in parallel using Lithops.
 In a very quick overview, the code above illustrates how to use Dataplug to partition a FASTQGZip file into 200 slices, and then process each slice in parallel using Lithops. First, the \texttt{preprocess()} method generates the required metadata for the FASTQGZip file, then the \texttt{partition()} method creates the slices based on the specified partitioning strategy, and the \texttt{get()} method retrieves the data for each slice when called, in a lazy way.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{assets/dataplug.pdf}
+\caption{Dataplug workflow.}
+\label{fig:dataplug_workflow}
+\end{figure}
+
 
 Dataplug approach offers several key advantages over static partitioning, that make it particularly well-suited for scientific data analytics:
 
@@ -295,8 +296,6 @@ METASPACE initially relied on a Spark cluster for its computational backend. How
 
 To address these issues, METASPACE transitioned to a serverless architecture, aiming for greater elasticity and ease of management. By adopting Lithops, the platform gained the ability to scale computing resources dynamically based on workload demands. This move significantly reduced operational overhead while improving performance and resource efficiency. The switch to a serverless model allowed METASPACE to overcome the constraints of its Spark-based infrastructure and provided a more responsive and scalable environment for data processing.
 
-Figure~\ref{fig:wallclock} shows the execution timeline for a METASPACE metabolomics workload, a complex workflow with multiple parallel stages. The timeline reveals significant variability in resource requirements, with some steps requiring substantially more computational power than others. This fluctuation is a key driver for adopting serverless computing, a paradigm where Lithops excels by dynamically scaling resources to precisely match the needs of each pipeline step.
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{assets/wallclock.pdf}
@@ -304,16 +303,19 @@ Figure~\ref{fig:wallclock} shows the execution timeline for a METASPACE metabolo
 \label{fig:wallclock}
 \end{figure}
 
-\subsection{Dataplug for Dynamic Partitioning}
+Figure~\ref{fig:wallclock} shows the execution timeline for a METASPACE metabolomics workload, a complex workflow with multiple parallel stages. The timeline reveals significant variability in resource requirements, with some steps requiring substantially more computational power than others. This fluctuation is a key driver for adopting serverless computing, a paradigm where Lithops excels by dynamically scaling resources to precisely match the needs of each pipeline step.
 
-A common issue in metabolomics involves processing large, non-cloud-optimized datasets, such as files in the standard imzML format~\citep{imzml}. While widely used for mass spectrometry imaging, imzML lacks native support for cloud-aware access patterns. The Dataplug framework overcomes this limitation with a plugin that enables efficient, on-the-fly partitioning of imzML files. By extracting key metadata, Dataplug facilitates dynamic partitioning strategies tailored to the specific need of each workload, eliminating the need to create static, pre-processed data chunks. This approach yields significant advantages: it reduces preprocessing time and storage costs (Figure~\ref{fig:dataplug_preprocess}) and enables parallel data access, which drastically cuts data ingestion times (Figure~\ref{fig:dataplug_downloading}). Furthermore, it offers researchers the flexibility to experiment with different partitioning schemes without modifying the original dataset.
+\subsection{Dataplug for Dynamic Partitioning}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.4\textwidth]{assets/datamovement.pdf}\label{fig:dataplug_preprocess}
-\includegraphics[width=0.55\textwidth]{assets/downloading.pdf}\label{fig:dataplug_downloading}
+\includegraphics[width=0.5\textwidth]{assets/datamovement.pdf}\label{fig:dataplug_preprocess}
+\includegraphics[width=0.73\textwidth]{assets/downloading.pdf}\label{fig:dataplug_downloading}
 \caption{Dataplug performance: preprocessing and ingestion.}
 \end{figure}
+
+A common issue in metabolomics involves processing large, non-cloud-optimized datasets, such as files in the standard imzML format~\citep{imzml}. While widely used for mass spectrometry imaging, imzML lacks native support for cloud-aware access patterns. The Dataplug framework overcomes this limitation with a plugin that enables efficient, on-the-fly partitioning of imzML files. By extracting key metadata, Dataplug facilitates dynamic partitioning strategies tailored to the specific need of each workload, eliminating the need to create static, pre-processed data chunks. This approach yields significant advantages: it reduces preprocessing time and storage costs (Figure~\ref{fig:dataplug_preprocess}) and enables parallel data access, which drastically cuts data ingestion times (Figure~\ref{fig:dataplug_downloading}). Furthermore, it offers researchers the flexibility to experiment with different partitioning schemes without modifying the original dataset.
+
 
 \subsection{Practical Insights of a Serverless-native Architecture}
 
