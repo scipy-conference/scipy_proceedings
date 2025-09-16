@@ -1,0 +1,10 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: "SymPy Tensor Module: A Bug Fix for High-Rank Metric Contractions"
+  authors:
+    - name: Arkadiusz P. Trawiński
+      orcid: 0000-0001-8604-7480
+      affiliation: ING Hubs Poland
+  abstract: |
+    In symbolic physics computations, handling tensors of varying ranks—such as vectors, spinors, metrics, and gamma matrices—is essential. A long-standing bug in SymPy's tensor module caused incorrect behavior when contracting metrics with tensors of rank higher than two. This poster presents the nature of the bug, its implications for physics computations, and the elegant one-line fix introduced in Pull Request #28240. The correction ensures proper permutation and contraction of tensor indices, restoring expected behavior in symbolic tensor algebra. This contribution improves the reliability of SymPy for high-energy physics and general relativity applications, where tensor manipulations are fundamental.
