@@ -1,0 +1,17 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: "Unlocking the Missing 78%: Inclusive Communities for the Future of Scientific Python"
+  authors:
+    - name: "Noor Aftab"
+      orcid: ""
+      affiliation: ""
+  abstract: |
+    Scientific Python teams are leaving value on the table—the Missing78%—and it shows up in slower
+    product cycles and brittle processes. This talk introduces the VIM framework (Visibility, Impact,
+    Mechanisms) as a lightweight operating system for product development: define visible contribution
+    ladders, focus on measurable impact, and install mechanisms that make responsible AI practices
+    repeatable. Attendees leave with a one-page checklist, repo templates, and a 30-day plan to ship
+    scientifically grounded, responsible-AI improvements—without extra headcount.
+
+    Keywords: product development, VIM framework, Missing78%, scientific Python, responsible AI, contribution ladders, mechanisms, measurable impact
