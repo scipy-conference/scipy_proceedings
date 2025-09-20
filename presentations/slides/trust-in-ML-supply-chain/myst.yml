@@ -1,0 +1,17 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'Taming the Wild West of ML: From Model to Trust'
+  authors:
+    - name: Mihai Maruseac
+      orcid: 0000-0002-6225-1206
+      affiliation: Google, Inc.
+  abstract: |
+    Three years ago, with the arrival of ChatGPT, the world of AI entered a new
+    era. Apllications and tools using AI flourished. However, the security
+    risks of using AI are still not all fully understood. In particular, there
+    is little thought paid to the supply chain security of a model. Tampering
+    with a model has significant impact downstream. In this talk, we show how
+    building upon tamper-proof metadata for ML artifacts, we can secure the ML
+    supply chain. That is, we show how the OpenSSF model signing secures the
+    most important part of the ML supply chain: the model.
