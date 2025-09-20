@@ -1,10 +1,10 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: "Unlocking the Missing 78%: Inclusive Communities for the Future of Scientific Python"
   authors:
     - name: "Noor Aftab"
-      orcid: ""
+      orcid: "0009-0008-6375-1123"
       affiliation: ""
   abstract: |
     Scientific Python teams are leaving value on the table—the Missing78%—and it shows up in slower
