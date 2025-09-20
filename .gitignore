@@ -6,3 +6,4 @@ _build
 *.swp
 *~
 node_modules
+*.bak
