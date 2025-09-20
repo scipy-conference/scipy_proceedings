@@ -525,7 +525,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 ```yaml
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: 'The title of your presentation'
   authors:
