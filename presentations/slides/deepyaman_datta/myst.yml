@@ -1,0 +1,16 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: "Python is all you need: an overview of the composable, Python-native data stack"
+  authors:
+    - name: Deepyaman Datta
+      email: deepyaman.datta@utexas.edu
+      orcid: 0009-0006-7814-1446
+      affiliation:
+        - Kedro
+  abstract: >
+    For the past decade, tools like dbt have formed a cornerstone of the modern data
+    stack, and Python-first alternatives couldn't compete with the scale and performance
+    of modern SQL—until now. New integrations with Ibis, the portable Python dataframe
+    library, enable building and orchestrating scalable data engineering pipelines using
+    existing open-source libraries like Kedro, Pandera, and more.
