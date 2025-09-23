@@ -1,0 +1,43 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Scientific Publishing with MyST Markdown
+  authors:
+    - name: Marco Colonna
+      email: marco.colonna@cern.ch
+      orcid: 0009-0000-1704-4139
+      affiliations:
+        - Technische Universität Dortmund
+    - name: Johannes Albrecht
+      email: johannes.albrecht@tu-dortmund.de
+      orcid: 0000-0001-8636-1621
+      affiliations:
+        - Technische Universität Dortmund
+    - name: Florian Bernlochner
+      email: florian.bernlochner@uni-bonn.de
+      orcid: 0000-0001-8153-2719
+      affiliations:
+        - University of Bonn
+    - name: Lorenz Gärtner
+      email: lorenz.gaertner@physik.uni-muenchen.de
+      orcid: 0000-0002-3643-4543
+      affiliations:
+        - Ludwig Maximilian University of Munich
+    - name: Abhijit Mathad
+      email: abhijit.mathad@cern.ch
+      orcid: 0000-0002-9428-4715
+      affiliations:
+        - CERN
+    - name: Biljana Mitreska
+      email: biljana.mitreska@cern.ch
+      orcid: 0000-0002-1697-4999
+      affiliations:
+        - Technische Universität Dortmund
+  abstract: |
+    Current High Energy Physics measurements rely on analysing the data by using underlying theoretical assumptions in model building that do not account for possible deviations from the nominal model on which the assumptions are based.
+    This approach can introduce potential bias in parameter extraction and complicate the reinterpretation of measurements without fully reanalyzing the data.
+    Redist is a package for building model-agnostic binned-likelihood fits, allowing combination and enhancing the reinterpretation of datasets.
+    Redist allows direct inference of theoretical parameters of any beyond the Standard Model scenario through histogram reweighting, properly taking into account changes in kinematic distributions.
+    By leveraging truth-level observables and capturing correlations, Redist can be interfaced with different theoretical backends to connect theoretical parameters with the *pyhf* environment for fitting.
+    We present a Redist-HAMMER interface that has been developed to address direct Beyond the Standard Model measurements by reinterpreting existing datasets collected by various High Energy Physics collaborations, using the increasingly popular theoretical backend HAMMER. This enables model-agnostic interpretation of data—a crucial step for advancing precision flavor physics.
+    Further applications of the Redist package in different fields, along the lines of the Redist-HAMMER interface in High Energy Physics, to extend *pyhf* models are possible and straightforward to implement.
