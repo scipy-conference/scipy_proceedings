@@ -1,0 +1,13 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Cubed: Scalable array processing with bounded-memory in Python
+  authors:
+    - name: Tom Nicholas
+      affiliation: Earthmover PBC
+      orcid: 0000-0002-2176-0530
+  authors:
+    - name: Tom White
+      affiliation: Independent
+      orcid: 
+  abstract: Cubed is a framework for distributed processing of large arrays without a cluster. Designed to respect memory constraints at all times, Cubed can express any NumPy-like array operation as a series of embarrassingly-parallel, bounded-memory steps. By using Zarr as persistent storage between steps, Cubed can run in a serverless fashion on both a local machine and on a range of Cloud platforms. After explaining Cubed’s model, we will show how Cubed has been integrated with Xarray and demonstrate its performance on various large array geoscience workloads.
