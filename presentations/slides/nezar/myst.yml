@@ -1,0 +1,29 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Accelerating Genomic Data Science and AI/ML with Composability
+  authors:
+    - name: Nezar Abdennur
+      affiliation: UMass Chan Medical School
+      orcid: 0000-0001-5814-0864
+  abstract: |
+    The practice of data science in genomics is fraught with friction. This is
+    largely due to a tight coupling of bioinformatic tools to file input/output,
+    where storage formats are frequently standardized but complex and siloed. In
+    this talk, I argue that the adoption of open standards not restricted to
+    bioinformatics can help better integrate bioinformatic workflows into the
+    wider data science, visualization, and AI/ML ecosystems by promoting
+    "composable" architectures. I present two bridge libraries as vignettes for
+    composable genomic data science. The first, Anywidget, is an architecture and
+    toolkit based on modern web standards for sharing interactive widgets across
+    all Jupyter-compatible runtimes, including JupyterLab, Google Colab, VSCode,
+    Marimo, and more. The second, Oxbow, is a Rust and Python-based adapter
+    library that unifies access to common NGS data formats by efficiently
+    transforming queries into Apache Arrow, a standard in-memory columnar
+    representation for tabular data analytics. I demonstrate the use of these
+    libraries to build custom connected genomic analysis and visualization
+    environments. I propose that bridge libraries such as these, which leverage
+    domain-agnostic standards to unbundle specialized file manipulation,
+    analytics, and web interactivity, can serve as the glue for assembling
+    reusable and flexible genomic data analysis and machine learning workflows as
+    well as systems for exploratory data analysis and visualization.
