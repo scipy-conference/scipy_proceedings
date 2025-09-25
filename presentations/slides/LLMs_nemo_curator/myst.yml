@@ -1,0 +1,9 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Unlocking AI Performance with NeMo Curator: Scalable Data Processing for LLMs
+  authors:
+    - name: Allison Ding
+      affiliation: NVIDIA
+      orcid: 0000-0000-0000-0001
+  abstract: A presentation about data processing for training or fine-tuning LLMs using NeMo Curator
