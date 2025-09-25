@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Scaling NumPy for Large-Scale Science: The cuPyNumeric Approach'
+  authors:
+    - name: Irina Demeshko
+      orcid: 0009-0001-1035-7260
+      affiliation: NVIDIA
+    - name: Scaling NumPy for Large-Scale Science: The cuPyNumeric Approach
+      orcid: 0000-0002-5897-8576
+      affiliation: NVIDIA
+  abstract: |
+     Many scientists rely on NumPy for its simplicity and strong CPU performance, but scaling beyond a single node is challenging. The researchers at SLAC need to process massive datasets under tight beam time constraints, often needing to modify code on the fly. This is where cuPyNumeric comes in—a drop-in replacement for NumPy that distributes work across CPUs and GPUs. With its familiar NumPy interface, cuPyNumeric makes it easy to scale computations without rewriting code, helping scientists focus on their research instead of debugging. It’s a great example of how the SciPy ecosystem enables cutting-edge science.
