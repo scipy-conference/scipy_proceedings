@@ -17,7 +17,7 @@ project:
     composable genomic data science. The first, Anywidget, is an architecture and
     toolkit based on modern web standards for sharing interactive widgets across
     all Jupyter-compatible runtimes, including JupyterLab, Google Colab, VSCode,
-    Marimo, and more. The second, Oxbow, is a Rust and Python-based adapter
+    Marimo, and more. The second, Oxbow, is a Rust and Python-based
     library that unifies access to common NGS data formats by efficiently
     transforming queries into Apache Arrow, a standard in-memory columnar
     representation for tabular data analytics. I demonstrate the use of these
