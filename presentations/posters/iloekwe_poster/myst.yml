@@ -1,0 +1,10 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: Weather Classification with CNNs: Successes, Surprises, and Sunrise Confusion
+  authors:
+    - name: Jennifer Iloekwe
+      orcid: 0009-0006-2105-6611      
+      affiliation: Pan-Atlantic University
+  abstract: |
+    Image-based weather classification has important applications in environmental monitoring and intelligent systems. In this study, a Convolutional Neural Network (CNN) model was developed to classify weather conditions into five classes (cloudy, foggy, rainy, shine, sunrise) using an open-source Kaggle dataset of approximately 1500 labeled images. The dataset was preprocessed, split into training and validation sets using an 85/15 ratio, and augmented to improve generalization. The CNN architecture was implemented in TensorFlow/Keras with data augmentation that included rescaling, rotation, zooming, and horizontal flipping. Model training employed early stopping to prevent overfitting. The model achieved good performance on validation data, with loss and accuracy curves indicating stable learning. However, evaluation on an independent test set highlighted difficulties in accurately classifying the ‘sunrise’ class. These results illustrate both the potential and challenges of applying CNNs to multiclass weather classification.
