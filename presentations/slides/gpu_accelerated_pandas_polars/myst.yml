@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Accelerated DataFrames for all: Bringing GPU acceleration to pandas and Polars'
+  authors:
+    - name: Vyas Ramasubramani
+      orcid: 0000-0001-5181-9532
+      affiliation: NVIDIA
+  abstract: |
+    In Python, data analytics users often prioritize convenience, flexibility, and familiarity over pure performance.
+    The cuDF DataFrame library provides a pandas-like experience with from 10x up to 50x performance improvements, but subtle differences prevent it from being a true drop-in replacement for many users.
+    This talk will showcase the evolution of this library to provide zero-code change experiences, first for pandas users and now for Polars.
+    We will provide examples of this usage and a high level overview of how users can make use of these today.
+    We will then delve into the details of how GPU acceleration is implemented differently in pandas and Polars, along with a deep dive into some of the different technical challenges encountered for each.
+    This talk will have something for both data practitioners and library developers.
