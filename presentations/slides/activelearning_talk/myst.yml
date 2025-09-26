@@ -1,0 +1,10 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: An Active Learning Plugin in napari to Fine-Tune Models for Large-scale Bioimage Analysis
+  authors:
+    - name: Fernando Cervantes
+      affiliation: The Jackson Laboratory
+      orcid: 0000-0003-0652-2750
+  abstract: 
+    The “napari-activelearning” plugin provides a framework to fine tune deep learning models for large-scale bioimage analysis, such as digital pathology Whole Slide Images (WSI). This plugin was developed with the motivation of easing the integration of deep learning tools into bioimage analysis workflows. This plugin implements the concept of Active Learning for reducing the time spent on labeling samples when fine tuning models. Because this plugin is integrated into Napari and leverages the use of next generation file formats (Zarr), it is suitable for fine tuning deep learning models on large-scale images with little image preparation.
