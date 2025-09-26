@@ -1,0 +1,9 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: The-Silmaril: Practice #ontology engineering with Python (and other languages).
+  authors:
+    - name: SHAURYA AGARWAL
+      affiliation:
+      orcid:
+  abstract: Ontologies provide a powerful way to structure knowledge, enable reasoning, and support more meaningful queries compared to traditional data models. Recently, interest in ontologies has resurged, driven by advancements in language models, reasoning capabilities, and the growing adoption of platforms like Palantir Foundry. Here we explore ontology development across multiple domains using a variety of Python-based tools such as rdflib, Owlready2, PySpark, Pandas, and SciPy. We will learn how ontologies facilitate semantic reasoning, improve data interoperability, and enhance query capabilities. Additionally, we will build a rudimentary reasoning engine to better understand inference mechanisms. The presentation emphasizes practical applications and comparisons with conventional data representations, making it ideal for researchers, data engineers, and developers interested in knowledge representation and reasoning.
