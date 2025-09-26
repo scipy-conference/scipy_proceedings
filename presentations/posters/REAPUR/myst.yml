@@ -1,0 +1,34 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Wavefront-Based Visual Acuity Estimation Using Machine Learning
+  authors:
+    - name: Allen S. Harvey Jr.
+      affiliation: Applied Research Associates, Inc.
+      orcid: 0009-0009-2764-5953
+    - name: Michael A. Patel
+      affiliation: Applied Research Associates, Inc.
+      orcid: 
+    - name: Jason J. Jerwick
+      affiliation: Applied Research Associates, Inc.
+      orcid: 
+    - name: Jennifer T. Nguyen
+      affiliation: Applied Research Associates, Inc.
+      orcid: 
+    - name: Clare M. Egan
+      affiliation: Applied Research Associates, Inc.
+      orcid: 
+    - name: Danny Hinojosa
+      affiliation: Applied Research Associates, Inc.
+      orcid: 
+   - name: Brenda J. Novar
+      affiliation: Air Force Research Laboratory
+      orcid: 
+   - name: Lindsey M. Ferris
+      affiliation: Air Force Research Laboratory
+      orcid: 
+   - name: Michael C. Cook
+      affiliation: Air Force Research Laboratory 
+      orcid: 
+   abstract: |
+ARA, Inc. and AFRL RHDO collaboratively develop RECOIL, a machine learning, Python-based application to categorize Air Force (AF) prototype eyewear consistent with military standard MIL-DTL-43511D.  RECOIL evaluates the interferogram obtained from a Ronchi test by using computer vision algorithms to identify its aperture and maximize the assignment of pixels to each fringe within it.  Metrics are derived from the set of fringes in each image.  RECOIL also can fit Zernike polynomials to the wavefront of light that passes through a lens.  RECOIL allows users to conduct virtual experiments by deriving and modifying Zernike polynomial coefficients.  Recent developments to RECOIL now allow its users to predict visual acuity by conducting a simulated eye exam or Snellen test. Artificial intelligence models, trained to perform similar to but not better than a human with normal vision, serve as human surrogates to classify letters or directions letter face from simulated distortions of letters in an eye exam chart.
