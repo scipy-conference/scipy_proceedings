@@ -1,0 +1,12 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: I Upgraded My AI...Now It's Funnier Than Me! A Beginner's Guide to Prompt Engineering for Playfulness
+  authors:
+    - name: Jarai Carter
+      affiliations:
+        - John Deere
+        - Columbia University
+      orcid: 0000-0003-3228-3036
+  abstract: |
+    Generative Al (GenAl) is revolutionizing creativity, but can it be funny? Absolutely — but only if you prompt it the right way! Using your funny bone is a creative endeavor. It is a great exercise in getting your mind to think outside the box and Al can accelerate that process. While you probably cannot put a joke on every slide in a business presentation, Al playfulness can help you make your explanations and titles more approachable and more unique.
