@@ -1,0 +1,32 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Using Discrete Global Grid Systems in the Pangeo ecosystem
+  authors:
+    - name: Justus Magin
+      affiliation: LOPS
+      orcid: 0000-0002-4254-8002
+    - name: Alexander Kmoch
+      affiliation: University of Tartu
+      orcid: 0000-0003-4386-4450
+    - name: Benoît Bovy
+      affiliation: Georode
+      orcid: 0009-0001-4011-3574
+    - name: Jean-Marc Delouis
+      affiliation: LOPS
+      orcid: 0000-0002-0713-1658
+    - name: Anne Fouilloux
+      affiliation: Simula
+      orcid: 0000-0002-1784-2920
+    - name: Tina Odaka
+      affiliation: LOPS
+      orcid: 0000-0002-1500-0156
+  abstract: >-
+    Over the past few years, Discrete Global Grid Systems (DGGS) that subdivide the earth into (roughly) equally sized
+    faces have seen a rise in popularity. However, their in-memory representation is different from traditional
+    projection-based data, which is either comprised of evenly shaped rectangular grid (aka raster) or discrete
+    geometries (aka vector), and thus requires specialized tooling. In particular, this includes libraries that can work
+    on the numeric cell ids defined by the specific DGGS.
+
+    `xdggs` is a library that provides a unified interface for `xarray` that allows working with and visualizing a
+    variety of DGGS-indexed data sets.
