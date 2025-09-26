@@ -1,0 +1,16 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: Fast and scalable general geospatial regridding
+  authors:
+    - name: Justus Magin
+      affiliation: Ifremer
+      orcid: 0000-0002-4254-8002
+  abstract: |
+    Being able to regrid between various grid types is very important in geoscience research. While the scientific
+    python ecosystem includes numerous geospatial regridding packages, most of them are tailored to only a few specific
+    grid types. Additionally, very few of them are designed to handle regridding of grids that are too big to fit into
+    memory using distributed computation frameworks like `dask`.
+
+    `grid-indexing` and `grid-weights` are a set of rust-based libraries that implement regridding between arbitrary
+    grids using a RTree and rely on `dask` to scale for larger-than-memory grids.
