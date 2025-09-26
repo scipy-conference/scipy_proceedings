@@ -1,0 +1,40 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: 'Keeping Python Fun: Using Robotics Competitions to Teach Data Analysis and Application Development'
+  authors:
+
+    - name: Olivia Yang
+      orcid: 0009-0000-6052-4349
+      affiliations:
+        - Issaquah Robotics Society
+        - Issaquah High School
+    - name: Brianna Choy
+      orcid: 0009-0000-1341-1202
+      affiliations:
+        - Issaquah Robotics Society
+        - Issaquah High School
+    - name: Archit Gouda
+      orcid: 0009-0007-0168-0430
+      affiliations:
+        - Issaquah Robotics Society
+        - Issaquah High School
+    - name: Ela Sharma
+      orcid: 0009-0000-2300-4205
+      affiliations:
+        - Issaquah Robotics Society
+        - Issaquah High School
+    - name: Stacy Irwin
+      orcid: 0009-0001-5969-9739
+      affiliation:
+        - Issaquah Robotics Society
+        - Pacific Northwest National Laboratory
+  abstract: >
+    The Issaquah Robotics Society (IRS) has been teaching Python and data
+    analysis to high school students since 2016. Our presentation will
+    summarize what we’ve learned from nine years of combining Python,
+    competitive robotics, and high school students with no prior programming
+    experience. We’ll focus on the importance of keeping it fun, learning the
+    tools, and how to provide useful feedback without making learning Python
+    feel like just another class. We’ll also explain how Python helps us win
+    robotics competitions.
