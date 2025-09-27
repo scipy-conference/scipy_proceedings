@@ -1,0 +1,12 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: A Practical Guide to Data Quality: Problems, Detection, and Strategy
+  authors:
+    - name: Edson Bomfim
+      orcid: 0009-0001-6387-2231
+      affiliations:
+        - Final04
+        - Universidade de São Paulo, USP
+  abstract: >-
+      The proliferation of data-driven systems, from machine learning models to business intelligence platforms, has placed unprecedented importance on the quality of the underlying data. The principle of "garbage in, garbage out" has never been more relevant, as poor data quality can lead to flawed models, incorrect business decisions, and a fundamental lack of trust in data systems.
