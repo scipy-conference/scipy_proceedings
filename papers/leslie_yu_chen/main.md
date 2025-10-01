@@ -294,7 +294,7 @@ A comprehensive and expressive uncertainty framework that reflects the contribut
 
 ## Imprecise reliability analysis
 
-Conventionally, in the analysis of a probabilistic safety framework, the probability of failure is given as $p_f = \mathbb{P}[g(\boldsymbol{X}) \leq 0]$ which involves an integration of the joint probability distribution over the failure domain. Given the presence of epistemic uncertainty, the failure probability presents as an interval bound as opposed of precise probability measure. Consider a generic simulation in the face of mixed uncertainties such that the system variables $\boldsymbol{X} = (X_1, \dots, X_n)^{T}$ cannot be precisely characterised but to be more appropriately modelled as an `uncertain number`, as suggested in [](#expressive-power-of-uncertain-number). The interval of failure probability can be given as [@zhang2010interval]:
+Conventionally, in the analysis of a probabilistic safety framework, the probability of failure is given as $p_f = \mathbf{P}[g(\boldsymbol{X}) \leq 0]$ which involves an integration of the joint probability distribution over the failure domain. Given the presence of epistemic uncertainty, the failure probability presents as an interval bound as opposed of precise probability measure. Consider a generic simulation in the face of mixed uncertainties such that the system variables $\boldsymbol{X} = (X_1, \dots, X_n)^{T}$ cannot be precisely characterised but to be more appropriately modelled as an `uncertain number`, as suggested in [](#expressive-power-of-uncertain-number). The interval of failure probability can be given as [@zhang2010interval]:
 
 
 ```{math}
@@ -304,14 +304,14 @@ Conventionally, in the analysis of a probabilistic safety framework, the probabi
 in which $\inf$ and $\sup$ denote the infimum and supremum function; Each uncertain number $X_{i}$ is discretised as pairs of focal elements and probability masses $\{(\eta_i, \alpha_i)_{1}^{N}\}$.
  The computation of $g({\boldsymbol{X}})$ can be straightforwardly done by the methods discussed in [](#non-deterministic-propagation) and `pyuncertainnumber` provides a simple function to easily evaluate the probability interval.
 
-@fig:imprecise_pof illustrates the conceptual comparison of expressing the probability of failure for both probabilistic and imprecise frameworks. Conventionally, the $p_f$ can be estimated using a Monte Carlo estimator that reads: $p_f = \frac{1}{N} \sum_{i}^{N} \mathbb{I}_{g(\boldsymbol{X}) \leq 0}(\boldsymbol{x}_i)$, where $\mathbb{I}$ denotes an indicator function, as shown in different colours in the histogram. 
+@fig:imprecise_pof illustrates the conceptual comparison of expressing the probability of failure for both probabilistic and imprecise frameworks. Conventionally, the $p_f$ can be estimated using a Monte Carlo estimator that reads: $p_f = \frac{1}{N} \sum_{i}^{N} \mathbf{I}_{g(\boldsymbol{X}) \leq 0}(\boldsymbol{x}_i)$, where $\mathbf{I}$ denotes an indicator function, as shown in different colours in the histogram. 
 This summation also depicts the blue cross in the empirical CDF in the top figure, where an interval of $p_{f}\in [\underline{p}_{f}, \overline{p}_{f}]$ is shown in red.
 
 
 :::{figure} demon_pof_bounds.png
 :label: fig:imprecise_pof
 :width: 500px
-Illustration of failure probability $\mathbb{P}[g(\boldsymbol{X}) \leq 0]$ for both probabilistic and imprecise frameworks where the probabilistic input is enclosed in the imprecise input
+Illustration of failure probability $\mathbf{P}[g(\boldsymbol{X}) \leq 0]$ for both probabilistic and imprecise frameworks where the probabilistic input is enclosed in the imprecise input
 :::
 
 
@@ -349,21 +349,21 @@ Illustration of the cost objective represented in uncertain numbers with respect
 
 
 In mixed uncertainty cases, the cost w.r.t a design is effectively presented by p-boxes , as seen in @fig:array_pbox. The existence of epistemic domain results in a bounded objective such as an expected performance indicator or a probability measure, for which both operations will average out the aleatory space. 
-Intuitively, in this example, one would desire to find the design accomplishing the minimum of the expected cost $[\mathbb{\underline{E}}(C), \mathbb{\overline{E}}(C)]$. 
-Alternatively, it is also possible to prescribe the performance requirement in a probability statement as below, which optimises with the probability of having a cost higher than a prescribed budget $c_{j}$, where ${p}_f({C}) = \mathbb{P}[C(x_1, x_2) > c_j]$. 
+Intuitively, in this example, one would desire to find the design accomplishing the minimum of the expected cost $[\mathbf{\underline{E}}(C), \mathbf{\overline{E}}(C)]$. 
+Alternatively, it is also possible to prescribe the performance requirement in a probability statement as below, which optimises with the probability of having a cost higher than a prescribed budget $c_{j}$, where ${p}_f({C}) = \mathbf{P}[C(x_1, x_2) > c_j]$. 
 
 
 ```{math}
 :label: objective_upper_bound
 
-x_{1}^{*} = \arg \min \overline{\mathbb{E}}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
+x_{1}^{*} = \arg \min \overline{\mathbf{E}}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
 ```
 
 This effectively introduces a constraint as to the budget. Note that upper bounds are used in the current formulation to take into effect of the epistemic uncertainty and to reflect a sense of performance guarantee. 
 Additionally, to be more pragmatic, the objective can be compounded with another constraint which could for example reflects a cost-production tradeoff that a lower cost is aimed on the condition that a certain production requirement is probabilistically satisfied. An examplar formation can be given as follows where $g_{i}$ stands for extra constraint functions:
 
 ```{math}
-\arg \min \{ \overline{\mathbb{E}}(C): \mathbb{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
+\arg \min \{ \overline{\mathbf{E}}(C): \mathbf{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
 ```
 
 
