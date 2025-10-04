@@ -4,7 +4,7 @@ project:
   title: Using Discrete Global Grid Systems in the Pangeo ecosystem
   authors:
     - name: Justus Magin
-      affiliation: LOPS
+      affiliation: LOPS - Laboratoire d'Oceanographie Physique et Spatiale UMR 6523 CNRS-IFREMER-IRD-Univ.Brest-IUEM, Plouzane, France
       orcid: 0000-0002-4254-8002
     - name: Alexander Kmoch
       affiliation: University of Tartu
@@ -13,13 +13,13 @@ project:
       affiliation: Georode
       orcid: 0009-0001-4011-3574
     - name: Jean-Marc Delouis
-      affiliation: LOPS
+      affiliation: LOPS - Laboratoire d'Oceanographie Physique et Spatiale UMR 6523 CNRS-IFREMER-IRD-Univ.Brest-IUEM, Plouzane, France
       orcid: 0000-0002-0713-1658
     - name: Anne Fouilloux
       affiliation: Simula
       orcid: 0000-0002-1784-2920
     - name: Tina Odaka
-      affiliation: LOPS
+      affiliation: LOPS - Laboratoire d'Oceanographie Physique et Spatiale UMR 6523 CNRS-IFREMER-IRD-Univ.Brest-IUEM, Plouzane, France
       orcid: 0000-0002-1500-0156
   abstract: >-
     Over the past few years, Discrete Global Grid Systems (DGGS) that subdivide the earth into (roughly) equally sized
