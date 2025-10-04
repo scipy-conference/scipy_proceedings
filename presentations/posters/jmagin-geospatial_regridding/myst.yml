@@ -4,7 +4,7 @@ project:
   title: Fast and scalable general geospatial regridding
   authors:
     - name: Justus Magin
-      affiliation: Ifremer
+      affiliation: LOPS - Laboratoire d'Oceanographie Physique et Spatiale UMR 6523 CNRS-IFREMER-IRD-Univ.Brest-IUEM, Plouzane, France
       orcid: 0000-0002-4254-8002
   abstract: |
     Being able to regrid between various grid types is very important in geoscience research. While the scientific
