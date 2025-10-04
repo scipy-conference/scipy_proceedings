@@ -8,7 +8,7 @@ abstract: |
   dataframe API.
 
   Through new integrations, Ibis supercharges existing open-source libraries like Kedro
-  and pandera. Combined, these technologies enable building and orchestrating scalable
+  and Pandera. Combined, these technologies enable building and orchestrating scalable
   data engineering pipelines without sacrificing the comfort and other advantages of
   Python.
 ---
@@ -70,7 +70,7 @@ In this paper, we present a set of new software integrations that form the basis
 composable Python analytics stack[^footnote-1]. First, we will introduce the concept of
 composable data management systems and Ibis [@ibis], the data processing workhorse of
 the Python analytics stack. Then, we will present two key components of the emerging
-stack: Kedro as the core transformation framework and pandera for data validation. In
+stack: Kedro as the core transformation framework and Pandera for data validation. In
 both cases, we will highlight how Ibis extends the capabilities of the existing,
 established tool. Finally, we will step back and look at the remaining pieces of the
 composable analytics stack. We will fill out the picture with Python-native
@@ -378,26 +378,26 @@ to some extent, and Ibis can produce data in a supported dataframe format.
 
 Data observability is a broad category that includes data quality, freshness, and other
 metrics [@ibmModernDataStack]. In our work, we focused on providing a solution for data
-validation as part of the composable Python analytics stack. pandera originated as a
+validation as part of the composable Python analytics stack. Pandera originated as a
 lightweight-yet-expressive API for validating pandas dataframes
-[@doi:10.25080/Majora-342d178e-010]. As it evolved, pandera added support for other
+[@doi:10.25080/Majora-342d178e-010]. As it evolved, Pandera added support for other
 pandas-compatible APIs, including GeoPandas, Dask, Modin, and the pandas API on Spark.
-Later, pandera loosened its tight coupling with the pandas API in order to support other
+Later, Pandera loosened its tight coupling with the pandas API in order to support other
 execution engines like Polars [@doi:10.25080/gerudo-f2bc6f59-010].
 
 We take advantage of this prior work to support validating Ibis tables using
-pandera&mdash;and, by extension, enable data validation across the full suite of
+Pandera&mdash;and, by extension, enable data validation across the full suite of
 Ibis-supported backends. For built-in checks (i.e. the wide range of common data quality
-checks that pandera supports out of the box), the fact that _Ibis_ enables validation on
+checks that Pandera supports out of the box), the fact that _Ibis_ enables validation on
 a previously-unsupported data processing framework or database can be almost transparent
 to the user. For more bespoke checks, the Ibis backend (similar to all of the
-previously-existing pandera backends) supports defining custom checks, and these do need
+previously-existing Pandera backends) supports defining custom checks, and these do need
 to be written using Ibis syntax.
 
 ```{code-block} python
 :linenos:
 :filename: pandera_example.py
-:caption: An example of validating data in DuckDB using the Ibis backend for pandera, including both built-in and custom checks.
+:caption: An example of validating data in DuckDB using the Ibis backend for Pandera, including both built-in and custom checks.
 import ibis
 import pandera.ibis as pa
 from ibis import _
@@ -436,7 +436,7 @@ In this paper, we have laid out the foundations for the composable, Python-nativ
 stack. As with any new development in the open-source data ecosystem, getting to this
 point would not have been possible without the contributions of many people and projects
 over the past decade&mdash;maintainers, committers, contributors, and users across dlt, Kedro,
-pandera, and, of course, Ibis.
+Pandera, and, of course, Ibis.
 
 At the same time, the Python data stack is not (yet) a product category that the data
 engineering community has coalesced around in the way that the modern data stack went
@@ -447,9 +447,9 @@ transformation framework that benefits from an active community and usage across
 academia, research institutions, startups, and Fortune 500 companies. The Ibis
 integration has been widely adopted by users, despite being relatively new; this usage
 has also highlighted functionalities that need adding, such as support for insert and
-upsert operations, both of which are in progress. pandera itself is a very popular
+upsert operations, both of which are in progress. Pandera itself is a very popular
 choice for data validation, but the Ibis integration is new. Other integrations, usually
-driven by the community (between Kedro and pandera, as well as between Kedro and
+driven by the community (between Kedro and Pandera, as well as between Kedro and
 workflow orchestrators like Airflow and Dagster), show promise as part of a future
 iteration of the stack.
 
