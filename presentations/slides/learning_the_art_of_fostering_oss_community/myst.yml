@@ -9,4 +9,4 @@ project:
   abstract: |
     Open-source projects are intricate ecosystems that consist of humans contributing in a diverse manner. These contributions are one of the essential elements driving the projects and must be encouraged. The humans behind these contributions play a vital role in constituting the lively and diverse community of the project. Both the humans and their contributions must be preserved and handled with utmost care for the success and evolution of the project.
 
-As with every community, certain best practices should be followed to maintain its health, and certain pitfalls should be avoided. In this talk, I’ll share what I have learned from maintaining the vibrant and wonderful Zarr project and its community over the years.
+    As with every community, certain best practices should be followed to maintain its health, and certain pitfalls should be avoided. In this talk, I’ll share what I have learned from maintaining the vibrant and wonderful Zarr project and its community over the years.
