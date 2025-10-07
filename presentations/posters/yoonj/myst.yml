@@ -1,7 +1,7 @@
 version: 1
 extends: ../../../proceedings.yml
 project:
-  title: AI for Wearable ECG Prototype: Quantified Health
+  title: 'AI for Wearable ECG Prototype: Quantified Health'
   authors:
     - name: Jennifer Yoon
       email: mail@JenniferYoon.com
