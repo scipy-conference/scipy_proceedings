@@ -6,8 +6,9 @@ project:
     - name: Jennifer Yoon
       email: mail@JenniferYoon.com
       orcid: 0009-0008-1594-270X 
-      affiliation: Areteus
-      affiliation: 10 Sigma Risk LLC
+      affiliations:
+        - Areteus
+        - 10 Sigma Risk LLC
   abstract: |
     We are exploring how to apply deep learning models and data augmentation methods to a 12-lead ECG prototype embedded in a T-shirt built by Areteus. 
  
