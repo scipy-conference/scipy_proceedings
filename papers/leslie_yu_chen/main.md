@@ -356,14 +356,14 @@ Alternatively, it is also possible to prescribe the performance requirement in a
 ```{math}
 :label: objective_upper_bound
 
-x_{1}^{*} = \arg \min \overline{\mathbf{E}}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
+x_{1}^{*} = \arg \min \overline{E}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
 ```
 
 This effectively introduces a constraint as to the budget. Note that upper bounds are used in the current formulation to take into effect of the epistemic uncertainty and to reflect a sense of performance guarantee. 
 Additionally, to be more pragmatic, the objective can be compounded with another constraint which could for example reflects a cost-production tradeoff that a lower cost is aimed on the condition that a certain production requirement is probabilistically satisfied. An examplar formation can be given as follows where $g_{i}$ stands for extra constraint functions:
 
 ```{math}
-\arg \min \{ \overline{\mathbf{E}}(C): \mathbf{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
+\arg \min \{ \overline{E}(C): \mathbf{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
 ```
 
 
