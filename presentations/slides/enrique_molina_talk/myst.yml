@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: 'Processing Cloud-optimized data in Python with Serverless Functions (Lithops, Dataplug)'
   authors:
@@ -15,12 +15,12 @@ project:
         - Universitat Rovira i Virgili, Tarragona, Spain
   abstract: |
     Cloud-optimized (CO) data formats are designed to efficiently store and access data directly from cloud storage without needing to download the entire dataset.
-These formats enable faster data retrieval, scalability, and cost-effectiveness by allowing users to fetch only the necessary subsets of data.
-They also allow for efficient parallel data processing using on-the-fly partitioning, which can considerably accelerate data management operations.
-In this sense, cloud-optimized data is a nice fit for data-parallel jobs using serverless.
-FaaS provides a data-driven scalable and cost-efficient experience, with practically no management burden.
-Each serverless function will read and process a small portion of the cloud-optimized dataset, being read in parallel directly from object storage, significantly increasing the speedup. 
-In this talk, you will learn how to process cloud-optimized data formats in Python using the Lithops toolkit.
-Lithops is a serverless data processing toolkit that is specially designed to process data from Cloud Object Storage using Serverless functions.
-We will also demonstrate the Dataplug library that enables Cloud Optimized data managament of scientific settings such as genomics, metabolomics, or geospatial data. We will show different data processing pipelines
-in the Cloud that demonstrate the benefits of cloud-optimized data management.
+    These formats enable faster data retrieval, scalability, and cost-effectiveness by allowing users to fetch only the necessary subsets of data.
+    They also allow for efficient parallel data processing using on-the-fly partitioning, which can considerably accelerate data management operations.
+    In this sense, cloud-optimized data is a nice fit for data-parallel jobs using serverless.
+    FaaS provides a data-driven scalable and cost-efficient experience, with practically no management burden.
+    Each serverless function will read and process a small portion of the cloud-optimized dataset, being read in parallel directly from object storage, significantly increasing the speedup. 
+    In this talk, you will learn how to process cloud-optimized data formats in Python using the Lithops toolkit.
+    Lithops is a serverless data processing toolkit that is specially designed to process data from Cloud Object Storage using Serverless functions.
+    We will also demonstrate the Dataplug library that enables Cloud Optimized data managament of scientific settings such as genomics, metabolomics, or geospatial data. We will show different data processing pipelines
+    in the Cloud that demonstrate the benefits of cloud-optimized data management.
