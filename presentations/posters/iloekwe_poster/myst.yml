@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: Weather Classification with CNNs: Successes, Surprises, and Sunrise Confusion
   authors:
