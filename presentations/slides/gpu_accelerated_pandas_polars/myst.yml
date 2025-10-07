@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: 'Accelerated DataFrames for all: Bringing GPU acceleration to pandas and Polars'
   authors:
