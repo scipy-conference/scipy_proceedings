@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: "SymPy Tensor Module: A Bug Fix for High-Rank Metric Contractions"
   authors:
