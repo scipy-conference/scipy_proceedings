@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: 'Noise Resilient Quantum Computing with Python'
   authors:
