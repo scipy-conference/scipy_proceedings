@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: 'Explore Solvable and Unsolvable Equations with SymPy'
   authors:
