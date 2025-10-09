@@ -35,6 +35,7 @@ An example Pixi workspace is presented in @pixi-ml-example-workspace
 
 ```{literalinclude} code/ml-example/pixi.toml
 :linenos:
+:end-line: 49
 :label: pixi-ml-example-workspace
 :caption: Example of a multi-platform and multi-environment Pixi manifest with all required information and constraints to resolve and install CUDA accelerated conda packages.
 ```
