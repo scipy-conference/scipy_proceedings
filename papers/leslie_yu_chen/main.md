@@ -311,7 +311,7 @@ This summation also depicts the blue cross in the empirical CDF in the top figur
 :::{figure} demon_pof_bounds.png
 :label: fig:imprecise_pof
 :width: 500px
-Illustration of failure probability $\mathbf{P}[g(\boldsymbol{X}) \leq 0]$ for both probabilistic and imprecise frameworks where the probabilistic input is enclosed in the imprecise input
+Illustration of failure probability $\mathbb{P}[g(\boldsymbol{X}) \leq 0]$ for both probabilistic and imprecise frameworks where the probabilistic input is enclosed in the imprecise input
 :::
 
 
@@ -349,21 +349,21 @@ Illustration of the cost objective represented in uncertain numbers with respect
 
 
 In mixed uncertainty cases, the cost w.r.t a design is effectively presented by p-boxes , as seen in @fig:array_pbox. The existence of epistemic domain results in a bounded objective such as an expected performance indicator or a probability measure, for which both operations will average out the aleatory space. 
-Intuitively, in this example, one would desire to find the design accomplishing the minimum of the expected cost $[\mathbf{\underline{E}}(C), \mathbf{\overline{E}}(C)]$. 
-Alternatively, it is also possible to prescribe the performance requirement in a probability statement as below, which optimises with the probability of having a cost higher than a prescribed budget $c_{j}$, where ${p}_f({C}) = \mathbf{P}[C(x_1, x_2) > c_j]$. 
+Intuitively, in this example, one would desire to find the design accomplishing the minimum of the expected cost $[\mathbb{\underline{E}}(C), \mathbb{\overline{E}}(C)]$. 
+Alternatively, it is also possible to prescribe the performance requirement in a probability statement as below, which optimises with the probability of having a cost higher than a prescribed budget $c_{j}$, where ${p}_f({C}) = \mathbb{P}[C(x_1, x_2) > c_j]$. 
 
 
 ```{math}
 :label: objective_upper_bound
 
-x_{1}^{*} = \arg \min \overline{E}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
+x_{1}^{*} = \arg \min \mathbb{\overline{E}}(C) \ \text{or} \ x_{1}^{*} = \arg \min \overline{p}_f({C})
 ```
 
 This effectively introduces a constraint as to the budget. Note that upper bounds are used in the current formulation to take into effect of the epistemic uncertainty and to reflect a sense of performance guarantee. 
 Additionally, to be more pragmatic, the objective can be compounded with another constraint which could for example reflects a cost-production tradeoff that a lower cost is aimed on the condition that a certain production requirement is probabilistically satisfied. An examplar formation can be given as follows where $g_{i}$ stands for extra constraint functions:
 
 ```{math}
-\arg \min \{ \overline{E}(C): \mathbf{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
+\arg \min \{ \mathbb{\overline{E}}(C): \mathbb{P}[g_{i}(x1, x2) \leq 0] \geq 1 - \epsilon_{i} \}
 ```
 
 
