@@ -1,0 +1,23 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'Missing data? MArray adds mask support to any array/tensor backend'
+  authors:
+    - name: Matt Haberland
+      orcid: 0000-0003-4806-3601
+      affiliations:
+	    - Cal Poly, San Luis Obispo
+		- SciPy Library
+    - name: Lucas Colley
+      orcid: 0000-0002-6199-2053
+      affiliations:
+        - SciPy Library
+		- University of Oxford
+        - prefix.dev
+    - name: Justus Magin
+      orcid: 0000-0002-4254-8002
+      affiliations:
+        - Laboratoire d'Océanographie Physique et Spatiale
+		- XArray Project
+  abstract: |
+    The abstract or description of your talk/poster.
