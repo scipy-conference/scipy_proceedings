@@ -17,7 +17,7 @@ project:
     - name: Justus Magin
       orcid: 0000-0002-4254-8002
       affiliations:
-        - Laboratoire d'Océanographie Physique et Spatiale
+        - LOPS - Laboratoire d'Océanographie Physique et Spatiale UMR 6523 CNRS-IFREMER-IRD-Univ.Brest-IUEM, Plouzané, France
 		- XArray Project
   abstract: |
 	Masked arrays enable the performance and convenience of (rectangular) array computing where missing data would otherwise result in ragged arrays. Some array libraries, such as NumPy, PyTorch, and Dask, offer partial support for masked versions of their arrays/tensors, but these often lack important features, have APIs that are inconsistent with those of the parent namespace, and see only limited support in downstream libraries (e.g. SciPy). Furthermore, there is no standard interface specification, some of these implementations are treated as "experimental" or are maintained less than the parent library, and some automatically mask the result of invalid numerical calculations, hiding bugs and leading to spurious results. MArray offers a new way forward by adding mask support to any array backend that is compatible with the Array API Standard.
