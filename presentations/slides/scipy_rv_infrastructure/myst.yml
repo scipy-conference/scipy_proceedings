@@ -6,17 +6,17 @@ project:
     - name: Albert Steppi
       orcid: 0000-0001-5871-6245
       affiliations:
-		- Quansight PBC
+        - Quansight PBC
         - SciPy Library
     - name: Matt Haberland
       orcid: 0000-0003-4806-3601
       affiliations:
-	    - Cal Poly, San Luis Obispo
-		- SciPy Library
+        - Cal Poly, San Luis Obispo
+        - SciPy Library
     - name: Pamphile Roy
       orcid: 0000-0001-9816-1416
       affiliations:
-	    - ?
-		- SciPy Library
+      - ?
+      - SciPy Library
   abstract: |
-	The SciPy library provides objects representing well over 100 univariate probability distributions. These have served the scientific Python ecosystem for decades, but they are built upon an infrastructure that has not kept up with the demands of today’s users. To address its shortcomings, SciPy 1.15 includes a new infrastructure for working with probability distributions. This talk will introduce users to the new infrastructure and demonstrate its many advantages in terms of usability, flexibility, accuracy, and performance.
+      The SciPy library provides objects representing well over 100 univariate probability distributions. These have served the scientific Python ecosystem for decades, but they are built upon an infrastructure that has not kept up with the demands of today’s users. To address its shortcomings, SciPy 1.15 includes a new infrastructure for working with probability distributions. This talk will introduce users to the new infrastructure and demonstrate its many advantages in terms of usability, flexibility, accuracy, and performance.
