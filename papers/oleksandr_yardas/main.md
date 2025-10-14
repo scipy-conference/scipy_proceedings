@@ -278,7 +278,7 @@ third case was only run for one-group transport-independent depletion.
 compositions of our model, and [](#tab:geo-params) contains the geometric
 parameters.  We used the ENDF/B-VII.1 nuclear data library available at
 [openmc.org/data](https://openmc.org/data/#endf-b-vii-1). We used the ENDF/B-VII.1 depletion
-chain in the PWR spectrum available at openmc.org/depletion-chains.
+chain in the PWR spectrum also available at [openmc.org/data](https://openmc.org/data/#endf-b-vii-1-chain-thermal-spectrum).
 
 ```{raw} latex
 \begin{longtable*}{|c|c|c|c|}
