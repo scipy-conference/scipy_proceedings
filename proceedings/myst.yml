@@ -6,7 +6,7 @@ site:
   nav: []
   template: article-theme
 project:
-  title: Proceedings of the 24rd Python in Science Conference
+  title: Proceedings of the 24th Python in Science Conference
   subtitle: SciPy 2025, Tacoma, Washington July 7 - July 13
   description: |
     The 24th annual SciPy conference was held in Tacoma, Washington at the Tacoma Convention Center, July 7-13, 2025.
