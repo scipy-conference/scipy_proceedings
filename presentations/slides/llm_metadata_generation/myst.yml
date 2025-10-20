@@ -1,0 +1,18 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'Accelerating scientific data releases: Automated metadata generation with LLM agents'
+  authors:
+    - name: Tudor Garbulet
+      orcid: 0000-0002-1804-4920
+      affiliation: Oak Ridge National Laboratory
+    - name: Chirag Shah
+      orcid: 0000-0002-0314-5737
+      affiliation: Oak Ridge National Laboratory
+  abstract: |
+    The rapid growth of scientific data repositories demands innovative solutions for efficient metadata creation. In this talk, we present our open-source project that leverages large language models to automate the generation of standard-compliant metadata files from raw scientific datasets. Our approach harnesses the capabilities of pre-trained open source models, finetuned with domain-specific data, and integrated with Langgraph to orchestrate a modular, end-to-end pipeline capable of ingesting heterogeneous raw data files and outputting metadata conforming to specific standards.
+
+    The methodology involves a multi-stage process where raw data is first parsed and analyzed by the LLM to extract relevant scientific and contextual information. This information is then structured into metadata templates that adhere strictly to recognized standards, thereby reducing human error and accelerating the data release cycle. We demonstrate the effectiveness of our approach using the USGS ScienceBase repository, where we have successfully generated metadata for a variety of scientific datasets, including images, time series, and text data.
+
+    Beyond its immediate application to the USGS ScienceBase repository, our open-source framework is designed to be extensible, allowing adaptation to other data release processes across various scientific domains. We will discuss the technical challenges encountered, such as managing diverse data formats and ensuring metadata quality, and outline strategies for community-driven enhancements. This work not only streamlines the metadata creation workflow but also sets the stage for broader adoption of generative AI in scientific data management.
+
