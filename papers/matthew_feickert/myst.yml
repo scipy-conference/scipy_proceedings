@@ -64,7 +64,6 @@ project:
         - ucx-split-feedstock-pr-14
         - pixi-docs
         - pixi-pack
-        - Feickert_Reproducible_Machine_Learning
   exports:
     - id: pdf
       format: typst
