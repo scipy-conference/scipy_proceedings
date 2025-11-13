@@ -507,7 +507,7 @@ The refactoring of the QIIME 2 Framework documentation ecosystem was supported i
 Project Pythia's transition to Jupyter Book 2 was supported by the National Science Foundation (awards 2324302, 2324303 and 2324304).
 [Notebooks Now!](https://data.agu.org/notebooks-now) was supported by a grant from the Alfred P. Sloan Foundation ([#19361](https://sloan.org/grant-detail/g-2022-19361)).
 
-We especially acknowledge Chris Sewell, whose foundational work on the MyST Markdown specification, the Sphinx parser (`myst-parser`), and the wider Jupyter Book 1 ecosystem in Sphinx.
+We especially acknowledge Chris Sewell, for his foundational work on the MyST Markdown specification, the Sphinx parser (`myst-parser`), and the wider Jupyter Book 1 ecosystem in Sphinx.
 Chris’s attention to these technical underpinnings laid the groundwork for many of the capabilities now realized in Jupyter Book 2.
 In addition, we acknowledge John Stachurski for providing key leadership and securing the original funding that created the Jupyter Book 1 ecosystem built on Sphinx.
 
