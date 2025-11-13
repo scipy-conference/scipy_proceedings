@@ -1,7 +1,7 @@
 ## Deploying environments to remote compute
 
-Often researchers are running scientific and machine learning workflows on remote computational resources that use batch computing systems (e.g. HTCondor, SLURM).
-For systems with shared filesystems (e.g. SLURM) it is possible to use Pixi workspaces in workflows in a similar manner to local machine (e.g. laptop or workstation).
+Often researchers are running scientific and machine learning workflows on remote computational resources that use batch computing systems (e.g. HTCondor, Slurm).
+For systems with shared filesystems (e.g. Slurm) it is possible to use Pixi workspaces in workflows in a similar manner to local machine (e.g. laptop or workstation).
 Other systems (e.g. HTCondor) do not have a shared filesystem (e.g. HTCondor), requiring that each worker node receive its own copy of the software environment.
 While locked Pixi environments significantly help with this, it is often advantageous to distribute the environment in the form of a Linux container image to the compute resources.
 These systems are able to mount Linux container images to worker nodes in ways that reduce the disk and memory cost to the user's session, compared to installing Pixi and then downloading all dependencies of the software environment from the package indexes used.
