@@ -1,7 +1,7 @@
 version: 1
 extends: ../../../proceedings.yml
 project:
-  title: Tying Up Loose Threads: Making your Project No-GIL Ready
+  title: 'Tying Up Loose Threads: Making your Project No-GIL Ready'
   authors:
     - name: Charlie Lin
       affiliation: ''
