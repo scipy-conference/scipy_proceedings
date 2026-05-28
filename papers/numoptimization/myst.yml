@@ -3,7 +3,11 @@ extends: ../papers.yml
 project:
   id: scipy-2026-numoptimization
   title: Numerical Stability Pitfalls in Scientific Optimization Pipelines
-  description: Add a two sentence description about your article.
+  description: This paper analyzes numerical stability failures in scientific optimization
+    workflows built on SciPy routines, focusing on conditioning, scaling, and
+    derivative reliability. It presents empirical evidence from the UCI HIGGS
+    study and summarizes a workflow-level auditing protocol with practical
+    diagnostics and mitigation strategies.
   authors:
     - name: Aayush Gauba
       affiliations:

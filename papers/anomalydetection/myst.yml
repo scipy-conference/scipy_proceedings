@@ -12,7 +12,12 @@ project:
   # Authors should have affiliations, emails, and ORCIDs if available
   authors:
     - name: Aayush Gauba
+      affiliations:
+        - id: SIUE
       corresponding: true
+  affiliations:
+    - id: SIUE
+      name: Student and Researcher
   keywords:
     - anomaly detection
     - scipy
