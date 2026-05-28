@@ -4,8 +4,11 @@ project:
   # Update this to match `scipy-2026-<folder>`
   id: scipy-2026-anomalydetection
   # Ensure your title is the same as in `main.md`
-  title: Detecting Anomalies in Scientific Data Using SciPy's Statistical and Signal Tools
-  description: Scientific datasets often contain subtle anomalies caused by sensor faults,
+  title:
+    Detecting Anomalies in Scientific Data Using SciPy's Statistical and Signal
+    Tools
+  description:
+    Scientific datasets often contain subtle anomalies caused by sensor faults,
     experimental drift, measurement noise, rare events, or abnormal signal
     behavior. This paper presents a SciPy-based anomaly detection workflow using
     statistical and signal-processing tools.
