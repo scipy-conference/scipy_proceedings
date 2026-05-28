@@ -109,7 +109,7 @@ To quantify this effect, Vandermonde matrices were constructed across 100 random
 
 The results demonstrate rapid instability amplification under increasing polynomial complexity. By degree 20, condition numbers frequently exceeded $10^{15}$, entering regimes associated with catastrophic numerical sensitivity and effectively singular optimization geometry.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \small
 \begin{tabular}{cccc}
@@ -519,7 +519,7 @@ $2.0\times10^{7}$ \\
 
 To evaluate instability emergence rather than only catastrophic failure, additional scale-imbalance ablations were performed across progressively more severe perturbation regimes. The severity ablation varied feature-scale imbalance while holding additive perturbation noise and near-collinear feature construction fixed at the same levels used in the full instability stress test. The results demonstrated a gradual transition from stable convergence to widespread practical failure as Hessian conditioning increased, indicating that the auditing framework can detect incipient instability before complete optimizer breakdown occurs.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \small
 \begin{tabular}{cccccc}
