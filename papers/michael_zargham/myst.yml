@@ -1,0 +1,78 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-michael_zargham
+  title: 'Derivations, Not Just Simulations'
+  subtitle: Teaching Applied Mathematics with Scientific Python
+  description: |
+    A SymPy-driven, marimo-hosted port of Rufus Isaacs' Homicidal Chauffeur
+    differential game, presented as a worked exemplar for teaching applied
+    mathematics with the Scientific Python stack. The contribution is
+    pedagogical: symbolic derivation is the load-bearing artifact, with
+    numerical simulation cast in a supporting role.
+  authors:
+    - name: Michael Zargham
+      email: michael.zargham@gmail.com
+      orcid: 0000-0001-5279-690X
+      affiliations:
+        - Dynamical Systems Group
+      roles:
+        - Conceptualization
+        - Software
+        - Visualization
+        - Writing – original draft
+      corresponding: true
+  keywords:
+    - mathematics education
+    - symbolic computation
+    - differential games
+    - SymPy
+    - marimo
+    - homicidal chauffeur
+    - glass-box pedagogy
+    - optimal control
+  # Acronyms used in prose. Per R-CIT-07 / README L211, every abbreviation in
+  # the paper's prose must appear here. Proper nouns (RAND, MATLAB, JAX,
+  # IIASA, MIT) are intentionally NOT declared — see scripts/check_abbreviations.py SKIP list.
+  abbreviations:
+    HC: Homicidal Chauffeur
+    HJI: Hamilton-Jacobi-Isaacs
+    ODE: ordinary differential equation
+    PDE: partial differential equation
+    DOF: degrees of freedom
+    UAV: unmanned aerial vehicle
+    CAS: computer algebra system
+    OWL: Web Ontology Language
+    RHS: right-hand side
+    PMP: Pontryagin maximum principle
+    HIL: hardware-in-the-loop
+    AV: autonomous vehicle
+    IC: initial condition
+    CI: continuous integration
+    AI: artificial intelligence
+  # DOI exists-check ignore list: pre-DOI works that have no canonical DOI to attach.
+  # See references_lit_review.md verification log for which entries are pre-DOI.
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - isaacs1951
+        - isaacs1965
+        - merz1971
+        - bernhard1977
+        - buchberger1990
+        - heid1988
+        - tall1991amtcomputer
+        - zargham2026adcs
+        - mehta2025gdsaxelrod
+        - zargham2026hcmarimo
+        - zargham2026incose
+        - w3c2012owl2
+        - tall2008transition
+        - tall2013
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: paper.ipynb
+      output: full_text.pdf
