@@ -2,8 +2,13 @@ version: 1
 extends: ../papers.yml
 project:
   id: scipy-2026-bhupendra_raut
-  title: "Adapt: Prototyping a Real-Time, Reproducible Data Analysis Framework for Adaptive Radar Scanning"
-  description: Adapt is a modular, DAG-based framework for real-time convective cell detection, motion projection, and storm lifecycle analysis supporting adaptive radar-scanning at the ARM User Facility.
+  title:
+    'Adapt: Prototyping a Real-Time, Reproducible Data Analysis Framework for
+    Adaptive Radar Scanning'
+  description:
+    Adapt is a modular, DAG-based framework for real-time convective cell
+    detection, motion projection, and storm lifecycle analysis supporting
+    adaptive radar-scanning at the ARM User Facility.
   authors:
     - name: Bhupendra A. Raut
       email: braut@anl.gov

@@ -239,4 +239,3 @@ Code and documentation are available at <https://github.com/ARM-DOE/adapt>.
 This research was supported by the Atmospheric Radiation Measurement (ARM) User Facility, a U.S. Department of Energy Office of Science user facility managed by the Biological and Environmental Research Program. Argonne National Laboratory's work was supported by the U.S. Department of Energy, Office of Science, Office of Biological and Environmental Research, under Contract DE-AC02-06CH11357.
 
 The work benefited from interactions with Sean Shahkarami, Sean Freeman, Brenda Dolan, Michael Giansiracusa, and Scott Giangrande. The authors also thank Jim Mather, Jennifer Comstock, Giri Prakash, and the ARM radar community for their support and feedback. Valuable discussions with the tobac development team and the Open Radar community also contributed to the direction of this work.
-
