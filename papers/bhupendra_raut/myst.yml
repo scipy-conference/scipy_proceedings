@@ -1,0 +1,82 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-bhupendra_raut
+  title: "Adapt: Prototyping a Real-Time, Reproducible Data Analysis Framework for Adaptive Radar Scanning"
+  description: Adapt is a modular, DAG-based framework for real-time convective cell detection, motion projection, and storm lifecycle analysis supporting adaptive radar-scanning at the ARM User Facility.
+  authors:
+    - name: Bhupendra A. Raut
+      email: braut@anl.gov
+      orcid: 0000-0001-5598-1393
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+      corresponding: true
+    - name: Siddhant Gupta
+      orcid: 0000-0002-0663-4595
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Zach Sherman
+      orcid: 0000-0002-6455-8324
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Bobby Jackson
+      orcid: 0000-0003-2518-1234
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Joe O'Brien
+      orcid: 0000-0003-4655-6912
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Eddie Schuman
+      orcid: 0009-0006-8104-8680
+      affiliations:
+        - Pacific Northwest National Laboratory, Richland, WA
+    - name: Pawel Lech
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Sherman Beus
+      affiliations:
+        - Pacific Northwest National Laboratory, Richland, WA
+    - name: Seth Abernethy
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Scott Collis
+      orcid: 0000-0002-2303-687X
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Nicki Hickmon
+      orcid: 0000-0002-2710-5588
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+    - name: Adam Theisen
+      orcid: 0000-0002-7602-1057
+      affiliations:
+        - Argonne National Laboratory, Lemont, IL
+  keywords:
+    - convective storms
+    - weather satellites
+    - remote sensing
+    - cell detection and tracking
+    - nowcasting
+    - data pipelines
+    - scientific workflows
+  abbreviations:
+    DAG: Directed Acyclic Graph
+    ARM: Atmospheric Radiation Measurement
+    NEXRAD: Next-Generation Weather Radar
+    CLI: Command-Line Interface
+    API: Application Programming Interface
+    DOE: Department of Energy
+    CI: Continuous Integration
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - gupta2025cloud
+        - narayanan2024getting
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
