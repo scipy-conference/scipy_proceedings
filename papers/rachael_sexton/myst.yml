@@ -1,0 +1,44 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-rachael_sexton
+  # Ensure your title is the same as in your `main.md`
+  title: "Trimming the Hairball"
+  subtitle: A Unfied Ecosystem for Better Network Recovery & Metrology
+  description: |
+    Recovering network structure from binary co-occurrence data is a problem encountered across NLP, epidemiology, manufacturing, and recommender systems; yet there is a lack of shared tools, metrics, or common benchmarks to compare and improve techniques.
+    This paper presents three interoperable Python libraries to address this need.
+
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Rachael Sexton
+      affiliations:
+        - National Institute for Standards & Technology
+      email: rachael.sexton@nist.gov
+      orcid: 0000-0001-5904-2887
+      corresponding: true
+  bibliography: references.bib
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
