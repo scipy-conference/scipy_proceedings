@@ -2239,10 +2239,13 @@ def dispersal_crossing(
     # Pursuer at origin
     ax.plot(0, 0, "k+", markersize=14, markeredgewidth=2, zorder=8)
 
-    # Start (●, τ=0 on capture circle) and end (■, τ=T_max) markers.
-    ax.plot(x1[0], x2[0], "o", color="black", markersize=7, zorder=8,
+    # Start (●) and end (■) are forward-time facts: ● = chase start
+    # (t=0), ■ = capture (t=T_max, on the capture circle). The array is
+    # τ-ordered (idx 0 = τ=0 = capture, idx -1 = τ=T_max = chase start),
+    # so the forward start is x1[-1] and the forward end is x1[0].
+    ax.plot(x1[-1], x2[-1], "o", color="black", markersize=7, zorder=8,
             markeredgecolor="white", markeredgewidth=0.8)
-    ax.plot(x1[-1], x2[-1], "s", color="black", markersize=7, zorder=8,
+    ax.plot(x1[0], x2[0], "s", color="black", markersize=7, zorder=8,
             markeredgecolor="white", markeredgewidth=0.8)
 
     # The switching star
@@ -2339,11 +2342,13 @@ def dispersal_crossing(
         ":", color=DISPERSAL, lw=1.4, alpha=0.7, zorder=3,
     )
 
-    # Start (●, τ=0) and end (■, τ=T_max) markers — labelled in
-    # figure legend.
-    ax.plot(p1[0], p2[0], "o", color="black", markersize=7, zorder=8,
+    # Start (●) = forward-time chase start (t=0); end (■) = capture
+    # (t=T_max) — labelled in the figure legend. τ-ordered array
+    # (idx 0 = capture, idx -1 = chase start), so forward start = p[-1],
+    # forward end = p[0].
+    ax.plot(p1[-1], p2[-1], "o", color="black", markersize=7, zorder=8,
             markeredgecolor="white", markeredgewidth=0.8)
-    ax.plot(p1[-1], p2[-1], "s", color="black", markersize=7, zorder=8,
+    ax.plot(p1[0], p2[0], "s", color="black", markersize=7, zorder=8,
             markeredgecolor="white", markeredgewidth=0.8)
     ax.plot(p1[cross_idx], p2[cross_idx], "*",
             color=KINK, markersize=20, zorder=10,
@@ -2458,10 +2463,12 @@ def dispersal_crossing(
             ))
 
     # Marker-shape legend entries — replace per-panel text labels
-    # like "pursuer start (t=0)". Reader infers panel-specific
-    # meaning from the axis labels: lab panels start = beginning
-    # of forward-time chase / end = capture; τ-panels start = τ=0
-    # (capture moment) / end = τ=T_max (chase start).
+    # like "pursuer start (t=0)". Start/end are forward-time facts in
+    # EVERY panel: ● = chase start (t=0), ■ = capture (t=T_max). The
+    # τ-ordered panels (body-frame state, costate) are integrated
+    # backwards, so their forward start is the last sample (τ=T_max) and
+    # their forward end is the first (τ=0) — handled where those markers
+    # are drawn.
     marker_handles = [
         plt.Line2D(
             [], [], color="black", marker="o", linestyle="none",

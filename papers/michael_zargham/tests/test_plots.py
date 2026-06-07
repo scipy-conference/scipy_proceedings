@@ -93,6 +93,63 @@ def test_dispersal_crossing_six_panels():
     )
 
 
+def _single_point_markers(ax, shape):
+    """All single-vertex Line2D markers of the given shape drawn on ``ax``."""
+    out = []
+    for ln in ax.lines:
+        if ln.get_marker() == shape and len(ln.get_xdata()) == 1:
+            out.append((float(ln.get_xdata()[0]), float(ln.get_ydata()[0])))
+    return out
+
+
+def _panel(fig, needle):
+    for ax in fig.axes:
+        if needle in ax.get_title():
+            return ax
+    raise AssertionError(f"no panel titled like {needle!r}")
+
+
+def test_dispersal_crossing_start_end_are_forward_time():
+    """Start/end markers are forward-time facts, even in backward-computed panels.
+
+    The body-frame-state (1,3) and costate (2,3) panels integrate the
+    characteristic backwards, so their arrays are τ-ordered: index 0 = τ=0 =
+    capture, index -1 = τ=T_max = chase start. The shared figure legend marks
+    ``●`` "start of curve" and ``■`` "end of curve" with the forward-time
+    meaning the lab panels set (start = chase start, end = capture). So in these
+    τ panels ``●`` must sit at array index -1 (chase start) and ``■`` at index 0
+    (capture) — NOT the raw array endpoints.
+    """
+    import numpy as np  # noqa: PLC0415
+    from plots import (  # noqa: PLC0415
+        dispersal_crossing,
+        _recover_chase_from_demo,
+    )
+
+    data = _recover_chase_from_demo()
+    x1, x2, p1, p2 = data.sol.y  # τ-ordered: [0]=capture, [-1]=chase start
+    fig = dispersal_crossing()
+
+    for needle, coords in (
+        ("Body-frame state", (x1, x2)),
+        ("Costate", (p1, p2)),
+    ):
+        ax = _panel(fig, needle)
+        start = _single_point_markers(ax, "o")
+        end = _single_point_markers(ax, "s")
+        assert len(start) == 1, f"{needle}: expected one ● marker, got {len(start)}"
+        assert len(end) == 1, f"{needle}: expected one ■ marker, got {len(end)}"
+        a, b = coords
+        np.testing.assert_allclose(
+            start[0], (a[-1], b[-1]), atol=1e-9,
+            err_msg=f"{needle}: ● start must be the forward-time chase start (τ=T_max)",
+        )
+        np.testing.assert_allclose(
+            end[0], (a[0], b[0]), atol=1e-9,
+            err_msg=f"{needle}: ■ end must be capture (τ=0)",
+        )
+
+
 # ---------- §8: optimal_vector_field (quiver with switching surface) ----------
 
 def test_optimal_vector_field_returns_figure():
