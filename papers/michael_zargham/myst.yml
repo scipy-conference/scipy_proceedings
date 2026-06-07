@@ -1,6 +1,15 @@
 version: 1
 extends: ../papers.yml
 project:
+  # README.md is repo/reviewer documentation (not a scientific supplement); exclude it
+  # so it is not built/checked as a manuscript page.
+  exclude:
+    - README.md
+  # paper.ipynb is the primary manuscript. supporting_material.ipynb is published
+  # alongside as supplementary material (per the proceedings guide it does not add to
+  # the word count). Naming paper.ipynb as the index keeps the word-count / abstract
+  # checks pointed at the paper rather than any other page.
+  index: paper.ipynb
   id: scipy-2026-michael_zargham
   title: 'Derivations, Not Just Simulations'
   subtitle: Teaching Applied Mathematics with Scientific Python

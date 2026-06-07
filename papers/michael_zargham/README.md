@@ -13,6 +13,7 @@ Source folder for the SciPy 2026 Proceedings submission *"Derivations, Not Just 
 ## What's in this folder
 
 - **`paper.ipynb`** — the article (Jupyter notebook; primary published artifact)
+- **`supporting_material.ipynb`** — supporting material, not part of the counted article: the full notation reference (Appendix A) and the verification audit (Appendix B — test catalog, live in-notebook pytest run, symbolic-vs-numerical conservation cross-check)
 - **`derivations.py`** — SymPy: body-frame reduction, Hamiltonian, optimal controls, costate ODE
 - **`numerics.py`** — SciPy: `lambdify` wrappers, backward characteristic integration, value-function grid with on-disk cache
 - **`plots.py`** — matplotlib: motivation chase, lab-frame geometry, coordinate-progression, 6-panel `dispersal_crossing`, V*(x) heat map, and supporting figures kept in module + tested
@@ -36,7 +37,7 @@ uv run jupyter lab paper.ipynb   # opens the live notebook
 
 `uv.lock` makes the dependency resolution byte-level reproducible.
 
-**Appendix B in the article runs the full test suite live in-notebook** and reports the symbolic-vs-numerical cross-checks for the conservation invariants the body relies on (`d/dt‖p‖² = 0` proven by `sp.simplify` in §8 is verified numerically along every integrated characteristic; visual inspection of the §8 heat map is the third Tall-world audit). The reviewer who runs `uv run pytest tests/` and then opens the notebook to Appendix B gets the same checks executed in two forms.
+**The verification audit (Appendix B) in `supporting_material.ipynb` runs the full test suite live in-notebook** and reports the symbolic-vs-numerical cross-checks for the conservation invariants the body relies on (`d/dt‖p‖² = 0` proven by `sp.simplify` in §8 is verified numerically along every integrated characteristic; visual inspection of the §8 heat map is the third Tall-world audit). The reviewer who runs `uv run pytest tests/` and then opens `supporting_material.ipynb` gets the same checks executed in two forms.
 
 ## Notes for reviewers
 
