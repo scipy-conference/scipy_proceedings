@@ -20,22 +20,28 @@ project:
       corresponding: true
   bibliography: references.bib
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - network analysis
+    - sparse matrix
+    - covariance shrinkage
+    - binary data
+    - structure learning
+    - edge prediction
+    - filtering
+    - feature learning
+    - graph theory
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
-  error_rules:
-    - rule: doi-exists
-      severity: ignore
-      keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+  # error_rules:
+  #   - rule: doi-exists
+  #     severity: ignore
+  #     keys:
+  #       - Atr03
+  #       - terradesert
+  #       - jupyter
+  #       - sklearn1
+  #       - sklearn2
   exports:
     - id: pdf
       format: typst
