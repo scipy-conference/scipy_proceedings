@@ -17,16 +17,31 @@ project:
       affiliations:
         - Banco do Brasil S.A., Brasília, Brazil
       corresponding: true
+      roles:
+        - Conceptualization
+        - Software
+        - Methodology
+        - Validation
+        - Visualization
+        - Writing – original draft
     - name: Paulo Henrique Dourado
       email: paulodourado.unb@gmail.com
       affiliations:
         - Banco do Brasil S.A., Brasília, Brazil
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
     - name: Osvaldo Candido
       email: candido.f@gmail.com
       orcid: 0000-0002-4850-6989
       affiliations:
         - Graduate School in Economics, Universidade Católica de Brasília,
           Brasília, Brazil
+      roles:
+        - Supervision
+        - Conceptualization
+        - Writing – review & editing
   keywords:
     - panel data
     - econometrics
@@ -54,6 +69,8 @@ project:
         - panelbox2025
         - scipy
         - plotly
+        - wooldridge2010
+        - bond2001
   exports:
     - id: pdf
       format: typst
