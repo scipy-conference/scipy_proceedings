@@ -18,7 +18,7 @@ abstract: |
   and 103 bundled datasets, all on top of the scientific Python stack
   (NumPy, pandas, SciPy, statsmodels). We validate PanelBox against Stata's
   `xtabond2` and R's `plm`, obtaining coefficient differences below 0.01%, and
-  illustrate it with a canonical dynamic labor-demand application. With 3{,}900+
+  illustrate it with a canonical dynamic labor-demand application. With 3,900+
   tests and an MIT license, PanelBox lets researchers run sophisticated panel
   analysis entirely in Python.
 ---
