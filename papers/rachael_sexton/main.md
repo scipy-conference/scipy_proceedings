@@ -471,7 +471,7 @@ Example API use for `Contingent` objects.
 
 :::{figure}
 :label: fig:contingent-scale
-
+:class: grid grid-rows-2
 
 ![](#fig:contingent-APS)
 ![](#fig:contingent-MCC)
