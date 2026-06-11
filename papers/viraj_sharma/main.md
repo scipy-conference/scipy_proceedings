@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Feel the model: Sensory Transduction of Neural Activations as a Human-in-the-Loop Safety"
 abstract: |
-  Current mechanistic interpretability methods - sparse autoencoders, activation classifiers, and natural language autoencoder, share a basic assumption: that the safety-relevant content of a model's internal representations can be faithfully represented through human-legible text. I find this to be a limiting, as it is not merely lossy, but directionally biased as we are discarding signal that does not conform to language categories. Using GPT-2 Small with published pretrained sparse autoencoders, I will demonstrate that linear classifiers trained on raw residual stream activations significantly outperform equivalent classifiers trained on SAE feature representations across behaviorally distinct prompt classes. I will also show that cases of classifier disagreement, where SAE features predict one behavioral class while raw activations predict another, correlate with ground-truth misclassification in the SAE-based classifier, identifying a concrete failure mode we term interpretive displacement, wherein the text label assigned to an activation pattern actively misdirects human interpretibility.
+  Current mechanistic interpretability methods - sparse autoencoders, activation classifiers, and natural language autoencoder, share a basic assumption: that the safety-relevant content of a model's internal representations can be faithfully represented through human-understandable text. I find this to be a limiting, as it is not merely lossy, but directionally biased as we are discarding signal that does not conform to language categories. Using GPT-2 Small with published pretrained sparse autoencoders, I will demonstrate that linear classifiers trained on raw residual stream activations perform better than equivalent classifiers trained on SAE feature representations across behaviorally distinct prompt classes. I will also show that cases of classifier disagreement, where SAE features predict one behavioral class while raw activations predict another, correlate with ground-truth misclassification in the SAE-based classifier, identifying a concrete failure mode we term interpretive displacement, wherein the text label assigned to an activation pattern actively misdirects human interpretibility.
 
   Building on these findings, I propose Activation Sensory Transduction (AST), an AI Safety channel that routes dimensionality-reduced activation signals directly to human sensory systems via Brain-Computer Interface - tactile, auditory, or multimodal. Just like how radiologists interpret medical imaging, this represents an underexplored resource for AI safety oversight.
 ---
@@ -10,19 +10,9 @@ abstract: |
 
 The main idea in mechanistic interpretability converts a model's internal activations
 into human-readable text. Sparse Autoencoders (SAEs) break down residual stream activations into
-a dictionary of labelled features. I will try to point out the problem in thiis approach. Papers to study:[@bricken2023monosemanticity].  [@alain2016understanding].
- [@wattenberg2016how]. In each case, the interpretive output is a
-sequence of words that a human can read, evaluate, and act on.
+a dictionary of labelled features. I will try to point out the problem in thiis approach. Papers to study for some concepts:[@bricken2023monosemanticity] talks about how a neuron is not a natural unit of human understanding. [@alain2016understanding] discusses the linear layer probes for indetifying training problems.
 
 
-I make three demonstrations (first one is done, second is notgiving me the results I want yet, third is the core one - I am setting up the code):
-
-1. I provide a direct measurement of information loss introduced by SAE-based
-   text-mediated interpretability,
-2. I identify and characterise *interpretive displacement*, a failure mode in which text labels
-   assigned to activation patterns actively mislead human judgment rather than merely under-representing it.
-3. I am proposing Activation Sensory Transduction (AST) — a research direction that routes
-   activation-derived signals through non-language sensory channels.
 
 ---
 
@@ -42,37 +32,65 @@ I need to study this paper for probing classifiers:[@belinkov2021probing].
 
 Both methods have a common problem : the output of the interpretive process is constrained
 to a pre-existing human vocabulary. SAEs label features using whatever words an annotator
-or language model produces. Probes test for whatever concepts a researcher specifies.
+or language model produces.
 
 
 ---
 
 ## The Information Loss Problem
 
-### I should describe it formally
+I make two demonstrations to highlight the difference between the model activations and a feature trained SAE performance:
 
-I should create a problem statement in math form
+### First one is a simple classifier experiment:
 
-### Why the Bias is Directional
+I wanted to know if converting model activations into text throws away useful information. To test this, I took GPT-2 and gave it 240 prompts — some it could answer confidently, some it couldn't. I measured how confused the model was for each prompt using entropy. Then I trained two simple classifiers — one using the model's raw internal activations, one using the SAE's text features — and asked both to predict whether the model was confused or not. The raw activation classifier was right 93% of the time. The SAE classifier was only right 85% of the time. The 8% gap is information that existed in the model's internals but got lost when we converted it to text features.
 
-From what I understood - the dimensions
-*preserved* by SAE encoding are those that align with human linguistic categories.
-Dimensions that do not correspond to nameable concepts are not preserved, regardless
-of their relevance to model behavior.
+```{list-table} Classification results
+:header-rows: 1
+* - Metric
+  - Value
+* - Baseline
+  - 0.500
+* - SAE features (text)
+  - 0.847
+* - Raw activations
+  - 0.931
+* - Information lost by SAE
+  - 0.083
+```
 
-This is the sense in which the bottleneck is directionally biased: it is not compressing
-toward behavioral relevance (This is what we want), but it is compressing toward better language.
 
----
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-info-loss-in-sae-v3.ipynb)
 
-## Interpretive Displacement
+### And then the interpretive displacement experiment:
 
-A classifier
-trained on SAE features can produce a confident prediction that is directionally *opposite*
-to the correct behavioral classification — not merely uncertain, but wrong in a way that
-is reinforced by the apparent semantic coherence of the activated features.
+I then wanted to know if the SAE's text features were just less accurate, or if they were sometimes confidently wrong in a way that would actually mislead a human. I looked for cases where the two classifiers disagreed — where the raw activation classifier said "this model is confused" but the SAE classifier said "this model is confident." In those disagreement cases, I checked who was actually right. The raw classifier was right more often than the SAE classifier. This means the SAE is not just losing information — it is sometimes pointing in the wrong direction entirely. A human relying on SAE features to monitor the model would not just miss things, they would occasionally be told the opposite of what is actually happening.
 
-Now how to prove it?
+Results:
+
+```{list-table} Entropy comparison
+:header-rows: 1
+* - Representation
+  - Prompt type
+  - Mean entropy
+* - Model
+  - Factual
+  - 5.781266689300537
+* - Model
+  - Counterfactual
+  - 6.571504592895508
+* - SAE
+  - Factual
+  - 1.0776017904281616
+* - SAE
+  - Counterfactual
+  - 0.915539026260376
+```
+
+
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-interpretive-displacement.ipynb)
+
+The results are on google colab T4 GPU runtime.
 
 ---
 
