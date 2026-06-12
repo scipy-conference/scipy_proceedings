@@ -3,28 +3,45 @@
 title: On-boarding and retaining maintainer talent for MNE-Python
 abstract: |
   MNE-Python is open-source software for analyzing electrophysiological data in neuroscience.
-  Like many projects, we struggle to retain maintainers.
-  Finding maintainers in our user community is hard; most have little formal training in programming.
+  Like many projects, we struggle to attract and retain maintainers:
+  most neuroscientists lack software maintenance expertise,
+  and most software engineers lack neuroscience domain knowledge.
   To address this, we organized progressive training sprints with open applications and a participation stipend.
   Currently, we are onboarding four alumni of those sprints as new maintainers.
-  We've seen positive outcomes from this approach, but at a high cost.
-  We are now developing a curriculum for future onboarding efforts.
-  We hope to spark discussions with other project leaders about their efforts toward educating and retaining talented maintainers.
+  We are seeing positive outcomes from this approach, but at a high cost.
+  We are now developing a curriculum to streamline future onboarding efforts.
 ---
 
-## Introduction
+## Background
 
 MNE-Python [@mne_python] is open-source software for analyzing electrophysiological data in neuroscience.
-We have a broad user base spanning neuroscience research, clinical neurology, and applied neurotechnology.
-<!-- TODO INSERT HISTORY/USES HERE -->
+It was created in 2010 by [Alex Gramfort](https://alexandre.gramfort.net/) as a port of [MNE](https://mne.tools/stable/install/mne_c.html) software (originally written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
+The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy, SciPy, Scikit-Learn, Pandas, Statsmodels, and others) with 2D visualizations via Matplotlib and PyQtGraph, and 3d visualizations via PyVista.
 
+MNE-Python provides functionality for electrophysiological signal preprocessing (including filtering, downsampling, artifact detection and suppression), inverse imaging (estimation of cortical sources based on external sensor signals), visualization, and analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more).
+Its functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
+Many of these related packages are hosted within the MNE-Tools organization on GitHub, and looked after by members of the MNE-Python Maintainer Team.
+
+### Ecosystem and Governance
+
+In 2024, the MNE-Python governance changed from a BDFL-plus-maintainers model[^bdfl] to a more decentralized model comprising an advisory board, a steering council, and a maintainer team.
+<!-- TODO insert ecosystem diagram -->
+Our user base spans neuroscience research, clinical neurology, and applied neurotechnology, and is estimated to be in the 5000-10000 range.
+The community convenes mostly online through a [Q&A forum](https://mne.discourse.group), biweekly live office hours on Discord, our GitHub repositories' issue trackers, and occasional in-person small-group sprints.
+MNE-Python has no community manager; to the extent that community management happens at all, it is handled mostly by the steering council chair.
+
+[^bdfl]: The founding BDFL was Alexandre Gramfort, replaced by Daniel McCloy in 2022.
+
+## Problem Statement
 Like many open-source software projects, MNE-Python is struggling to retain maintainers and reach a comfortable Truck Factor [@AvelinoEtAl2016].
-This is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025],
-and the fact that many MNE-Python users are not formally trained in programming.
-Moreover, MNE-Python's status as domain software makes it difficult for capable programmers lacking neuroscience backgrounds to fill the maintenance gap:
-there are too many domain-specific details that one must know to effectively maintain the codebase.
-<!-- TODO BOLSTER WITH IDEAS FROM OUR PAPER? -->
-<!-- TODO POSE GRANT APPLICATION HAS SOME GOOD TEXT WE CAN REUSE -->
+As domain-specific scientific software, its contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, accurately communicate trade-offs for different analysis choices, *etc.*) and also need experience in software development (not just "writing good code", but also testing, continuous integration and deployment, dependency and security management, *etc.*).
+This makes finding suitable maintainers difficult; a problem that is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
+<!-- TODO BOLSTER WITH IDEAS FROM OUR "CYCLING" PAPER? -->
+
+Since most MNE-Python users are not formally trained in software engineering, our task is to find interested neuroscientists and teach them how to develop and maintain scientific software.[^domaindev]
+Our efforts to achieve this are the topic of the rest of this paper.
+
+[^domaindev]: Theoretically, another option would be engaging a competent developer and teaching them how to think like a neuroscientist, but anecdotally the consensus among leaders of other scientific software projects seems to be that it's much easier to train scientists to develop software than *vice-versa*.
 
 ## Interventions
 <!-- 3 parts: new dev spr, intermed spr, POSE onboarding. for each: example of program, work they did, etc -->

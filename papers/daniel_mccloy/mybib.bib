@@ -1,4 +1,37 @@
 # Feel free to delete these first few references, which are specific to the template:
+@software{autoreject,
+  author  = {Jas, Mainak and
+             Engemann, Denis A and
+             Appelhoff, Stefan and
+             Gramfort, Alexandre and
+             Scheltienne, Mathieu and
+             Rockhill, Alex and
+             Koculak, Marcin and
+             Larson, Eric and
+             Stetz, Patrick and
+             Luke, Robert and
+             Boggess, Matt and
+             de la Torre, Carlos and
+             Raimondo, Fede and
+             Chapochnikov, Nikolai M and
+             Kern, Simon and
+             Wagner, Adina and
+             Höchenberger, Richard and
+             Banville, Hubert and
+             Massich, Joan and
+             Legrand, Nicolas and
+             Raghav, Rajagopalan and
+             Zerfas, Stephen and
+             Ezenwaka, Callis and
+             Sassenhagen, Jona and
+             Seibel, Marc Steffen and
+             Ugolotti, Roberto and
+             Antopolskiy, Sergey},
+  title   = {{autoreject}: Automated rejection and repair of bad trials/sensors in {M/EEG}},
+  journal = {v0.4.2},
+  year    = {2023},
+  url     = {https://autoreject.github.io}
+}
 @inproceedings{AvelinoEtAl2016,
   author    = {Avelino, Guilherme and
                Passos, Leonardo and
@@ -12,30 +45,180 @@
   pages     = {1-10},
   doi       = {10.1109/ICPC.2016.7503718}
 }
-@article{WestnerEtAl2025,
-  author  = {Westner, Britta U. and
-             McCloy, Daniel R. and
+@software{mne_bids,
+  author  = {Appelhoff, Stefan and
+             Sanderson, Matthew and
+             Brooks, Teon L. and
+             van Vliet, Marijn and
+             Quentin, Romain and
+             Holdgraf, Chris and
+             Chaumon, Maximilien and
+             Mikulan, Ezequiel and
+             Tavabi, Kambiz and
+             Höchenberger, Richard and
+             Welke, Dominik and
+             Brunner, Clemens and
+             Rockhill, Alexander P. and
              Larson, Eric and
+             Li, Adam and
+             Rokem, Ariel and
+             McCloy, Daniel and
+             Hurst, Austin J. and
+             Lozano-Soldevilla, Diego and
+             Ort, Eduard and
+             Knights, Ethan and
+             Kalenkovich, Evgenii and
+             von Albedyll, Franziska and
+             Wong, Fu-Te and
+             King, Jean-Rémi and
+             Niso Galán, Julia Guiomar and
+             Köhler, Richard M. and
+             Luke, Robert and
+             Kern, Simon and
+             Kim, Sin and
+             Herbst, Sophie and
+             Gupta, Swastika and
+             Donoghue, Thomas and
+             Mantilla Ramos, Yorguin José and
+             Huberty, Scott and
+             Scheltienne, Mathieu and
+             Saini, Anand and
+             Hebling Vieira, Bruno and
+             Engemann, Denis and
+             Gerster, Moritz and
+             Laetitia, Fesselier and
+             Vanhoecke, Jonathan and
+             McDonald, Ford and
+             Guetschel, Pierre and
+             Wolter, Mara and
+             Welzel, Julius and
              Gramfort, Alexandre and
-             Katz, Daniel S. and
-             Smith, Arfon M. and
-             Delorme, Arnaud and
-             Litvak, Vladimir and
-             Makeig, Scott and
-             Oostenveld, Robert and
-             Schoffelen, Jan-Matthijs and
-             Tierney, Tim M.},
-  title   = {Cycling on the Freeway: The perilous state of open-source neuroscience software},
-  journal = {Imaging Neuroscience},
-  volume  = {3},
-  pages   = {imag_a_00554},
-  year    = {2025},
-  month   = {05},
-  issn    = {2837-6056},
-  doi     = {10.1162/imag_a_00554},
-  url     = {https://doi.org/10.1162/imag_a_00554},
-  eprint  = {https://direct.mit.edu/imag/article-pdf/doi/10.1162/imag_a_00554/2512339/imag_a_00554.pdf}
+             Jas, Mainak},
+  title   = {{MNE-BIDS: Organizing electrophysiological data
+             into the BIDS format and facilitating their
+             analysis}},
+  month   = jun,
+  year    = 2024,
+  journal = {v0.15.0},
+  doi     = {10.5281/zenodo.11471689},
+  url     = {https://mne.tools/mne-bids/}
 }
+
+@software{mne_bids_pipeline,
+  author  = {Richard Höchenberger and
+             Eric Larson and
+             Alexandre Gramfort and
+             Stefan Appelhoff and
+             Sophie Herbst and
+             Joan Massich and
+             Mainak Jas and
+             Charbel-Raphael Segerie and
+             Apolline Mellot and
+             Denis A. Engemann and
+             Mathias Sablé-Meyer and
+             Máté Aller and
+             Daniel McCloy and
+             Julia Guiomar Niso Galán and
+             MerlinDumeur and
+             Rob Luke and
+             Kambiz Tavabi and
+             Adonay Nunes and
+             Izem and
+             Thomas S. Binns and
+             Victor Férat and
+             Virginie van Wassenhove and
+             Yaroslav Halchenko},
+  title   = {MNE-BIDS-Pipeline},
+  month   = jun,
+  year    = 2024,
+  journal = {v1.9.0},
+  doi     = {10.5281/zenodo.12274470},
+  url     = {https://mne.tools/mne-bids-pipeline/}
+}
+
+@software{mne_connectivity,
+  author  = {Li, Adam and
+             McCloy, Daniel and
+             Larson, Eric and
+             Westner, Britta and
+             Kroner, Alexander and
+             Gramfort, Alexandre and
+             Binns, Thomas Samuel and
+             Orabe, Mohammad},
+  title   = {{MNE-Connectivity}},
+  month   = jun,
+  year    = {2024},
+  journal = {v0.7},
+  doi     = {10.5281/zenodo.11620568},
+  url     = {https://github.com/mne-tools/mne-connectivity}
+}
+
+@software{mne_hcp,
+  author  = {Engemann, Denis A. and
+             Sassenhagen, Jona and
+             Larson, Eric and
+             Bzdok , Danilo and
+             Gramfort, Alexandre and
+             Jas, Mainak and
+             Foti, Nick and
+             Griffiths, John and
+             Guibert, Fabrice
+             },
+  title   = {{MNE-HCP}},
+  journal = {v0.1dev9},
+  year    = {2016},
+  url     = {https://github.com/mne-tools/mne-hcp}
+}
+
+@software{mne_lsl,
+  title   = {{MNE-LSL}},
+  author  = {Scheltienne, Mathieu and
+             Desvachez, Arnaud and
+             Lee, Kyuhwa and
+             dnastars and
+             Larson, Eric and
+             Uhl, Quentin and
+             de Seta, Valeria and
+             Sherbina, Dmitry N.},
+  month   = aug,
+  year    = 2024,
+  journal = {v1.5.0},
+  urldate = {2024-08-28},
+  url     = {https://mne.tools/mne-lsl/}
+}
+
+@software{mne_microstates,
+  author  = {van Vliet, Marijn},
+  title   = {{MNE microstates}: Microstate analysis for use with {MNE-Python}},
+  journal = {v0.3},
+  year    = {2022},
+  url     = {https://github.com/wmvanvliet/mne_microstates}
+}
+
+@software{mne_nirs,
+  author  = {Luke, Robert and
+             Larson, Eric and
+             Gouailhardou, Nathalie and
+             Shader, Maureen and
+             Pop, Florin and
+             Gramfort, Alexandre and
+             Newman, Aaron and
+             Rockhill, Alex and
+             Kiefer, Alexander and
+             Arthur, Christian and
+             McCloy, Daniel and
+             Sleiter, Darin Erat and
+             Mohan, Girish and
+             Benerradi, Johann and
+             Busato, Nicolas
+             },
+  title   = {{MNE-NIRS: Near-Infrared Spectroscopy Analysis}},
+  month   = jun,
+  year    = {2024},
+  journal = {v0.7.0},
+  url     = {https://mne.tools/mne-nirs/}
+}
+
 @software{mne_python,
   author  = {Larson, Eric and
              Gramfort, Alexandre and
@@ -416,4 +599,132 @@
   journal = {v1.7.1},
   doi     = {10.5281/zenodo.11662646},
   url     = {https://mne.tools/}
+}
+
+@software{mne_rsa,
+  author  = {Marijn van Vliet and
+             Takao Shimizu and
+             Stefan Appelhoff and
+             Yuan-Fang Zhao and
+             Richard Höchenberger},
+  title   = {{MNE-RSA}: Representational Similarity Analysis on MEG and EEG data},
+  month   = may,
+  year    = 2024,
+  journal = {v0.9.1},
+  doi     = {10.5281/zenodo.11258133},
+  url     = {https://users.aalto.fi/~vanvlm1/mne-rsa/}
+}
+
+@software{openneuropy,
+  author  = {Höchenberger, Richard and
+             Larson, Eric and
+             Rockhill, Alex and
+             van Vliet, Marijn and
+             Li, Adam and
+             Gramfort, Alexandre and
+             Markiewicz, Chris and
+             Brunner, Clemens and
+             Scheltienne, Mathieu
+             },
+  title   = {{OpenNeuro-Py}},
+  year    = {2024},
+  journal = {v2024.2.0},
+  url     = {https://github.com/hoechenberger/openneuro-py}
+}
+
+@software{pactools,
+  author  = {Dupré la Tour, Tom and
+             Grabot, Laetitia and
+             Rockhill, Alex and
+             Raimondo, Fede and
+             Gramfort, Alexandre and
+             Jas, Mainak and
+             Magnuski, Mikołaj and
+             Massias, Mathurin},
+  title   = {{pactools}: estimate phase-amplitude coupling in neural time series},
+  journal = {v0.3.1},
+  year    = {2020},
+  url     = {https://pactools.github.io/}
+}
+
+@software{pycrostates,
+  author  = {Férat, Victor and
+             Scheltienne, Mathieu and
+             Brunet, Denis and
+             Ros, Tomas and
+             Michel, Christoph},
+  title   = {{Pycrostates: a Python library to study EEG microstates}},
+  author  = {Victor Férat and
+             Mathieu Scheltienne and
+             Reinmar Kobler and
+             Andrew Quinn and
+             Eric Larson and
+             Lou Planchamp},
+  month   = aug,
+  year    = 2024,
+  journal = {v0.6.1},
+  doi     = {10.5281/zenodo.13166383},
+  url     = {https://pycrostates.readthedocs.io/}
+}
+
+@software{pyprep,
+  author  = {Appelhoff, Stefan and
+             Hurst, Austin J. and
+             Lawrence, Aamna and
+             Li, Adam and
+             Mantilla Ramos, Yorguin José and
+             O'Reilly, Christian and
+             Xiang, Liang and
+             Dancker, Jonte and
+             Scheltienne, Mathieu and
+             Bialas, Ole},
+  title   = {{PyPrep}: A {Python} implementation of the Preprocessing Pipeline ({PREP}) for {EEG} data},
+  year    = {2023},
+  journal = {v0.4.3},
+  doi     = {10.5281/zenodo.10047462},
+  url     = {https://pyprep.readthedocs.io/en/latest/}
+}
+
+@article{Rockhill2022,
+  doi       = {10.21105/joss.03897},
+  url       = {https://doi.org/10.21105/joss.03897},
+  year      = {2022},
+  publisher = {The Open Journal},
+  volume    = {7},
+  number    = {70},
+  pages     = {3897},
+  author    = {Alexander P. Rockhill and
+               Eric Larson and
+               Brittany Stedelin and
+               Alessandra Mantovani and
+               Ahmed M. Raslan and
+               Alexandre Gramfort and
+               Nicole C. Swann},
+  title     = {Intracranial Electrode Location and Analysis in {MNE-Python}},
+  journal   = {Journal of Open Source Software}
+}
+
+@article{WestnerEtAl2025,
+  author  = {Westner, Britta U. and
+             McCloy, Daniel R. and
+             Larson, Eric and
+             Gramfort, Alexandre and
+             Katz, Daniel S. and
+             Smith, Arfon M. and
+             Delorme, Arnaud and
+             Litvak, Vladimir and
+             Makeig, Scott and
+             Oostenveld, Robert and
+             Schoffelen, Jan-Matthijs and
+             Tierney, Tim M.},
+  title   = {Cycling on the Freeway: The perilous state of open-source neuroscience software},
+  journal = {Imaging Neuroscience},
+  volume  = {3},
+  pages   = {imag_a_00554},
+  year    = {2025},
+  month   = {05},
+  issn    = {2837-6056},
+  doi     = {10.1162/imag_a_00554},
+  url     = {https://doi.org/10.1162/imag_a_00554},
+  eprint  = {https://direct.mit.edu/imag/article-pdf/doi/10.1162/imag_a_00554/2512339/imag_a_00554.pdf}
 }
