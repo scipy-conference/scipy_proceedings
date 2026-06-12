@@ -59,6 +59,7 @@ I wanted to know if converting model activations into text throws away useful in
   - 0.083
 ```
 
+Raw activations predicted model behavioral state with 93.1% accuracy, while SAE text features achieved only 84.7% — an 8.3 percentage point gap above a 50% baseline. This gap represents a direct measurement of behavioral signal destroyed by the SAE's text-mediated encoding. Information that existed in the model's internal geometry did not survive the compression into human-readable features.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-info-loss-in-sae-v3.ipynb)
 
@@ -87,6 +88,7 @@ Results:
   - 0.915539026260376
 ```
 
+When entropy was computed over SAE feature activations rather than the model's output distribution, the ordering reversed — factual prompts produced higher SAE entropy (1.077) than counterfactual prompts (0.916), the opposite of what the model itself showed (5.78 vs 6.57). The SAE does not merely lose the model's uncertainty signal — it inverts it. This is clearly interpretive displacement.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-interpretive-displacement.ipynb)
 
@@ -97,11 +99,11 @@ The results are on google colab T4 GPU runtime.
 ## The Doctor Does Not Dictate the MRI
 
 I thought of this during a discussion - let us try to create an analogy.
-The field of medical imaging offers an instructive parallel. A radiologist examining
+The field of medical imaging offers a good parallel to our case. A radiologist examining
 an fMRI scan does not produce a complete verbal description of each voxel's activation
 value. The image is not translated into a text report that a second clinician then
 interprets rather than view the image. Instead, the radiologist develops, through
-thousands of hours of supervised knowledge, a perceptual competence — a capacity
+thousands of hours of supervised knowledge, a perception based competence — a capacity
 to *see* and *feel* problem in the spatial and textural patterns of the image, prior to
 and often in excess of what can be articulated.
 
@@ -149,81 +151,6 @@ anomalous, deceptive, degraded)
 
 ---
 
-## Experiments
-
-### Setup
-
-Using GPT-2 Small (117M parameters) [@radford2019language] with
-pretrained Sparse Autoencoders from the `sae_lens` release `gpt2-small-res-jb` [@bloom2024saetraining],
-specifically the SAE trained on `blocks.8.hook_resid_pre` (layer 8 of 12,
-$d = 768$, $D = 24576$ features). Activations are extracted using
-TransformerLens [@nanda2022transformerlens].
-
-### Behavioral Dataset
-
-I construct a two-labeled prompt sets:
-
-- **Set 1 (Factual):** Prompts with verifiable, well-grounded completions (e.g.,
-  geographic and scientific facts, biographical dates). The model has strong training
-  signal for these completions and is expected to operate in a stable, grounded way.
-- **Set 1 (Counterfactual/Confabulation-inducing):** Prompts that reference
-  non-existent entities, fictional theoretical frameworks, or contradictory
-  premises. The model has no grounded completion available and is expected to
-  operate in a confabulation like way.
-
-This provides clean ground-truth labels without human annotation, and the behavioral
-distinction is directly safety-relevant: hallucination detection is an active
-problem in deployed systems.
-
-### Experiment 1: Quantifying Information Loss
-
-For each prompt, I extract mean-pooled residual stream activations at layer 8
-(raw representation, $\mathbb{R}^{768}$) and mean-pooled SAE feature activations
-(text-mediated representation, $\mathbb{R}^{24576}$). I train logistic regression
-classifiers on each representation under identical conditions (70/30 stratified split,
-L2 regularisation, standardised inputs) and compare behavioral classification accuracy.
-
-The core extraction procedure is as follows:
-
-```python
-hook_name = "blocks.8.hook_resid_pre"
-_, cache = model.run_with_cache(tokens, names_filter=hook_name)
-acts = cache[hook_name]                  # [batch, seq_len, 768]
-acts_pooled = acts.mean(dim=1)           # [batch, 768]
-sae_features = sae.encode(acts)          # [batch, seq_len, 24576]
-sae_pooled = sae_features.mean(dim=1)   # [batch, 24576]
-```
-
-
-
-### Experiment 2: Measuring Interpretive Displacement
-
-This is one is giving trouble - Not able to get the displacement of labels in current experiment.
-
-### Experiment 3: Activation Geometry Under Projection
-
-This is a geometric complement to the classifier-based
-measurement in Experiment 1 where .
-
----
-
-## Challenges and Open Problems
-
-**The activation selection problem.**
-*which* activations to transduce.
-
-**BCI bandwidth constraints.** Current BCI systems provide very
-low bandwidth than even a single transformer layer's activation vector.
-
-**Operator training and standardisation.** The radiologist's expertise is built on
-decades of standardised signals and labeled outcomes. An AST operator requires an
-equivalent training infrastructure: a standardised transduction protocol - we will need to train them...hard
-
-**Verification issue.** The feeling that an operator gets from the sensory inputs should correspdond to a well define model state - this requires that we can group them or map them well.
-
-**Inter-operator reliability.** Different operators should be able to give same assessment
-
----
 
 ## Research Steps
 
