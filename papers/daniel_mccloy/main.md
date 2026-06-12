@@ -47,26 +47,34 @@ Our efforts to achieve this are the topic of the rest of this paper.
 
 To increase our contributor pool, we organized two New Developer Sprints and one Intermediate Developer Sprint.
 These one-week courses were open to applications from the community, and participants received a stipend.
-Holding the courses online allowed for the participation of developers from all over the world.
-To further account for this, we ran the sprints in different time zones,
-with maintainers from the community leading different time zones.
-Both types of sprint involved participants pair-programming with each other or with seasoned maintainers and participants choosing projects to tackle during the week.
-The programs were complemented with plenary lectures.
+Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of developers from all over the world.
+We used the Discord platform because it supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video "rooms" for participants to work in.
+Each sprint had an associated kanban-style project board on GitHub to facilitate finding and tracking the pieces of work to be done.
+Both types of sprint involved participants pair-programming with each other and with seasoned maintainers.
+Sprint mentors (MNE-Python maintainers) staffed the Discord server in shifts, waiting in an "available mentors" room for participants to ask questions, request reviews, or seek their next piece of work.
+Short plenary lectures and tutorials augmented the time spent coding.
 
 ### New Developer Sprints
 
 In 2021 and 2022 we held two New Developer Sprints, which aimed at equipping users of our software with the knowledge necessary to become open-source contributors.
-Most of our users are from the wider fields of neuroscience and cognitive science, and usually do not have a formal education in computer science.
-This means that they can be lacking the necessary knowledge on how to contribute to open source,
-and the (perceived) barriers to contribution can thus be high.
-With the New Developers Sprints, we aimed at providing an educational space to acquire the open-source-general and MNE-Python-specific skills for successful contributions to our project.
-The curriculum of these sprints consisted of short presentations and pair-programming.
+Most of our users are from the fields of neuroscience and cognitive science, and many do not have formal training in computer science or programming.
+Thus most lack the knowledge of how open-source contribution happens.
+Setting up the development environment, understanding git and GitHub, writing documentation and tests, and navigating reviews and CI logs: all are knowledge gaps that prospective contributors must bridge.
+For the New Developers Sprints, our application process included questions designed to guarantee that applicants had, at minimum, a functioning development environment and an up-to-date clone of their own fork of the upstream MNE-Python repository.
+We provided support to help applicants get this part right, and proactively reached out to applicants before the deadline if their answers indicated a wrong or incomplete setup.
+By doing this, we avoided spending any sprint time on environment setup, git configuration, or other preliminaries.
+
+The content of the New Developers' Sprints was also curated in advance.
+Dozens of issues were tagged as reserved for the sprint, including several nearly-identical small documentation tasks spread across the codebase.
+Participants were given brief instructions in pair programming practices, assigned a partner, and each pair was given several small documentation issues to work through.
 <!-- TODO ADD EVIDENCE/CITATION ON PAIR PROGRAMMING BEING USEFUL? -->
-The presentations were delivered by senior community members within and outside of academia, who shared their experiences in the MNE-Python community and how they benefitted from being contributors.
-The focus on the sprints, however, was on acquiring hands-on contributing experience through online pair-programming.
-Before the sprints, we had curated a list of suitable “First Issues” that the participants could choose from.
-The participants paired up with each other and tackled these issues in pairs, connected on a platform that enables screen-sharing and video calls.
-Meanwhile, mentors from the MNE-Python maintainer team were available to answer questions or jump into the pair-programming sessions. 
+The purpose of these small issues was to repeatedly expose participants to the full contribution life cycle: fetch upstream, branch, code, test, commit, push, open PR, check CIs, and respond to reviews.
+After a day or so spent on the small documentation issues, nearly all participants took on more complex tasks involving editing module code, writing tests, or updating tutorials.
+
+Each day, a short lecture or tutorial was provided by senior community members within and outside of academia.
+Lectures focused on career trajectory, experiences in the MNE-Python community, and how the speakers benefitted from being contributors.
+Tutorials focused on knowledge relevant to the contributing workflow: writing and running tests, checking code coverage, reading tracebacks, and similar topics.
+
 <!-- TODO ADD INFO ON RETENTION/CONTINUED CONTRIBUTIONS -->
 
 ### Intermediate Sprint
