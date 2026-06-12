@@ -1,0 +1,56 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-daniel_mccloy
+  # Ensure your title is the same as in your `main.md`
+  title: On-boarding and retaining maintainer talent for MNE-Python
+  # subtitle:
+  description: Add a two sentence description about your article.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Britta Westner
+      email: britta.westner@donders.ru.nl
+      orcid: 0000-0003-3231-1076
+      affiliations:
+        - Donders Institute for Brain, Cognition and Behavior
+        - Radboud University Medical Center
+    - name: Daniel McCloy
+      email: dan@mccloy.info
+      orcid: 0000-0002-7572-3241
+      affiliations:
+        - Institute for Learning and Brain Sciences, University of Washington
+      corresponding: true
+    - name: Eric Larson
+      email: larsoner@uw.edu
+      orcid: 0000-0003-4782-5360
+      affiliations:
+        - Institute for Learning and Brain Sciences, University of Washington
+  keywords:
+    - neuroscience
+    - software maintenance
+    - software sustainability
+    - community management
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    EEG: electroencephalography
+    MEG: magnetoencephalography
+    ECoG: electrocorticography
+    fNIRS: functional near-infrared spectroscopy
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
