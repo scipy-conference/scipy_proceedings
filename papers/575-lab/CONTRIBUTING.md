@@ -26,12 +26,20 @@ Install these once:
 
 ## 2. Get the repo
 
-We work on the **`2026`** branch.
+We collaborate on the **575-lab fork** (`575-lab/scipy_proceedings`), and work
+on the **`2026`** branch.
 
 ```bash
-git clone https://github.com/scipy-conference/scipy_proceedings.git
+git clone git@github.com:575-lab/scipy_proceedings.git
 cd scipy_proceedings
 git checkout 2026          # or: git checkout -b 2026 --track origin/2026
+```
+
+The upstream conference repo is kept as a separate remote for pulling in updates
+(it's already configured if you cloned the fork; add it if missing):
+
+```bash
+git remote add upstream git@github.com:scipy-conference/scipy_proceedings.git
 ```
 
 > Only edit files inside `papers/575-lab/`. Per SciPy proceedings policy, do
