@@ -66,6 +66,16 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     SAE: Sparse Autoencoder
+    LLM: Large Language Model
+    MoE: Mixture of Experts
+    GQA: Grouped-Query Attention
+    MSE: Mean Squared Error
+    PCA: Principal Component Analysis
+    NMI: Normalized Mutual Information
+    ARI: Adjusted Rand Index
+    SEM: Standard Error of the Mean
+    ReLU: Rectified Linear Unit
+    JumpReLU: Jump Rectified Linear Unit
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
