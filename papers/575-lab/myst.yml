@@ -1,0 +1,52 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-575-lab
+  # Ensure your title is the same as in your `main.md`
+  title: A Numerical Perspective to Terraforming a Desert
+  # subtitle:
+  description: Add a two sentence description about your article.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Ada Lovelace
+      email: ada.lovelace@example.org
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Analytical Society, London
+    - name: Chien-Shiung Wu
+      email: cs.wu@example.org
+      affiliations:
+        - Columbia University
+    - name: Katherine Johnson
+      email: k.johnson@example.org
+      affiliations:
+        - NASA Langley Research Center
+      corresponding: true
+    - name: Alan Turing
+      email: alan.turing@example.org
+      affiliations:
+        - University of Manchester
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
