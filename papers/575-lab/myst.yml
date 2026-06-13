@@ -4,36 +4,68 @@ project:
   # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2026-575-lab
   # Ensure your title is the same as in your `main.md`
-  title: A Numerical Perspective to Terraforming a Desert
+  title:
+    'Opening the Black Box: Mechanistic Interpretability for AI Agent Tool
+    Selection Using Sparse Autoencoders'
+  subtitle:
+    A complete pipeline for interpreting agent tool-selection decisions with
+    JumpReLU sparse autoencoders
   # subtitle:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Ada Lovelace
-      email: ada.lovelace@example.org
-      orcid: 0000-0000-0000-0000
-      affiliations:
-        - Analytical Society, London
-    - name: Chien-Shiung Wu
-      email: cs.wu@example.org
-      affiliations:
-        - Columbia University
-    - name: Katherine Johnson
-      email: k.johnson@example.org
-      affiliations:
-        - NASA Langley Research Center
+    - name: Hannes Hapke
+      orcid: 0009-0005-3111-7353
+      email: hannes.hapke@dataiku.com
       corresponding: true
-    - name: Alan Turing
-      email: alan.turing@example.org
       affiliations:
-        - University of Manchester
+        - id: dataiku-pdx
+          institution: 575 Lab, Dataiku Inc.
+          city: Portland
+          region: Oregon
+          country: USA
+    - name: David Cardozo
+      orcid: 0009-0006-1234-9973
+      email: david.cardozo@dataiku.com
+      affiliations:
+        - id: dataiku-yyz
+          institution: 575 Lab, Dataiku Inc.
+          city: Toronto
+          region: Ontario
+          country: Canada
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - mechanistic interpretability
+    - sparse autoencoders
+    - AI agents
+    - tool selection
+    - feature interpretation
+  abstract: |
+    AI agents that autonomously select and run tools are increasingly deployed in business
+    contexts, yet their decision-making processes remain opaque. When an agent chooses to query
+    a database rather than search the web, what internal representations drive that choice?
+    Current approaches rely on prompt engineering, behavioral testing, or post-hoc explanations,
+    none of which reveal the actual computational mechanisms within the model. We present a
+    complete mechanistic interpretability pipeline for understanding agent tool-selection
+    decisions. Our approach extracts hidden-state activations from the subject model at the
+    precise moment of tool commitment (the *decision token*), trains a JumpReLU Sparse
+    Autoencoder (SAE) to decompose these activations into monosemantic features, and applies
+    contrastive analysis to identify which features are associated with specific decision
+    patterns. Crucially, the SAE learns the model's natural feature vocabulary without
+    contrastive supervision; contrastive pairs serve only as post-hoc statistical probes. We
+    validate our feature explanations using token-level fuzzing evaluation adapted from
+    EleutherAI's autointerp methodology, which tests whether labels identify the correct tokens
+    that activate each feature, not just the correct texts. Our pipeline processes diverse agent
+    scenarios across five domains and produces human-readable decision reports explaining the
+    internal factors driving tool selection. Our implementation is open source at
+    https://github.com/dataiku/kiji-inspector.
+  # Github / code repository for the work
+  github: https://github.com/dataiku/kiji-inspector
+  # Bibliography file(s)
+  bibliography:
+    - references.bib
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    SAE: Sparse Autoencoder
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
