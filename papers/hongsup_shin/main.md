@@ -434,7 +434,7 @@ The judges, by contrast, are visible precisely as a *faithfulness* layer that of
 
 ### Adversarial robustness
 
-The adversarial suite (Evaluation design) tests whether the system refuses to answer when it should. On its 20 fabricated incidents, **all 20 escalated; none completed; zero fabricated names appeared in any extracted field.** Seventeen escalated at search, two at the relevance judge, and one as insufficient sources. Because seventeen were stopped at search before any extraction ran, the agentic faithfulness defenses were exercised on only the three records that retrieved real articles: the deterministic retrieval and validation front-end does much of the safety work, with the agentic layer (the relevance judge, then conflict detection, then human review) as the deeper net that caught every case in this small but deliberately hard probe.
+The adversarial suite (Evaluation design) tests whether the system refuses to answer when it should. On its 20 fabricated incidents, **all 20 escalated; none completed; zero fabricated names appeared in any extracted field.** Seventeen escalated at search, two at the relevance judge, and one as insufficient sources. Because seventeen were stopped at search before any extraction ran, the agentic faithfulness defenses were exercised on only the two records that retrieved real articles: the deterministic retrieval and validation front-end does much of the safety work, with the agentic layer (the relevance judge, then conflict detection, then human review) as the deeper net that caught every case in this small but deliberately hard probe.
 
 ### Cost and latency
 
