@@ -1,0 +1,67 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-hongsup_shin
+  # No banner image for this paper (overrides the inherited default from ../papers.yml)
+  banner: null
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Automated Data Enrichment for Police Accountability: Where Agentic Judgment
+    Earns Its Place'
+  # subtitle:
+  description:
+    A LangGraph and Anthropic-API pipeline that recovers missing fields in the
+    Texas Justice Initiative's officer-involved-shooting databases, pairing a
+    deterministic core with three bounded LLM judges of graduated authority. The
+    contribution is a discipline (an earn-it protocol, a
+    reward-hacking-resistant evaluation gate, and authority calibrated to
+    stakes) for deciding where agentic judgment belongs in high-stakes data
+    work.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Hongsup Shin
+      email: hongsup.shin@pm.me
+      # orcid: 0000-0000-0000-0000  # register a free ORCID at https://orcid.org and add it here
+      affiliations:
+        - Texas Justice Initiative
+      corresponding: true
+  keywords:
+    - police accountability
+    - data enrichment
+    - LangGraph
+    - LLM-as-judge
+    - agentic workflows
+    - evaluation gate
+    - faithfulness
+    - human-in-the-loop
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    LLM: large language model
+    TJI: Texas Justice Initiative
+    OIS: officer-involved shooting
+    OAG: Office of the Attorney General
+    HITL: human-in-the-loop
+  # `doi-exists` is enforced for all references except these, which legitimately have no DOI
+  # (software/website @misc, a blog post, and a techreport). Add a new key here only if a
+  # genuinely DOI-less reference is added later.
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - anthropic2024agents
+        - langgraph
+        - langchain
+        - tavily
+        - pydantic
+        - psycopg2
+        - rapidfuzz
+        - postgresql
+        - anthropic_claude
+        - tji2020ois
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
