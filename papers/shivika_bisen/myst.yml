@@ -4,7 +4,8 @@ project:
   # Matches the folder name papers/shivika_bisen
   id: scipy-2026-shivika_bisen
   # Must match the title in main.md
-  title: "Solving the AI Eval Gap: Domain-Aware Evaluation for Production AI Agents"
+  title:
+    'Solving the AI Eval Gap: Domain-Aware Evaluation for Production AI Agents'
   description: |
     AI Eval Engine is an open-source Python framework that automates domain-aware
     evaluation of production AI agents — ingesting a pluggable domain context, generating
