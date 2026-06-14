@@ -1,0 +1,50 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Matches the folder name papers/shivika_bisen
+  id: scipy-2026-shivika_bisen
+  # Must match the title in main.md
+  title: "Solving the AI Eval Gap: Domain-Aware Evaluation for Production AI Agents"
+  description: |
+    AI Eval Engine is an open-source Python framework that automates domain-aware
+    evaluation of production AI agents — ingesting a pluggable domain context, generating
+    a versioned golden set, emitting runnable eval scripts, and maintaining a living
+    Safety Runbook of emergent failure modes.
+  authors:
+    - name: Shivika Bisen
+      email: shivikakbisen@gmail.com
+      corresponding: true
+      affiliations:
+        - Independent
+  keywords:
+    - AI agents
+    - evaluation
+    - large language models
+    - domain-aware evaluation
+    - golden set generation
+    - LLM-as-judge
+    - safety
+    - retrieval-augmented generation
+  # Abbreviations expand on first use; see mystmd.org/guide/glossaries-and-terms#abbreviations
+  abbreviations:
+    LLM: large language model
+    RAG: retrieval-augmented generation
+    OKR: objective and key result
+    QA: question answering
+    API: application programming interface
+  # arXiv entries carry 10.48550/arXiv.* DOIs; software/tool citations have no DOI.
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - anthropic2025claude
+        - deepeval
+        - phoenix
+        - opik
+        - chroma
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
