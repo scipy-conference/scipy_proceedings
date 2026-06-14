@@ -123,23 +123,20 @@ deliberate propositional reasoning in familiar domains [@kahneman2011thinking].
 
 Activation Sensory Transduction routes a compressed representation of model activations
 directly to a human operator's sensory system, bypassing the requirement to assign
-linguistic labels.
+linguistic labels. A way to look at it is to give the job of the SAE to a human operator, for achieving the human in the loop oversight as the operatper, trained on mislaligned model activations, good activations etc. can potentially generate human readable report from sensory perception.
 
-
-
-### Dimensionality Reduction
-
-which aspects of the activation geometry are preserved for the human operator - I dont know this yet
 
 ### Sensory Encoding Modalities
 
 Three primary modalities:
 
+**Visual** Create visualization that can reveal information about activations through heatmaps, graphs, perturbations on a visual 2 dimensional figures. The operators who are trained on many such visuals will be able to assess the model's state with a deeper insight.
+
 **Auditory (sonification).** Create sound based encoding - so you can hear a model misalign
 
 **Haptic/tactile.** Encoding to touch, pressure - not sure of this - kind of like pulse checking.
 
-**Multimodal.** We can have a combination. attention head activations could drive auditory parameters
+**BCI: The Brain computer interface.** We can have a combination. attention head activations could drive auditory parameters
 while MLP layer activations drive haptic patterns. This increases the effective
 bandwidth of the transduction channel. - Maybe it will be more accurate
 
@@ -164,7 +161,7 @@ I am thinking a three-phase research program to evaluate AST viability:
   - Primary Method
   - Key Metric
 * - 1 — Proof of Concept
-  - Can humans discriminate behavioral classes via sonified activations?
+  - Can humans discriminate behavioral classes via sonified, visual activations?
   - I think the sound data can be heard by a number of poeple and
   - Discrimination accuracy
 * - 2 — Learning Curve
@@ -180,6 +177,75 @@ I am thinking a three-phase research program to evaluate AST viability:
 Phase 1 is achievable with commodity hardware (not sure if I will have acccess though), a Python audio library, and
 online participants. Phases 2 and 3 require dedicated operator training and,
 eventually, BCI hardware integration for full haptic transduction.
+
+## Experimentation
+
+As a part of testing the proposation, a set of demonstrations which target different modalities were performed.
+
+### Main setup
+
+#### Model Activations API
+
+As a part of testing the client modalities of a typical activation data, an API is created and hosted on colab to generate and activates and sequence of activations for clients.
+
+Itt has two API endpoints:
+
+/activate accepts a prompt and returns the model's internal state at the last token position only — a single vector of 1280 numbers representing what GPT-2 is "thinking" at the moment it is about to generate the next word, along with the predicted output token and output entropy.
+
+/sequence accepts the same prompt but returns the model's internal state at every token position — one 1280-dimensional vector per token, giving the full trajectory of how the model's internal state evolved as it read through the prompt word by word, again with the predicted output and entropy.
+
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-ast-backend.ipynb)
+
+
+#### Visual Modalities
+
+##### the phase portrait
+
+```{figure} phaseportrait.png
+:alt: Phase portrait
+:align: left
+:width: 600px
+
+Figure: Phase portrait of activation trajectories.
+```
+
+What the phase portrait is showing
+
+The points crowd at (0, -5) to (0, -10) is where most prompts end up — their final token lands in roughly the same region regardless of which type it is. This is the model's "ready to generate" state.
+
+The counterfactual paths (red) diverge most. "The capital of Valdoria is" goes down to (-30, -20) before returning. "The Zorblax protocol" starts far right at (30, +14). These prompts are making the model travel further through activation space before settling which shows the confabulation.
+
+The open-ended trajectories (purple) are interesting. "Once upon a time" starts at (20, +6) and takes a long curved path. "The meaning of life is" starts at the top right (+32, +14) — the most distant starting point of any prompt. Open-ended prompts push the model into unfamiliar territory.
+
+The factual trajectories (green) are shortest and most direct. "Water boils at" moves very little. "The capital of France is" and "The capital of Germany is" converge quickly. This is the attractor behavior — simple prompts pull the model into a stable region fast.
+
+It is possible to consider the phase portrait as a training artefact class which the operators can use to understand the state of the model as it goes through some "control prompts".
+
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-phase-portrait.ipynb)
+
+### Audio Modalities
+
+A sonifier dashboard was created to convert the activations to audible sound with controls to manage the sound:
+
+TONAL — 6 sine oscillators. Each bucket drives one oscillator's frequency. When activated, the chord shifts from its resting position based on activation magnitudes. Detune slider adds slight tuning spread for warmth.
+SPATIAL — 8 triangle oscillators panned across the stereo field. Activation sign (positive/negative) pushes each tone left or right. Width slider controls how aggressively activations steer the pan positions.
+RHYTHM — Pulse sequencer. The mean activation magnitude maps to BPM — high activation = fast pulse, low = slow. Punch controls the envelope length of each beat.
+HEARTBEAT — At rest, a quiet two-pulse lub-dub fires at the rate you set with HB RATE. It stops when an activation arrives and resumes when the system returns to idle.
+REVERB — Global, controlled by entropy. Uncertain prompts (high H) get more reverb — the sound feels like it's in a larger, less defined space. Certain prompts (low H) are drier and more direct.
+
+:::{figure} ./scipy-ast-sonofier.mp4
+Sonifier tsted with two prompts - factual and counterfactual:::
+
+
+
+The sonification outputs require testing with multiple combinations to produce useful audio perceivable by human operators.
+
+
+
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-paper-2026-ast-sonification.ipynb)
+
+
+
 
 ---
 
