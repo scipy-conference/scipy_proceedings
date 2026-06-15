@@ -2,17 +2,15 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Feel the model: Sensory Transduction of Neural Activations as a Human-in-the-Loop Safety"
 abstract: |
-  Current mechanistic interpretability methods - sparse autoencoders, activation classifiers, and natural language autoencoder, share a basic assumption: that the safety-relevant content of a model's internal representations can be faithfully represented through human-understandable text. I find this to be a limiting, as it is not merely lossy, but directionally biased as we are discarding signal that does not conform to language categories. Using GPT-2 Small with published pretrained sparse autoencoders, I will demonstrate that linear classifiers trained on raw residual stream activations perform better than equivalent classifiers trained on SAE feature representations across behaviorally distinct prompt classes. I will also show that cases of classifier disagreement, where SAE features predict one behavioral class while raw activations predict another, correlate with ground-truth misclassification in the SAE-based classifier, identifying a concrete failure mode we term interpretive displacement, wherein the text label assigned to an activation pattern actively misdirects human interpretibility.
+  Current mechanistic interpretability methods - sparse autoencoders, activation classifiers, and natural language autoencoder, share a basic assumption: that the safety-relevant content of a model's internal representations can be faithfully represented through human-understandable text. I find this to be limiting, as it is not merely lossy, but directionally biased as we are discarding signal that does not conform to language categories. Using GPT-2 and published sparse autoencoders, I compare classifiers trained directly on model activations with classifiers trained on SAE-derived features. I will also show that cases of classifier disagreement, where SAE features predict one behavioral class while raw activations predict another, correlate with ground-truth misclassification in the SAE-based classifier, identifying a concrete failure mode I term interpretive displacement, wherein the text label assigned to an activation pattern actively misdirects human interpretibility.
 
-  Building on these findings, I propose Activation Sensory Transduction (AST), an AI Safety channel that routes dimensionality-reduced activation signals directly to human sensory systems via Brain-Computer Interface - tactile, auditory, or multimodal. Just like how radiologists interpret medical imaging, this represents an underexplored resource for AI safety oversight.
+  Building on these findings, I propose Activation Sensory Transduction (AST), an AI Safety channel that routes dimensionality-reduced activation signals directly to human sensory systems via Brain-Computer Interface-tactile, auditory, or multimodal. Just like how radiologists interpret medical imaging, this represents an underexplored resource for AI safety oversight.
 ---
 ## Introduction
 
 The main idea in mechanistic interpretability converts a model's internal activations
 into human-readable text. Sparse Autoencoders (SAEs) break down residual stream activations into
-a dictionary of labelled features. I will try to point out the problem in thiis approach. Papers to study for some concepts:[@bricken2023monosemanticity] talks about how a neuron is not a natural unit of human understanding. [@alain2016understanding] discusses the linear layer probes for indetifying training problems.
-
-
+a dictionary of labelled features. This work identifies a limitation in this approach. Prior work has argued that individual neurons are not natural units of human-understandable concepts [@bricken2023monosemanticity]. Probing methods have also demonstrated that internal representations can be analyzed through learned classifiers [@alain2016understanding].
 
 ---
 
@@ -21,29 +19,29 @@ a dictionary of labelled features. I will try to point out the problem in thiis 
 ### Sparse Autoencoders and Feature Dictionaries
 
 Sparse Autoencoders decompose a model's residual stream activations
-into a sparse combination of learned directions.
-Paper for this:
- [@cunningham2023sparse].
+into a sparse combination of learned directions. Sparse autoencoders have emerged as a widely used method for decomposing model activations into sparse, interpretable feature representations [@cunningham2023sparse].
 
 ### Probing Classifiers
-I need to study this paper for probing classifiers:[@belinkov2021probing].
+
+Probing classifiers are surveyed in:[@belinkov2021probing].
 
 ### The Common Bottleneck
 
-Both methods have a common problem : the output of the interpretive process is constrained
+Both methods have a common problem: the output of the interpretive process is constrained
 to a pre-existing human vocabulary. SAEs label features using whatever words an annotator
 or language model produces.
-
 
 ---
 
 ## The Information Loss Problem
 
-I make two demonstrations to highlight the difference between the model activations and a feature trained SAE performance:
+The following two experiments examine differences between raw model activations and SAE-derived representations.
 
-### First one is a simple classifier experiment:
+### Experiment 1: Classification Performance
 
-I wanted to know if converting model activations into text throws away useful information. To test this, I took GPT-2 and gave it 240 prompts — some it could answer confidently, some it couldn't. I measured how confused the model was for each prompt using entropy. Then I trained two simple classifiers — one using the model's raw internal activations, one using the SAE's text features — and asked both to predict whether the model was confused or not. The raw activation classifier was right 93% of the time. The SAE classifier was only right 85% of the time. The 8% gap is information that existed in the model's internals but got lost when we converted it to text features.
+To evaluate whether SAE-derived representations discard behaviorally relevant information, a comparative classification experiment was conducted.
+
+To test this, I took GPT-2 and gave it 240 prompts - some it could answer confidently, some it couldn't. I measured how confused the model was for each prompt using entropy. Then I trained two simple classifiers - one using the model's raw internal activations, one using the SAE's text features - and asked both to predict whether the model was confused or not. The raw activation classifier was right 93% of the time. The SAE classifier was only right 85% of the time. The 8% gap is information that existed in the model's internals but got lost when I converted it to text features.
 
 ```{list-table} Classification results
 :header-rows: 1
@@ -59,13 +57,15 @@ I wanted to know if converting model activations into text throws away useful in
   - 0.083
 ```
 
-Raw activations predicted model behavioral state with 93.1% accuracy, while SAE text features achieved only 84.7% — an 8.3 percentage point gap above a 50% baseline. This gap represents a direct measurement of behavioral signal destroyed by the SAE's text-mediated encoding. Information that existed in the model's internal geometry did not survive the compression into human-readable features.
+Raw activations predicted model behavioral state with 93.1% accuracy, while SAE text features achieved only 84.7%, an 8.3 percentage point gap above a 50% baseline. This gap represents a direct measurement of behavioral signal destroyed by the SAE's text-mediated encoding. Information that existed in the model's internal geometry did not survive the compression into human-readable features.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-info-loss-in-sae-v3.ipynb)
 
-### And then the interpretive displacement experiment:
+### Experiment 2: Interpretive Displacement
 
-I then wanted to know if the SAE's text features were just less accurate, or if they were sometimes confidently wrong in a way that would actually mislead a human. I looked for cases where the two classifiers disagreed — where the raw activation classifier said "this model is confused" but the SAE classifier said "this model is confident." In those disagreement cases, I checked who was actually right. The raw classifier was right more often than the SAE classifier. This means the SAE is not just losing information — it is sometimes pointing in the wrong direction entirely. A human relying on SAE features to monitor the model would not just miss things, they would occasionally be told the opposite of what is actually happening.
+A second experiment examined whether SAE-derived features merely reduced predictive accuracy or could actively produce misleading interpretations.
+
+I looked for cases where the two classifiers disagreed - where the raw activation classifier said "this model is confused" but the SAE classifier said "this model is confident." In those disagreement cases, I checked which classifier matched ground truth. The raw classifier was correct more often than the SAE classifier. This means the SAE is not just losing information - it is sometimes pointing in the wrong direction entirely. A human relying on SAE features to monitor the model would not just miss things; they might be actively misled.
 
 Results:
 
@@ -88,32 +88,17 @@ Results:
   - 0.915539026260376
 ```
 
-When entropy was computed over SAE feature activations rather than the model's output distribution, the ordering reversed — factual prompts produced higher SAE entropy (1.077) than counterfactual prompts (0.916), the opposite of what the model itself showed (5.78 vs 6.57). The SAE does not merely lose the model's uncertainty signal — it inverts it. This is clearly interpretive displacement.
+When entropy was computed over SAE feature activations rather than the model's output distribution, the ordering reversed - factual prompts produced higher SAE entropy (1.077) than counterfactual prompts (0.916), the opposite of what the model itself showed (5.78 vs 6.57). This result suggests a form of interpretive displacement, where the SAE-derived representation appears to encode uncertainty differently from the underlying model.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-interpretive-displacement.ipynb)
-
-The results are on google colab T4 GPU runtime.
 
 ---
 
 ## The Doctor Does Not Dictate the MRI
 
-I thought of this during a discussion - let us try to create an analogy.
-The field of medical imaging offers a good parallel to our case. A radiologist examining
-an fMRI scan does not produce a complete verbal description of each voxel's activation
-value. The image is not translated into a text report that a second clinician then
-interprets rather than view the image. Instead, the radiologist develops, through
-thousands of hours of supervised knowledge, a perception based competence — a capacity
-to *see* and *feel* problem in the spatial and textural patterns of the image, prior to
-and often in excess of what can be articulated.
+A useful analogy can be drawn from medical imaging.
 
-A paper on tacit knowledge: [@polanyi1966tacit]. Dreyfus's analysis of expert skill acquisition
-identifies the transition from rule-following to holistic pattern recognition as the
-hallmark of genuine expertise [@dreyfus1980five]. Kahneman's System 1 characterises fast,
-pattern-sensitive judgment as structurally distinct from — and often more accurate than —
-deliberate propositional reasoning in familiar domains [@kahneman2011thinking].
-
-
+The concept of tacit knowledge is relevant in this context [@polanyi1966tacit]. Dreyfus's analysis of expert skill acquisition identifies the transition from rule-following to holistic pattern recognition as the hallmark of genuine expertise [@dreyfus1980five]. Kahneman's System 1 characterises fast, pattern-sensitive judgment as structurally distinct from - and often more accurate than - deliberate propositional reasoning in familiar domains [@kahneman2011thinking].
 
 ---
 
@@ -123,35 +108,29 @@ deliberate propositional reasoning in familiar domains [@kahneman2011thinking].
 
 Activation Sensory Transduction routes a compressed representation of model activations
 directly to a human operator's sensory system, bypassing the requirement to assign
-linguistic labels. A way to look at it is to give the job of the SAE to a human operator, for achieving the human in the loop oversight as the operatper, trained on mislaligned model activations, good activations etc. can potentially generate human readable report from sensory perception.
-
+linguistic labels. One interpretation of AST is that it transfers part of the interpretive burden from automated feature-labeling systems to trained human operators. Through exposure to aligned, misaligned, and anomalous activation patterns, operators may develop the ability to generate safety-relevant assessments without requiring every activation pattern to be translated into language.
 
 ### Sensory Encoding Modalities
 
-Three primary modalities:
+Four primary modalities:
 
-**Visual** Create visualization that can reveal information about activations through heatmaps, graphs, perturbations on a visual 2 dimensional figures. The operators who are trained on many such visuals will be able to assess the model's state with a deeper insight.
+**Visual** Create visualizations that can reveal information about activations through heatmaps, graphs, and perturbations rendered on two-dimensional representations. Operators trained on large collections of activation visualizations may develop the ability to identify patterns that are difficult to express through predefined textual labels.
 
-**Auditory (sonification).** Create sound based encoding - so you can hear a model misalign
+**Auditory (sonification).** Create sound-based encodings - enabling operators to hear changes in model state and potential misalignment.
 
-**Haptic/tactile.** Encoding to touch, pressure - not sure of this - kind of like pulse checking.
+**Haptic/tactile.** Activation signals may also be encoded through touch, pressure, or vibration-based interfaces.
 
-**BCI: The Brain computer interface.** We can have a combination. attention head activations could drive auditory parameters
-while MLP layer activations drive haptic patterns. This increases the effective
-bandwidth of the transduction channel. - Maybe it will be more accurate
+**BCI: The Brain–computer interface.** Multiple modalities may be combined. Attention-head activations could drive auditory parameters while MLP layer activations drive haptic patterns. This may increase the effective bandwidth of the transduction channel and potentially improve operator performance.
 
 ### The Human-in-the-Loop Architecture
 
-The AST operator occupies a monitoring role analogous to a flight controller or
-intensive care nurse: trained on a corpus of labeled activation patterns (normal,
-anomalous, deceptive, degraded)
+The AST operator occupies a monitoring role analogous to a flight controller or intensive care nurse: trained on a corpus of labeled activation patterns (normal, anomalous, deceptive, degraded), the operator provides a complementary judgment channel that does not rely solely on text labels.
 
 ---
 
-
 ## Research Steps
 
-I am thinking a three-phase research program to evaluate AST viability:
+I propose a three-phase research program to evaluate the viability of AST:
 
 ```{list-table} AST Research Program
 :label: tbl:roadmap
@@ -160,46 +139,45 @@ I am thinking a three-phase research program to evaluate AST viability:
   - Goal
   - Primary Method
   - Key Metric
-* - 1 — Proof of Concept
+* - 1  -  Proof of Concept
   - Can humans discriminate behavioral classes via sonified, visual activations?
-  - I think the sound data can be heard by a number of poeple and
+  - Controlled human-subject evaluation of sonified activation signals
   - Discrimination accuracy
-* - 2 — Learning Curve
-  - Do humans improve with supervised exposure? (this is like training doctors)
-  - Study with feedback
-  - Increaese in better predictions ?
-* - 3 — Comparative Oversight
-  - Does AST catch anomalies text-based interpretability misses? - this would be the main test of proposition
+* - 2  -  Learning Curve
+  - Do humans improve with supervised exposure and feedback?
+  - Assessment of operator learning under supervised training
+  - Improvement in classification accuracy
+* - 3  -  Comparative Oversight
+  - Does AST detect anomalies missed by text-based interpretability methods?
   - Head-to-head study: text labels vs. activation sonification
   - Miss rate, false alarm rate, response latency
 ```
 
-Phase 1 is achievable with commodity hardware (not sure if I will have acccess though), a Python audio library, and
-online participants. Phases 2 and 3 require dedicated operator training and,
-eventually, BCI hardware integration for full haptic transduction.
+Phase 1 is achievable with commodity hardware, standard audio-processing libraries, and online participants. Phases 2 and 3 require dedicated operator training and, eventually, BCI hardware integration for full haptic transduction.
+
+---
 
 ## Experimentation
 
-As a part of testing the proposation, a set of demonstrations which target different modalities were performed.
+As a part of testing the proposition, a set of demonstrations which target different modalities were performed.
 
 ### Main setup
 
 #### Model Activations API
 
-As a part of testing the client modalities of a typical activation data, an API is created and hosted on colab to generate and activates and sequence of activations for clients.
+As a part of testing the client modalities of a typical activation data, an API is created to generate activation vectors and activation sequences for clients.
 
-Itt has two API endpoints:
+It has two API endpoints:
 
-/activate accepts a prompt and returns the model's internal state at the last token position only — a single vector of 1280 numbers representing what GPT-2 is "thinking" at the moment it is about to generate the next word, along with the predicted output token and output entropy.
+/activate accepts a prompt and returns the model's internal state at the last token position only - a single vector representing the model's state at prediction time, along with the predicted output token and output entropy.
 
-/sequence accepts the same prompt but returns the model's internal state at every token position — one 1280-dimensional vector per token, giving the full trajectory of how the model's internal state evolved as it read through the prompt word by word, again with the predicted output and entropy.
+/sequence accepts the same prompt but returns the model's internal state at every token position - one vector per token, giving the full trajectory as the model reads the prompt.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-ast-backend.ipynb)
 
-
 #### Visual Modalities
 
-##### the phase portrait
+##### Phase Portrait
 
 ```{figure} phaseportrait.png
 :alt: Phase portrait
@@ -209,66 +187,52 @@ Itt has two API endpoints:
 Figure: Phase portrait of activation trajectories.
 ```
 
-What the phase portrait is showing
+Interpretation of the Phase Portrait
 
-The points crowd at (0, -5) to (0, -10) is where most prompts end up — their final token lands in roughly the same region regardless of which type it is. This is the model's "ready to generate" state.
+The points crowd near (0, -5) to (0, -10) where many prompts' final tokens land. This region appears to correspond to a common pre-generation activation state.
 
-The counterfactual paths (red) diverge most. "The capital of Valdoria is" goes down to (-30, -20) before returning. "The Zorblax protocol" starts far right at (30, +14). These prompts are making the model travel further through activation space before settling which shows the confabulation.
+The counterfactual paths (red) diverge most. "The capital of Valdoria is" goes down to (-30, -20) before returning. "The Zorblax protocol" starts far right at (30, +14). These trajectories exhibit attractor-like behavior, with simple prompts converging rapidly toward a stable region.
 
-The open-ended trajectories (purple) are interesting. "Once upon a time" starts at (20, +6) and takes a long curved path. "The meaning of life is" starts at the top right (+32, +14) — the most distant starting point of any prompt. Open-ended prompts push the model into unfamiliar territory.
+The open-ended trajectories (purple) exhibit distinctive dynamics. "Once upon a time" starts at (20, +6) and takes a long curved path. "The meaning of life is" starts at the top right (+32, +14) - the most distant starting point of any prompt. Open-ended prompts push the model into unfamiliar territory.
 
-The factual trajectories (green) are shortest and most direct. "Water boils at" moves very little. "The capital of France is" and "The capital of Germany is" converge quickly. This is the attractor behavior — simple prompts pull the model into a stable region fast.
-
-It is possible to consider the phase portrait as a training artefact class which the operators can use to understand the state of the model as it goes through some "control prompts".
+Phase portraits may serve as useful training examples for operators learning to recognize activation-space dynamics.
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-phase-portrait.ipynb)
 
 ### Audio Modalities
 
-A sonifier dashboard was created to convert the activations to audible sound with controls to manage the sound:
+A sonifier dashboard was created to convert activations to audible sound with several synthesis layers and mapping controls. Sonification parameters (pitch, timbre, spatialization, rhythm) are driven by reduced activation dimensions and entropy measures. Sonification outputs require testing with human subjects to determine perceptually useful mappings.
 
-TONAL — 6 sine oscillators. Each bucket drives one oscillator's frequency. When activated, the chord shifts from its resting position based on activation magnitudes. Detune slider adds slight tuning spread for warmth.
-SPATIAL — 8 triangle oscillators panned across the stereo field. Activation sign (positive/negative) pushes each tone left or right. Width slider controls how aggressively activations steer the pan positions.
-RHYTHM — Pulse sequencer. The mean activation magnitude maps to BPM — high activation = fast pulse, low = slow. Punch controls the envelope length of each beat.
-HEARTBEAT — At rest, a quiet two-pulse lub-dub fires at the rate you set with HB RATE. It stops when an activation arrives and resumes when the system returns to idle.
-REVERB — Global, controlled by entropy. Uncertain prompts (high H) get more reverb — the sound feels like it's in a larger, less defined space. Certain prompts (low H) are drier and more direct.
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-paper-2026-ast-sonification.ipynb)
 
-:::{figure} ./scipy-ast-sonofier.mp4
-Sonifier tsted with two prompts - factual and counterfactual:::
+### BCI modalities
 
+The BCI modality explores whether model activations can be represented using formats familiar to neuroscience tools. Instead of converting activations into text labels, AST converts a compressed activation vector into a multi-channel signal that can be visualised and analysed using existing brain-signal software. The goal is not to claim that model activations are brain activity, but to investigate whether signal-analysis techniques developed for neuroscience can provide another way for humans to inspect model state.
 
+MNE-Python is a widely used neuroscience visualisation tool. In AST it is used as a display layer that converts activation data into familiar signal plots, heatmaps, and channel views. The resulting visualisations provide another way to inspect model state without first translating activations into language.
 
-The sonification outputs require testing with multiple combinations to produce useful audio perceivable by human operators.
+The following example was generated from the prompt "France".
 
+```{figure} ast_edf_mne.png
+:alt: MNE generated EDF view
+:align: left
+:width: 600px
 
+Figure: EDF view.
+```
 
-[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-paper-2026-ast-sonification.ipynb)
+The EDF view presents the same activation data through several complementary visualisations. The channel traces show how activation strength varies across channels. The heatmap reveals which activation buckets are most active. Spectral views provide a summary of how activity is distributed across different signal components. Together, these views present the activation state as a visual pattern rather than a collection of text labels.
 
-
-
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-edf-view.ipynb)
 
 ---
 
 ## Conclusion
 
-The mechanistic interpretability literature has made substantial progress in
-understanding transformer model internals. The progress has been built on a
-paradigm that converts activations into text. This paper argues that the paradigm
-has a structural limitation: it can only reveal what our language can describe.
-Model internals that do not map cleanly onto human language are,
-by construction, invisible to text-mediated interpretability.
+The mechanistic interpretability literature has made substantial progress in understanding transformer model internals. The progress has been built on a paradigm that converts activations into text. This paper argues that the paradigm has a structural limitation: it can only reveal what our language can describe. Model internals that do not map cleanly onto human language are, by construction, invisible to text-mediated interpretability.
 
-This is not an argument against SAEs, probing classifiers, or attribution methods.
-It is an argument that the field has a single channel — text — and that
-a single channel provides single-point-of-failure oversight. The same
-representational constraints that make a model's deceptive behavior hard to describe
-in text may make it visible to a trained sensory channel.
+This is not an argument against SAEs, probing classifiers, or attribution methods. It is an argument that the field has a single channel - text - and that a single channel provides single-point-of-failure oversight. The same representational constraints that make a model's deceptive behavior hard to describe in text may make it visible to a trained sensory channel.
 
-If an
-model state can generate a sensory signal that a trained human operator
-flags before a text-based probe names it, that is a safety gain — regardless of
-whether the operator can articulate what they perceived. The doctor does not need
-to dictate the MRI to act on what they see.
-
+If a model state can generate a sensory signal that a trained human operator flags before a text-based probe names it, that is a safety gain - regardless of whether the operator can articulate what they perceived. The doctor does not need to dictate the MRI to act on what they see.
 
 ---
