@@ -6,18 +6,21 @@ project:
   # No banner image for this paper (overrides the inherited default from ../papers.yml)
   banner: null
   # Ensure your title is the same as in your `main.md`
-  title:
-    'Automated Data Enrichment for Police Accountability: Where Agentic Judgment
-    Earns Its Place'
+  title: 'Where Agentic Judgment Earns Its Place in High-Stakes Data Enrichment'
   # subtitle:
   description:
-    A LangGraph and Anthropic-API pipeline that recovers missing fields in the
-    Texas Justice Initiative's officer-involved-shooting databases, pairing a
-    deterministic core with three bounded LLM judges of graduated authority. The
-    contribution is a discipline (an earn-it protocol, a
-    reward-hacking-resistant evaluation gate, and authority calibrated to
-    stakes) for deciding where agentic judgment belongs in high-stakes data
-    work.
+    In high-stakes data enrichment a confidently wrong value is worse than a
+    blank, so the question is not whether an LLM can fill missing fields but
+    where agentic judgment earns its place. On the Texas Justice Initiative's
+    police shooting databases, a deterministic LangGraph pipeline searches,
+    validates, extracts, and escalates hard cases to a human, completing 92% of
+    officer and 70% of civilian records and inventing zero facts across twenty
+    fabricated incidents. Agency earns its place only in a judgment layer above
+    extraction, separating control flow (a relevance judge that escalates
+    wrong-article records) from bounded authority over a produced value (to null
+    or advise), each cleared by a reward-hacking-resistant evaluation gate. The
+    contribution is a discipline (an earn-it protocol) for deciding where
+    agentic judgment belongs in high-stakes data work.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Hongsup Shin
