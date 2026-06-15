@@ -6,7 +6,9 @@ project:
   # No banner image for this paper (overrides the inherited default from ../papers.yml)
   banner: null
   # Ensure your title is the same as in your `main.md`
-  title: 'Where Agentic Judgment Earns Its Place in High-Stakes Data Enrichment'
+  title:
+    'Automated Data Enrichment for Police Accountability: Where Agentic Judgment
+    Earns Its Place'
   # subtitle:
   description:
     In high-stakes data enrichment a confidently wrong value is worse than a

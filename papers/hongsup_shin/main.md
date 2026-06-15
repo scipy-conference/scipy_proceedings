@@ -1,6 +1,6 @@
 ---
 # Keep this title identical to the one in myst.yml
-title: "Where Agentic Judgment Earns Its Place in High-Stakes Data Enrichment"
+title: "Automated Data Enrichment for Police Accountability: Where Agentic Judgment Earns Its Place"
 abstract: |
   Automated data enrichment, filling missing fields in structured records from unstructured sources, is the canonical case for pointing an autonomous agent at a database and letting it fill every blank. In high-stakes data that instinct is dangerous. A confidently wrong value is worse than a blank, and retrieval-grounded extraction reduces but does not remove the tendency to assert what the source never stated. The question is not whether an LLM can extract these fields (it can) but where agentic judgment earns its place and where it is a liability.
 
