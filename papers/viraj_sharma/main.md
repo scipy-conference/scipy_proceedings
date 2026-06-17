@@ -12,7 +12,7 @@ The main idea in mechanistic interpretability converts a model's internal activa
 into human-readable text. Sparse Autoencoders (SAEs) break down residual stream activations into
 a dictionary of labelled features. This work identifies a limitation in this approach. Prior work has argued that individual neurons are not natural units of human-understandable concepts [@bricken2023monosemanticity]. Probing methods have also demonstrated that internal representations can be analyzed through learned classifiers [@alain2016understanding].
 
----
+
 
 ## Background
 
@@ -31,7 +31,7 @@ Both methods have a common problem: the output of the interpretive process is co
 to a pre-existing human vocabulary. SAEs label features using whatever words an annotator
 or language model produces.
 
----
+
 
 ## The Information Loss Problem
 
@@ -92,7 +92,7 @@ When entropy was computed over SAE feature activations rather than the model's o
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-interpretive-displacement.ipynb)
 
----
+
 
 ## The Doctor Does Not Dictate the MRI
 
@@ -100,7 +100,7 @@ A useful analogy can be drawn from medical imaging.
 
 The concept of tacit knowledge is relevant in this context [@polanyi1966tacit]. Dreyfus's analysis of expert skill acquisition identifies the transition from rule-following to holistic pattern recognition as the hallmark of genuine expertise [@dreyfus1980five]. Kahneman's System 1 characterises fast, pattern-sensitive judgment as structurally distinct from - and often more accurate than - deliberate propositional reasoning in familiar domains [@kahneman2011thinking].
 
----
+
 
 ## Proposed Framework: Activation Sensory Transduction (AST)
 
@@ -126,7 +126,7 @@ Four primary modalities:
 
 The AST operator occupies a monitoring role analogous to a flight controller or intensive care nurse: trained on a corpus of labeled activation patterns (normal, anomalous, deceptive, degraded), the operator provides a complementary judgment channel that does not rely solely on text labels.
 
----
+
 
 ## Research Steps
 
@@ -155,7 +155,7 @@ I propose a three-phase research program to evaluate the viability of AST:
 
 Phase 1 is achievable with commodity hardware, standard audio-processing libraries, and online participants. Phases 2 and 3 require dedicated operator training and, eventually, BCI hardware integration for full haptic transduction.
 
----
+
 
 ## Experimentation
 
@@ -225,7 +225,7 @@ The EDF view presents the same activation data through several complementary vis
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-edf-view.ipynb)
 
----
+
 
 ## Conclusion
 
@@ -234,5 +234,3 @@ The mechanistic interpretability literature has made substantial progress in und
 This is not an argument against SAEs, probing classifiers, or attribution methods. It is an argument that the field has a single channel - text - and that a single channel provides single-point-of-failure oversight. The same representational constraints that make a model's deceptive behavior hard to describe in text may make it visible to a trained sensory channel.
 
 If a model state can generate a sensory signal that a trained human operator flags before a text-based probe names it, that is a safety gain - regardless of whether the operator can articulate what they perceived. The doctor does not need to dictate the MRI to act on what they see.
-
----
