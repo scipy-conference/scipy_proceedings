@@ -66,7 +66,7 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - harrel_civic_2020
+        - harrell_civic_2020
         - eghbal_working_2020
         - fogel_producing_2023
         - gleicher_removing_2018
