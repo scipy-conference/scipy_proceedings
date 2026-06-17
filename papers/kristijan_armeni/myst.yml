@@ -58,7 +58,6 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
-    CIBMT: CIB Mango Tree
     CIB: Coordinated Inauthentic Behavior
     CI: Continuous Integration
     NGO: Non-Governmental Organization
