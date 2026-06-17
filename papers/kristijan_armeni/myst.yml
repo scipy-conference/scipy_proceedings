@@ -1,0 +1,80 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-kristijan_armeni
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Commit to Community: Open Source as Social Infrastructure in Volunteer
+    Civic Tech'
+  # subtitle:
+  description:
+    A lessons learned report on the pronounced social role of open source
+    maintainership in civic tech.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Kristijan Armeni
+      email: k.armeni@pm.me
+      orcid: 0000-0001-8391-8965
+      url: https://www.kristijanarmeni.net
+      github: KristijanArmeni
+      affiliations:
+        - id: CTDC
+          name: Civic Tech DC
+          email: team@civictechdc.org
+          url: https://civictechdc.org
+          github: https://github.com/orgs/civictechdc
+          city: Washinton
+          state: Disctrict of Columbia
+          country: United States of America
+      roles:
+        - Conceptualization
+        - Software
+        - Writing – original draft
+        - Supervision
+      corresponding: true
+    - name: Helen Y. Glover
+      email: helen.glover@civictechdc.org
+      url: https://helenyglover.com
+      affiliations:
+        - CTDC
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+        - Project administration
+    - name: Ben Sando
+      email: sandobenjamin@gmail.com
+      affiliations:
+        - CTDC
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+        - Project administration
+  keywords:
+    - civic tech
+    - open source
+    - maintainership
+    - community building
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    CIBMT: CIB Mango Tree
+    CIB: Coordinated Inauthentic Behavior
+    CI: Continuous Integration
+    NGO: Non-Governmental Organization
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
