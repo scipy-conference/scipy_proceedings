@@ -11,7 +11,8 @@ project:
   description:
     Proposal for developing a set of protocols and frameworks to convert
     tranformer model activations into
-
+  refencences:
+    - mybib.bib
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: viraj sharma
