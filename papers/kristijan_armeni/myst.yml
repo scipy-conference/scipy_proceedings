@@ -66,11 +66,13 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - harrel_civic_2020
+        - eghbal_working_2020
+        - fogel_producing_2023
+        - gleicher_removing_2018
+        - romero_vicente_coordinated_2024
+        - buytaert_25_2026
+        - sommerville_software_2016
   exports:
     - id: pdf
       format: typst
