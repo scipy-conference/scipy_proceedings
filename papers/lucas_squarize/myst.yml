@@ -9,24 +9,14 @@ project:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Ada Lovelace
-      email: ada.lovelace@example.org
-      orcid: 0000-0000-0000-0000
+    - name: Lucas Squarize Chagas
+      email: lsquarize@gmail.com
       affiliations:
-        - Analytical Society, London
-    - name: Chien-Shiung Wu
-      email: cs.wu@example.org
+        - Intuit, Inc.
+    - name: Avik Basu
+      email: avikbasu93@gmail.com
       affiliations:
-        - Columbia University
-    - name: Katherine Johnson
-      email: k.johnson@example.org
-      affiliations:
-        - NASA Langley Research Center
-      corresponding: true
-    - name: Alan Turing
-      email: alan.turing@example.org
-      affiliations:
-        - University of Manchester
+        - Intuit, Inc.
   keywords:
     - terraforming
     - desert
