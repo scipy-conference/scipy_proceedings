@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Hosted API concurrency versus usable records per minute</title>
+  <desc id="desc">Line chart showing usable records per minute increasing from 1.19 at API concurrency 1 to 10.52 at API concurrency 12.</desc>
+  <rect width="900" height="520" fill="#ffffff"/>
+  <text x="450" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#202124">Hosted API concurrency drives throughput</text>
+  <text x="450" y="73" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#5f6368">Single-agent sweep with worker count fixed at 12; 200 records per run</text>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
+    <line x1="90" y1="420" x2="790" y2="420" stroke="#202124" stroke-width="1.5"/>
+    <line x1="90" y1="100" x2="90" y2="420" stroke="#202124" stroke-width="1.5"/>
+
+    <g stroke="#e8eaed" stroke-width="1">
+      <line x1="90" y1="420" x2="790" y2="420"/>
+      <line x1="90" y1="340" x2="790" y2="340"/>
+      <line x1="90" y1="260" x2="790" y2="260"/>
+      <line x1="90" y1="180" x2="790" y2="180"/>
+      <line x1="90" y1="100" x2="790" y2="100"/>
+    </g>
+
+    <g text-anchor="end">
+      <text x="78" y="424">0</text>
+      <text x="78" y="344">3</text>
+      <text x="78" y="264">6</text>
+      <text x="78" y="184">9</text>
+      <text x="78" y="104">12</text>
+    </g>
+
+    <g text-anchor="middle">
+      <line x1="90" y1="420" x2="90" y2="426" stroke="#202124"/>
+      <text x="90" y="444">1</text>
+      <line x1="154" y1="420" x2="154" y2="426" stroke="#202124"/>
+      <text x="154" y="444">2</text>
+      <line x1="217" y1="420" x2="217" y2="426" stroke="#202124"/>
+      <text x="217" y="444">3</text>
+      <line x1="281" y1="420" x2="281" y2="426" stroke="#202124"/>
+      <text x="281" y="444">4</text>
+      <line x1="408" y1="420" x2="408" y2="426" stroke="#202124"/>
+      <text x="408" y="444">6</text>
+      <line x1="535" y1="420" x2="535" y2="426" stroke="#202124"/>
+      <text x="535" y="444">8</text>
+      <line x1="790" y1="420" x2="790" y2="426" stroke="#202124"/>
+      <text x="790" y="444">12</text>
+    </g>
+
+    <text x="445" y="486" text-anchor="middle" font-size="15" fill="#202124">Hosted API concurrency</text>
+    <text transform="translate(27 260) rotate(-90)" text-anchor="middle" font-size="15" fill="#202124">Usable records per minute</text>
+  </g>
+
+  <polyline points="90,388 154,355 217,321 281,317 408,281 535,226 790,139" fill="none" stroke="#1a73e8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#1a73e8" text-anchor="middle">
+    <circle cx="90" cy="388" r="6" fill="#1a73e8"/>
+    <text x="90" y="374">1.19</text>
+    <circle cx="154" cy="355" r="6" fill="#1a73e8"/>
+    <text x="154" y="341">2.44</text>
+    <circle cx="217" cy="321" r="6" fill="#1a73e8"/>
+    <text x="217" y="307">3.71</text>
+    <circle cx="281" cy="317" r="6" fill="#1a73e8"/>
+    <text x="281" y="303">3.86</text>
+    <circle cx="408" cy="281" r="6" fill="#1a73e8"/>
+    <text x="408" y="267">5.23</text>
+    <circle cx="535" cy="226" r="6" fill="#1a73e8"/>
+    <text x="535" y="212">7.29</text>
+    <circle cx="790" cy="139" r="6" fill="#1a73e8"/>
+    <text x="790" y="125">10.52</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="13" fill="#202124">
+    <rect x="608" y="86" width="218" height="62" rx="4" fill="#f8fafd" stroke="#d2e3fc"/>
+    <text x="624" y="111" font-weight="700">Observed pattern</text>
+    <text x="624" y="132">API concurrency was the dominant</text>
+    <text x="624" y="148">throughput control in this sweep.</text>
+  </g>
+</svg>

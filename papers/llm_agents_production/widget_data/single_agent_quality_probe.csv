@@ -1,0 +1,3 @@
+config,workers,api_concurrency,repeats,records,record_runs,exact_matches,exact_match_rate,consistent_records,consistency_rate,all_repeats_exact_match_records,all_repeats_exact_match_rate,total_missing_codes,total_extra_codes,interpretation
+w12_a3,12,3,3,12,36,33,0.9167,12,1.0000,11,0.9167,0,3,reference lower API concurrency quality probe
+w12_a12,12,12,3,12,36,34,0.9444,11,0.9167,11,0.9167,0,2,highest throughput quality probe

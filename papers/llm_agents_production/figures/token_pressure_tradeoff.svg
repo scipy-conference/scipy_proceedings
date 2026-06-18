@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-agent token-pressure operating points</title>
+  <desc id="desc">Bubble chart of four multi-agent stress configurations. Throughput ranges from 7.84 to 16.69 records per minute, exact label-triplet agreement ranges from 79 to 84 percent, and bubble size represents peak token-per-minute pressure.</desc>
+  <rect width="900" height="620" fill="#ffffff"/>
+  <text x="450" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#202124">Token pressure changes the operating point, not monotonically quality</text>
+  <text x="450" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#5f6368">Known-solvable 100-record cohort; bubble size shows peak total TPM</text>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
+    <line x1="115" y1="480" x2="790" y2="480" stroke="#202124" stroke-width="1.5"/>
+    <line x1="115" y1="115" x2="115" y2="480" stroke="#202124" stroke-width="1.5"/>
+    <g stroke="#e8eaed">
+      <line x1="115" y1="480" x2="790" y2="480"/>
+      <line x1="115" y1="407" x2="790" y2="407"/>
+      <line x1="115" y1="334" x2="790" y2="334"/>
+      <line x1="115" y1="261" x2="790" y2="261"/>
+      <line x1="115" y1="188" x2="790" y2="188"/>
+      <line x1="115" y1="115" x2="790" y2="115"/>
+      <line x1="115" y1="115" x2="115" y2="480"/>
+      <line x1="228" y1="115" x2="228" y2="480"/>
+      <line x1="340" y1="115" x2="340" y2="480"/>
+      <line x1="453" y1="115" x2="453" y2="480"/>
+      <line x1="565" y1="115" x2="565" y2="480"/>
+      <line x1="678" y1="115" x2="678" y2="480"/>
+      <line x1="790" y1="115" x2="790" y2="480"/>
+    </g>
+    <g text-anchor="end">
+      <text x="103" y="484">76%</text>
+      <text x="103" y="411">78%</text>
+      <text x="103" y="338">80%</text>
+      <text x="103" y="265">82%</text>
+      <text x="103" y="192">84%</text>
+      <text x="103" y="119">86%</text>
+    </g>
+    <g text-anchor="middle">
+      <text x="115" y="503">6</text>
+      <text x="228" y="503">8</text>
+      <text x="340" y="503">10</text>
+      <text x="453" y="503">12</text>
+      <text x="565" y="503">14</text>
+      <text x="678" y="503">16</text>
+      <text x="790" y="503">18</text>
+    </g>
+    <text x="452" y="540" text-anchor="middle" font-size="15" fill="#202124">Records per minute</text>
+    <text transform="translate(36 298) rotate(-90)" text-anchor="middle" font-size="15" fill="#202124">Exact label-triplet match</text>
+  </g>
+
+  <g font-family="Arial, sans-serif">
+    <circle cx="350" cy="261" r="16" fill="#1a73e8" fill-opacity="0.78" stroke="#174ea6" stroke-width="2"/>
+    <circle cx="219" cy="225" r="14" fill="#9334e6" fill-opacity="0.78" stroke="#681da8" stroke-width="2"/>
+    <circle cx="716" cy="371" r="25" fill="#e8710a" fill-opacity="0.78" stroke="#b35200" stroke-width="2"/>
+    <circle cx="549" cy="188" r="22" fill="#188038" fill-opacity="0.78" stroke="#0b5d1e" stroke-width="2"/>
+
+    <g font-size="12" fill="#202124">
+      <text x="350" y="229" text-anchor="middle" font-weight="700">Baseline</text>
+      <text x="350" y="245" text-anchor="middle">10.18 rpm, 82%</text>
+      <text x="219" y="194" text-anchor="middle" font-weight="700">High reasoning</text>
+      <text x="219" y="210" text-anchor="middle">7.84 rpm, 83%</text>
+      <text x="716" y="332" text-anchor="middle" font-weight="700">High concurrency</text>
+      <text x="716" y="348" text-anchor="middle">16.69 rpm, 79%</text>
+      <text x="549" y="150" text-anchor="middle" font-weight="700">Maximum pressure</text>
+      <text x="549" y="166" text-anchor="middle">13.71 rpm, 84%</text>
+    </g>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
+    <rect x="610" y="522" width="250" height="70" rx="6" fill="#f8fafd" stroke="#dadce0"/>
+    <text x="628" y="546" font-weight="700" fill="#202124">Peak TPM bubble size</text>
+    <circle cx="642" cy="572" r="12" fill="#9aa0a6" fill-opacity="0.45" stroke="#5f6368"/>
+    <text x="666" y="576">~300k</text>
+    <circle cx="742" cy="572" r="22" fill="#9aa0a6" fill-opacity="0.45" stroke="#5f6368"/>
+    <text x="774" y="576">~700k</text>
+  </g>
+</svg>
