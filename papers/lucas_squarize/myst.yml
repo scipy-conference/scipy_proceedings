@@ -4,9 +4,15 @@ project:
   # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2026-lucas_squarize
   # Ensure your title is the same as in your `main.md`
-  title: A Numerical Perspective to Terraforming a Desert
+  title:
+    'The Missing Lever in Machine Learning Deployment: Threshold Tuning using
+    Regression Discontinuity'
   # subtitle:
-  description: Add a two sentence description about your article.
+  description: >
+    We propose using Regression Discontinuity Design (RDD) to systematically
+    optimize decision thresholds in production ML models, turning arbitrary
+    cutoffs into causal, measurable, and adaptive business rules that maximize
+    outcomes at scale.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Lucas Squarize Chagas
@@ -18,22 +24,21 @@ project:
       affiliations:
         - Intuit, Inc.
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - regression discontinuity
+    - threshold tuning
+    - machine learning
+    - causal inference
+    - optimization
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    RDD: Regression Discontinuity Design
+    ML: Machine Learning
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - cattaneo2020
   exports:
     - id: pdf
       format: typst
