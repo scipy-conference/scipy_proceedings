@@ -110,11 +110,18 @@ grounding-based check independent of the judge.
 
 ## The Five-Step Framework
 
-The framework decomposes evaluation into five steps, each an independent Python module with a
-stable interface so teams can replace, extend, or skip a step without forking the pipeline. A
-pluggable domain context (Step 1) drives golden-set generation (Step 2) and eval-script generation
-and scoring (Step 3); failure clusters feed a living Domain Compliance Runbook (Step 4) whose new constraints
-flow back into Step 2, and a monitoring dashboard (Step 5) tracks results over time.
+The framework decomposes evaluation into five steps (@fig:pipeline), each an independent Python
+module with a stable interface so teams can replace, extend, or skip a step without forking the
+pipeline.
+
+:::{figure} pipeline.png
+:label: fig:pipeline
+:width: 100%
+The five-step framework. A pluggable domain context (Step 1) drives golden-set generation (Step 2)
+and eval-script generation and scoring (Step 3); failure clusters feed the living **Domain
+Compliance Runbook** (Step 4), whose new constraints flow back into Step 2; a monitoring dashboard
+(Step 5) tracks the OKRs over time.
+:::
 
 ### Step 1 — Pluggable Domain Context Ingestion
 
