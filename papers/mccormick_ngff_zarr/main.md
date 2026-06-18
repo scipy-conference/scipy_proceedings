@@ -37,7 +37,7 @@ cloud-ready: they are difficult to stream, to share, and to align with FAIR
 (Findable, Accessible, Interoperable, Reusable) principles. This friction
 directly hinders reproducible, collaborative science.
 
-The bioimaging community has converged on an answer. OME-Zarr — created by the 
+The bioimaging community has converged on an answer. OME-Zarr — created by the
 OME-NGFF, Open Microscopy Environment Next-Generation File Format, community — is a
 community-driven open standard for storing bioimaging data in the cloud
 [@moore2021ngff; @moore2023omezarr]. Built on Zarr's chunked, compressed,
