@@ -263,7 +263,7 @@ nz.to_ngff_zarr("output.ome.zarr", multiscales, enabled_rfcs=[4])
 
 The most significant recent addition is emerging support for RFC-5, which
 provides first-class coordinate systems and transformations in OME-Zarr and is
-the centerpiece of the forthcoming version 0.6 [@rfc5]. RFC-5 introduces named
+the centerpiece of the version 0.6 [@rfc5]. RFC-5 introduces named
 coordinate systems (sets of axes) and a richer vocabulary of transformations —
 including identity, axis permutation, translation, scale, affine, rotation,
 sequences of transformations, and field-based displacement and coordinate
@@ -356,11 +356,9 @@ and reproducible workflows to users who would otherwise be deterred by tooling.
 ### Future work
 
 Several directions are planned. On the specification side, we intend to extend
-support for additional community RFCs: **RFC-3** (the transitional
-bioformats2raw layout) [@rfc3] for smoother interoperability with existing
-conversion tools, and **RFC-8** (collections) [@rfc8] for grouping related
+support for additional community RFCs: **RFC-3** (support for additional dimensions) [@rfc3] for smoother interoperability with more image tyes, and **RFC-8** (collections) [@rfc8] for grouping related
 OME-Zarr datasets. We will continue maturing **RFC-5** coordinate-transformation
-support as the specification stabilizes, and align releases with the community's
+support to directly support common use cases, and align releases with the community's
 **OME-Zarr 1.0** milestone — a stable, long-term-supported version of the
 format. Alongside these features, we plan ongoing **performance improvements**,
 including faster downscaling and writing, better memory-aware scheduling, and
