@@ -142,23 +142,23 @@ enumeration, summarized in @tbl:methods. They differ primarily in their
 smoothing strategy and in their suitability for intensity versus label images,
 trading off artifact level, speed, and hardware portability.
 
-```{list-table} Downscaling methods available via `ngff_zarr.Methods`.
+:::{list-table} Downscaling methods available via `ngff_zarr.Methods`.
 :label: tbl:methods
 :header-rows: 1
 * - Method
   - Backend
   - Image type
 * - `ITKWASM_GAUSSIAN` (default)
-  - ITK-Wasm, SIMD / optional CUDA
+  - ITK-Wasm
   - Intensity
 * - `ITKWASM_BIN_SHRINK`
-  - ITK-Wasm, SIMD / optional CUDA
+  - ITK-Wasm
   - Intensity
 * - `ITKWASM_LABEL_IMAGE`
   - ITK-Wasm
   - Label
 * - `ITK_GAUSSIAN`
-  - Native ITK / optional FFT GPU
+  - Native ITK
   - Intensity
 * - `ITK_BIN_SHRINK`
   - Native ITK
@@ -172,14 +172,12 @@ trading off artifact level, speed, and hardware portability.
 * - `DASK_IMAGE_NEAREST`
   - dask-image / SciPy
   - Label
-```
+:::
 
 The default method, `ITKWASM_GAUSSIAN`, smooths with a discrete Gaussian filter
 to build a proper scale space, ideal for intensity images. It is implemented
 with ITK-Wasm [@itkwasm], so it is SIMD-accelerated and extremely portable
-across platforms, including the browser. Installing the
-`itkwasm-downsample-cucim` package transparently enables NVIDIA CUDA
-GPU-accelerated downsampling [@cucim]. The availability of label-aware methods
+across platforms, including the browser. The availability of label-aware methods
 is important: naively downsampling a segmentation with a smoothing filter
 corrupts label identities, so dedicated mode-based reductions
 (`ITKWASM_LABEL_IMAGE`, `DASK_IMAGE_MODE`) are provided. Native ITK variants
