@@ -21,8 +21,10 @@ project:
         - Intuit, Inc.
     - name: Avik Basu
       email: avikbasu93@gmail.com
+      orcid: 0009-0002-4489-378X
       affiliations:
         - Intuit, Inc.
+        - PyOpenSci
   keywords:
     - regression discontinuity
     - threshold tuning
