@@ -4,7 +4,7 @@ project:
   # Update this to match `scipy-2026-<folder>`; the folder is `mccormick_ngff_zarr`
   id: scipy-2026-mccormick_ngff_zarr
   # Ensure your title is the same as in your `main.md`
-  title: "ngff-zarr: A Lean and Kind OME-Zarr Toolkit for Bioimaging"
+  title: 'ngff-zarr: A Lean and Kind OME-Zarr Toolkit for Bioimaging'
   description: >-
     ngff-zarr is a lightweight, open-source Python toolkit implementing the
     OME-Zarr specification. It converts, validates, and generates multiscale
