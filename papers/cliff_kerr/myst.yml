@@ -1,0 +1,67 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-cliff_kerr
+  # Ensure your title is the same as in your `main.md`
+  title: "Vibes, meet rigor: Evaluating and improving AI performance on complex scientific code"
+  # subtitle:
+  description: >-
+    We quantitatively evaluated LLM models with and without domain-specific
+    tools (MCP servers and skills) on a Starsim disease modeling benchmark,
+    finding that tool access improved performance more than model choice alone.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Cliff Kerr
+      email: cliff.kerr@gatesfoundation.org
+      # orcid: [PLACEHOLDER: add ORCID if available]
+      affiliations:
+        - Bill & Melinda Gates Foundation, Seattle, USA
+      corresponding: true
+    - name: Katherine Rosenfeld
+      email: katherine.rosenfeld@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      affiliations:
+        - Bill & Melinda Gates Foundation, Seattle, USA
+    - name: Jessica Lundin
+      email: jessica.lundin@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      affiliations:
+        - Bill & Melinda Gates Foundation, Seattle, USA
+    - name: Robyn Stuart
+      email: robyn.stuart@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      affiliations:
+        - Bill & Melinda Gates Foundation, Seattle, USA
+    - name: Romesh Abeysuriya
+      # email: [PLACEHOLDER: add Romesh Abeysuriya's email — Burnet address unconfirmed]
+      affiliations:
+        - Burnet Institute, Melbourne, Australia
+  keywords:
+    - AI evaluation
+    - agent-based model
+    - disease modeling
+    - Starsim
+    - Sciris
+    - Inspect.ai
+    - SciCode
+    - Claude
+  abbreviations:
+    MCP: Model Context Protocol
+    LLM: Large Language Model
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - starsim
+        - starsim_crn
+        - inspectai
+        - scicode
+        - terminalbench
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
