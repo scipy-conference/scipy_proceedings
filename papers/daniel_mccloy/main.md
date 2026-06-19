@@ -26,7 +26,7 @@ Many of these related packages are hosted within the MNE-Tools organization on G
 
 In 2024, the MNE-Python governance changed from a BDFL-plus-maintainers model[^bdfl] to a more decentralized model comprising an advisory board, a steering council, and a maintainer team.
 <!-- TODO insert ecosystem diagram -->
-Our user base spans neuroscience research, clinical neurology, and applied neurotechnology, and is estimated to be in the 5000-10000 range.
+Our user base spans neuroscience research, clinical neurology, and applied neurotechnology, and is estimated to be in the range of 5000-10000 users.
 The community convenes mostly online through a [Q&A forum](https://mne.discourse.group), biweekly live office hours on Discord, our GitHub repositories' issue trackers, and occasional in-person small-group sprints.
 MNE-Python has no community manager; to the extent that community management happens at all, it is handled mostly by the steering council chair.
 
