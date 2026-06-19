@@ -86,23 +86,26 @@ Tutorials focused on knowledge relevant to the contributing workflow: writing an
 
 ### Intermediate Sprint
 
-In 2023, we held an Intermediate Sprint, that was aimed at people who were already contributing to MNE-Python but who wanted to advance their contributing skills.
+In 2023, we held an Intermediate Sprint, open to alumni of the New Developer Sprints who wanted to advance their contributing skills.
 This sprint was again held online, covering several time zones.
 Participants chose larger contributing projects in advance, pairing up with each other or mentors for pair-programming sessions.
-This was complemented by daily short lectures on pertinent topics such as running and writing tests,
-building documentation, deprecations, using Continuous Integration and understanding the output of the services used by MNE-Python, and more.
+This was complemented by daily short lectures on pertinent topics such as debugging,
+building documentation, deprecations, understanding output of the CIs we use, and more.
+
+<!-- TODO more detail here about the kinds of projects the participants did. -->
 
 ### Maintainer Onboarding
 
-Currently, we are onboarding four alumni of those sprints as maintainers.
-For the first time, we are providing a structured onboarding process that spans two years.
-During this period, the prospective maintainers obtain a stipend.
-<!-- 
-- What are they learning / learning objectives
-- What are their responsibilities
-- How is this structured (recurring meetings etc)
-- Do we want to say something about the funding of this?
- -->
+After completion of our Intermediate Sprint we sought funding to support the onboarding of those participants to become MNE-Python maintainers.
+We received an [NSF POSE award](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2449064) in 2025, and began onboarding three sprint alumni and one exceptionally good GSoC contributor.
+The POSE grant again allowed us to provide substantial stipends to the trainees.
+For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization, *etc*), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
+
+<!-- TODO describe the second 6-month period (triage, review practicum, CI practicum, documentation / Diátaxis). -->
+
+<!-- TODO describe the additional outside training (CSCCE, CoC enforcement). -->
+
+<!-- TODO discuss the upcoming in-person training. -->
 
 ### Curriculum
 
@@ -110,6 +113,10 @@ During the sprints and onboarding activities, we are collecting notes and materi
 This documentation is meant to mainly support future onboarding efforts, but will also be worked into our Contributing Guide where applicable.
 The domain-general parts will be extracted and published separately from the MNE-Python-specific curriculum.
 
+<!-- TODO expand this section: links to resources, what resources are still missing. -->
+
+
+<!-- TODO add a sidebar section about trainee's engagement with the AI policy governance debate / vote -->
 
 ## Discussion
 

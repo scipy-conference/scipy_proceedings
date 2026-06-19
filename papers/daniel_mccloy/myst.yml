@@ -38,6 +38,7 @@ project:
     PR: pull request
     Q&A: question-and-answer
     BDFL: benevolent dictator-for-life
+    GSoC: Google Summer of Code
     EEG: electroencephalography
     MEG: magnetoencephalography
     ECoG: electrocorticography
