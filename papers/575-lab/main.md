@@ -33,6 +33,10 @@ decision process that leads an agent to choose one tool over another.
 
 Consider an agent that receives the request "Find information about our company's API rate
 limits." The agent might choose between searching internal documentation or the public web.
+The agent's decision to use internal search is the correct one, but what if it instead chose the wrong
+tool or took an unauthorized action? Without the ability to trace and understand the model's interpretation
+of both the request and the environment in which it is working, users can not be confident that the agent
+is taking the right course of action and in turn can not trust it to operate as required.
 Understanding *why* the model interprets "our company's" as requiring internal search, rather
 than treating it as a generic reference, requires inspecting the model's internal
 representations, not just its outputs.
@@ -73,11 +77,47 @@ decisions. Our contributions are:
    [@ref_juang2024] to validate whether feature labels correctly identify *which tokens* activate
    each feature, catching explanations that are "right for the wrong reasons."
 
-The remainder of this paper is organized as follows. [](#sec:related) reviews related work.
+The remainder of this paper is organized as follows.[](#sec:raft) provides the ethical motivation for this work.
+[](#sec:related) reviews related work.
 [](#sec:methodology) details our methodology. [](#sec:evaluation) describes our evaluation
 approach. [](#sec:experiments) presents our experimental setup, and [](#sec:results) reports
 results. [](#sec:discussion) discusses findings and limitations, and [](#sec:conclusion)
 concludes.
+
+(sec:raft)=
+## Responsible AI Motivations
+Transparency of agent decisions is increasingly important as AI regulations are implemented
+across many geographies and industries. Traditional approaches to AI Governance
+require the ability to interpret and explain model behavior and agentic systems are subject 
+to the same scrutiny, even if their mechanics are different. Transparency requirements are 
+grounded in the need to verify AI systems are operating as intended, leading to stronger trust in
+and adoption of the technology. Engendering trust in AI systems requires a framework for responsible
+AI development; we choose to follow the transparency principle outlined in the RAFT framework
+[@ref_gandhi2025] as the underpinning and motivation for understanding agent behavior.
+
+The advent of chat-based language models and rapid development in agenetic capabilities have highlighted the 
+ongoing need for robust and practical frameworks for AI Governance. Numerous political bodies and standards organizations
+have developed frameworks to manage the risks associated with AI - though these largely provide high-level ethical
+principles. By contrast, the RAFT framework is a value-criteria-indicator approach to Responsible AI that covers risks
+from traditional and generative AI. It is an intentionally lightweight methodology that focuses on what are considered
+"baseline" requirements for good AI Governance. The RAFT framework is compromised of 4 values - Reliable, Accountable,
+Fair, and Transparent.
+
+```{figure} images/RAFT.png
+:label: fig:raft
+:align: center
+:width: 100%
+
+Core principles of the RAFT framework.
+```
+From these principles organizations form specific criteria and indicators to assess whether their systems align to 
+these values. For example, in the case of Transparency an organization might assign "explainable outputs"
+as a criteria towards alignment with this principle. Within that criterion will be multiple indicators that can be 
+used as observable measures of progress - such as SHAP values (for predictive modeling) or chain-of-thought reasoning
+(in the case of generative AI systems). The mechanistic interpretability approach offered in this paper can serve as
+another indicator towards explainability and overall transparency of agenetic systems. Our hope is that by grounding 
+the motivation for this work in a larger principles-based approach we can support the holistic development of responsible
+AI tooling. 
 
 (sec:related)=
 ## Related Work
