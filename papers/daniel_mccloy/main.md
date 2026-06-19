@@ -22,10 +22,13 @@ It was created in 2010 by [Alex Gramfort](https://alexandre.gramfort.net/) as a 
 The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels [@statsmodels], and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
 
 MNE-Python provides functionality for electrophysiological signal pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals) and visualization.
-Its functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
+
+### Ecosystem
+
+MNE-Python's functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
 Many of these related packages are hosted within the MNE-Tools organization on GitHub, and looked after by members of the MNE-Python Maintainer Team.
 
-### Ecosystem and Governance
+### Community and Governance
 
 In 2024, the MNE-Python governance changed from a BDFL-plus-maintainers model[^bdfl] to a more decentralized model comprising an advisory board, a steering council, and a maintainer team.
 <!-- TODO insert ecosystem diagram -->
