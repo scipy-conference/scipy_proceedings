@@ -139,7 +139,7 @@ leading to a slight increase in the diversity of our regular contributors and ma
 The onboarding efforts, however, came with considerable monetary and personnel costs.
 The sprints and maintainer onboarding were funded by three separate grants over a six-year period.
 Beyond the monetary requirements (compensation for the sprint attendees and key personnel),
-they were a huge investment of existing maintainers' time. 
+they were a huge investment of existing maintainers' time.
 
 <!-- TODO say something about investing into future maintainers vs fixing current roadmap items -->
 
