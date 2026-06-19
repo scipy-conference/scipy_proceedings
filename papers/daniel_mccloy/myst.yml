@@ -34,6 +34,11 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    CI: continuous integration
+    PR: pull request
+    Q&A: question-and-answer
+    BDFL: benevolent dictator-for-life
+    GSoC: Google Summer of Code
     EEG: electroencephalography
     MEG: magnetoencephalography
     ECoG: electrocorticography

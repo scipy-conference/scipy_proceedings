@@ -3,75 +3,113 @@
 title: On-boarding and retaining maintainer talent for MNE-Python
 abstract: |
   MNE-Python is open-source software for analyzing electrophysiological data in neuroscience.
-  Like many projects, we struggle to retain maintainers.
-  Finding maintainers in our user community is hard; most have little formal training in programming.
-  To address this, we organized progressive training sprints with open applications and a participation stipend.
-  Currently, we are onboarding four alumni of those sprints as new maintainers.
-  We've seen positive outcomes from this approach, but at a high cost.
-  We are now developing a curriculum for future onboarding efforts.
-  We hope to spark discussions with other project leaders about their efforts toward educating and retaining talented maintainers.
+  Like many projects, we struggle to attract and retain maintainers.
+  Besides the usual reasons (overworked researchers facing career instability
+  and a publication-focused incentive structure),
+  our challenge is especially acute:
+  most neuroscientists lack software maintenance expertise,
+  and most software engineers lack neuroscience domain knowledge.
+  To address this, we organized progressive training sprints over several years.
+  Currently, four alumni of those sprints are being onboarded as maintainers.
+  We are seeing positive outcomes from this approach, but at a high cost.
+  We are now developing a curriculum to streamline future onboarding efforts.
 ---
 
-## Introduction
+## Background
 
 MNE-Python [@mne_python] is open-source software for analyzing electrophysiological data in neuroscience.
-We have a broad user base spanning neuroscience research, clinical neurology, and applied neurotechnology.
-<!-- TODO INSERT HISTORY/USES HERE -->
+It was created in 2010 by [Alex Gramfort](https://alexandre.gramfort.net/) as a port of [MNE](https://mne.tools/stable/install/mne_c.html) software (originally written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
+The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels [@statsmodels], and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
 
-Like many open-source software projects, MNE-Python is struggling to retain maintainers and reach a comfortable Truck Factor [@AvelinoEtAl2016].
-This is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025],
-and the fact that many MNE-Python users are not formally trained in programming.
-Moreover, MNE-Python's status as domain software makes it difficult for capable programmers lacking neuroscience backgrounds to fill the maintenance gap:
-there are too many domain-specific details that one must know to effectively maintain the codebase.
-<!-- TODO BOLSTER WITH IDEAS FROM OUR PAPER? -->
-<!-- TODO POSE GRANT APPLICATION HAS SOME GOOD TEXT WE CAN REUSE -->
+MNE-Python provides functionality for electrophysiological signal pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals) and visualization.
+
+### Ecosystem
+
+MNE-Python's functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
+Many of these related packages are hosted within the MNE-Tools organization on GitHub, and looked after by members of the MNE-Python Maintainer Team.
+
+### Community and Governance
+
+In 2024, the MNE-Python governance changed from a BDFL-plus-maintainers model[^bdfl] to a more decentralized model comprising an advisory board, a steering council, and a maintainer team.
+<!-- TODO insert ecosystem diagram -->
+Our user base spans neuroscience research, clinical neurology, and applied neurotechnology, and is estimated to be in the range of 5000-10000 users.
+The community convenes mostly online through a [Q&A forum](https://mne.discourse.group), biweekly live office hours on Discord, our GitHub repositories' issue trackers, and occasional in-person small-group sprints.
+MNE-Python has no community manager; to the extent that community management happens at all, it is handled mostly by the steering council chair.
+
+[^bdfl]: The founding BDFL was Alexandre Gramfort, replaced by Daniel McCloy in 2022.
+
+## Problem Statement
+Like many open-source software projects, MNE-Python struggles retain maintainers and reach a comfortable Truck Factor [@AvelinoEtAl2016].
+Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, accurately communicate trade-offs for different analysis choices, *etc.*) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, *etc.*).
+Since most MNE-Python users are not formally trained in software engineering, this makes finding suitable maintainers difficult; the problem is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
+Therefore our task becomes finding interested neuroscientists and teaching them how to develop and maintain scientific software.[^domaindev]
+Our efforts to achieve this are the topic of the rest of this paper.
+<!-- TODO BOLSTER WITH IDEAS FROM OUR "CYCLING" PAPER? -->
+
+[^domaindev]: Theoretically, another option would be engaging a competent developer and teaching them how to think like a neuroscientist, but anecdotally the consensus among leaders of other scientific software projects seems to be that it's much easier to train scientists to develop software than *vice-versa*.
 
 ## Interventions
 <!-- 3 parts: new dev spr, intermed spr, POSE onboarding. for each: example of program, work they did, etc -->
 
 To increase our contributor pool, we organized two New Developer Sprints and one Intermediate Developer Sprint.
+<!-- TODO include links to the CZI grants that funded the NewDev and Intermed sprints -->
 These one-week courses were open to applications from the community, and participants received a stipend.
-Holding the courses online allowed for the participation of developers from all over the world.
-To further account for this, we ran the sprints in different time zones,
-with maintainers from the community leading different time zones.
-Both types of sprint involved participants pair-programming with each other or with seasoned maintainers and participants choosing projects to tackle during the week.
-The programs were complemented with plenary lectures.
+The goal of these sprints was to teach software development and open-source skills to interested community members.
+Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of scientists from all over the world.
+We used the Discord platform because it supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video "rooms" for participants to work in.
+Each sprint had an associated kanban-style project board on GitHub to facilitate finding and tracking the pieces of work to be done.
+Both types of sprint involved participants pair-programming with each other and with mentors.
+Sprint mentors (MNE-Python maintainers) staffed the Discord server in shifts, waiting in an "available mentors" room for participants to ask questions, request reviews or pair-programming sessions, or seek their next piece of work.
+Short plenary lectures and tutorials augmented the time spent coding.
 
 ### New Developer Sprints
 
 In 2021 and 2022 we held two New Developer Sprints, which aimed at equipping users of our software with the knowledge necessary to become open-source contributors.
-Most of our users are from the wider fields of neuroscience and cognitive science, and usually do not have a formal education in computer science.
-This means that they can be lacking the necessary knowledge on how to contribute to open source,
-and the (perceived) barriers to contribution can thus be high.
-With the New Developers Sprints, we aimed at providing an educational space to acquire the open-source-general and MNE-Python-specific skills for successful contributions to our project.
-The curriculum of these sprints consisted of short presentations and pair-programming.
+Most of our users are from the fields of neuroscience and cognitive science, and many do not have formal training in computer science or programming.
+Thus most lack the knowledge of how open-source contribution happens.
+Setting up the development environment, understanding git and GitHub, writing documentation and tests, and navigating reviews and CI logs: all are knowledge gaps that prospective contributors must bridge.
+For the New Developers Sprints, our application process included questions designed to guarantee that applicants had, at minimum, a functioning development environment and an up-to-date clone of their own fork of the upstream MNE-Python repository.[^example_app_questions]
+We provided support to help applicants get this part right, and proactively reached out before the deadline if their submissions indicated a wrong or incomplete setup.
+By doing this, we avoided spending any sprint time on environment setup, git configuration, or other preliminaries.
+
+[^example_app_questions]: Example questions: (1) change directory to the root of your repository clone, and paste the output of the command `git remote -v`. (2) start an IPython session and run the commands `import mne; mne.sys_info()` and paste the output here.
+
+
+The content of the New Developer Sprints was also curated in advance.
+Dozens of issues were tagged as reserved for the sprint, including several nearly-identical small documentation tasks spread across the codebase.
+Participants were given brief instructions in pair programming practices (for review of benefits, see @HanksEtAl2011), assigned a partner, and each pair was given several small documentation issues to work through.
 <!-- TODO ADD EVIDENCE/CITATION ON PAIR PROGRAMMING BEING USEFUL? -->
-The presentations were delivered by senior community members within and outside of academia, who shared their experiences in the MNE-Python community and how they benefitted from being contributors.
-The focus on the sprints, however, was on acquiring hands-on contributing experience through online pair-programming.
-Before the sprints, we had curated a list of suitable “First Issues” that the participants could choose from.
-The participants paired up with each other and tackled these issues in pairs, connected on a platform that enables screen-sharing and video calls.
-Meanwhile, mentors from the MNE-Python maintainer team were available to answer questions or jump into the pair-programming sessions. 
+The purpose of these small issues was to repeatedly expose participants to the full contribution life cycle: fetch upstream, branch, code, test, commit, push, open PR, check CIs, and respond to reviews.
+After a day or so spent on the small documentation issues, nearly all participants took on more complex tasks involving editing module code, writing tests, or updating tutorials.
+
+Each day, a short lecture or tutorial was provided by senior community members within and outside of academia.
+Lectures focused on career trajectory, experiences in the MNE-Python community, and how the speakers benefitted from being contributors.
+Tutorials focused on knowledge relevant to the contributing workflow: writing and running tests, checking code coverage, reading tracebacks, and similar topics.
+
 <!-- TODO ADD INFO ON RETENTION/CONTINUED CONTRIBUTIONS -->
 
 ### Intermediate Sprint
 
-In 2023, we held an Intermediate Sprint, that was aimed at people who were already contributing to MNE-Python but who wanted to advance their contributing skills.
+In 2023, we held an Intermediate Sprint, open to alumni of the New Developer Sprints who wanted to advance their contributing skills.
 This sprint was again held online, covering several time zones.
 Participants chose larger contributing projects in advance, pairing up with each other or mentors for pair-programming sessions.
-This was complemented by daily short lectures on pertinent topics such as running and writing tests,
-building documentation, deprecations, using Continuous Integration and understanding the output of the services used by MNE-Python, and more.
+This was complemented by daily short lectures on pertinent topics such as debugging,
+building documentation, deprecations, understanding output of the CIs we use, and more.
+
+<!-- TODO more detail here about the kinds of projects the participants did. -->
 
 ### Maintainer Onboarding
 
-Currently, we are onboarding four alumni of those sprints as maintainers.
-For the first time, we are providing a structured onboarding process that spans two years.
-During this period, the prospective maintainers obtain a stipend.
-<!-- 
-- What are they learning / learning objectives
-- What are their responsibilities
-- How is this structured (recurring meetings etc)
-- Do we want to say something about the funding of this?
- -->
+After completion of our Intermediate Sprint we sought funding to support the onboarding of those participants to become MNE-Python maintainers.
+We received an [NSF POSE award](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2449064) in 2025, and began onboarding three sprint alumni and one exceptionally good GSoC contributor.
+The POSE grant again allowed us to provide substantial stipends to the trainees.
+For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization, *etc*), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
+
+<!-- TODO describe the second 6-month period (triage, review practicum, CI practicum, documentation / Diátaxis). -->
+
+<!-- TODO describe the additional outside training (CSCCE, CoC enforcement). -->
+
+<!-- TODO discuss the upcoming in-person training. -->
 
 ### Curriculum
 
@@ -79,13 +117,17 @@ During the sprints and onboarding activities, we are collecting notes and materi
 This documentation is meant to mainly support future onboarding efforts, but will also be worked into our Contributing Guide where applicable.
 The domain-general parts will be extracted and published separately from the MNE-Python-specific curriculum.
 
+<!-- TODO expand this section: links to resources, what resources are still missing. -->
+
+
+<!-- TODO add a sidebar section about trainee's engagement with the AI policy governance debate / vote -->
 
 ## Discussion
 
 ### Onboarding Results
 
 Past contributors and maintainers mostly came from labs where the lab director had a vested interest in MNE-Python, or were recruited at conferences to contribute their methodological developments.
-<!-- ↑ This could be duplicated above as "problem statement" -->
+<!-- ↑ This could be duplicated above in the "problem statement" section? -->
 In contrast, our current approach has been bottom-up: first training users how to contribute, then upskilling contributors to facilitate repeat contributions, and finally providing intensive training in maintainer-specific skills.
 In our experience, providing education on how to contribute to open source, especially information specific to our project,
 greatly lowers the threshold for our users to be willing to attempt a contribution.
@@ -98,7 +140,8 @@ The onboarding efforts, however, came with considerable monetary and personnel c
 The sprints and maintainer onboarding were funded by three separate grants over a six-year period.
 Beyond the monetary requirements (compensation for the sprint attendees and key personnel),
 they were a huge investment of existing maintainers' time. 
-<!-- Do we want to say something about investing into future maintainers vs fixing current things? -->
+
+<!-- TODO say something about investing into future maintainers vs fixing current roadmap items -->
 
 ### Onboarding Obstacles and Outlook
 
@@ -111,4 +154,4 @@ At the same time, we hope to spark a discussion among open source software maint
 
 
 ## Funding acknowledgment
-This project has been made possible in part by NSF POSE award 2449064, and by grant numbers 2020-219006 and 2021-237679 from the Chan Zuckerberg Initiative DAF, an advised fund of Silicon Valley Community Foundation.
+This project has been made possible by NSF POSE award 2449064, and by grant numbers 2020-219006 and 2021-237679 from the Chan Zuckerberg Initiative DAF, an advised fund of Silicon Valley Community Foundation.
