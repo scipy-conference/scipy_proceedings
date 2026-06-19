@@ -69,6 +69,9 @@ Now, before coding in the AI hackathon, we spent time in the beginning determini
 
 Requirements gathering was an important step to help us understand the goals of our institutions. This involved journey mapping.
 
+<img width="1400" height="785" alt="user_journey_map" src="https://github.com/user-attachments/assets/c2ee6cd7-9103-4402-86ad-ac343453cf54" />
+
+
 Once we documented the needs and criteria our stakeholders (educational institutions and staff) had for success, we could begin development work.
 
 Before building, we worked with educational staff to journey-map their workflows, questions, and pain points. That process helped define:
