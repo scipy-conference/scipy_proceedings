@@ -22,7 +22,7 @@ It was created in 2010 by [Alex Gramfort](https://alexandre.gramfort.net/) as a 
 The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels, and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
 
 MNE-Python provides functionality for electrophysiological signal pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals) and visualization.
-Its functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
+Its functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@mne_nirs]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
 Many of these related packages are hosted within the MNE-Tools organization on GitHub, and looked after by members of the MNE-Python Maintainer Team.
 
 ### Ecosystem and Governance
@@ -50,11 +50,12 @@ Our efforts to achieve this are the topic of the rest of this paper.
 
 To increase our contributor pool, we organized two New Developer Sprints and one Intermediate Developer Sprint.
 These one-week courses were open to applications from the community, and participants received a stipend.
+The goal of these sprints was to teach software development and open-source skills to interested community members.
 Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of developers from all over the world.
 We used the Discord platform because it supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video "rooms" for participants to work in.
 Each sprint had an associated kanban-style project board on GitHub to facilitate finding and tracking the pieces of work to be done.
 Both types of sprint involved participants pair-programming with each other and with seasoned maintainers.
-Sprint mentors (MNE-Python maintainers) staffed the Discord server in shifts, waiting in an "available mentors" room for participants to ask questions, request reviews, or seek their next piece of work.
+Sprint mentors (MNE-Python maintainers) staffed the Discord server in shifts, waiting in an "available mentors" room for participants to ask questions, request reviews or pair-programming sessions, or seek their next piece of work.
 Short plenary lectures and tutorials augmented the time spent coding.
 
 ### New Developer Sprints
