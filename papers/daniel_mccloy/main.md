@@ -3,11 +3,14 @@
 title: On-boarding and retaining maintainer talent for MNE-Python
 abstract: |
   MNE-Python is open-source software for analyzing electrophysiological data in neuroscience.
-  Like many projects, we struggle to attract and retain maintainers:
+  Like many projects, we struggle to attract and retain maintainers.
+  Besides the usual reasons (overworked researchers facing career instability
+  and a publication-focused incentive structure),
+  the challenge is especially acute:
   most neuroscientists lack software maintenance expertise,
   and most software engineers lack neuroscience domain knowledge.
-  To address this, we organized progressive training sprints with open applications and a participation stipend.
-  Currently, we are onboarding four alumni of those sprints as new maintainers.
+  To address this, we organized progressive training sprints over several years.
+  Currently, four alumni of those sprints are being onboarded as maintainers.
   We are seeing positive outcomes from this approach, but at a high cost.
   We are now developing a curriculum to streamline future onboarding efforts.
 ---
