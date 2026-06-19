@@ -34,7 +34,7 @@ MNE-Python has no community manager; to the extent that community management hap
 
 ## Problem Statement
 Like many open-source software projects, MNE-Python struggles retain maintainers and reach a comfortable Truck Factor [@AvelinoEtAl2016].
-Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, accurately communicate trade-offs for different analysis choices, *etc.*) and also need software development expertise (not just "writing good code", but also testing, continuous integration and deployment, dependency and security management, *etc.*).
+Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, accurately communicate trade-offs for different analysis choices, *etc.*) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, *etc.*).
 Since most MNE-Python users are not formally trained in software engineering, this makes finding suitable maintainers difficult; the problem is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
 Therefor our task becomes finding interested neuroscientists and teaching them how to develop and maintain scientific software.[^domaindev]
 Our efforts to achieve this are the topic of the rest of this paper.
