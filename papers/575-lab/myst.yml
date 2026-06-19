@@ -33,6 +33,24 @@ project:
           city: Toronto
           region: Ontario
           country: Canada
+    - name: Carlos Huisa
+      orcid: 0009-0003-3599-3209
+      email: carlos.huisa@dataiku.com
+      affiliations:
+        - id: dataiku-tx
+          institution: Dataiku Inc.
+          city: Austin
+          region: Texas
+          country: USA
+    - name: Triveni Gandhi
+      orcid: 0000-0001-6964-8460
+      email: triveni.gandhi@dataiku.com
+      affiliations:
+        - id: dataiku-ny
+          institution: Dataiku Inc.
+          city: New York City
+          region: New York
+          country: USA
   keywords:
     - mechanistic interpretability
     - sparse autoencoders
