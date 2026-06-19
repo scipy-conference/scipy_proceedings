@@ -26,6 +26,7 @@ project:
       affiliations:
         - embl
     - name: Valentin Boussot
+      orcid: 0009-0003-2465-5458
       affiliations:
         - fideus
     - name: Josh Moore
