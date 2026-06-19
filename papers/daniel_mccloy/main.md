@@ -66,7 +66,7 @@ By doing this, we avoided spending any sprint time on environment setup, git con
 
 The content of the New Developers' Sprints was also curated in advance.
 Dozens of issues were tagged as reserved for the sprint, including several nearly-identical small documentation tasks spread across the codebase.
-Participants were given brief instructions in pair programming practices, assigned a partner, and each pair was given several small documentation issues to work through.
+Participants were given brief instructions in pair programming practices (for review of benefits, see @HanksEtAl2011), assigned a partner, and each pair was given several small documentation issues to work through.
 <!-- TODO ADD EVIDENCE/CITATION ON PAIR PROGRAMMING BEING USEFUL? -->
 The purpose of these small issues was to repeatedly expose participants to the full contribution life cycle: fetch upstream, branch, code, test, commit, push, open PR, check CIs, and respond to reviews.
 After a day or so spent on the small documentation issues, nearly all participants took on more complex tasks involving editing module code, writing tests, or updating tutorials.
