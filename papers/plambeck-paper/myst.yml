@@ -3,8 +3,14 @@ extends: ../papers.yml
 project:
   id: scipy-2026-plambeck-paper
   # Ensure your title is the same as in your `main.tex`
-  title: "Optimising HCP Sample Allocation in Pharma: Combining Non-Linear Ensemble Learning, Spatial Lags, and Integer Programming"
-  description: A learning–optimisation framework that combines decile-banded CatBoost ensembles, inverse-distance spatial lags, and 0–1 mixed-integer programming to allocate pharmaceutical samples across U.S. healthcare providers under territory and inventory constraints.
+  title:
+    'Optimising HCP Sample Allocation in Pharma: Combining Non-Linear Ensemble
+    Learning, Spatial Lags, and Integer Programming'
+  description:
+    A learning–optimisation framework that combines decile-banded CatBoost
+    ensembles, inverse-distance spatial lags, and 0–1 mixed-integer programming
+    to allocate pharmaceutical samples across U.S. healthcare providers under
+    territory and inventory constraints.
   # The original Springer-formatted source is kept for reference but not rendered.
   exclude:
     - paper-springer-formatted-v7-full.tex
