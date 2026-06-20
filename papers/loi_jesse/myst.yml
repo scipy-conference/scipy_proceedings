@@ -1,0 +1,8 @@
+```yaml
+   project:
+     id: scipy-2026-loi
+     title: Placeholder Title for SciPy Submission
+     authors:
+       - name: Jesse Loi
+         affiliations:
+           - Seattle University
