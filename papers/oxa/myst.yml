@@ -1,0 +1,59 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-oxa
+  title: 'OXA: An Open Exchange Architecture for Modular and Composable Scientific Content'
+  description: >-
+    OXA is a community-driven specification that represents scientific documents
+    and their components as typed, addressable JSON objects, providing an open
+    exchange substrate for modular and composable research.
+  authors:
+    - name: Rowan Cockett
+      email: rowan@curvenote.com
+      corresponding: true
+      affiliations:
+        - Curvenote
+        - Continuous Science Foundation
+    - name: Tracy Teal
+      affiliations:
+        - openRxiv
+    - name: Nokome Bentley
+      affiliations:
+        - Stencila
+  keywords:
+    - modular science
+    - open standards
+    - reproducibility
+    - executable documents
+    - scientific publishing
+    - JATS
+  # Abbreviations used in the paper (https://mystmd.org/guide/glossaries-and-terms#abbreviations)
+  abbreviations:
+    OXA: Open Exchange Architecture
+    JATS: Journal Article Tag Suite
+    MECA: Manuscript Exchange Common Approach
+    AST: Abstract Syntax Tree
+    RFC: Request for Comments
+    CSF: Continuous Science Foundation
+    MyST: Markedly Structured Text
+    RDS: Reproducible Document Stack
+    ERA: Executable Research Article
+    AGU: American Geophysical Union
+    ATProto: AT Protocol
+  # Citation keys without a DOI are exempted from the `doi-exists` check
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - jupyter
+        - jats
+        - meca
+        - notebooksinpublishing
+        - pandoc
+        - quarto
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
