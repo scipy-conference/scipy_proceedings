@@ -1,0 +1,50 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-allison_ding
+  title: "BCDNM-HPO: Noise-Suppressed Topic Modeling with Zero-Code-Change GPU Acceleration"
+  description: "A SciPy proceedings draft describing scalarized hyperparameter optimization for BERTopic-style topic modeling with coherence, diversity, and noise-suppression metrics."
+  authors:
+    - name: Allison Ding
+      affiliations:
+        - NVIDIA
+      corresponding: true
+    - name: Mitesh Patel
+      affiliations:
+        - NVIDIA
+    - name: Corey Nolet
+      affiliations:
+        - NVIDIA
+  keywords:
+    - topic modeling
+    - BERTopic
+    - hyperparameter optimization
+    - RAPIDS
+    - cuML
+    - noise suppression
+  abbreviations:
+    BCDNM: Balanced Coherence, Diversity, and Noise-Suppression Metric
+    BERTopic: Bidirectional Encoder Representations from Transformers topic model
+    HDBSCAN: Hierarchical Density-Based Spatial Clustering of Applications with Noise
+    HPO: Hyperparameter Optimization
+    LDA: Latent Dirichlet Allocation
+    NVDM: Neural Variational Document Model
+    TPE: Tree-structured Parzen Estimator
+    UMAP: Uniform Manifold Approximation and Projection
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - bertopic
+        - umap
+        - nvdm
+        - ding_notebook
+        - cuml_accel
+        - cuml_limitations
+        - rapids
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
