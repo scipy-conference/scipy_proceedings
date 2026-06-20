@@ -76,6 +76,10 @@ project:
     scenarios across five domains and produces human-readable decision reports explaining the
     internal factors driving tool selection. Our implementation is open source at
     https://github.com/dataiku/kiji-inspector.
+  # Table of contents: main manuscript + supplementary quickstart notebook
+  toc:
+    - file: main.md
+    - file: quickstart_colab.ipynb
   # Github / code repository for the work
   github: https://github.com/dataiku/kiji-inspector
   # Bibliography file(s)

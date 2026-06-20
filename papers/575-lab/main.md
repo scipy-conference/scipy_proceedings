@@ -201,6 +201,18 @@ model. The SAE is trained unsupervised on the extracted activations; contrastive
 as post-hoc statistical probes for feature analysis and interpretation.
 ```
 
+The study is reproducible from the command line: pair generation is a one-off step, after which a
+single command runs the remaining stages ([](#code:pipeline)). Flags select individual steps
+(`--step`), additional layers (`--layers`), or a different subject model (`--subject-model`).
+
+```{code-block} bash
+:label: code:pipeline
+:caption: Reproducing the study from the command line.
+
+python -m kiji_inspector.generate_pairs 1300
+python -m kiji_inspector.pipeline
+```
+
 ### Contrastive Pair Generation
 
 Each contrastive pair captures two semantically similar requests that require different tools. The
@@ -708,6 +720,52 @@ hidden state is intercepted and projected through the SAE to obtain a sparse fea
 most active dimensions are mapped to pre-computed feature labels, producing a human-readable
 decision report alongside the agent's tool selection.
 
+To make this extraction step practical at serving time, the repository ships a patch for vLLM
+that adds an `--extract-activation-layers` option: it captures prompt activations for the
+selected layers and returns them in the OpenAI-compatible chat and completion responses
+(supporting the Nemotron and Gemma-3 architectures). Once applied, the subject model can be
+served with hidden-state extraction enabled at the decision layer ([](#code:vllm-serve)):
+
+```{code-block} bash
+:label: code:vllm-serve
+:caption: Serving the subject model with layer-20 hidden-state extraction enabled.
+
+vllm serve nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 \
+    --extract-activation-layers 20
+```
+
+We release trained SAEs for several subject models on the Hugging Face Hub
+([](#tab:sae-registry)). Given a subject model, `SAE.from_pretrained` resolves the matching SAE
+repository from kiji-inspector's built-in registry and loads it together with its feature labels
+in a single call ([](#code:load-sae)):
+
+```{code-block} python
+:label: code:load-sae
+:caption: Loading the trained SAE and its feature labels for the paper's subject model.
+
+from kiji_inspector import SAE
+
+# The SAE repository is resolved from kiji-inspector's built-in registry
+sae, feature_descriptions = SAE.from_pretrained(
+    base_model="nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    layer=20,
+)
+```
+
+```{table} Subject models with trained SAEs in the kiji-inspector registry.
+:label: tab:sae-registry
+:align: center
+
+| Subject model | SAE repository (Hugging Face) | Group |
+|:---|:---|:---|
+| `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` | `575-lab/kiji-inspector-NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` | NVIDIA |
+| `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-FP8` | `575-lab/kiji-inspector-NVIDIA-Nemotron-3-Nano-30B-A3B-FP8` | NVIDIA |
+| `google/gemma-3-27b-it` | `575-lab/kiji-inspector-google-gemma-3-27b-it` | Experimental |
+| `google/gemma-4-E4B-it` | `575-lab/kiji-inspector-google-gemma-4-E4B-it` | Experimental |
+| `google/gemma-4-31B-it` | `575-lab/kiji-inspector-google-gemma-4-31B-it` | Experimental |
+| `google/gemma-4-26B-A4B-it` | `575-lab/kiji-inspector-google-gemma-4-26B-A4B-it` | Experimental |
+```
+
 ```{figure} images/inference_pipeline.png
 :label: fig:inference
 :align: center
@@ -734,6 +792,14 @@ actionable transparency for domain experts.
 Interactive demo application showing SAE-powered explainability for a home improvement agent. The demo shows dominant features for every selected tool alongside a natural-language explanation derived from the
 activated SAE features.
 ```
+
+A runnable, open-source quickstart is provided as supplementary material ([](#quickstart)). Rather than
+reproducing the results above, it applies the pipeline to a smaller home-repair dataset using a JumpReLU
+SAE trained on that scenario (distinct from the SAE reported in this paper). In a handful of cells it
+captures a decision-token activation from the subject model, loads that pretrained SAE with
+`SAE.from_pretrained`, and reports the top features driving tool selection; it requires only
+`transformers` and `kiji-inspector` and runs on CPU. It can also be executed directly in
+Google Colab: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/575-lab/scipy_proceedings/blob/2026/papers/575-lab/quickstart_colab.ipynb)
 
 ### Limitations
 
