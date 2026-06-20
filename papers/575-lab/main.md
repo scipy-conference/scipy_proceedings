@@ -88,14 +88,14 @@ concludes.
 ## Responsible AI Motivations
 Transparency of agent decisions is increasingly important as AI regulations are implemented
 across many geographies and industries. Traditional approaches to AI Governance
-require the ability to interpret and explain model behavior and agentic systems are subject 
-to the same scrutiny, even if their mechanics are different. Transparency requirements are 
+require the ability to interpret and explain model behavior and agentic systems are subject
+to the same scrutiny, even if their mechanics are different. Transparency requirements are
 grounded in the need to verify AI systems are operating as intended, leading to stronger trust in
 and adoption of the technology. Engendering trust in AI systems requires a framework for responsible
 AI development; we choose to follow the transparency principle outlined in the RAFT framework
 [@ref_gandhi2025] as the underpinning and motivation for understanding agent behavior.
 
-The advent of chat-based language models and rapid development in agenetic capabilities have highlighted the 
+The advent of chat-based language models and rapid development in agenetic capabilities have highlighted the
 ongoing need for robust and practical frameworks for AI Governance. Numerous political bodies and standards organizations
 have developed frameworks to manage the risks associated with AI - though these largely provide high-level ethical
 principles. By contrast, the RAFT framework is a value-criteria-indicator approach to Responsible AI that covers risks
@@ -110,14 +110,14 @@ Fair, and Transparent.
 
 Core principles of the RAFT framework.
 ```
-From these principles organizations form specific criteria and indicators to assess whether their systems align to 
+From these principles organizations form specific criteria and indicators to assess whether their systems align to
 these values. For example, in the case of Transparency an organization might assign "explainable outputs"
-as a criteria towards alignment with this principle. Within that criterion will be multiple indicators that can be 
+as a criteria towards alignment with this principle. Within that criterion will be multiple indicators that can be
 used as observable measures of progress - such as SHAP values (for predictive modeling) or chain-of-thought reasoning
 (in the case of generative AI systems). The mechanistic interpretability approach offered in this paper can serve as
-another indicator towards explainability and overall transparency of agenetic systems. Our hope is that by grounding 
+another indicator towards explainability and overall transparency of agenetic systems. Our hope is that by grounding
 the motivation for this work in a larger principles-based approach we can support the holistic development of responsible
-AI tooling. 
+AI tooling.
 
 (sec:related)=
 ## Related Work
@@ -857,10 +857,28 @@ fuzzing evaluation that catches explanations which are "right for the wrong reas
 As AI agents are deployed in increasingly high-stakes contexts, understanding *how* they make
 decisions, not just *what* decisions they make, becomes critical for safety, debugging, and trust.
 
+(sec:ai-attribution)=
+## AI Attribution
+
+In keeping with the SciPy generative AI disclosure policy, we report the use of generative AI
+tools in the preparation of this work. AI-assisted coding tools (Anthropic's Claude, including via
+Claude Code) supported development of the `kiji-inspector` codebase, where they were used to draft
+boilerplate code, scaffold tests, and suggest refactors. The same class of tools assisted in preparing
+this manuscript, where they were used to improve language for clarity. All AI-assisted outputs, such as code, and texts were reviewed, executed, and revised by the authors, who take full responsibility for
+the accuracy and integrity of the final content. Standard spell-checkers, grammar tools (e.g., Grammarly), and code
+linters (e.g., GitHub Co-Pilot) are excluded from this disclosure, consistent with the policy.
+
+We distinguish this authoring assistance from the large language models that are the *subject* of
+our methodology. The generation model (Qwen3-VL-235B) and the subject model (Nemotron-3-Nano-30B)
+described in [](#sec:methodology) and [](#sec:experiments) are components of the interpretability
+pipeline itself, not authoring aids, and their roles are documented in full in those sections.
+Consistent with the policy, no AI tool is listed as an author or contributor; authorship reflects
+human accountability alone.
+
 +++ {"part": "acknowledgments"}
 
 This work was conducted as part of Dataiku's 575 Lab, the company's open source office. The source
 code for this project is available at <https://github.com/dataiku/kiji-inspector>.
 
 Hannes Hapke and David Cardozo are employees of Dataiku Inc., and part of Dataiku's 575 Lab, the
-open source office. Compute resources for this project have been provided by NVIDIA, Inc.
+open source office. Carlos Huisa and Triveni Gandhi are affiliated with Dataiku Inc. Compute resources for this project have been provided by NVIDIA, Inc.
