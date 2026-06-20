@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: "alphagenome-pt: A Trainable PyTorch Port of AlphaGenome"
+title: "alphagenome-pt: Flexible Training of AlphaGenome Models in PyTorch"
 abstract: |
   We present `alphagenome-pt`, an open-source PyTorch implementation of Google DeepMind’s AlphaGenome model for training and fine-tuning. AlphaGenome predicts functional genomic outputs directly from DNA sequence, but the released models are trained on human and mouse genomes, motivating dataset-specific training for other species and biological contexts. Because the released implementation is written in JAX, `alphagenome-pt` lowers the software barrier to adapting AlphaGenome by porting the model to PyTorch and exposing relevant model hyperparameters to custom configuration.
 ---
