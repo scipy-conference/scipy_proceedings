@@ -122,6 +122,13 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        # Web/blog references with no registered DOI
+        - ref_gandhi2025
+        - ref_bricken2023
+        - elhage2022toymodelssuperposition
+        - ref_sharkey2022
+        - ref_bills2023
+        - ref_juang2024
   exports:
     - id: pdf
       format: typst
