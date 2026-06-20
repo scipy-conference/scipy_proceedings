@@ -1,0 +1,50 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-sho_tanaka
+  # Ensure your title is the same as in your `main.md`
+  title: Avoiding Zero-Trade Policies in RL with a Decoupled MLOps Architecture
+  # subtitle:
+  description: >
+    Common reward designs in financial RL collapse into buy-and-hold or
+    zero-trade policies. We present a decoupled architecture that separates
+    signal generation (RL confidence scores) from a deterministic execution
+    engine handling position sizing, risk rules, and exits. The talk covers
+    failure-mode detection, production Python patterns (Position, Order,
+    RiskManager, ExitPolicy), and lessons learned deploying this system.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Sho Tanaka
+      email: sho.tanaka@snowflake.com
+      affiliations:
+        - Snowflake, Tokyo
+      corresponding: true
+  keywords:
+    - Reinforcement Learning
+    - MLOps
+    - FinTech
+  abbreviations:
+    RL: Reinforcement Learning
+    MDP: Markov Decision Process
+    PnL: Profit and Loss
+    SAC: Soft Actor-Critic
+    TD3: Twin Delayed Deep Deterministic Policy Gradient
+    PPO: Proximal Policy Optimization
+    ATR: Average True Range
+    RSI: Relative Strength Index
+    MACD: Moving Average Convergence Divergence
+    MLOps: Machine Learning Operations
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - schulman2017
+        - stable_baselines3
+        - gymnasium
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
