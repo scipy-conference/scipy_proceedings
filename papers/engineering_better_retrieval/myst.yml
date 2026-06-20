@@ -7,8 +7,8 @@ project:
   title: Engineering Better Retrieval for RAG
   # subtitle:
   description: >-
-    A three-stage framework for systematically optimizing retrieval pipelines
-    in Retrieval-Augmented Generation systems.
+    A three-stage framework for systematically optimizing retrieval pipelines in
+    Retrieval-Augmented Generation systems.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Aarti Jha
