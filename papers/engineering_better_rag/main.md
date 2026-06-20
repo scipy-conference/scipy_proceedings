@@ -31,7 +31,7 @@ Three-stage retrieval optimization framework. Pre-Retrieval prepares documents a
 
 ### Where This Framework Applies
 
-Standalone RAG executes retrieval once per query and passes the result directly to a generator. Agent-based systems [@singh2025agenticrag] expose retrieval as one tool among others structured query, web search, APIs and an orchestrating model decides whether to invoke it, which index or route to query, and whether to call it again when context is insufficient. 
+Standalone RAG executes retrieval once per query and passes the result directly to a generator. Agent-based systems [@singh2025agenticrag] expose retrieval as one tool among others structured query, web search, APIs and an orchestrating model decides whether to invoke it, which index or route to query, and whether to call it again when context is insufficient.
 
 Regardless of shape, each retrieval invocation passes through the same operational concerns: documents must be indexed well, the query must be prepared, candidates must be ranked and filtered, and the returned context must be packaged for downstream use. The three stages in @fig:framework specify **the retrieval subsystem** the logic inside the retrieval tool rather than the full agent loop. The agent layer decides *when* to retrieve; the sections that follow detail *what each call should do* at each stage.
 
@@ -86,9 +86,9 @@ For multimodal documents, only Docling chunking produces typed units rather than
 | Strategy | Answer Relevancy | Faithfulness | Context Precision | Context Recall | Average |
 |----------|------------------|--------------|-------------------|----------------|---------|
 | Recursive | 0.972 | 0.950 | 0.923 | 0.900 | 0.941 |
-| Docling | 0.979 | 0.972 | 0.917 | 0.893 | 0.922 | 
+| Docling | 0.979 | 0.972 | 0.917 | 0.893 | 0.922 |
 | Parent-Child | 0.978 | 0.986 | 0.922 | 0.900 | 0.947 |
-| Contextual | 0.973 | 0.961 | 0.922 | 0.833 | 0.922 |  
+| Contextual | 0.973 | 0.961 | 0.922 | 0.833 | 0.922 |
 :::
 @tbl:chunking_eval shows that no single strategy leads across all metrics. On this text-centric corpus, recursive and parent-child chunking perform strongest hierarchical boundaries align well with question–answer semantics, and parent-child additionally supports mid-retrieval expansion when matched snippets need surrounding context. Docling's advantage in preserving multimodal structure (tables, figures, layout) is not reflected here because the current evaluation set is predominantly text-based; for multimodal corpora, its typed retrieval units become the practical choice.
 
@@ -162,7 +162,7 @@ Hybrid retrieval combines sparse keyword matching (BM25) with dense embedding se
 
 ### Reranking
 
-Bi-encoder retrieval encodes queries and documents independently, enabling efficient approximate nearest-neighbor search but limiting token-level interactions. *Cross-encoder reranking* [@reimers2019sentencebert] scores query–document pairs jointly, improving precision at the cost of latency. The standard pattern retrieves a larger candidate set ($k' \gg k$), reranks with a cross-encoder, and returns the top-$k$. Reranking composes with hybrid search or RRF output: fusion produces the candidate pool, reranking orders it. Model choice trades quality against speed i.e. full cross-encoders for accuracy, lighter models for low-latency filtering. 
+Bi-encoder retrieval encodes queries and documents independently, enabling efficient approximate nearest-neighbor search but limiting token-level interactions. *Cross-encoder reranking* [@reimers2019sentencebert] scores query–document pairs jointly, improving precision at the cost of latency. The standard pattern retrieves a larger candidate set ($k' \gg k$), reranks with a cross-encoder, and returns the top-$k$. Reranking composes with hybrid search or RRF output: fusion produces the candidate pool, reranking orders it. Model choice trades quality against speed i.e. full cross-encoders for accuracy, lighter models for low-latency filtering.
 
 :::{table} Mid-retrieval methods, targets, and latency cost.
 :label: tbl:mid_retrieval
