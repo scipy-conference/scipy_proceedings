@@ -18,6 +18,11 @@ project:
       orcid: 0009-0005-3111-7353
       email: hannes.hapke@dataiku.com
       corresponding: true
+      roles:
+        - Conceptualization
+        - Software
+        - Writing - original draft
+        - Project administration
       affiliations:
         - id: dataiku-pdx
           institution: 575 Lab, Dataiku Inc.
@@ -27,6 +32,10 @@ project:
     - name: David Cardozo
       orcid: 0009-0006-1234-9973
       email: david.cardozo@dataiku.com
+      roles:
+        - Software
+        - Methodology
+        - Validation
       affiliations:
         - id: dataiku-yyz
           institution: 575 Lab, Dataiku Inc.
@@ -36,6 +45,9 @@ project:
     - name: Carlos Huisa
       orcid: 0009-0003-3599-3209
       email: carlos.huisa@dataiku.com
+      roles:
+        - Formal analysis # the causal/CATE ablation work
+        - Investigation
       affiliations:
         - id: dataiku-tx
           institution: Dataiku Inc.
@@ -45,6 +57,8 @@ project:
     - name: Triveni Gandhi
       orcid: 0000-0001-6964-8460
       email: triveni.gandhi@dataiku.com
+      roles:
+        - Conceptualization # the RAFT responsible-AI framing
       affiliations:
         - id: dataiku-ny
           institution: Dataiku Inc.
