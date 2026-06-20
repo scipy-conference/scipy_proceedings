@@ -1,0 +1,39 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-gandrathi_docgen_pharma
+  # Ensure your title is the same as in your `paper.md`
+  title: Building Trustworthy Scientific Python Workflows in Pharma
+  description: A production-grade, blueprint-driven architecture for agentic regulatory document authoring in pharma, combining graph-grounded retrieval with governed MCP tool contracts.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Tarun Gandrathi
+      email: tarun.gandrathi@zs.com
+      affiliations:
+        - ZS Associates, Hyderabad, India
+    - name: Subbiah Sethuraman
+      affiliations:
+        - ZS Associates
+    - name: Rahul Sahu
+      affiliations:
+        - ZS Associates
+  keywords:
+    - Agentic AI
+    - Knowledge Graph
+    - Neo4j
+    - Blueprint-driven generation
+    - RAG
+    - LangGraph
+    - Regulatory authoring
+    - Pharma
+    - Production deployment
+  # Manual section numbering is used in `paper.md`, so disable automatic heading numbering
+  numbering:
+    headings: false
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: paper.md
+      output: full_text.pdf
