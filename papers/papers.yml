@@ -2,8 +2,8 @@ version: 1
 extends: ../proceedings.yml
 project:
   subject: Research Article
-  banner: images/AG_Banner.png
-  thumbnail: images/AG_PyTorch.png
+  banner: banner.png
+  thumbnail: thumbnail.png
   numbering:
     headings: true
   exports:
