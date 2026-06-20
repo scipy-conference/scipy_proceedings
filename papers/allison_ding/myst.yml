@@ -2,8 +2,13 @@ version: 1
 extends: ../papers.yml
 project:
   id: scipy-2026-allison_ding
-  title: "BCDNM-HPO: Noise-Suppressed Topic Modeling with Zero-Code-Change GPU Acceleration"
-  description: "A SciPy proceedings draft describing scalarized hyperparameter optimization for BERTopic-style topic modeling with coherence, diversity, and noise-suppression metrics."
+  title:
+    'BCDNM-HPO: Noise-Suppressed Topic Modeling with Zero-Code-Change GPU
+    Acceleration'
+  description:
+    'A SciPy proceedings draft describing scalarized hyperparameter optimization
+    for BERTopic-style topic modeling with coherence, diversity, and
+    noise-suppression metrics.'
   authors:
     - name: Allison Ding
       affiliations:
@@ -24,8 +29,10 @@ project:
     - noise suppression
   abbreviations:
     BCDNM: Balanced Coherence, Diversity, and Noise-Suppression Metric
-    BERTopic: Bidirectional Encoder Representations from Transformers topic model
-    HDBSCAN: Hierarchical Density-Based Spatial Clustering of Applications with Noise
+    BERTopic:
+      Bidirectional Encoder Representations from Transformers topic model
+    HDBSCAN:
+      Hierarchical Density-Based Spatial Clustering of Applications with Noise
     HPO: Hyperparameter Optimization
     LDA: Latent Dirichlet Allocation
     NVDM: Neural Variational Document Model
