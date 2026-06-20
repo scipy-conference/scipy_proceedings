@@ -11,15 +11,14 @@ project:
     Detecting when a production model keeps its accuracy but silently changes
     its reasoning, by tracking SHAP attribution distributions over time as a
     complement to feature-drift and performance monitoring.
-  # Authors should have affiliations, emails and ORCIDs if available
-  # TODO(author): replace the placeholder email and ORCID before final submission.
   authors:
     - name: Avik Basu
-      email: avik.basu@example.org
-      orcid: 0000-0000-0000-0000
+      email: avikbasu93@gmail.com
+      orcid: 0009-0002-4489-378X
       corresponding: true
       affiliations:
-        - Intuit Inc.
+        - Intuit, Inc.
+        - PyOpenSci
   keywords:
     - explainability
     - SHAP
