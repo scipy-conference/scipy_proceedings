@@ -4,31 +4,33 @@ project:
   # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2026-sanjana_prakash
   # Ensure your title is the same as in your `main.md`
-  title: A Python Framework for Molecular Dynamics-Informed Machine Learning in Enzyme Engineering
+  title:
+    A Python Framework for Molecular Dynamics-Informed Machine Learning in
+    Enzyme Engineering
   # subtitle:
   description: >
-    framework for integrating molecular dynamics
-    simulation-derived structural and dynamical features into machine learning
-    workflows for enzyme engineering and protein design.
+    framework for integrating molecular dynamics simulation-derived structural
+    and dynamical features into machine learning workflows for enzyme
+    engineering and protein design.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Sai Sanjana Prakash
       email: prakash.saisanjana@gmail.com
       orcid: 0009-0008-9760-6477
-    - name: Justin Seyedmoomenkashi 
+    - name: Justin Seyedmoomenkashi
       email: Justin.Seyedmoomenkashi@mail.mcgill.ca
       orcid: 0009-0005-7280-3632
       affiliations:
         - McGill University
-    - name: Charlie Hou 
+    - name: Charlie Hou
       email: yh4298@nyu.edu
       orcid: 0009-0008-0719-940X
       affiliations:
-        - New York University 
+        - New York University
   keywords:
     - PETase
     - Enzyme Engineering
-    - De Novo Design 
+    - De Novo Design
     - molecular dynamics
     - machine learning
     - protein engineering
