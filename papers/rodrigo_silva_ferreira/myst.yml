@@ -1,0 +1,140 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: >-
+    25 Years of Interactive Scientific Computing: From IPython and Jupyter to
+    Open Source IDE-Native Notebooks
+  authors:
+    - nameParsed:
+        literal: Rodrigo Silva Ferreira
+        given: Rodrigo
+        family: Silva Ferreira
+      name: Rodrigo Silva Ferreira
+      email: rodrigosf672@gmail.com
+      affiliations:
+        - Independent Researcher, Pittsburgh, PA, USA
+      id: contributors-myst-generated-uid-0
+      corresponding: true
+  affiliations:
+    - id: Independent Researcher, Pittsburgh, PA, USA
+      name: Independent Researcher, Pittsburgh, PA, USA
+    - name: Curvenote
+      ror: https://ror.org/02mz0e468
+      url: https://curvenote.com
+      id: affiliations-myst-generated-uid-0
+    - id: University of Alabama in Huntsville
+      name: University of Alabama in Huntsville
+    - id: Deloitte
+      name: Deloitte
+    - id: Curvenote
+      name: Curvenote
+    - id: Aptos
+      name: Aptos
+    - id: Arm
+      name: Arm
+  bibliography:
+    - references.bib
+  id: scipy-2026-rodrigo-silva-ferreira
+  toc:
+    - file: interactive_scientific_computing.ipynb
+  editors:
+    - rowan
+    - sean
+    - christopher
+    - sanhita
+    - franklin
+    - charles
+    - hongsup
+    - chongshen
+    - jennifer
+  venue:
+    title: Python in Science Conference
+    short_title: SciPy
+    url: https://proceedings.scipy.org
+    doi: 10.25080/issn.2575-9752
+    number: 25th
+    location: Minneapolis, Minnesota
+    date: July 13 - July 19, 2026
+    series: Proceedings of the Python in Science Conference
+    issn: 2575-9752
+    publisher: SciPy
+  contributors:
+    - id: rowan
+      nameParsed:
+        literal: Rowan Cockett
+        given: Rowan
+        family: Cockett
+      name: Rowan Cockett
+      email: rowan@curvenote.com
+      affiliations:
+        - affiliations-myst-generated-uid-0
+    - id: sean
+      nameParsed:
+        literal: Sean Freeman
+        given: Sean
+        family: Freeman
+      name: Sean Freeman
+      email: sean.freeman@uah.edu
+      affiliations:
+        - University of Alabama in Huntsville
+    - id: christopher
+      nameParsed:
+        literal: Christopher Holloman
+        given: Christopher
+        family: Holloman
+      name: Christopher Holloman
+    - id: sanhita
+      nameParsed:
+        literal: Sanhita Joshi
+        given: Sanhita
+        family: Joshi
+      name: Sanhita Joshi
+      email: sanhita.joshi@gmail.com
+      affiliations:
+        - Deloitte
+    - id: franklin
+      nameParsed:
+        literal: Franklin Koch
+        given: Franklin
+        family: Koch
+      name: Franklin Koch
+      email: franklin@curvenote.com
+      affiliations:
+        - Curvenote
+    - id: charles
+      nameParsed:
+        literal: Charles Lindsey
+        given: Charles
+        family: Lindsey
+      name: Charles Lindsey
+      email: lindseycster@gmail.com
+      affiliations:
+        - Aptos
+    - id: hongsup
+      nameParsed:
+        literal: Hongsup Shin
+        given: Hongsup
+        family: Shin
+      name: Hongsup Shin
+      email: hongsup.shin@pm.me
+      affiliations:
+        - Arm
+    - id: chongshen
+      nameParsed:
+        literal: Chong Shen Ng
+        given: Chong Shen
+        family: Ng
+      name: Chong Shen Ng
+    - id: jennifer
+      nameParsed:
+        literal: Jennifer Yoon
+        given: Jennifer
+        family: Yoon
+      name: Jennifer Yoon
+  date: '2026-07-13'
+  open_access: true
+  license: CC-BY-4.0
+extend:
+  - /Users/rodrigosilvaferreira/scipy_proceedings/proceedings.yml
+site:
+  template: book-theme
