@@ -32,12 +32,17 @@ Before we delve into these items, we'll explain the modern LLM stack.
 Most AI-powered Python applications are assembled from a small set of reusable components:
 
 - LLM APIs
-- ollama-python
-- embedding models
-- vector databases
-- prompt orchestration
-- structured output validation
-- tool calling
+  - ollama-python, litellm, transformers, vllm, llama-cpp-python
+- Embedding models
+  - sentence-transformers, transformers, InstructorEmbedding, FlagEmbedding (BGE models)
+- Vector databases
+  - faiss, chromadb, qdrant-client, weaviate-client, milvus
+- Prompt orchestration
+  - LangGraph, LangChain, Haystack, PydanticAI, CrewAI
+- Structured output validation
+  - Pydantic, Instructor, Guardrails AI, jsonschema
+- Tool calling
+  - PydanticAI, LangGraph, LangChain, smolagents, CrewAI
 
 We'll show how these pieces connect in practice using code snippets and examples from our social impact hackathon project.
 
@@ -91,28 +96,106 @@ With the requirements distilled from our clients with this method of planning, w
 
 Let's start off acknowledging that not every problem requires a LLM. This first pattern will illustrate how to organize distinct flows into logic that a LLM could be beneficial for and more deterministic pieces of logic that could be solved with fixed pipelines or analysis.
 
-In Audrey's hackathon project, her team created a predictive analytics dashboard with an interactive chatbot designed around those analysis results and ML model predictions. They separated language understanding from data computation. Instead of allowing unrestricted responses, they structured how the LLM could request information and how results would be returned. This created a safer interface between the chatbot and the underlying datasets. Instead of the LLM generating predictions directly, it acted as an interface layer that requested structured analytics from backend systems.
+In Audrey's hackathon project, she had to consider the various goals of the different institutions on her team. Through requirements gathering techniques like journey mapping, she was able to develop a solution that would satisfy all goals -- build a predictive analytics dashboard to help institutions better understand their student's academic trajectories and address issues early on. The predictive analytics dashboard was thus created using a host of ML models, and an associated interactive chatbot was integrated for institutions to easily gather those analysis results. The design behind this dashboard was focused on separating language understanding from analysis workflows. Instead of allowing unrestricted responses, we structured how the LLM could request information and how results from predictive analyses would be returned. This created a safer interface between the chatbot and the underlying datasets. Instead of the LLM generating predictions directly, it acted as an interface layer, deciding which analytics function to call and how to interpret the result.
 
 This included outputs like:
 
-- risk scores per student
-- probability of dropout
-- attendance trend forecasts
-
-The LLM's role was not to compute these values, but to decide which analytics function to call and how to interpret the result.
+- Retention prediction
+  - risk scores per student
+  - probability of dropping out
+  - attendance trend forecasts
+- Credential type prediction
+- Gateway course success prediction
+- GPA prediction
 
 For example, a flow could look as follows:
 
-1. LLM request → `get_risk_scores(school_id)`
-2. Python system → returns aggregated predictions
-3. LLM → explains results in context
+```
+Question → LLM → One Function → One Model → Result → Explanation
+```
 
-This ensures predictions are:
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+# Predictive model wrapped as an approved function
+def get_retention_risk(school_id):
+
+    students = feature_store.get_students(school_id)
+
+    risk_scores = retention_model.predict_proba(students)
+
+    return {
+        "school_id": school_id,
+        "avg_retention_risk": float(risk_scores.mean())
+    }
+
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_retention_risk",
+            "description": "Retrieve student retention risk metrics",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "school_id": {"type": "string"}
+                },
+                "required": ["school_id"]
+            }
+        }
+    }
+]
+
+user_question = (
+    "Which students are most at risk of not returning next semester?"
+)
+
+# Step 1: LLM determines what analytics are needed
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "system",
+            "content": (
+                "Never generate predictions yourself. "
+                "Use available analytics functions and explain results."
+            )
+        },
+        {"role": "user", "content": user_question}
+    ],
+    tools=tools
+)
+
+# Step 2: Backend executes predictive model
+analytics_result = get_retention_risk(
+    school_id="School_123"
+)
+
+# Step 3: LLM explains results
+final_response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": user_question},
+        {
+            "role": "tool",
+            "tool_call_id": response.choices[0].message.tool_calls[0].id,
+            "content": str(analytics_result)
+        }
+    ]
+)
+
+print(final_response.choices[0].message.content)
+```
+
+This pattern ensured predictions are:
 
 - reproducible
 - auditable
 - computed separately from the LLM
-- token optimization
+- token usage was optimized
 
 ---
 
@@ -164,9 +247,9 @@ To confirm the dictionary was being utilized correctly, our institutional partne
 
 ---
 
-## Core Pattern 3: Simple Agent Loops (Query Response Cycle)
+## Core Pattern 3: Simple Agent Loops
 
-In Audrey's project, her team also saw a natural fit for lightweight agent behavior when analytics required multiple steps.
+While Core Pattern 1 focused on a single function call, many institutional questions in Audrey's project required chaining multiple tools together. This created a natural opportunity for lightweight agentic workflows, where the system could retrieve data, compute metrics, compare results, and generate explanations through a multi-step reasoning process.
 
 Instead of a single query response cycle, the system often needed to:
 
@@ -184,6 +267,51 @@ interpret → retrieve → compute → refine → explain
 In this setup, the LLM becomes an orchestrator that decides what to analyze next, while Python tools handle each step of computation.
 
 Predictive analytics here becomes less of a model output, and more of a tool-driven reasoning workflow over data.
+
+Example Flow:
+
+```
+Question → LLM → Tool 1: Get cohort → Tool 2: Get retention scores → Tool 3: Compare to prior semester → Tool 4: Generate summary statistics → LLM explanation
+```
+
+```python
+# Available tools
+tools = [
+    get_student_cohort,
+    get_retention_risk,
+    compare_to_previous_term
+]
+
+query = """
+Which first-year students are most at risk,
+and is retention improving or declining?
+"""
+
+# Agent loop
+cohort = get_student_cohort(
+    year="first_year"
+)
+
+risk_scores = get_retention_risk(
+    students=cohort
+)
+
+trend = compare_to_previous_term(
+    current=risk_scores
+)
+
+summary = llm.generate(
+    f"""
+    Cohort: {cohort}
+    Risk Scores: {risk_scores}
+    Trend Analysis: {trend}
+
+    Summarize findings for university advisors.
+    """
+)
+
+print(summary)
+```
 
 ---
 
