@@ -1,23 +1,21 @@
----
-title: "From Hello World to Hello LLM: A Python Developer's Survival Guide"
-abstract: |
-  AI tooling is moving fast, but many Python developers are unsure where to start or how today's AI patterns fit into systems they already know how to build. This talk is a practical, hands-on overview of modern AI development patterns in Python, focused on what you need to know to go from zero to hero.
-
-  We'll walk through a real-world coding example broken into parts that illustrate the core building blocks of modern AI applications, and explain when each pattern makes sense. This example is designed in a way that doesn't require any prior machine learning experience, and attendees will leave with an understanding of how AI systems work, what problems they're good at solving, and how to maintain and observe what has been built.
-
-  Topics we'll cover:
-
-  - The modern AI stack in Python: LLM APIs, embeddings, tools, and agents
-  - Common Python AI patterns: prompts, function calling, RAG, and simple agents
-  - When to use a script vs an agent vs a service (and when not to)
-  - How to get something working quickly without sacrificing reliability or safety
-  - Practical guardrails: handling errors, controlling outputs, and protecting data
-  - How to generally stand up common AI workflows, such as LLM-powered scripts to lightweight AI agents / MCP-style services
-
-  Attendees will leave with a clear map of the AI landscape, working Python patterns they can reuse immediately, and the confidence to start building AI features without needing a machine learning background.
----
-
 # What We Learned Building AI Tools with Python
+
+:::{abstract}
+AI tooling is moving fast, but many Python developers are unsure where to start or how today's AI patterns fit into systems they already know how to build. This talk is a practical, hands-on overview of modern AI development patterns in Python, focused on what you need to know to go from zero to hero.
+
+We'll walk through a real-world coding example broken into parts that illustrate the core building blocks of modern AI applications, and explain when each pattern makes sense. This example is designed in a way that doesn't require any prior machine learning experience, and attendees will leave with an understanding of how AI systems work, what problems they're good at solving, and how to maintain and observe what has been built.
+
+Topics we'll cover:
+
+- The modern AI stack in Python: LLM APIs, embeddings, tools, and agents
+- Common Python AI patterns: prompts, function calling, RAG, and simple agents
+- When to use a script vs an agent vs a service (and when not to)
+- How to get something working quickly without sacrificing reliability or safety
+- Practical guardrails: handling errors, controlling outputs, and protecting data
+- How to generally stand up common AI workflows, such as LLM-powered scripts to lightweight AI agents / MCP-style services
+
+Attendees will leave with a clear map of the AI landscape, working Python patterns they can reuse immediately, and the confidence to start building AI features without needing a machine learning background.
+:::
 
 Most Python developers already know how to build real systems, APIs, scripts, services, and pipelines. During a social impact AI hackathon, we applied those same engineering skills to rapidly build AI-powered tools that helped educational institutions become more comfortable using AI to improve student success outcomes.
 
