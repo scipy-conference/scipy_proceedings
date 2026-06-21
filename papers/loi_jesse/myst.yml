@@ -1,8 +1,3 @@
-```yaml
-   project:
-     id: scipy-2026-loi
-     title: Placeholder Title for SciPy Submission
-     authors:
-       - name: Jesse Loi
-         affiliations:
-           - Seattle University
+project:
+  id: scipy-2026-loi-jesse
+  title: "Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven Document Analysis"
