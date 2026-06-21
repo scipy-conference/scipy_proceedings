@@ -8,18 +8,52 @@ project:
     and their components as typed, addressable JSON objects, providing an open
     exchange substrate for modular and composable research.
   authors:
-    - name: Rowan Cockett
+    - id: rowan
+      name: Rowan Cockett
       email: rowan@curvenote.com
       corresponding: true
+      orcid: 0000-0002-7859-8394
+      github: rowanc1
       affiliations:
-        - Curvenote
-        - Continuous Science Foundation
-    - name: Tracy Teal
+        - id: csf
+        - id: curvenote
+    - id: tracy
+      name: Tracy Teal
+      email: tracy@openrxiv.org
+      orcid: 0000-0002-9180-9598
+      github: tracykteal
       affiliations:
-        - openRxiv
-    - name: Nokome Bentley
+        - id: openrxiv
+    - id: nokome
+      name: Nokome Bentley
+      email: nokome@stenci.la
+      orcid: 0000-0003-1608-7967
+      github: nokome
       affiliations:
-        - Stencila
+        - id: stencila
+  affiliations:
+    - id: csf
+      name: Continuous Science Foundation
+      ror: https://ror.org/00zwsrq61
+      github: continuous-foundation
+      bluesky: continuous.foundation
+      linkedin: https://www.linkedin.com/company/continuous-foundation
+    - id: curvenote
+      name: Curvenote Inc.
+      country: Canada
+      ror: https://ror.org/02mz0e468
+      email: support@curvenote.com
+      url: https://curvenote.com
+      linkedin: https://www.linkedin.com/company/curvenote/
+      bluesky: curvenote.com
+      github: curvenote
+    - id: openrxiv
+      name: openRxiv
+      url: https://openrxiv.org
+      ror: https://ror.org/03vc1wb14
+    - id: stencila
+      name: Stencila
+      url: https://stenci.la
   keywords:
     - modular science
     - open standards
