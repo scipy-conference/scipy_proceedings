@@ -2,7 +2,7 @@ version: 1
 extends: ../papers.yml
 project:
   # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
-  id: scipy-2026-from-hello-world-to-hello-llm-a-python-developers-survival-guide
+  id: scipy-2026-hello-llm-survival-guide
   # Ensure your title is the same as in your `main.md`
   title: "From Hello World to Hello LLM: A Python Developer's Survival Guide"
   # subtitle:
