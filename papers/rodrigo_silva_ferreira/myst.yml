@@ -134,7 +134,3 @@ project:
   date: '2026-07-13'
   open_access: true
   license: CC-BY-4.0
-extend:
-  - /Users/rodrigosilvaferreira/scipy_proceedings/proceedings.yml
-site:
-  template: book-theme
