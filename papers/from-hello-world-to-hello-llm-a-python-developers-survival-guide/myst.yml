@@ -12,8 +12,12 @@ project:
     - name: Jasmine Omeke
       email: jasmine.omeke@gmail.com
       corresponding: true
+      affiliations:
+        - /dev/color
     - name: Audrey Webb
       email: audreyehiwebb@gmail.com
+      affiliations:
+        - /dev/color
   keywords:
     - LLM
     - Python
