@@ -85,6 +85,7 @@ project:
         - notebooksinpublishing
         - pandoc
         - quarto
+        - openrxivlabsreader
   exports:
     - id: pdf
       format: typst
