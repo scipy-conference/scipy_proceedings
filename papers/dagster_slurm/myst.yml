@@ -3,7 +3,10 @@ extends: ../papers.yml
 project:
   id: scipy-2026-dagster_slurm
   title: 'dagster-slurm: Dagster Assets on Slurm-Managed Scientific Workflows'
-  description: An open-source integration that runs Dagster asset source code across local, CI, and Slurm-managed execution targets, demonstrated on a web-scale European firm-discovery pipeline.
+  description:
+    An open-source integration that runs Dagster asset source code across local,
+    CI, and Slurm-managed execution targets, demonstrated on a web-scale
+    European firm-discovery pipeline.
   banner: asset_graph_tiers.png
   thumbnail: asset_graph_tiers.png
   authors:
