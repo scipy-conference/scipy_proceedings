@@ -27,10 +27,21 @@ project:
   authors:
     - name: Hongsup Shin
       email: hongsup.shin@pm.me
-      # orcid: 0000-0000-0000-0000  # register a free ORCID at https://orcid.org and add it here
+      orcid: 0009-0008-8437-6684
       affiliations:
         - Texas Justice Initiative
       corresponding: true
+      roles:
+        - Conceptualization
+        - Data curation
+        - Formal analysis
+        - Investigation
+        - Methodology
+        - Software
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
   keywords:
     - police accountability
     - data enrichment
@@ -58,9 +69,7 @@ project:
         - langgraph
         - langchain
         - tavily
-        - pydantic
         - psycopg2
-        - rapidfuzz
         - postgresql
         - anthropic_claude
         - tji2020ois
