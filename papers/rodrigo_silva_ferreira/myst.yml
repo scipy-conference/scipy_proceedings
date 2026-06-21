@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../papers.yml
 
 project:
   id: scipy-2026-rodrigo-silva-ferreira
@@ -36,3 +36,15 @@ project:
 
   toc:
     - file: interactive_scientific_computing.ipynb
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: interactive_scientific_computing.ipynb
+      output: full_text.pdf
+    - format: jats
+      article: interactive_scientific_computing.ipynb
+      output: _build/exports/jats.xml
+    - format: meca
+      article: interactive_scientific_computing.ipynb
+      output: meca.zip
