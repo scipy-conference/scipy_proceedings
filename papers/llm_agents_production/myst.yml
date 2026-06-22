@@ -51,6 +51,8 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - brooker2015backoff
+        - sculley2015hidden
   exports:
     - id: pdf
       format: typst
