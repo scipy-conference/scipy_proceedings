@@ -159,7 +159,7 @@ By combining blueprint-first planning, graph-based knowledge grounding, governed
 
 1. Boiko D, et al. Autonomous chemical research with large language models. *Nature*. 2023;624:570–578.
 2. Bran A, et al. ChemCrow: Augmenting large-language models with chemistry tools. *Nature Machine Intelligence*. 2024.
-3. Anthropic. Model Context Protocol specification. 2024. spec.modelcontextprotocol.io
+3. Anthropic. Model Context Protocol specification. 2024. [modelcontextprotocol.io/specification](https://modelcontextprotocol.io/specification)
 4. Agarwal B, et al. RAGulating Compliance: Multi-Agent Knowledge Graph for Regulatory QA. arXiv:2508.09893. 2025.
 5. Es S, et al. RAGAS: Automated Evaluation of Retrieval Augmented Generation. EACL 2024.
 6. IntuitionLabs. Agentic AI for Pharma Regulatory Document Automation. 2025. intuitionlabs.ai
