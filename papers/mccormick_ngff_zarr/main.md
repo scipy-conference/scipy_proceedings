@@ -269,7 +269,7 @@ The most significant recent addition is emerging support for RFC-5, which
 provides first-class coordinate systems and transformations in OME-Zarr and is
 the centerpiece of the version 0.6 [@rfc5]. RFC-5 introduces named
 coordinate systems (sets of axes) and a richer vocabulary of transformations —
-including identity, axis permutation, translation, scale, affine, rotation,
+including identity, axis permutation and projection, translation, scale, affine, rotation,
 sequences of transformations, and field-based displacement and coordinate
 transforms — that map points between coordinate systems. This enables datasets
 to express the spatial relationships between multiple images, such as aligned
