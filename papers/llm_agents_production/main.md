@@ -5,7 +5,7 @@ abstract: |
 
   Across hundreds of records and thousands of model and retrieval calls, reliability depended less on prompt design alone and more on production controls: separating local worker parallelism from hosted API concurrency, enforcing per-record wall-clock budgets, distinguishing transient from non-transient failures, preserving progress through checkpoints, and recording structured operational metadata. In the single-agent workflow, hosted API concurrency was the dominant throughput bottleneck; tuning it improved throughput by nearly 5x relative to the initial baseline while preserving completion yield.
 
-  In the multi-agent workflow, a verifier stage and multi-source evidence gathering produced richer metadata but also introduced orchestration cost and partial-completion behavior. Later probes showed that record-level concurrency, verifier concurrency caps, token pressure, and reasoning effort moved the system across different throughput, cost, yield, and strict label-agreement operating points. These findings motivate a practical optimization framework for selecting agent configurations that balance throughput, cost, completion yield, reliability, and auditability.
+  In the multi-agent workflow, a verifier stage and multi-source evidence gathering produced richer metadata but also introduced orchestration cost and partial-completion behavior. Later probes showed that record-level concurrency, verifier concurrency caps, token pressure, and reasoning effort moved the system across different throughput, cost, yield, and strict label-agreement operating points. We argue that production agent deployment should be formulated as a constrained multi-objective systems problem, rather than as model-quality maximization alone.
 ---
 ## Introduction
 
@@ -15,15 +15,22 @@ Production environments expose a different class of problems. When the same agen
 
 This paper studies those reliability problems through a real production case study. We evaluate two related workflows: a single-agent batch classification pipeline that processes each record independently, and a multi-agent review workflow that retrieves supporting evidence, synthesizes a structured prediction, verifies the prediction, attempts a bounded repair when needed, and routes outputs by confidence. We frame these workflows as production systems rather than isolated model calls. That framing follows a broader lesson from production machine learning: systems fail not only because of model behavior, but because data dependencies, validation, serving, monitoring, and operational controls are handled ad hoc [@sculley2015hidden; @baylor2017tfx].
 
-The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and quality guardrails. Second, we propose a failure taxonomy that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort.
+The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and quality guardrails. Second, we propose a failure taxonomy that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained multi-objective optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort. This last framing is the paper's central methodological claim: production agent deployment should select a bounded operating point under reliability, cost, and auditability constraints, not simply maximize model complexity or parallelism.
 
 The central problem is simple: an LLM agent that works once is not necessarily a production system. To deploy agents in high-volume environments, practitioners must design for the ways they fail at scale.
+
+```{figure} figures/production_agent_optimization_synthesis.svg
+:name: fig-production-agent-optimization-synthesis
+:alt: Synthesis diagram showing a prototype becoming a production batch workflow, exposing failure signals, requiring reliability controls, producing an optimization surface, and selecting an operating point.
+
+Conceptual contribution of the paper. Production deployment exposes failure modes that require reliability controls and an empirical optimization surface before choosing an operating point.
+```
 
 ## Background
 
 Recent work on LLM reasoning and agentic systems has shown that language models can do more than single-turn text generation. Chain-of-thought prompting demonstrated that intermediate reasoning can improve model performance on complex tasks [@wei2022chain]. ReAct-style agents combine reasoning with actions such as search and tool use [@yao2023react]. Retrieval-augmented generation extends this pattern by grounding generation in external knowledge sources [@lewis2020rag]. These approaches motivate agents that can retrieve candidates, reason over free text and metadata, and produce structured outputs.
 
-Much of the agent literature, however, focuses on reasoning quality or interaction patterns. Production deployment introduces additional concerns: service quotas, network failures, retries, nondeterministic replay, malformed structured outputs, provider content filtering, and long-running partial completion. The distributed-systems literature provides a useful lens. Large-scale systems amplify rare latency and failure events; a small probability of slow or failed calls can become common when many calls are made concurrently [@dean2013tail]. Techniques such as bounded concurrency, timeouts, backoff with jitter, and checkpointing are standard reliability controls [@brooker2015backoff]. We apply these ideas to LLM agent workflows, where each record may trigger multiple external calls and failures may occur inside agent reasoning paths rather than at obvious service boundaries.
+Much of the agent literature, however, focuses on reasoning quality or interaction patterns. Production deployment introduces additional concerns: service quotas, network failures, retries, nondeterministic replay, malformed structured outputs, provider content filtering, and long-running partial completion. The distributed-systems literature provides a useful lens. Large-scale systems amplify rare latency and failure events; a small probability of slow or failed calls can become common when many calls are made concurrently [@dean2013tail]. Techniques such as bounded concurrency, timeouts, backoff with jitter, and checkpointing are standard reliability controls [@brooker2015backoff]. We apply these ideas to LLM agent workflows, where each record may trigger multiple external calls and failures may occur inside agent reasoning paths rather than at obvious service boundaries. Although the measured rates in this study are workflow-specific, the architectural pressures are common to many production agent systems: hosted model APIs, managed retrieval, batch execution, verifier stages, rate limits, and persistent outputs.
 
 ## From Interactive Prototype To Production Batch Agent
 
@@ -349,20 +356,29 @@ Taken together, these operating points motivate the framework below: choose conf
 
 ## Optimization Framework
 
-The experiments suggest that production agent design should be treated as a constrained optimization problem. Organizations usually want lower cost, higher throughput, reliable completion, and auditability, but these goals can conflict. Increasing parallelism can improve runtime while increasing external-service pressure. Reducing timeout budgets can make a batch appear faster while converting slow-but-recoverable records into failures. Adding verifier or fan-out stages can improve review metadata while increasing model calls, latency, and possible failure points.
+The experiments suggest that production agent design should be treated as a constrained optimization problem. Organizations usually want lower cost, higher throughput, reliable completion, and auditability, but these goals can conflict. Increasing parallelism can improve runtime while increasing external-service pressure. Reducing timeout budgets can make a batch appear faster while converting slow-but-recoverable records into failures. Adding verifier or fan-out stages can improve review metadata while increasing model calls, latency, and possible failure points. This makes the framework more than a tuning checklist: each configuration maps to an observed operating point with measurable benefits and constraint violations.
 
 The objective is not to maximize the number of agents, workers, retries, or reasoning steps. The goal is to maximize usable completed records per unit time while minimizing cost, rework, failure rate, and review burden under reliability and auditability constraints.
 
 ```text
-maximize:
-  usable_completed_records / wall_clock_time
+choose configuration x = (W, A, T, R, K, V, C_v, F, E, P)
 
-minimize:
-  cost_per_usable_record
-  final_failure_rate
-  recovered_internal_error_rate
-  reprocessing_cost
-  review_burden
+maximize:
+  throughput(x) = usable_completed_records(x) / wall_clock_time(x)
+
+subject to:
+  completion_yield(x) >= Y_min
+  strict_agreement(x) >= G_min
+  cost_per_usable_record(x) <= C_max
+  peak_TPM(x) <= P_max
+  final_failure_rate(x) <= F_max
+  auditability_controls(x) are enabled
+
+secondary objectives:
+  minimize cost_per_usable_record(x)
+  minimize recovered_internal_error_rate(x)
+  minimize reprocessing_cost(x)
+  minimize review_burden(x)
 ```
 
 ```{table} Agent configuration variables.
@@ -425,6 +441,7 @@ This study has several limitations:
 - **Provider drift.** The systems used hosted LLM APIs and managed cloud services whose behavior can change over time as providers update models, infrastructure, and content policies.
 - **Replay nondeterminism.** Replaying historical agent-internal failures did not reproduce the same final failures. This is an important reliability result, but it also means some historical failure modes could not be deterministically recreated under current conditions.
 - **Disclosure limits.** Some sensitive examples cannot be disclosed.
+- **Uncertainty treatment.** Some experiments include repeated runs and consistency metrics, but we do not report confidence intervals for every measurement. Small differences between nearby operating points should be interpreted cautiously.
 - **Limited labeled calibration.** The single-agent labeled calibration used only 12 records and should not be interpreted as a definitive accuracy benchmark.
 - **Reference-label interpretation.** The 200-record multi-agent structured-prediction probe evaluates agreement with internal reference labels, not broader downstream correctness. The exact-match metrics are intentionally strict: a record counts as correct only when the full predicted label set matches the reference label set. They do not give partial credit for predictions that are close or partly correct.
 - **Known-solvable selection.** The 100-record concurrency stability, verifier concurrency cap, and token-pressure probes were selected from prior successes. They are regression and pressure tests, not unbiased accuracy samples. The verifier concurrency cap sweep used three repeats, while the token-pressure stress matrix used one completed run per stress configuration. One high-reasoning stress attempt ended as a partial operational run and was replaced with a successful confirmation run in the reported table.
