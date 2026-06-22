@@ -39,12 +39,12 @@ directly hinders reproducible, collaborative science.
 
 The bioimaging community has converged on an answer. OME-Zarr — created by the
 OME-NGFF, Open Microscopy Environment Next-Generation File Format, community — is a
-community-driven open standard for storing bioimaging data in the cloud
+community-driven, open standard for storing bioimaging data in the cloud
 [@moore2021ngff; @moore2023omezarr]. Built on Zarr's chunked, compressed,
 n-dimensional array storage [@zarr], OME-Zarr stores images as multiscale
 pyramids together with rich, machine-readable metadata. Its specification and
 ecosystem are developed openly through a Request for Comments (RFC) process and
-periodic community hackathons [@luthi2025hackathon], and adoption now spans
+periodic community hackathons [@luthi2025hackathon]. Adoption now spans
 diverse modalities and institutions worldwide.
 
 A specification, however, only delivers value when backed by robust, accessible
@@ -90,11 +90,15 @@ community, tracking the specification as it advances from version 0.1 through
 
 `ngff-zarr` is implemented in Python (requiring Python 3.10 or newer) with a
 deliberately small dependency footprint built on NumPy [@numpy], Dask [@dask],
-Zarr [@zarr], and ITK-Wasm [@itkwasm]. Its interface reflects the OME-Zarr data
-model directly, using Python `dataclasses` to represent images and metadata and
-Dask arrays to represent pixel data lazily. The core abstraction is a four-step
-pipeline: an in-memory array becomes an `NgffImage`, which becomes a multiscale
-`NgffMultiscales`, which is written to an OME-Zarr store.
+Zarr [@zarr], and ITK-Wasm [@itkwasm]. Its interface provides an abstraction
+layer between front-end usage and the terms of the spec, to provide users with
+a stable interface and a backend that is able to evolve and forward metadata
+as the specification and its terms evolve. This backend uses Python `dataclasses`
+to represent the specification model directly which is accessible to users for
+inspection, alongside with convenient access to the pixel data as lazy Dask arrays.
+The core abstraction is a four-step pipeline: an in-memory array becomes an 
+`NgffImage`, which becomes a multiscale `NgffMultiscales`, which is written
+to an OME-Zarr store.
 
 ```python
 import ngff_zarr as nz
@@ -200,8 +204,8 @@ supported on write, and versions 0.1 through 0.5 can be read.
 Reading mirrors writing. `from_ngff_zarr` returns an `NgffMultiscales`
 populated with lazy Dask arrays. With the optional `validate` dependency
 installed, passing `validate=True` checks that the store's metadata conforms to
-the shared OME-Zarr data model, raising an error on any deviation; validation is
-supported for versions 0.1 through 0.5.
+the shared OME-Zarr JSON schema model, raising an error on any deviation;
+validation is supported for versions 0.1 through 0.5.
 
 ```python
 multiscales = nz.from_ngff_zarr("cthead1.ome.zarr", validate=True)
@@ -265,7 +269,7 @@ The most significant recent addition is emerging support for RFC-5, which
 provides first-class coordinate systems and transformations in OME-Zarr and is
 the centerpiece of the version 0.6 [@rfc5]. RFC-5 introduces named
 coordinate systems (sets of axes) and a richer vocabulary of transformations —
-including identity, axis permutation, translation, scale, affine, rotation,
+including identity, axis permutation and projection, translation, scale, affine, rotation,
 sequences of transformations, and field-based displacement and coordinate
 transforms — that map points between coordinate systems. This enables datasets
 to express the spatial relationships between multiple images, such as aligned
