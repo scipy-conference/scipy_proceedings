@@ -1,6 +1,6 @@
 ```markdown
    ---
-   title: Placeholder Title for SciPy Submission
+   title: Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven Document Analysis
    ---
 
    ## Abstract
