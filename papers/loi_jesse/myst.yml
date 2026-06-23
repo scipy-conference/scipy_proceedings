@@ -10,17 +10,28 @@ project:
     information from PDF documents and how effective it is compared to human
     labeling. We present results from fuzzy matches between human and LLM
     labels.'
+
+  # Binding the abstract and contents clearly for the single-paper template
+  abstract: |
+    This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Utilizing a student-led Retrieval-Augmented Generation (RAG) pipeline optimized for community-driven document analysis, we evaluate performance metrics across real-world datasets. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels, outlining trade-offs in accuracy, cost, and scalability for community research initiatives.
+
   authors:
     - name: Jesse Loi
       email: jesse.loi418@gmail.com
       affiliations:
         - Seattle University
+
   keywords:
     - document extraction
     - LLMs
     - data labeling
+    - RAG pipeline
+
   abbreviations:
     MyST: Markedly Structured Text
+    RAG: Retrieval-Augmented Generation
+    LLM: Large Language Model
+
   error_rules:
     - rule: doi-exists
       severity: ignore
@@ -30,17 +41,10 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+
   exports:
     - id: pdf
       format: typst
       template: https://github.com/curvenote-templates/scipy.git
       article: main.md
       output: full_text.pdf
-
-parts:
-  - id: abstract
-    chapters:
-      - main.md
-
-frontmatter:
-  - id: titlepage
