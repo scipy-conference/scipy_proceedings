@@ -24,8 +24,10 @@ project:
       affiliations:
         - gerbi
     - name: Wouter-Michiel Vierdag
+      orcid: 0000-0003-1666-5421
       affiliations:
-        - embl
+        - cellonautica
+        - scverse
     - name: Valentin Boussot
       orcid: 0009-0003-2465-5458
       affiliations:
@@ -44,10 +46,16 @@ project:
       name: German BioImaging — Society for Microscopy and Image Analysis e.V.
       city: Konstanz
       country: Germany
-    - id: embl
-      name: European Molecular Biology Laboratory (EMBL)
-      city: Heidelberg
-      country: Germany
+    - id: cellonautica
+      name: Cellonautica Inc
+      city: Austin
+      region: Texas
+      country: USA
+    - id: scverse
+      name: scverse
+      city: Austin
+      region: Texas
+      country: USA
   keywords:
     - OME-Zarr
     - OME-NGFF

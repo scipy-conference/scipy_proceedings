@@ -73,8 +73,8 @@ chunked, compressed arrays accompanied by JSON metadata [@ome-zarr-spec]. Three
 properties make it well suited to modern data. It is **chunked and compressed**,
 so a client can read a small region of a large image without downloading the
 whole dataset — the foundation of cloud-optimized access. It is **multiscale**,
-storing each image as a pyramid of progressively downsampled resolutions for
-responsive visualization and scale-appropriate analysis. And it is
+storing each image as a singular scale or as a pyramid of progressively downsampled
+resolutions for responsive visualization and scale-appropriate analysis. And it is
 **self-describing**: axis names, types, units, and coordinate transformations
 are stored alongside the data in a standardized model shared across the
 community's many implementations and programming languages.
@@ -96,7 +96,7 @@ a stable interface and a backend that is able to evolve and forward metadata
 as the specification and its terms evolve. This backend uses Python `dataclasses`
 to represent the specification model directly which is accessible to users for
 inspection, alongside with convenient access to the pixel data as lazy Dask arrays.
-The core abstraction is a four-step pipeline: an in-memory array becomes an 
+The core abstraction is a four-step pipeline: an in-memory array becomes an
 `NgffImage`, which becomes a multiscale `NgffMultiscales`, which is written
 to an OME-Zarr store.
 
@@ -121,10 +121,10 @@ in an `NgffImage`, a plain `dataclass` representing a single scale level. When
 constructing the image, the user may specify the dimension names `dims` drawn
 from `{'t', 'z', 'y', 'x', 'c'}`, the physical pixel `scale` for the spatial
 dimensions, a `translation` giving the origin of the first pixel, a `name`, and
-`axes_units` expressed with UDUNITS-2 identifiers. Sensible NumPy-compatible
-defaults are used for anything left unspecified. Internally the data is held
-lazily as a chunked Dask array, so no pixels are loaded or computed until they
-are needed.
+`axes_units` expressed with UDUNITS-2 (standard for physical units) identifiers.
+Sensible NumPy-compatible defaults are used for anything left unspecified.
+Internally the data is held lazily as a chunked Dask array, so no pixels are
+loaded or computed until they are needed.
 
 ### `NgffImage` to `NgffMultiscales`
 
