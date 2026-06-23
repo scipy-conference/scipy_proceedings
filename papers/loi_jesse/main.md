@@ -97,6 +97,19 @@ This paper presents the impacts of using Large Language Models (LLMs) to extract
 
 [cite_start]**[Fuzzy Comparison Data/Plots Here]** [cite: 100]
 
+```{figure} ./Dataset1.png
+:name: human-human-comparison
+:alt: Human-to-Human fuzzy comparison distribution plot
+:align: center
+
+Distribution of fuzzy match scores for double-verified human-to-human annotations.
+
+```{figure} ./Table2.png
+:name: human-human-comparison
+:alt: Human-to-Human fuzzy comparison distribution plot
+:align: center
+
+Distribution of fuzzy match scores for double-verified human-to-human annotations.
 
 
 
