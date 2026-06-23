@@ -1,9 +1,7 @@
 version: 1
 extends: ../papers.yml
 project:
-  # Updated to match your exact folder name format, wrapped safely
   id: scipy-2026-loi_jesse
-  # Wrapped in quotes to fix the colon syntax error
   title:
     'Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven
     Document Analysis'
@@ -17,7 +15,6 @@ project:
       email: jesse.loi418@gmail.com
       affiliations:
         - Seattle University
-
   keywords:
     - document extraction
     - LLMs
@@ -39,3 +36,11 @@ project:
       template: https://github.com/curvenote-templates/scipy.git
       article: main.md
       output: full_text.pdf
+
+parts:
+  - id: abstract
+    chapters:
+      - main.md
+
+frontmatter:
+  - id: titlepage
