@@ -104,7 +104,6 @@ project:
         - ome-zarr-spec
         - zarr
         - dask
-        - itkwasm
         - mcp
         - array-api
         - rfc4
