@@ -21,7 +21,8 @@ MNE-Python [@mne_python] is open-source software for analyzing electrophysiologi
 It was created in 2010 by [Alexandre Gramfort](https://alexandre.gramfort.net/) as a port of the original [MNE](https://mne.tools/stable/install/mne_c.html) software (written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
 The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels [@statsmodels], and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
 
-MNE-Python is used for the analysis of different electrophysiological signals in human neuroscience, mostly focussing on electroencephalography (EEG) and magnetoencephalography (MEG) data. It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
+MNE-Python is used for the analysis of different electrophysiological signals in human neuroscience, mostly focussing on electroencephalography (EEG) and magnetoencephalography (MEG) data. 
+It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
 
 ### Ecosystem
 
