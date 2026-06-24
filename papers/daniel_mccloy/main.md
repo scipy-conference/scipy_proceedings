@@ -146,12 +146,12 @@ The onboarding efforts, however, came with considerable monetary and personnel c
 The sprints and maintainer onboarding were funded by three separate grants over a six-year period.
 Beyond the monetary requirements (compensation for the sprint attendees and key personnel),
 they were a huge investment of existing maintainers' time.
-
-<!-- TODO say something about investing into future maintainers vs fixing current roadmap items -->
+Concretely, a considerable amount of time that would otherwise be spend on code development was now put into training new maintainers, putting further strain on the maintenance of the software.
+However, looking ahead we still consider this a valuable investment that hopefully we make future maintenance easier, it being distributed over more shoulders.
 
 ### Onboarding Obstacles and Outlook
 
-The incentive structure of academia still works against retaining our contributors and maintainers long-term.
+The incentive structure of academia still works against retaining our contributors and maintainers long-term (and software maintenance in general, with funding usually being awarded for new development).
 We hope that by publicizing our onboarding curriculum and creating other “contributor ladder” resources,
 we will empower more users to self-educate about the open-source contribution process.
 This will hopefully increase the “input stream” of contributors, and may also increase retention:
