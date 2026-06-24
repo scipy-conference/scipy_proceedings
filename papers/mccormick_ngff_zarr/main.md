@@ -28,9 +28,7 @@ abstract: |
 
 ## Introduction
 
-Modern bioimaging instruments — light-sheet microscopes, high-content screening
-systems, whole-slide scanners, and electron and volume-electron microscopes —
-routinely produce datasets that are large, multidimensional, and stored in
+Modern bioimaging instruments, including light-sheet microscopes, high-content screening systems, whole-slide scanners, and electron or volume-electron microscopes, routinely produce datasets that are large, multidimensional, and stored in
 fragmented, vendor-specific proprietary formats. A single acquisition can exceed
 the memory of any workstation, and the resulting monolithic files are not
 cloud-ready: they are difficult to stream, to share, and to align with FAIR
@@ -360,7 +358,7 @@ and reproducible workflows to users who would otherwise be deterred by tooling.
 ### Future work
 
 Several directions are planned. On the specification side, we intend to extend
-support for additional community RFCs: **RFC-3** (support for additional dimensions) [@rfc3] for smoother interoperability with more image tyes, and **RFC-8** (collections) [@rfc8] for grouping related
+support for additional community RFCs: **RFC-3** (support for additional dimensions) [@rfc3] for smoother interoperability with more image types, and **RFC-8** (collections) [@rfc8] for grouping related
 OME-Zarr datasets. We will continue maturing **RFC-5** coordinate-transformation
 support to directly support common use cases, and align releases with the community's
 **OME-Zarr 1.0** milestone — a stable, long-term-supported version of the
