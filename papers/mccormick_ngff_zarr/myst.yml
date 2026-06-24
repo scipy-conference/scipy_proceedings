@@ -19,23 +19,44 @@ project:
       corresponding: true
       affiliations:
         - fideus
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Writing – original draft
     - name: Johannes Soltwedel
       orcid: 0000-0003-1273-2412
       affiliations:
         - gerbi
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
     - name: Wouter-Michiel Vierdag
       orcid: 0000-0003-1666-5421
       affiliations:
         - cellonautica
         - scverse
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
     - name: Valentin Boussot
       orcid: 0009-0003-2465-5458
       affiliations:
         - fideus
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
     - name: Josh Moore
       orcid: 0000-0003-4028-811X
       affiliations:
         - gerbi
+      roles:
+        - Investigation
+        - Validation
+        - Supervision
   affiliations:
     - id: fideus
       name: Fideus Labs LLC
