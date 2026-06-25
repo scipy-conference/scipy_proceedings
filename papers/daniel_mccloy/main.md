@@ -44,7 +44,8 @@ Like many open-source software projects, MNE-Python struggles retain maintainers
 Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, accurately communicate trade-offs for different analysis choices, *etc.*) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, *etc.*).
 Since most MNE-Python users are not formally trained in software engineering, finding suitable maintainers is difficult.
 In the past, most of our regular contributors came from research groups that already had strong ties to the MNE-Python development team or where the principal investigator had a vested interest in contributing.
-The problem is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
+While those contributors often came with pre-existing open source skills, this very closed strategy likely diminished the pool of possible contributors.
+The problem of attracting and retaining contributors is further aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
 The existing barriers to open source contributions in academia further lead to skewed developer demographics since some groups (e.g., women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012].
 To mitigate the risk for our software that is posed by low maintainer numbers, we strive to remove some of these barriers - especially those related to open source skills.
 Therefore, our task becomes finding interested neuroscientists and teaching them how to develop and maintain scientific software.[^domaindev]
