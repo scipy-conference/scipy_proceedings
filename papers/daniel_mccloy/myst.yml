@@ -9,7 +9,7 @@ project:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Britta Westner
+    - name: Britta U. Westner
       email: britta.westner@donders.ru.nl
       orcid: 0000-0003-3231-1076
       affiliations:
@@ -19,6 +19,15 @@ project:
         - Conceptualization
         - Supervision
         - Writing – original draft
+        - Writing – review & editing
+    - name: Eric Larson
+      email: larsoner@uw.edu
+      orcid: 0000-0003-4782-5360
+      affiliations:
+        - Institute for Learning and Brain Sciences, University of Washington
+      roles:
+        - Conceptualization
+        - Supervision
         - Writing – review & editing
     - name: Daniel McCloy
       email: dan@mccloy.info
@@ -32,20 +41,12 @@ project:
         - Project administration
         - Supervision
         - Writing – original draft
-        - Writing – review & editing
-    - name: Eric Larson
-      email: larsoner@uw.edu
-      orcid: 0000-0003-4782-5360
-      affiliations:
-        - Institute for Learning and Brain Sciences, University of Washington
-      roles:
-        - Conceptualization
-        - Supervision
-        - Writing – review & editing
+        - Writing – review & editing        
   keywords:
     - neuroscience
     - software maintenance
     - software sustainability
+    - open source education
     - community management
   # Add the abbreviations that you use in your paper here
   abbreviations:
