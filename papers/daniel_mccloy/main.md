@@ -106,7 +106,7 @@ While the New Developer Sprints had focused mostly on contribution skills, the p
 ### Maintainer Onboarding
 
 After completion of the Intermediate Sprint we sought funding to support the onboarding new MNE-Python maintainers.
-We received funding in 2025, and began training three alumni of our Intermediate Sprint and one exceptionally good GSoC contributor.
+We received funding in 2025 via an NSF POSE [grant](https://www.nsf.gov/funding/opportunities/pose-pathways-enable-open-source-ecosystems/505982/nsf24-606), and began training three alumni of our Intermediate Sprint and one exceptionally good GSoC contributor.
 The funding again allowed us to provide substantial stipends to the trainees.
 For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
 
@@ -172,4 +172,4 @@ At the same time, we hope to spark a discussion among open-source software maint
 
 
 ## Funding acknowledgment
-This project has been made possible by NSF POSE award [2449064](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2449064), and by grant numbers [2020-219006](https://doi.org/10.37921/890928yoegkg) and [2021-237679](https://chanzuckerberg.com/eoss/proposals/building-pediatric-and-clinical-data-pipelines-for-mne-python/) from the Chan Zuckerberg Initiative DAF, an advised fund of Silicon Valley Community Foundation (funder DOI [10.13039/100014989](https://doi.org/10.13039/100014989)).
+This project has been made possible by NSF POSE award [2449064](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2449064), NIH [R01NS104585](https://reporter.nih.gov/search/1D9FUdzlcE2fiUxRF70eJg/project-details/11249201), and by grant numbers [2020-219006](https://doi.org/10.37921/890928yoegkg) and [2021-237679](https://chanzuckerberg.com/eoss/proposals/building-pediatric-and-clinical-data-pipelines-for-mne-python/) from the Chan Zuckerberg Initiative DAF, an advised fund of Silicon Valley Community Foundation (funder DOI [10.13039/100014989](https://doi.org/10.13039/100014989)).
