@@ -45,7 +45,7 @@ Part of the problem is that the pool is small: contributors and maintainers need
 Since most MNE-Python users are not formally trained in software engineering, finding suitable maintainers is difficult.
 In the past, most of our regular contributors came from research groups that already had strong ties to the MNE-Python development team or where the principal investigator had a vested interest in contributing.
 The problem is aggravated by academic incentive systems which devalue open source work compared to scientific publications [@WestnerEtAl2025].
-The existing barriers to open source contributions in academia further lead to skewed developer demographics since some groups (e.g., women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012]].
+The existing barriers to open source contributions in academia further lead to skewed developer demographics since some groups (e.g., women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012].
 To mitigate the risk for our software that is posed by low maintainer numbers, we strive to remove some of these barriers - especially those related to open source skills.
 Therefore, our task becomes finding interested neuroscientists and teaching them how to develop and maintain scientific software.[^domaindev]
 Our efforts to achieve this are the topic of the rest of this paper.
@@ -146,8 +146,8 @@ The onboarding efforts, however, came with considerable monetary and personnel c
 The sprints and maintainer onboarding were funded by three separate grants over a six-year period.
 Beyond the monetary requirements (compensation for the sprint attendees and key personnel),
 they were a huge investment of existing maintainers' time.
-Concretely, a considerable amount of time that would otherwise be spend on code development was now put into training new maintainers, putting further strain on the maintenance of the software.
-However, looking ahead we still consider this a valuable investment that hopefully we make future maintenance easier, it being distributed over more shoulders.
+To spell it out: the time spent training new maintainers could not be used to fix bugs or make progress on our roadmap, thereby putting further strain on the maintenance of the software (at least in the short term).
+However, looking ahead we still consider this a valuable investment that hopefully will make future maintenance easier by distributing it across a larger team, and by creating resources that make it easier to keep the size of the team stable.
 
 ### Onboarding Obstacles and Outlook
 
