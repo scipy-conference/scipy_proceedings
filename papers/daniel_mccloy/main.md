@@ -93,7 +93,11 @@ Tutorials focused on knowledge relevant to the contributing workflow: writing an
 
 :::{figure} figure1.png :label: fig:reten Contributor retention of the two New Developer Sprints. The lines show how many years the contributors stayed active after the sprint. The teal-colored line represents the 2021 cohort, the purple line the 2022 cohort. :::
 
-<!-- TODO ADD INFO ON RETENTION/CONTINUED CONTRIBUTIONS -->
+Figure @fig:reten shows the retention of New Developer Sprint attendees as contributors to MNE-Python.
+For both sprints, around half of the attendees continued to contribute beyond the first year. Taking both sprints together, ten attendees contributed for two years or longer.
+In 2026, five and four years after the sprints, 4 attendees are still regularly contributing.
+Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
+This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
 
 ### Intermediate Sprint
 
