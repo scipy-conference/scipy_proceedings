@@ -106,7 +106,7 @@ While the New Developer Sprints had focused mostly on contribution skills, the p
 ### Maintainer Onboarding
 
 After completion of the Intermediate Sprint we sought funding to support the onboarding new MNE-Python maintainers.
-We received funding in 2025 via an NSF POSE [grant](https://www.nsf.gov/funding/opportunities/pose-pathways-enable-open-source-ecosystems/505982/nsf24-606), and began training three alumni of our Intermediate Sprint and one exceptionally good GSoC contributor.
+We received funding in 2025, and began training three alumni of our Intermediate Sprint and one exceptionally good GSoC contributor.
 The funding again allowed us to provide substantial stipends to the trainees.
 For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
 
