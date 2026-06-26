@@ -17,6 +17,7 @@ project:
         - Radboud University Medical Center
       roles:
         - Conceptualization
+        - Formal Analysis
         - Supervision
         - Writing – original draft
         - Writing – review & editing
