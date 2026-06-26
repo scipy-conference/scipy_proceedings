@@ -108,7 +108,7 @@ The projects were more complex and took participants several days if not the who
 During the sprint, they joined with each other or with mentors for pair-programming sessions;
 hands-on contributing was complemented by daily short lectures on pertinent topics such as debugging, building documentation, deprecations, understanding output of the CIs we use, and more.
 While the New Developer Sprints had focused mostly on contribution skills, the projects at the Intermediate Sprint relied on neuroscience knowledge as well, making the experience more akin to the work done by seasoned contributors.
-<!-- TODO more detail here about the kinds of projects the participants did. -->
+Examples of sprint projects include how to handle bad channels when working with multiple recordings, adding functionality to equalize observation numbers ("epochs") for time-frequency-resolved data, fixing a bug in our permutation statistics code, or annotating eyetracking data.
 
 ### Maintainer Onboarding
 
