@@ -44,7 +44,7 @@ Like many open-source software projects, MNE-Python struggles retain maintainers
 Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, and accurately communicate trade-offs for different analysis choices) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, and related topics).
 Since most MNE-Python users are not formally trained in software engineering, finding suitable candidates is difficult.
 The problem of attracting and retaining contributors is further aggravated by academic incentive systems which devalue open-source work compared to scientific publications [@WestnerEtAl2025];
-those barriers to open-source contributions in academia also reinforce existing representational biases in developer demographics, since some groups (such as women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012].
+those barriers to open-source contributions in academia also reinforce existing representational biases in developer demographics, since some groups (such as women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012;@WestnerEtAl2025].
 
 In the past, regular contributors often came from research groups that already had strong ties to the MNE-Python development team, or groups where the principal investigator had a vested interest in contributing.
 While those contributors usually had a better-than-average set of relevant skills, this network-based approach almost surely missed many promising contributors.
@@ -62,7 +62,10 @@ To increase our contributor pool, we organized two New Developer Sprints and one
 Because we provided stipends for participants, admission was competitive and hence a non-trivial application process was needed.
 The goal of these one-week courses was to teach software development and open-source contribution skills to interested community members.
 Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of scientists from all over the world.
-<!-- TODO: number of countries / institutions involved -->
+In total, 29 participants (12 of them female) took part in one of the two New Developer Sprints, coming from eleven countries in Europe, North and South America, and South Asia.
+While the first sprint had a large cohort (23 participants), the second sprint was scaled back to only 7 participants, for financial and logistical reasons.
+Eleven participants of the two New Developer Sprints returned for the Intermediate Sprint in 2023.
+
 We used a video conferencing platform that supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video/screen "rooms" for participants to work in.
 Each sprint had an associated kanban-style project board to facilitate finding and tracking the pieces of work to be done.
 Both types of sprint involved participants pair-programming with each other and with mentors.
@@ -90,7 +93,17 @@ Each day, a short lecture or tutorial was provided by senior community members w
 Lectures focused on career trajectory, experiences in the MNE-Python community, and how the speakers benefitted from being contributors.
 Tutorials focused on knowledge relevant to the contributing workflow: writing and running tests, checking code coverage, reading tracebacks, and similar topics.
 
-<!-- TODO ADD INFO ON RETENTION/CONTINUED CONTRIBUTIONS -->
+```{figure} figure1.png
+:label: fig:reten
+
+Contributor retention of the two New Developer Sprints. The lines show how many years the contributors stayed active after the sprint. The teal-colored line represents the 2021 cohort, the purple line the 2022 cohort.
+```
+
+Figure @fig:reten shows the retention of New Developer Sprint attendees as contributors to MNE-Python.
+For both sprints, around half of the attendees continued to contribute beyond the first year. Taking both sprints together, ten attendees contributed for two years or longer.
+In 2026, five and four years after the sprints, four attendees are still regularly contributing.
+Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
+This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
 
 ### Intermediate Sprint
 
@@ -101,7 +114,7 @@ The projects were more complex and took participants several days if not the who
 During the sprint, they joined with each other or with mentors for pair-programming sessions;
 hands-on contributing was complemented by daily short lectures on pertinent topics such as debugging, building documentation, deprecations, understanding output of the CIs we use, and more.
 While the New Developer Sprints had focused mostly on contribution skills, the projects at the Intermediate Sprint relied on neuroscience knowledge as well, making the experience more akin to the work done by seasoned contributors.
-<!-- TODO more detail here about the kinds of projects the participants did. -->
+Examples of sprint projects include how to handle bad channels when working with multiple recordings, adding functionality to equalize observation numbers ("epochs") for time-frequency-resolved data, fixing a bug in our permutation statistics code, or annotating eyetracking data.
 
 ### Maintainer Onboarding
 
@@ -145,9 +158,11 @@ This is due to a mixture of factors: a small pool of qualified people, the unfav
 In contrast to our past network-based recruitment practices, our current approach has been bottom-up: first training users how to contribute, then upskilling contributors to facilitate repeat contributions, and finally providing intensive training in maintainer-specific skills.
 In our experience, providing education on how to contribute to open-source software, especially information specific to our project,
 greatly lowers the threshold for our users to be willing to attempt a contribution.
-<!-- TODO sprint attendee retention numbers could go here too/instead -->
 This approach also allowed us to prioritize inclusivity in our recruitment and to address barriers that disproportionately impact underrepresented groups in our training.
 As of now, this has lead to a slight increase in the diversity of our regular contributors and maintainers.
+Overall, we have retained roughly a third of the attendees for two years or longer.
+We do not have any insight into why long-term active attendees stop contributing, but assume that new careers, possibly outside of neuroscience, and the academic incentive system play a major role.
+However, that seven attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding curriculum on the project.
 
 ### Onboarding Costs
 
