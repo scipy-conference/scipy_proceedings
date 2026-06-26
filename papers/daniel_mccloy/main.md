@@ -63,7 +63,8 @@ Because we provided stipends for participants, admission was competitive and hen
 The goal of these one-week courses was to teach software development and open-source contribution skills to interested community members.
 Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of scientists from all over the world.
 In total, 29 participants (12 of them female) took part in one of the two New Developer Sprints, coming from eleven countries in Europe, North and South America, and West Asia.
-Eleven of these participants would return for the Intermediate Sprint.
+While the first sprint had a large cohort (23 participants), the second sprint was scaled back for financial and logistical reasons with only 6 participants (also see Figure @fig:reten below).
+Eleven participants of the two New Developer Sprints returned for the Intermediate Sprint in 2023.
 We used a video conferencing platform that supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video/screen "rooms" for participants to work in.
 Each sprint had an associated kanban-style project board to facilitate finding and tracking the pieces of work to be done.
 Both types of sprint involved participants pair-programming with each other and with mentors.
@@ -95,7 +96,7 @@ Tutorials focused on knowledge relevant to the contributing workflow: writing an
 
 Figure @fig:reten shows the retention of New Developer Sprint attendees as contributors to MNE-Python.
 For both sprints, around half of the attendees continued to contribute beyond the first year. Taking both sprints together, ten attendees contributed for two years or longer.
-In 2026, five and four years after the sprints, 4 attendees are still regularly contributing.
+In 2026, five and four years after the sprints, four attendees are still regularly contributing.
 Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
 This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
 
