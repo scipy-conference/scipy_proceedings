@@ -91,6 +91,8 @@ Each day, a short lecture or tutorial was provided by senior community members w
 Lectures focused on career trajectory, experiences in the MNE-Python community, and how the speakers benefitted from being contributors.
 Tutorials focused on knowledge relevant to the contributing workflow: writing and running tests, checking code coverage, reading tracebacks, and similar topics.
 
+:::{figure} figure1.png :label: fig:reten Contributor retention of the two New Developer Sprints. The lines show how many years the contributors stayed active after the sprint. The teal-colored line represents the 2021 cohort, the purple line the 2022 cohort. :::
+
 <!-- TODO ADD INFO ON RETENTION/CONTINUED CONTRIBUTIONS -->
 
 ### Intermediate Sprint
