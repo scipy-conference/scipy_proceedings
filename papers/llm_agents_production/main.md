@@ -1,7 +1,7 @@
 ---
 title: Everything That Breaks When You Put an LLM Agent in Production
 abstract: |
-  Agentic AI systems often perform well in interactive prototypes and small evaluations, but they behave like distributed systems when deployed in production-scale workflows. We present a case study from a regulated record-processing environment where LLM-based agents were used for structured classification in two architectures: a high-throughput single-agent batch workflow and a staged multi-agent review workflow. The goal of the study is not to introduce a new prompting method or model architecture. Instead, we evaluate the engineering controls needed to make LLM agent execution observable, recoverable, and tunable at scale.
+  Agentic AI systems often perform well in interactive prototypes and small evaluations, but they behave like distributed systems when deployed in production-scale workflows. We present a case study from a regulated record-processing environment where LLM-based agents were used for structured classification in two successive scaling architectures: a high-throughput single-agent batch workflow and a staged multi-agent review workflow. The goal of the study is not to introduce a new prompting method or model architecture. Instead, we evaluate the engineering controls needed to parallelize record-level agent execution while keeping it observable, recoverable, and tunable at scale.
 
   Across hundreds of records and thousands of model and retrieval calls, reliability depended less on prompt design alone and more on production controls: separating local worker parallelism from hosted API concurrency, enforcing per-record wall-clock budgets, distinguishing transient from non-transient failures, preserving progress through checkpoints, and recording structured operational metadata. In the single-agent workflow, hosted API concurrency was the dominant throughput bottleneck; tuning it improved throughput by nearly 5x relative to the initial baseline while preserving completion yield.
 
@@ -15,9 +15,23 @@ Production environments expose a different class of problems. When the same agen
 
 This paper studies those reliability problems through a real production case study. We evaluate two related workflows: a single-agent batch classification pipeline that processes each record independently, and a multi-agent review workflow that retrieves supporting evidence, synthesizes a structured prediction, verifies the prediction, attempts a bounded repair when needed, and routes outputs by confidence. We frame these workflows as production systems rather than isolated model calls. That framing follows a broader lesson from production machine learning: systems fail not only because of model behavior, but because data dependencies, validation, serving, monitoring, and operational controls are handled ad hoc [@sculley2015hidden; @baylor2017tfx].
 
-The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and quality guardrails. Second, we propose a failure taxonomy that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained multi-objective optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort. This last framing is the paper's central methodological claim: production agent deployment should select a bounded operating point under reliability, cost, and auditability constraints, not simply maximize model complexity or parallelism.
+The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments that parallelize record processing, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and quality guardrails. Second, we propose a failure taxonomy and measurement set that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained multi-objective optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort. This last framing is the paper's central methodological claim: production agent deployment should select a bounded operating point under reliability, cost, and auditability constraints, not simply maximize model complexity or parallelism.
 
 The central problem is simple: an LLM agent that works once is not necessarily a production system. To deploy agents in high-volume environments, practitioners must design for the ways they fail at scale.
+
+```{table} What breaks when a record-processing agent is parallelized.
+:label: tab-what-breaks
+
+| Scale-up pressure | What breaks or becomes ambiguous | Measurement or control used here |
+|---|---|---|
+| More local workers | Hosted API, retrieval, network, or storage bottlenecks dominate local parallelism | Separate worker count from API concurrency |
+| Long-tail records | A few slow records can hold the batch open | Per-record wall-clock timeout budgets |
+| Partial completion | A run can finish most records but still exit with failures | Completion yield, saved decisions, and failure logs |
+| Hidden internal recovery | The final output may succeed while an agent stage recovered from an exception | Recovered-internal-error counters |
+| Provider or policy errors | Some failures are non-transient and should not be retried indefinitely | Named error taxonomy and retry limits |
+| Cost and token pressure | Faster configurations can increase model calls or peak token load | Token totals, peak TPM, and cost per usable record |
+| Quality under concurrency | More parallel execution does not guarantee better or worse agreement | Repeat probes and strict label-set agreement |
+```
 
 ```{figure} figures/production_agent_optimization_synthesis.svg
 :name: fig-production-agent-optimization-synthesis
@@ -56,9 +70,9 @@ It also changed how failures had to be represented. A production run needs struc
 
 ## Workflow Overview
 
-We evaluated two workflow architectures. The single-agent batch workflow processes each record independently using one LLM-based agent. The runner loads records from spreadsheet or cloud object storage, creates record-level tasks, executes them in parallel, and writes JSON outputs, spreadsheet outputs, failure logs, checkpoints, and run summaries.
+We evaluated two workflow architectures as an evolutionary line for scaling record-level agent work. The single-agent batch workflow processes each record independently using one LLM-based agent. The runner loads records from spreadsheet or cloud object storage, creates record-level tasks, executes them in parallel, and writes JSON outputs, spreadsheet outputs, failure logs, checkpoints, and run summaries.
 
-The multi-agent workflow separates responsibilities across retrieval, reasoning, synthesis, verification, repair, and confidence routing. Retrieval gathers candidate evidence, synthesis assembles a final structured prediction, verification checks the proposed prediction, repair is one bounded correction attempt after a verifier objection, and confidence routing assigns the result to a review tier or escalation path. A verifier stage reviews proposed classifications and either passes them, requests repair, or escalates the record for additional review. Fan-out means branching a record through multiple evidence paths or agent calls, such as free-text narrative and structured fields already present in the input record, before combining the results into one final classification.
+The multi-agent workflow extends the same scaling problem with additional stages rather than serving as an unrelated alternative. It separates responsibilities across retrieval, reasoning, synthesis, verification, repair, and confidence routing. Retrieval gathers candidate evidence, synthesis assembles a final structured prediction, verification checks the proposed prediction, repair is one bounded correction attempt after a verifier objection, and confidence routing assigns the result to a review tier or escalation path. A verifier stage reviews proposed classifications and either passes them, requests repair, or escalates the record for additional review. Fan-out means branching a record through multiple evidence paths or agent calls, such as free-text narrative and structured fields already present in the input record, before combining the results into one final classification.
 
 ```{figure} figures/single_agent_batch_workflow.svg
 :name: fig-single-agent-batch-workflow
