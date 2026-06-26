@@ -2,12 +2,13 @@ version: 1
 extends: ../papers.yml
 project:
   id: scipy-2026-awkward_cuda_compute
-  title: "GPU-Accelerated Awkward Arrays with CUDA Python"
+  title: 'GPU-Accelerated Awkward Arrays with CUDA Python'
   description: >
-    A collaboration between the Awkward Array and NVIDIA teams that rebuilds Awkward's GPU
-    backend on cuda.compute, replacing hand-written CUDA C++ kernels with compositions of
-    Python-callable primitives from the CUB and Thrust libraries—with kernel fusion handled
-    by the library—so contributors write pure Python and obtain C++-level GPU performance.
+    A collaboration between the Awkward Array and NVIDIA teams that rebuilds
+    Awkward's GPU backend on cuda.compute, replacing hand-written CUDA C++
+    kernels with compositions of Python-callable primitives from the CUB and
+    Thrust libraries—with kernel fusion handled by the library—so contributors
+    write pure Python and obtain C++-level GPU performance.
   authors:
     - name: Ashwin Trikuta Srinath
       email: ashwint@nvidia.com
