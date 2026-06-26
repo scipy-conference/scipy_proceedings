@@ -44,7 +44,7 @@ Like many open-source software projects, MNE-Python struggles retain maintainers
 Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, and accurately communicate trade-offs for different analysis choices) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, and related topics).
 Since most MNE-Python users are not formally trained in software engineering, finding suitable candidates is difficult.
 The problem of attracting and retaining contributors is further aggravated by academic incentive systems which devalue open-source work compared to scientific publications [@WestnerEtAl2025];
-those barriers to open-source contributions in academia also reinforce existing representational biases in developer demographics, since some groups (such as women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012].
+those barriers to open-source contributions in academia also reinforce existing representational biases in developer demographics, since some groups (such as women, Non-White persons, more senior academics) face greater obstacles to contributing [@Nafus2012;@WestnerEtAl2025].
 
 In the past, regular contributors often came from research groups that already had strong ties to the MNE-Python development team, or groups where the principal investigator had a vested interest in contributing.
 While those contributors usually had a better-than-average set of relevant skills, this network-based approach almost surely missed many promising contributors.
@@ -62,7 +62,8 @@ To increase our contributor pool, we organized two New Developer Sprints and one
 Because we provided stipends for participants, admission was competitive and hence a non-trivial application process was needed.
 The goal of these one-week courses was to teach software development and open-source contribution skills to interested community members.
 Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of scientists from all over the world.
-<!-- TODO: number of countries / institutions involved -->
+In total, 29 participants took part in one of the two New Developer Sprints, coming from eleven countries in Europe, North and South America, and West Asia.
+Eleven of these participants would return for the Intermediate Sprint.
 We used a video conferencing platform that supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video/screen "rooms" for participants to work in.
 Each sprint had an associated kanban-style project board to facilitate finding and tracking the pieces of work to be done.
 Both types of sprint involved participants pair-programming with each other and with mentors.
