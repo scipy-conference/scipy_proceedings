@@ -1,0 +1,52 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-awkward_cuda_compute
+  title: "GPU-Accelerated Awkward Arrays with CUDA Python"
+  description: >
+    A collaboration between the Awkward Array and NVIDIA teams that rebuilds Awkward's GPU
+    backend on cuda.compute, replacing hand-written CUDA C++ kernels with compositions of
+    Python-callable primitives from the CUB and Thrust libraries—with kernel fusion handled
+    by the library—so contributors write pure Python and obtain C++-level GPU performance.
+  authors:
+    - name: Ashwin Trikuta Srinath
+      email: ashwint@nvidia.com
+      affiliations:
+        - NVIDIA Corporation
+      corresponding: true
+    - name: Ianna Osborne
+      email: ianna.osborne@cern.ch
+      affiliations:
+        - Princeton University
+  keywords:
+    - GPU computing
+    - awkward array
+    - CUDA
+    - cuda.compute
+    - high-energy physics
+    - ragged arrays
+    - kernel fusion
+  abbreviations:
+    HEP: High-Energy Physics
+    JIT: Just-In-Time
+    LOC: Lines of Code
+    PTX: Parallel Thread Execution
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - awkward-gpu-cupy
+        - cuda-compute-blog
+        - cuda-compute-docs
+        - adl-benchmarks
+        - columnar-gpu
+        - cub
+        - cuda-coop
+        - awkward-issue-3793
+        - uproot
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
