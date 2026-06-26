@@ -153,9 +153,11 @@ This is due to a mixture of factors: a small pool of qualified people, the unfav
 In contrast to our past network-based recruitment practices, our current approach has been bottom-up: first training users how to contribute, then upskilling contributors to facilitate repeat contributions, and finally providing intensive training in maintainer-specific skills.
 In our experience, providing education on how to contribute to open-source software, especially information specific to our project,
 greatly lowers the threshold for our users to be willing to attempt a contribution.
-<!-- TODO sprint attendee retention numbers could go here too/instead -->
 This approach also allowed us to prioritize inclusivity in our recruitment and to address barriers that disproportionately impact underrepresented groups in our training.
 As of now, this has lead to a slight increase in the diversity of our regular contributors and maintainers.
+Overall, we have retained roughly a third of the attendees for two years or longer.
+We do not have any insight into why long-term active attendees stop contributing, but assume that new careers, possibly outside of neuroscience, and the academic incentive system play a major role.
+However, that seven attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding curriculum on the project.
 
 ### Onboarding Costs
 
