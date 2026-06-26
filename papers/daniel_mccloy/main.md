@@ -62,7 +62,7 @@ To increase our contributor pool, we organized two New Developer Sprints and one
 Because we provided stipends for participants, admission was competitive and hence a non-trivial application process was needed.
 The goal of these one-week courses was to teach software development and open-source contribution skills to interested community members.
 Holding the courses online (and with flexible work times to accommodate different time zones) allowed for the participation of scientists from all over the world.
-In total, 29 participants took part in one of the two New Developer Sprints, coming from eleven countries in Europe, North and South America, and West Asia.
+In total, 29 participants (12 of them female) took part in one of the two New Developer Sprints, coming from eleven countries in Europe, North and South America, and West Asia.
 Eleven of these participants would return for the Intermediate Sprint.
 We used a video conferencing platform that supports fast, high-resolution screen-sharing and the creation of an arbitrary number of voice/video/screen "rooms" for participants to work in.
 Each sprint had an associated kanban-style project board to facilitate finding and tracking the pieces of work to be done.
