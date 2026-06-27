@@ -293,9 +293,9 @@ The safety signal comes from an adversarial probe of 20 fabricated incidents: in
 
 ### Held-out accuracy
 
-A record *completes* when it reaches the Complete node with at least one field extracted; otherwise it escalates to human review. On the held-out set (100 records per dataset; {ref}`tbl:holdout`), the pipeline completes 70% of civilian records and 92% of officer records; officers complete far more often because officer-involved shootings draw denser news coverage, so retrieval rarely fails. Among extracted values, aggregate exact-match precision is 77% for civilians and 71% for officers, rising to 89% and 86% under fuzzy match. Of the 30 civilian escalations, 22 are retrieval gaps (no articles found), 7 are relevance-judge vetoes, and 1 is insufficient sources; the officer escalations split 4/3/1 the same way. No record escalates on a conflict alone, since partial completion commits the agreed fields and routes only the contested one to review.
+A record *completes* when it reaches the Complete node with at least one field extracted; otherwise it escalates to human review. On the held-out set (100 records per dataset; {ref}`tbl:holdout`), the pipeline completes 70% of civilian records (95% Wilson interval 60–78%) and 92% of officer records (85–96%); officers complete far more often because officer-involved shootings draw denser news coverage, so retrieval rarely fails. Among extracted values, aggregate exact-match precision is 77% for civilians and 71% for officers, rising to 89% and 86% under fuzzy match. Of the 30 civilian escalations, 22 are retrieval gaps (no articles found), 7 are relevance-judge vetoes, and 1 is insufficient sources; the officer escalations split 4/3/1 the same way. No record escalates on a conflict alone, since partial completion commits the agreed fields and routes only the contested one to review.
 
-```{list-table} Held-out results, 100 records per dataset, all judges on; Claude Sonnet, with the conflict annotator on Claude Haiku.
+```{list-table} Held-out results, 100 records per dataset, all judges on; Claude Sonnet, with the conflict annotator on Claude Haiku. Bracketed ranges are 95% Wilson score confidence intervals.
 :label: tbl:holdout
 :header-rows: 1
 
@@ -303,17 +303,17 @@ A record *completes* when it reaches the Complete node with at least one field e
   - civilians_shot
   - officers_shot
 * - Completion rate
-  - 70% (70/100)
-  - 92% (92/100)
+  - 70% (70/100) [60–78]
+  - 92% (92/100) [85–96]
 * - Escalation rate
   - 30% (30/100)
   - 8% (8/100)
 * - Aggregate exact
-  - 77% (210/272)
-  - 71% (147/207)
+  - 77% (210/272) [72–82]
+  - 71% (147/207) [64–77]
 * - Aggregate fuzzy
-  - 89% (243/272)
-  - 86% (179/207)
+  - 89% (243/272) [85–92]
+  - 86% (179/207) [81–90]
 ```
 
 Per-field, the strongest civilian fields are age (95% exact) and outcome (92%); weapon is 83% after category normalization and time of day 82% ({ref}`tbl:perfield`). Location is the familiar exact/fuzzy split (16% exact but 91% fuzzy) because the pipeline returns the correct city inside a fuller string that does not match the street-level ground truth. Officer fields follow the same shape ({ref}`tbl:perfield-off`). Outcome errors are almost entirely *conservative*: civilians have 6 of 74 wrong, all "fatal" where the truth is "survived" (100% fatal recall); officers have 12 of 94 wrong, of which 11 are conservative and one is a reverse error, the pipeline reporting a non-fatal outcome where the database records a death (the single fatal-recall miss across both datasets). These outcome errors share a mechanism: they cluster on *outcome-only completions* (12 officers, 4 civilians) whose only strongly supported field is the generic outcome, the signature of a different shooting at the same place and time having been matched.
@@ -390,7 +390,7 @@ Per-field, the strongest civilian fields are age (95% exact) and outcome (92%); 
   - 67%
 ```
 
-Denominators differ by field because each is scored only where ground truth exists. Small cells warrant caution: `civilian_race` accuracy is over the 11 values the verifier committed, so its 91% (and the 65%→91% gain reported below) is a point estimate on roughly a dozen records. Each extracted value also carries a self-reported confidence label, and that label is usefully calibrated: high-confidence extractions are markedly more accurate than medium-confidence ones (roughly 93% versus 68% exact on civilians, 86% versus 54% on officers), so it is a usable triage signal for a human reviewer.
+Denominators differ by field because each is scored only where ground truth exists. Small cells warrant caution: `civilian_race` accuracy is over the 11 values the verifier committed, so its 91% is a point estimate on roughly a dozen records, with a 95% Wilson interval of 62–98% wide enough to span the 65% gate-off figure reported below; we therefore read the 65%→91% change as the verifier declining to assert unstated races rather than a measured accuracy gain. Each extracted value also carries a self-reported confidence label, and that label is usefully calibrated: high-confidence extractions are markedly more accurate than medium-confidence ones (roughly 93% versus 68% exact on civilians, 86% versus 54% on officers), so it is a usable triage signal for a human reviewer.
 
 ### Qualitative behavior
 
@@ -517,7 +517,7 @@ Equity is monitored as a first-class concern ({ref}`tbl:fairness`). Per-race com
 
 ### Limitations
 
-Retrieval recall, more than reasoning, sets the true ceiling on this task: 22 of 30 civilian escalations are simply records for which no relevant article was found, and no agent can extract what was never retrieved. The pattern is temporal: civilian completion peaks for 2019–2021 incidents (90%) and falls for both the most recent 2022–2024 (56%) and the oldest 2014–2016 (66%) cohorts, tracking how thoroughly news coverage is indexed rather than anything the model does (officer completion stays high, 82–100%, across cohorts because that coverage is denser). The fairness reading above is itself limited statistically: the per-group cells are small (as few as five records), so the equity gaps in {ref}`tbl:fairness` are directional at best, and although the evidence points to coverage availability over time, we cannot fully exclude pipeline bias as a contributor at this sample size. More broadly, the evaluation covers about 6% of the full dataset; LLM run-to-run variance remains a source of noise we damp but do not eliminate; ground-truth fields have their own gaps; and the data is single-state. These bound the strength of the per-field and fairness claims.
+Retrieval recall, more than reasoning, sets the true ceiling on this task: 22 of 30 civilian escalations are simply records for which no relevant article was found, and no agent can extract what was never retrieved. The pattern is temporal: civilian completion peaks for 2019–2021 incidents (90%) and falls for both the most recent 2022–2024 (56%) and the oldest 2014–2016 (66%) cohorts, tracking how thoroughly news coverage is indexed rather than anything the model does (officer completion stays high, 82–100%, across cohorts because that coverage is denser). The fairness reading above is itself limited statistically: the per-group cells are small (as few as five records), so the equity gaps in {ref}`tbl:fairness` are directional at best, and although the evidence points to coverage availability over time, we cannot fully exclude pipeline bias as a contributor at this sample size. More broadly, the evaluation covers about 6% of the full dataset; LLM run-to-run variance remains a source of noise we damp but do not eliminate; ground-truth fields have their own gaps; and the data is single-state. These bound the strength of the per-field and fairness claims. Every reported rate is a sample proportion, so we read each through a 95% Wilson score interval: the completion rates span roughly eight to eleven points (civilians 60–78%, officers 85–96%), while the small per-field and per-race cells are far wider (`civilian_race` 62–98% on eleven values, the officer suspect-race 35–88% on nine, and the per-group fairness cells, some as small as five records, wider still), so any difference smaller than these intervals should be read as noise rather than signal.
 
 ### Future work
 
