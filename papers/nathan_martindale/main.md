@@ -48,8 +48,8 @@ for updating uncertain parameters based on observed data.
 
 System dynamics modeling (SDM) is a way to represent how material and
 information move through and accumulate within complex systems.
-These systems are characterized by stocks (i.e., states wherein material or
-information accumulates) and flows (i.e., equations that define how those
+These systems are characterized by stocks (states where material or
+information accumulates) and flows (equations that define how those
 accumulations increase or decrease over time) and often exhibit nonlinear
 behavior arising from feedback loops and time delays [@Radzicki2020].
 SDM explores top-down impacts to system behavior, as opposed to
@@ -64,14 +64,14 @@ resource management [@husniah15;@tan2020] and interactions between social and
 ecological systems [@martin15].
 
 For the purposes of a simple example to illustrate how stocks and flows interact
-in a system, consider a bathtub. The tub represents a stock, measuring the
+in a system, consider a bathtub. The tub itself represents a stock, measuring the
 amount of water that has accumulated over time. The faucet and drain would be
 represented as an inflow and outflow to the tub respectively, influencing the
 rates at which the water level changes ([Figure %s](#fig:tub)).
 Nonlinearities are introduced with concepts like feedback loops, such as a water
 level sensor that connects to the faucet and automatically increases or
 decreases the flow rate to maintain a certain water level in a leaky tub. Time
-delays are another common source of complexity, wherein the transmission of
+delays are another common source of complexity, where the transmission of
 values from specific variables/flows may lag many timesteps behind. To
 overextend the tub analogy, one could imagine if the water level sensor is a poorly
 designed, wifi-enabled, Internet of Things (IoT) device with a sensor reading
@@ -93,7 +93,7 @@ The model exhibits several feedback loops, for instance the exponential growth
 between a population and the population's birth rate (i.e., as the population
 grows, birth rate grows, causing the population to grow even faster).
 Interaction between the two populations occurs in the predation loop, shown in
-the middle of [Figure %s](#fig:pred_prey_cld), wherein prey sustains the
+the middle of [Figure %s](#fig:pred_prey_cld), where prey sustains the
 predator population but decreases the prey population and thus preventing
 unbounded growth from either population's positive feedback loop. Causal loop
 diagrams like the one shown only highlight general interactions in a system, but
@@ -122,7 +122,7 @@ observed data. This approach promotes an intuitive way of considering
 uncertainty and can produce meaningful information even with sparse input data.
 The Bayesian statistics interpretation of uncertainty is often contrasted with
 the frequentist interpretation: a useful distinction drawn from [@fornacon22] is
-that the Bayesian approach considers the uncertainty of hypotheses (i.e., the model
+that the Bayesian approach considers the uncertainty of hypotheses (the model
 and its parameters) rather than the uncertainty of the underlying data like in the
 frequentist approach. This aligns well with SDM, in which different structures
 and parameterizations function as different hypotheses. For models with
@@ -137,13 +137,13 @@ structure is more likely based on a set of observed data.
 Example probability distributions before and after Bayesian inference. These
 probability distributions could represent what the likely value of a particular
 parameter is. The prior shows a wider, "uncertain" value, whereas the
-posterior (i.e., the updated distribution after trying to fit some data), shows
+posterior (the updated distribution after trying to fit some data), shows
 tighter probability mass around two specific likely values.
 :::
 
 This update process is theoretically underpinned by Bayes' theorem, shown in
 Equation {ref}`bayes_theorem`, a formula that computes a posterior probability
-(i.e., the probability of a hypothesis conditioned on some data) based on a
+(the probability of a hypothesis conditioned on some data) based on a
 combination of the prior probability and the probability of observing that
 specific data.  In practice, using Bayes' theorem directly is often
 computationally infeasible, so sampling-based approximations are typically used
@@ -325,9 +325,9 @@ with tub:
 
 An equation in Reno is fundamentally a tree data structure, where any node that
 has subtrees is an operation and leaf nodes are references to other equations
-(e.g., other stocks/flows/variables in the model) or values. An equation is
+(other stocks/flows/variables in the model) or values. An equation is
 evaluated by recursively evaluating through the tree down to the leaf nodes,
-and in turn returning produced values back up through the tree. Each operation (i.e., the classes included
+and in turn returning produced values back up through the tree. Each operation (a set of classes included
 with Reno) has definitions for their evaluation based on its subtrees both
 in numpy as well as how to construct the equivalent subtree in PyMC ([Figure %s](#fig:reno_equations)).
 Similar to PyTensor and numpy, all basic math operators are
@@ -435,7 +435,7 @@ sparklines of relevant stocks and flows to produce an output as shown in [Figure
 :label: fig:pred_sparks
 :width: 800
 
-Graphviz output from `predator_prey.graph(sparklines=True, sparkall=True)`
+Graphviz output from `predator_prey.graph(stock_sparklines=True, flow_sparklines=True)`
 :::
 
 Reno can output a latex representation of all of the equations
@@ -619,9 +619,9 @@ concentration timeseries observation (pinpointed in black). Ground truth is
 highlighted in black for absorption fraction and white for concentration.
 :::
 
-Supplying more data (i.e., the other two observed measurements) and rerunning
+Supplying more data (the other two observed measurements) and rerunning
 the simulation
-results in what is shown in [Figure %s](#fig:compartment_threeobs), wherein the posterior probability
+results in what is shown in [Figure %s](#fig:compartment_threeobs), where the posterior probability
 distribution for the absorption_fraction is tightly concentrated around the
 ground truth value of $0.12$.
 
@@ -665,7 +665,7 @@ can have a list of `sub_equation_parts`.
 is the -->
 
 Due to the structure of the equation trees, converting individual equations into
-their PyMC equivalents is straightforward. Every `EquationPart` (i.e., the tree
+their PyMC equivalents is straightforward. Every `EquationPart` (the tree
 data structure class) has a `pt()` function which recursively calls throughout
 the entire tree, thus creating a PyTensor equation that mirrors the original. Much of
 the value that Reno provides is in the surrounding setup for the entire model,
