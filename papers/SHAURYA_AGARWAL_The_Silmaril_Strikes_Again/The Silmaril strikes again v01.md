@@ -12,7 +12,7 @@ This paper is a follow up from  a four-hour tutorial on ontology engineering pre
 
 # Abstract
 
-Large language models operate on token sequences with no stable identity, no guaranteed transitive inference, and no audit trail. Those are exactly the guarantees an ontology and reasoning layer supplies. This paper traces the evolution of reasoners from a single abstraction, a quad store with forward chaining to a fixpoint, a built-in escape hatch, and native provenance, from its reference implementation in cwm (the Closed World Machine) through a modern columnar, distributed, and GPU-accelerated re-engineering, and through the wider family of reasoning engines (backward chaining, RETE with truth maintenance, stratified negation, description-logic tableau, resolution, the chase, answer-set and probabilistic reasoning).   
+Large language models operate on token sequences with no stable identity, no guaranteed transitive inference, and no audit trail. Those are exactly the guarantees an ontology and reasoning layer supplies. This paper traces the evolution of reasoners from a single abstraction, a quad store with forward chaining to a fixpoint, a built-in escape hatch, and native provenance, from its reference implementation in cwm (the Closed World Machine) through a modern columnar, distributed, and GPU-accelerated re-engineering, and through the wider family of reasoning engines (backward chaining, RETE with truth maintenance, stratified negation, description-logic tableau, resolution, the chase, answer-set and probabilistic reasoning).
 The organizing thesis is a division of labor: the model proposes, a reasoning engine disposes, and the decision carries a proof. The author shows that cwm already implemented the core mechanics (an incremental RETE-style agenda, cost-ordered conjunctive joins, reflective graph operators, proofs as a first-class output), that its honest limits (single process, monotonic, write-amplified) are precisely the axes a modern system must address, and that addressing them yields a deterministic core able to materialize the multi-hop, provenance-carrying world model agentic AI requires. The contribution overall is then integrative: a fully coherent map from a historical reasoner to a production-grade deterministic substrate, with the agentic architecture, the engine-to-guarantee mapping, and the deployment requirements stated explicitly.
 
 ---
@@ -107,7 +107,7 @@ flowchart TD
     A3 --> JABC
     JABC --> BABC["betaABC (partial matches / tokens)"]
     BABC --> T["terminal node -> fire head"]
-```  
+```
 
 The decisive addition over cwm is retraction. Each derived fact records its support (the tokens that justify it); removing a fact deletes its tokens down the network and withdraws them from the supports of what they produced, and a fact that loses its last support is itself retracted, cascading. Over ancestry rules, retracting a middle edge un-derives exactly the pairs whose only path crossed it and leaves the rest, nothing recomputed; re-asserting restores the closure. The boundary is well-foundedness: support counting is correct only when derivations are acyclic. Contribution: a live belief state that fires on a stream's delta and withdraws a conclusion cleanly when its basis is gone (truth maintenance for agent memory).
 
@@ -166,7 +166,7 @@ Distribution and CUDA. The set-at-a-time shape scales across a cluster and onto 
 
 The substrate is the one cwm prefigured and the columnar work scaled; the agent is the loop around it.
 
-*\[...cont’d on next page\]*  
+*\[...cont’d on next page\]*
 
 ```mermaid
 flowchart TD
@@ -261,9 +261,9 @@ Human and multi-agent operation. Human-in-the-loop: case management, escalation,
 
 # Summary
 
-A reasoner and an Ontology, makes the LLM a batched relational operator at a stratification boundary, turns provenance and truth maintenance into queryable relations, and unlocks the possibilities to make the workload distributable and GPU-resident, with multi-hop closure expressed as sparse boolean matrix multiplication. 
+A reasoner and an Ontology, makes the LLM a batched relational operator at a stratification boundary, turns provenance and truth maintenance into queryable relations, and unlocks the possibilities to make the workload distributable and GPU-resident, with multi-hop closure expressed as sparse boolean matrix multiplication.
 
-Around that deterministic core, the wider family of reasoning engines supplies the guarantees an LLM cannot give alone: forward for complete materialization, backward for a faithful proof, RETE for truth maintenance, stratified negation for sound exceptions, the chase for soundness under incomplete data, resolution for pre-commit verification, description-logic reasoning for open-world consistency and classification. 
+Around that deterministic core, the wider family of reasoning engines supplies the guarantees an LLM cannot give alone: forward for complete materialization, backward for a faithful proof, RETE for truth maintenance, stratified negation for sound exceptions, the chase for soundness under incomplete data, resolution for pre-commit verification, description-logic reasoning for open-world consistency and classification.
 
 The governing pattern is a division of labor: the LLM proposes across an open, messy world; the engine disposes with a proof; a human signs. The propose-check-repair loop, with the engine's counterexample driving targeted repair, turns a fluent proposal into an auditable decision.
 
@@ -273,6 +273,6 @@ This paper aims to be integrative: a coherent map from a historical reasoner to 
 
 # References
 
-* The Silmaril on GitHub: [https://github.com/shauryashaurya/The-Silmaril](https://github.com/shauryashaurya/The-Silmaril)  
-* Scipy 2025 presentation on YouTube: [https://www.youtube.com/watch?v=HlSqH6T-y0Q](https://www.youtube.com/watch?v=HlSqH6T-y0Q)  
-* TimBL’s semantic web application platform on GitHub: [https://github.com/linkeddata/swap](https://github.com/linkeddata/swap) 
+* The Silmaril on GitHub: [https://github.com/shauryashaurya/The-Silmaril](https://github.com/shauryashaurya/The-Silmaril)
+* Scipy 2025 presentation on YouTube: [https://www.youtube.com/watch?v=HlSqH6T-y0Q](https://www.youtube.com/watch?v=HlSqH6T-y0Q)
+* TimBL’s semantic web application platform on GitHub: [https://github.com/linkeddata/swap](https://github.com/linkeddata/swap)
