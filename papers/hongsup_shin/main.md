@@ -4,7 +4,7 @@ title: "Automated Data Enrichment for Police Accountability: Where Agentic Judgm
 abstract: |
   Automated data enrichment, filling missing fields in structured records from unstructured sources, is the canonical case for pointing an autonomous agent at a database and letting it fill every blank. In high-stakes data that instinct is dangerous. A confidently wrong value is worse than a blank, and retrieval-grounded extraction reduces but does not remove the tendency to assert what the source never stated. An LLM can extract these fields; this paper asks where agentic judgment earns its place and where it becomes a liability.
 
-  We study this on the Texas Justice Initiative's police shooting databases, where nearly two thousand records are missing the weapon, the subject's race, or the outcome, whose fields volunteers typically recover by hand, fifteen to thirty minutes each. Our LangGraph pipeline, deterministic in its control flow, searches, validates, extracts, and escalates hard cases to a human. It completes 92% of officer and 70% of civilian records and invents zero facts across twenty fabricated incidents. The recovery itself came from a deterministic prompt fix without any agent.
+  We study this on the Texas Justice Initiative's police shooting databases, where nearly two thousand records are missing the weapon, the subject's race, or the outcome, whose fields volunteers typically recover by hand, fifteen to thirty minutes each. Our LangGraph pipeline, deterministic in its control flow, searches, validates, extracts, and escalates hard cases to a human. It completes 92% of officer and 70% of civilian records and invents zero facts across twenty fabricated incidents. The recovery itself came from a deterministic prompt fix without any agent. An autonomous agent pointed at the same fabricated incidents, with more freedom, commits a wrong-article fabrication the pipeline escalates.
 
   If the deterministic core does the recovering, the agentic layer earns its place by making those recovered values trustworthy. Agency lives only in this thin judgment layer above extraction, and its components act in one of two ways. One acts on the pipeline's control flow: a relevance judge reads the retrieved articles and, when none actually report this incident, routes the record to a human instead of completing it. The other two pass judgment on what extraction produced: one deletes a value the source never states, and the other explains to the reviewer why the sources disagree on a value. Extraction calls an LLM too, but because it only proposes values for these judges to rule on, we do not count it as agentic. Every judge had to clear a reward-hacking-resistant evaluation gate before it shipped. The main contribution of this paper is a discipline, an "earn-it" protocol, for drawing the line between what a high-stakes pipeline should settle deterministically and where it is worth granting agentic judgment.
 ---
@@ -13,7 +13,7 @@ abstract: |
 
 In Texas, the Office of the Attorney General (OAG) is required by law to collect a report on every officer-involved shooting (OIS) and to publish an annual summary. Those summaries are high-level: they omit age demographics, report dates, and the number of officers involved, and they carry no intersectional analysis [@tji2020ois]. The Texas Justice Initiative (TJI), a nonprofit, re-publishes the underlying incident records with far more granularity, the detail independent analysis depends on. But the records are incomplete. About a quarter of incidents are filed with an unidentified cause; race is recorded with a coarse vocabulary that law enforcement is known to mischaracterize; weapon and outcome fields are frequently blank [@tji2020ois]. These gaps carry substantive consequences: undercounting and misclassification of police violence are documented at the national scale [@gbd2021police], and each blank field leaves a question about a police shooting that the public record cannot answer.
 
-TJI addresses these gaps through the standard practice of accountability nonprofits: volunteers search news archives one incident at a time, read the coverage, and transcribe the details. The work takes fifteen to thirty minutes per record, and there are nearly two thousand records. This is precisely the kind of tedious, search-and-extract task that modern large language models (LLMs) appear built for, and the temptation is to point an autonomous agent at the database and let it fill every blank. Human-factors research has long documented that operators over-trust automation in exactly such conditions [@parasuraman2010complacency].
+TJI addresses these gaps through the standard practice of accountability nonprofits: volunteers search news archives one incident at a time, read the coverage, and transcribe the details. The work takes 15-30 minutes per record, and there are nearly two thousand records. This is precisely the kind of tedious, search-and-extract task that modern large language models (LLMs) appear built for, and the temptation is to point an autonomous agent at the database and let it fill every blank. Human-factors research has long documented that operators over-trust automation in exactly such conditions [@parasuraman2010complacency]. We test this directly: an autonomous agent on the same adversarial probe declines most incidents but completes one fabricated record with no signal a reviewer could use to distrust it.
 
 This paper argues against that approach for high-stakes domains; that argument, together with a system that embodies the alternative, is its contribution. The failure mode that matters is the *confidently wrong* field, worse than the blank a volunteer would otherwise leave: a fabricated weapon, a misattributed race, a detail lifted from a different shooting that shares a city and a date. Generative extraction grounded in retrieved documents [@lewis2020rag] reduces but does not remove *unfaithfulness*, the tendency to emit content the source does not support, a failure documented in summarization [@maynez2020faithfulness] and surveyed broadly for LLMs [@ji2023hallucination; @huang2025hallucination]. Uncritical automation therefore recovers and fabricates in the same pass [@bender2021parrots], and a fabricated fact in an accountability database is worse than the blank it replaced. This leads to the following engineering questions: how to earn the right to trust what an LLM extracts, and how to decide which decisions warrant an LLM.
 
@@ -345,6 +345,8 @@ The accuracy signal comes from fields that already exist in the database but are
 
 The safety signal comes from an adversarial probe of 20 fabricated incidents: invented names, real Texas cities and dates, including six "traps" placed within days of real high-profile events so that real articles about the *wrong* person would pass date and location checks. The twenty span five designed categories: obscure towns where no coverage should exist, dates deliberately outside the validation window, the six hallucination traps, common-name confusions (a fabricated "Michael Brown" in a major city), and null-name edge cases. Only the database fetch is patched; every downstream node runs live, so the probe exercises the real retrieval, validation, and agentic layers.
 
+The same adversarial probe also grounds a baseline that tests the autonomous-agent design directly. We built a single tool-use agent on the same Claude Sonnet model, gave it free-text Tavily search, an open-web page fetch, and the incident anchor, and withheld the pipeline's judges, evaluation gate, Coordinator, and retry ladder. To keep the comparison fair, its prompt states only a generic standard of care (cite a source for each value; decline when coverage is thin) and carries none of the project's earned rules: the relevance taxonomy, the race rule, and the officer-as-suspect reframing are all absent. The agent is more capable than the pipeline along several axes, writing its own queries, fetching open-web pages, and searching without a date window. We ran it on the same twenty incidents, patched only the database fetch, three times for variance.
+
 ## Results
 
 ### Held-out accuracy
@@ -509,6 +511,63 @@ End to end, a record costs roughly \$0.20 (about \$0.16 of LLM calls plus \$0.04
 
 Cost discipline raises an obvious question: if Haiku is the cheaper model, why not run the whole pipeline on it? We treated this as another *earn-it* decision and let the gate answer. The lever is real but bounded — Haiku is priced at a third of Sonnet per token, on both input and output, so the LLM share of the ~\$400 full-archive estimate would fall by about two-thirds, not the order of magnitude the framing "just use the cheap model" implies. We sized the saving on saved runs first, then bought the cheapest live signal first: the same twenty-incident adversarial probe, re-run with extraction and both binary judges moved to Haiku. Sonnet fabricated nothing on that probe. The all-Haiku variant committed one: it asserted the trap's planted victim name, "Michael Brown," with high confidence on the common-name-confusion scenario. That is exactly the failure the probe was built to catch. Since single fabrication is a hard, never-overridden veto, this variant was rejected without running the holdout. The same gate had earlier accepted a change that lowered completion because the hard guards held. Here it rejected a cheaper variant because one of those guards failed. We therefore keep the major runs on Sonnet, reserving Haiku for the conflict annotator's advisory notes, where, because it never commits a value, the cheaper model carries no faithfulness risk.
 
+### An autonomous agent fabricates where the pipeline escalates
+
+The cheaper-model probe tested a smaller model on the same suite; this baseline tests dropping the workflow altogether. We ran the autonomous-agent baseline on the same twenty incidents and scored it identically ({ref}`tbl:baseline`). The pipeline completed none of the twenty and escalated each with a reason a reviewer can act on. The agent completed one incident, 99913, in all three runs, each time committing six fabricated fields and marking the record done with no signal that anything was wrong; it declined the other nineteen.
+
+:::{list-table} The autonomous-agent baseline against the shipped pipeline on the 20-incident adversarial probe. Agent figures are per-run means over three runs. Cost is for this probe, where 18 of 20 incidents escalate before any extraction runs; the pipeline's holdout average, which includes extraction, is higher (\$0.20).
+:label: tbl:baseline
+:header-rows: 1
+
+* - Metric (20-incident probe)
+  - Shipped pipeline
+  - Autonomous agent
+* - Records completed
+  - 0 / 20
+  - 1 / 20 (incident 99913, all 3 runs)
+* - Committed fabrications
+  - 0
+  - 6 fields (two invented names, an unsourced outcome, and a weapon, circumstance, and location taken from a different event)
+* - Signal on the failure
+  - escalated `irrelevant_sources`
+  - none; record marked complete
+* - Tavily searches per incident
+  - 2.8 (three-rung ladder)
+  - 14.9
+* - Open-web fetches per incident
+  - 0
+  - 6.1
+* - Cost per incident
+  - ~\$0.05 (search-dominated; 2/20 extract)
+  - ~\$1.00
+:::
+
+The single completion shows that a generic instruction to check sources is not the same as a mechanism that can act on the check ({ref}`fig:agent-trace`). The agent did the relevance reasoning the prompt asked for: it searched about fifteen times per incident and read several full articles before deciding, and on most incidents that reasoning produced a correct decline. On the Houston trap it found the real Harding Street raid and reported that the record's names matched no one in it; on the fabricated "Michael Brown" case it noted the Ferguson collision and declined. On 99913 it reasoned the same way and wrote, in its final turn, that "the specific names in our database record don't appear in any news articles I've found." It then submitted the record as complete, labeling the two planted names low-confidence and attaching real Austin 2020 protest coverage to the contextual fields. The relevance judge supplies the authority this instruction lacks: it reads the same articles and escalates the wrong-article record to a human.
+
+::::{figure}
+:label: fig:agent-trace
+
+The autonomous agent on adversarial incident 99913 (fabricated anchor: officer "Eleanora F. Strickland", civilian "Broderick T. Van Pelt", Austin, 2020-05-31, non-fatal). Its final-turn reasoning, verbatim: *"the specific names in our database record don't appear in any news articles I've found."* The record it then submitted (`completed: true`; values abridged, sources shown as domains):
+
+```json
+{
+  "completed": true,
+  "fields": [
+    {"field_name": "officer_name",   "value": "Eleanora F. Strickland", "confidence": "low",    "sources": []},
+    {"field_name": "civilian_name",  "value": "Broderick T. Van Pelt",  "confidence": "low",    "sources": []},
+    {"field_name": "outcome",        "value": "Survived (non-fatal)",   "confidence": "high",   "sources": []},
+    {"field_name": "weapon",         "value": "Beanbag round",          "confidence": "high",   "sources": ["kut.org", "keranews.org"]},
+    {"field_name": "circumstance",   "value": "shot with a beanbag round during protests outside APD HQ, May 31, 2020", "confidence": "medium", "sources": ["keranews.org", "kut.org"]},
+    {"field_name": "location_detail","value": "near APD headquarters, downtown Austin",        "confidence": "medium", "sources": ["rubberbullets.longlead.com", "kut.org"]}
+  ]
+}
+```
+
+The agent stated that no article names the planted officer or civilian, then completed the record anyway. The two names and the outcome carry no source; the weapon, circumstance, and location are real details from the May 2020 Austin protests, a different event that shares the city and date. This is the "right structure, wrong incident" failure of {ref}`fig:output`, committed here with no distrust signal because no judge holds authority over the record.
+::::
+
+Autonomy was also more expensive. The agent ran 14.9 Tavily searches per incident to the pipeline's 2.8 and added open-web fetches the pipeline does not make, costing about \$1.00 per incident against the pipeline's \$0.05 on this probe, and the extra effort bought no safety: the additional searching on 99913 surfaced more of the adjacent Austin coverage the agent drew on. Two qualifications matter. The agent declined nineteen of twenty, so a careful prompt does much of the work, and the judge closes the remaining trap where adjacent coverage let the agent convince itself. One of those declines was also a near-miss: on a San Antonio trap the agent chased a real overnight-shooting story until the turn cap stopped it, so the single committed fabrication is a floor. The cheaper-model and autonomous-agent probes point the same way, with the adversarial suite and the gate catching the tempting shortcut before it ships.
+
 ## Discussion
 
 ### Design principles and tradeoffs
@@ -586,11 +645,11 @@ The natural next step is a *self-healing* loop in which agentic effort moves to 
 
 ## Code and data availability
 
-The pipeline, the evaluation harness, and the multi-objective gate are open source at `github.com/hongsupshin/police-data-intelligence` [code archive DOI: *to be deposited on Zenodo*]. The underlying datasets are published by the Texas Justice Initiative [@tji2020ois] [dataset citation/DOI: *to be confirmed*]. The accept/reject *decision* in this paper is a pure function of two saved holdout reports, so it can be recomputed from those reports at no cost; regenerating the reports themselves (`python -m src.eval.run_eval <dataset> --limit 100 --stratified`) requires inference and, because of run-to-run model variance, is not bit-for-bit reproducible.
+The pipeline, the evaluation harness, and the multi-objective gate are open source at `github.com/hongsupshin/police-data-intelligence` [code archive DOI: *to be deposited on Zenodo*]. The autonomous-agent baseline of {ref}`tbl:baseline` and its transcripts are included as well (`src/baselines/autonomous_agent/`, with outputs under `output/adversarial_baseline/`). The underlying datasets are published by the Texas Justice Initiative [@tji2020ois] [dataset citation/DOI: *to be confirmed*]. The accept/reject *decision* in this paper is a pure function of two saved holdout reports, so it can be recomputed from those reports at no cost; regenerating the reports themselves (`python -m src.eval.run_eval <dataset> --limit 100 --stratified`) requires inference and, because of run-to-run model variance, is not bit-for-bit reproducible.
 
 ## Conclusions
 
-Pointing an autonomous agent at an accountability database is the wrong design for high-stakes data, however tempting it looks. We built an enrichment pipeline that is mostly a deterministic workflow, with three small LLM judges admitted only after each earned its place through offline evaluation, and with authority (block, null, advise) calibrated to how much we could trust each judgment. The deterministic core does the recovering; the judges make the recovered data trustworthy, escalating to a human instead of inventing. On held-out samples the pipeline completes 92% of officer and 70% of civilian records and fabricated nothing on a deliberately adversarial twenty-incident probe. The transferable lesson for scientific-Python practitioners building with LLMs is that the engineering is in the restraint. A reward-hacking-resistant evaluation gate and an earn-it bar let agentic components into a high-stakes pipeline without letting wrong answers in with them.
+Pointing an autonomous agent at an accountability database is the wrong design for high-stakes data, however tempting it looks. We built an enrichment pipeline that is mostly a deterministic workflow, with three small LLM judges admitted only after each earned its place through offline evaluation, and with authority (block, null, advise) calibrated to how much we could trust each judgment. The deterministic core does the recovering; the judges make the recovered data trustworthy, escalating to a human instead of inventing. On held-out samples the pipeline completes 92% of officer and 70% of civilian records and fabricated nothing on a deliberately adversarial twenty-incident probe. An autonomous agent on that same probe, with more freedom and none of the guards, completed a fabricated record the pipeline escalates. The transferable lesson for scientific-Python practitioners building with LLMs is that the engineering is in the restraint. A reward-hacking-resistant evaluation gate and an earn-it bar let agentic components into a high-stakes pipeline without letting wrong answers in with them.
 
 ## Acknowledgments
 
