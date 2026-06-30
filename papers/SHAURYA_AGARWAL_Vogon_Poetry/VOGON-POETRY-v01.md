@@ -8,63 +8,63 @@
 
 # ABSTRACT
 
-*...As plurdled gabbleblotchits on a lurgid bee...*  
-AI is fast becoming the core value engine. The differentiator is no longer the model, but the ability to address determinism, correctness, latency and unit costs. Data Engineering must be looked at from this lens. 
+*...As plurdled gabbleblotchits on a lurgid bee...*
+AI is fast becoming the core value engine. The differentiator is no longer the model, but the ability to address determinism, correctness, latency and unit costs. Data Engineering must be looked at from this lens.
 
-In this fast evolving ecosystem, the expert-novice data engineer gap cannot be addressed by building tool fluency, but instead building a high quality understanding of a pedagogy of core concepts \- a core set of transferrable mental models that unlock analysis and prediction of behaviour across tools and systems \- prevalent and emergent. 
+In this fast evolving ecosystem, the expert-novice data engineer gap cannot be addressed by building tool fluency, but instead building a high quality understanding of a pedagogy of core concepts \- a core set of transferrable mental models that unlock analysis and prediction of behaviour across tools and systems \- prevalent and emergent.
 
-This paper organizes these mental models as concepts, classified into "instincts" \- invariant ideas that govern a class of decisions, grouped into "families" \- that form the general heuristic idea in data engineering. Honestly, when read together \- these sound like a poem that would make Prostetnic Vogon Jeltz slurp his axlegrurts hagrilly. Hence the name. 
+This paper organizes these mental models as concepts, classified into "instincts" \- invariant ideas that govern a class of decisions, grouped into "families" \- that form the general heuristic idea in data engineering. Honestly, when read together \- these sound like a poem that would make Prostetnic Vogon Jeltz slurp his axlegrurts hagrilly. Hence the name.
 
-The families function as a dependency structure rather than a taxonomy. A decision in one family, such as file layout under "storage as a substrate," propagates predictable consequences in others, such as scan cost under "mechanical sympathy" and shuffle volume under "distribution." 
+The families function as a dependency structure rather than a taxonomy. A decision in one family, such as file layout under "storage as a substrate," propagates predictable consequences in others, such as scan cost under "mechanical sympathy" and shuffle volume under "distribution."
 
 The author claims that familiarity with these concepts first, then attaching tools to them, yields faster transfer to unfamiliar systems than tool-first instruction, because these mental models largely act as invariants and remain stable while interfaces change. This paper presents  the map, the concept graph, and the reasoning each instinct supports, with banking and reinsurance as the primary worked domains.
 
-By order of Galactic Hyperspace Planning Council,   
-Recitation shall now begin, without mercy.  
+By order of Galactic Hyperspace Planning Council,
+Recitation shall now begin, without mercy.
 Resistance is useless.
 
-***Family A, Mechanical Sympathy***  
-Physical form dominates performance  
-Movement is the cost  
+***Family A, Mechanical Sympathy***
+Physical form dominates performance
+Movement is the cost
 Batch beats tuple-at-a-time
 
-***Family B, Do Less And Prove It***  
-Declare what; let the planner choose how  
-The fastest work is skipped work  
+***Family B, Do Less And Prove It***
+Declare what; let the planner choose how
+The fastest work is skipped work
 Approximate on purpose
 
-***Family C, Distribution***  
+***Family C, Distribution***
 Placement decides what is cheap
 
-***Family D, State, Time, And Safe Re-runs***  
-Durability is an append-only log plus a snapshot  
-Time and ordering are plural and uncertain  
+***Family D, State, Time, And Safe Re-runs***
+Durability is an append-only log plus a snapshot
+Time and ordering are plural and uncertain
 Design every pipeline to be safe to re-run
 
-***Family E, Storage As A Substrate***  
-A table is metadata over immutable files  
+***Family E, Storage As A Substrate***
+A table is metadata over immutable files
 Compose interchangeable layers through open standards
 
-***Family F, Operating Under Load And Trust***  
-A system that cannot say no will fail  
+***Family F, Operating Under Load And Trust***
+A system that cannot say no will fail
 Data is a product with a contract
 
-***Family G, Policy And Economics***  
-Enforce policy at the chokepoint  
+***Family G, Policy And Economics***
+Enforce policy at the chokepoint
 Cost is an architecture decision
 
-***Family H, Data For AI***  
-Meaning becomes geometry  
+***Family H, Data For AI***
+Meaning becomes geometry
 Feed the accelerator
 
-There.   
+There.
 You may now applaud.
 
 ---
 
 # Vogon Poetry - Interactive Explorer
 
-A static figure cannot convey the dependency structure that is the central claim of this work; the interactive form lets the reader trace those dependencies directly. The viewer and the underlying data are available online at [Vogon Poetry on GitHub](https://github.com/shauryashaurya/vogon-poetry), and readers are invited to explore the concepts there. The 80 concepts and their typed relationships are published as an interactive concept graph that accompanies this paper. The viewer renders the 8 families, 18 instincts, and their concept nodes as a force-directed graph in the browser, colored by family and clustered by instinct, with the cross-family edges that encode where one invariant constrains another drawn explicitly. Readers can switch between layouts, filter by family or link type, isolate a single instinct and expand its concepts into readable cards, and search for individual nodes. Each node exposes its definition, a worked example on the canonical schema, and its links to related concepts. 
+A static figure cannot convey the dependency structure that is the central claim of this work; the interactive form lets the reader trace those dependencies directly. The viewer and the underlying data are available online at [Vogon Poetry on GitHub](https://github.com/shauryashaurya/vogon-poetry), and readers are invited to explore the concepts there. The 80 concepts and their typed relationships are published as an interactive concept graph that accompanies this paper. The viewer renders the 8 families, 18 instincts, and their concept nodes as a force-directed graph in the browser, colored by family and clustered by instinct, with the cross-family edges that encode where one invariant constrains another drawn explicitly. Readers can switch between layouts, filter by family or link type, isolate a single instinct and expand its concepts into readable cards, and search for individual nodes. Each node exposes its definition, a worked example on the canonical schema, and its links to related concepts.
 
 [images of the full graph available in the PDF]
 
@@ -1655,27 +1655,27 @@ DataLoader(ds, num_workers=8, prefetch_factor=4, pin_memory=True)
 
 # Canonical Schema used in examples
 
-## *Banking* 
+## *Banking*
 
-* **customers**(customer\_id, name, country, risk\_rating, onboarded\_ts)  
-* **accounts**(account\_id, customer\_id, account\_type, currency, branch\_id, opened\_ts)  
-* **instruments**(instrument\_id, symbol, asset\_class, currency)  
-* **trades**(trade\_id, account\_id, instrument\_id, side, quantity, price, trade\_ts, venue)  
-* **payments**(payment\_id, account\_id, counterparty\_id, amount, currency, payment\_ts, channel)  
+* **customers**(customer\_id, name, country, risk\_rating, onboarded\_ts)
+* **accounts**(account\_id, customer\_id, account\_type, currency, branch\_id, opened\_ts)
+* **instruments**(instrument\_id, symbol, asset\_class, currency)
+* **trades**(trade\_id, account\_id, instrument\_id, side, quantity, price, trade\_ts, venue)
+* **payments**(payment\_id, account\_id, counterparty\_id, amount, currency, payment\_ts, channel)
 * **positions**(account\_id, instrument\_id, as\_of\_date, quantity, market\_value)
 
-## *Reinsurance* 
+## *Reinsurance*
 
-* **cedents**(cedent\_id, name, country, rating)  
-* **treaties**(treaty\_id, cedent\_id, line\_of\_business, treaty\_type, inception\_date, expiry\_date)  
-* **policies**(policy\_id, treaty\_id, insured\_id, sum\_insured, premium)  
+* **cedents**(cedent\_id, name, country, rating)
+* **treaties**(treaty\_id, cedent\_id, line\_of\_business, treaty\_type, inception\_date, expiry\_date)
+* **policies**(policy\_id, treaty\_id, insured\_id, sum\_insured, premium)
 * **claims**(claim\_id, treaty\_id, loss\_date, report\_date, paid\_amount, reserve\_amount, status)
 
 ---
 
 # Summary
 
-This paper presents a structured map of the mental models that govern data systems in an AI-centric stack, where models commoditize and the data layer sets the correctness, latency, and unit cost of AI outputs. The claim is that an expert in the field must be able to think in this vocabulary instead of thinking in terms of tools, to effectively mine value in the evolving ecosystem. 
+This paper presents a structured map of the mental models that govern data systems in an AI-centric stack, where models commoditize and the data layer sets the correctness, latency, and unit cost of AI outputs. The claim is that an expert in the field must be able to think in this vocabulary instead of thinking in terms of tools, to effectively mine value in the evolving ecosystem.
 
 The author does not introduce new systems or benchmarks. Instead this paper is a synthesis and a representation: the invariants/concepts, their instantiation, and the graph that encodes their interdependencies, intended as a basis for instruction and for reasoning about data architectures that prove essential in enterprise class AI-driven value chains.
 
@@ -1683,4 +1683,4 @@ The author does not introduce new systems or benchmarks. Instead this paper is a
 
 # References
 
-* Vogon Poetry on GitHub: [https://github.com/shauryashaurya/vogon-poetry](https://github.com/shauryashaurya/vogon-poetry) 
+* Vogon Poetry on GitHub: [https://github.com/shauryashaurya/vogon-poetry](https://github.com/shauryashaurya/vogon-poetry)
