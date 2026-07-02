@@ -150,6 +150,8 @@ We extended the data dictionary into a live retrieval layer connected to institu
 
 Jasmine's hackathon project relied heavily on RAG to ground responses in a trusted educational context. Embeddings and retrieval pipelines helped guide the chatbot toward approved terminology, retrieve institutional definitions, and constrain answers to known concepts, especially important in a sensitive domain where accuracy matters.
 
+![RAG Pipeline Flow](core_pattern_rag_flow.png)
+
 ```python
 # Data sources (swappable, secured)
 DATA_SOURCES = {
