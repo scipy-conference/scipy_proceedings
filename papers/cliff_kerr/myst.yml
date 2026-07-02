@@ -1,5 +1,5 @@
 version: 1
-extends: papers.yml
+extends: ../papers.yml
 project:
   id: scipy-2026-cliff_kerr
   title: "Vibes, meet rigor: Evaluating and improving AI performance on complex scientific code"
