@@ -37,11 +37,11 @@ Rather than treating AI as magic, we'll break it down into familiar engineering 
 
 ## The Shift: AI as a System Component, Not Magic
 
-The biggest shift here is the greater accessibility for anyone to build. You no longer need to train models yourself—modern large language model (LLM) APIs, embedding models, and vector databases are available with minimal setup. We view AI as not replacing your application stack, but another component to be added to existing systems that are useful for ambiguity, language, reasoning, and search.
+The biggest shift here is the greater accessibility for anyone to build. You no longer need to train models yourself. Modern large language model (LLM) APIs, embedding models, and vector databases are available with minimal setup. We view AI as not replacing your application stack, but another component to be added to existing systems that are useful for ambiguity, language, reasoning, and search.
 
 Think of an LLM like a non-deterministic but powerful external API that needs structure, validation, retries, and observability.
 
-**AI collapses the gap between expertise & execution.** In our hackathon, we paired technologists (who bring architecture, LLM knowledge, data systems, and engineering experience) with education experts (who bring deep context, student needs, institutional knowledge, and on-the-ground experience). Together, through a modular LLM stack—prompts, tools, retrieval, embeddings, vector databases, and guardrails—we delivered working solutions in 3 days.
+**AI collapses the gap between expertise and execution.** In our hackathon, we paired technologists (who bring architecture, LLM knowledge, data systems, and engineering experience) with education experts (who bring deep context, student needs, institutional knowledge, and on-the-ground experience). Together, through a modular LLM stack (prompts, tools, retrieval, embeddings, vector databases, and guardrails), we delivered working solutions in 3 days.
 
 ---
 
@@ -117,7 +117,7 @@ Jasmine's team used system prompts and a data dictionary to ground the LLM in in
 - Together, they constrain interpretation and reduce hallucinations
 - Ensures data is used at the correct grain and in the correct context
 
-Jasmine's hackathon project involved building a chatbot to help higher education staff understand a pivotal student success dataset. The institution had an institutional research department that was overwhelmed with data requests that took days to answer. AI was an opportunity to make this self-service—but institutions were concerned about data privacy and security.
+Jasmine's hackathon project involved building a chatbot to help higher education staff understand a pivotal student success dataset. The institution had an institutional research department that was overwhelmed with data requests that took days to answer. AI was an opportunity to make this self-service, but institutions were concerned about data privacy and security.
 
 Prompting became the primary way we defined system behavior, privacy, and guardrails.
 
@@ -249,13 +249,13 @@ In practice, the chatbot received structured requests, passed them to backend an
 
 **Key principles:**
 
-1. **Separate Understanding from Computation** — The LLM interprets the user's intent, but the predictive model and analytics pipeline do the actual math. This keeps forecasting logic outside the model and makes the system easier to test and trust.
+1. **Separate Understanding from Computation** - The LLM interprets the user's intent, but the predictive model and analytics pipeline do the actual math. This keeps forecasting logic outside the model and makes the system easier to test and trust.
 
-2. **Let the LLM Request Structured Data** — Instead of free-form answers, the LLM calls a function like `get_retention_risk(school_id)`. That request is precise, typed, and limited to the data the backend is designed to return.
+2. **Let the LLM Request Structured Data** - Instead of free-form answers, the LLM calls a function like `get_retention_risk(school_id)`. That request is precise, typed, and limited to the data the backend is designed to return.
 
-3. **Return Predictable Analytics** — The Python system aggregates predictions and returns structured outputs such as risk scores, dropout probability, and attendance trends. The LLM then explains those results in plain language.
+3. **Return Predictable Analytics** - The Python system aggregates predictions and returns structured outputs such as risk scores, dropout probability, and attendance trends. The LLM then explains those results in plain language.
 
-4. **Keep It Reproducible and Auditable** — Because predictions are computed outside the model, the same input produces the same output. That makes the system easier to audit, version, and debug—especially in a hackathon setting where you need reliable behavior fast.
+4. **Keep It Reproducible and Auditable** - Because predictions are computed outside the model, the same input produces the same output. That makes the system easier to audit, version, and debug, especially in a hackathon setting where you need reliable behavior fast.
 
 ```python
 from openai import OpenAI
@@ -345,7 +345,7 @@ Instead of a single query-response cycle, the system often needed to:
 - compare trends across groups
 - generate a narrative summary
 
-This created an iterative loop: **Interpret → Retrieve → Compute → Refine → Explain**
+This created an iterative loop: **Interpret, Retrieve, Compute, Refine, Explain**
 
 In this setup, the LLM becomes an orchestrator that decides what to analyze next, while Python tools handle each step of computation. Predictive analytics becomes less of a model output and more of a tool-driven reasoning workflow over data.
 
@@ -391,24 +391,24 @@ print(summary)
 
 The goal is not to rely solely on the model, but to build systems that remain reliable even when it makes mistakes.
 
-Because we had two different use cases—Audrey's predictive analytics tool and Jasmine's institutional data chatbot—we deployed different guardrails tailored to each system's risks and requirements.
+Because we had two different use cases (Audrey's predictive analytics tool and Jasmine's institutional data chatbot), we deployed different guardrails tailored to each system's risks and requirements.
 
 ### Audrey's Project: Predictive Analytics Tool
 *Student Retention & Success*
 
-- **Input Sanitization** — Validate and clean user inputs before they reach the model
-- **Sensitive Data Handling** — Never send PII, secrets, or sensitive data to an LLM without explicit review
-- **Structured Output Validation** — Never use raw LLM output without validation; enforce schemas before downstream systems
-- **Prompt Logging & Observability** — Log prompts, responses, latency, token counts, and tool calls to detect degradation early
-- **Retries & Timeouts** — Set explicit timeouts on LLM API calls; use retries with exponential backoff for transient failures
+- **Input Sanitization** - Validate and clean user inputs before they reach the model
+- **Sensitive Data Handling** - Never send PII, secrets, or sensitive data to an LLM without explicit review
+- **Structured Output Validation** - Never use raw LLM output without validation; enforce schemas before downstream systems
+- **Prompt Logging & Observability** - Log prompts, responses, latency, token counts, and tool calls to detect degradation early
+- **Retries & Timeouts** - Set explicit timeouts on LLM API calls; use retries with exponential backoff for transient failures
 
 ### Jasmine's Project: Institutional Data Chatbot
 *Student Retention & Success Queries*
 
-- **Hallucination Safeguards** — Ground factual answers in verified data; require citations when needed; allow the model to say "I don't know"
-- **Detecting Off-Topic Conversations** — Identify and redirect conversations that drift too far from intended scope
-- **Rejecting Unsupported Requests / Escalating Sensitive Queries** — Redirect unsupported requests to the right workflow; escalate sensitive queries that need policy checks or special handling
-- **Dynamic Retrieval Strategy Selection** — Dynamically select retrieval strategies based on topic, intent, and confidence in the answer
+- **Hallucination Safeguards** - Ground factual answers in verified data; require citations when needed; allow the model to say "I don't know"
+- **Detecting Off-Topic Conversations** - Identify and redirect conversations that drift too far from intended scope
+- **Rejecting Unsupported Requests / Escalating Sensitive Queries** - Redirect unsupported requests to the right workflow; escalate sensitive queries that need policy checks or special handling
+- **Dynamic Retrieval Strategy Selection** - Dynamically select retrieval strategies based on topic, intent, and confidence in the answer
 
 ---
 
@@ -441,4 +441,4 @@ You do not need deep ML expertise to build useful AI systems. You need:
 
 The core lesson from our hackathon: **The path forward is straightforward. Build on solid engineering basics, add capability in layers, and use the simplest abstraction that solves the problem.**
 
-In three days, we went from exploring requirements to shipping working tools because we treated AI like any other system dependency—with respect for its probabilistic nature, careful validation, and thoughtful orchestration. Python developers already know how to do this. AI is just another component in your stack.
+In three days, we went from exploring requirements to shipping working tools because we treated AI like any other system dependency, with respect for its probabilistic nature, careful validation, and thoughtful orchestration. Python developers already know how to do this. AI is just another component in your stack.
