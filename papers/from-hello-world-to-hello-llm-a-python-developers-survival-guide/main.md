@@ -1,4 +1,3 @@
----
 title: "From Hello World to Hello LLM: A Python Developer's Survival Guide"
 authors:
   - name: Audrey Webb
@@ -7,7 +6,6 @@ authors:
     affiliation: Airbnb
 abstract: |
   AI tooling is moving fast, but many Python developers are unsure where to start or how today's AI patterns fit into systems they already know how to build. This talk is a practical, hands-on overview of modern AI development patterns in Python, focused on what you need to know to go from zero to hero. We'll walk through real-world coding examples from a social good hackathon. We'll break this down into parts that show core building blocks of modern AI applications, and explain when each pattern makes sense. This example is designed in a way that doesn't require any prior machine learning experience, and attendees will leave with an understanding of how AI systems work, what problems they're good at solving, and how to maintain and observe what has been built. Topics covered include the modern AI stack in Python, common patterns such as prompts, function calling, RAG, and simple agents, when to use a script vs an agent vs a service, how to get something working quickly without sacrificing reliability or safety, practical guardrails for handling errors and protecting data, and how to stand up common AI workflows from LLM-powered scripts to lightweight agents and MCP-style services. Attendees will leave with a clear map of the AI landscape, working Python patterns they can reuse immediately, and the confidence to start building AI features without needing a machine learning background.
----
 
 ## What We Learned Building AI Tools with Python
 
@@ -82,8 +80,6 @@ Requirements gathering was an important step to help us understand the goals of 
 
 Once we documented the needs and criteria our stakeholders (educational institutions and staff) had for success, we could begin development work. With the requirements distilled from our clients with this method of planning, we were able to identify LLM patterns for our respective institution's use case. With that in mind, we'll explore patterns of LLM usage with hands-on examples.
 
----
-
 ## Core Pattern 1: System Prompts + Data Dictionaries
 
 Jasmine's team used system prompts and a data dictionary to ground the LLM in institutional data and terminology. This created a control layer between user questions, language, and underlying datasets.
@@ -138,7 +134,6 @@ response = llm.chat.completions.create(
 
 **Key takeaway:** System prompts and data dictionaries turn language into a controlled interface for data.
 
----
 
 ## Core Pattern 2: Retrieval-Augmented Generation (RAG)
 
@@ -191,7 +186,6 @@ def answer(query, model="gpt-4o"):
 
 **Key takeaway:** RAG connects the LLM to live institutional data systems and approved terminology.
 
----
 
 ## Core Pattern 3: Function Calling & Controlled Output
 
@@ -300,7 +294,6 @@ This pattern ensured predictions were:
 
 **Key takeaway:** Separate language understanding from computation. Let the LLM be an orchestrator, not a calculator.
 
----
 
 ## Core Pattern 4: Simple Agent Loops
 
@@ -358,7 +351,6 @@ print(summary)
 
 **Key takeaway:** The LLM orchestrates, tools compute. This iterative loop enables adaptive multi-step reasoning over data.
 
----
 
 ## LLM Guardrails We Deployed
 
@@ -396,7 +388,6 @@ Because we had two different use cases (Audrey's predictive analytics tool and J
 | Out-of-scope questions | Rejecting Unsupported Requests / Escalating Sensitive Queries |
 | Wrong retrieval strategy | Dynamic Retrieval Strategy Selection |
 
----
 
 ## Building the Right Complexity for the Problem
 
@@ -416,7 +407,6 @@ Start with the simplest working approach before adding complexity. The path is s
 4. Add RAG when external knowledge matters
 5. Introduce agents only when the task genuinely requires them
 
----
 
 ## Conclusion
 
