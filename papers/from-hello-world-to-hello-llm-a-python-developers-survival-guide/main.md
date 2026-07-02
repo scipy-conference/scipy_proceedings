@@ -1,3 +1,4 @@
+---
 title: "From Hello World to Hello LLM: A Python Developer's Survival Guide"
 authors:
   - name: Audrey Webb
@@ -6,6 +7,7 @@ authors:
     affiliation: Airbnb
 abstract: |
   AI tooling is moving fast, but many Python developers are unsure where to start or how today's AI patterns fit into systems they already know how to build. This talk is a practical, hands-on overview of modern AI development patterns in Python, focused on what you need to know to go from zero to hero. We'll walk through real-world coding examples from a social good hackathon. We'll break this down into parts that show core building blocks of modern AI applications, and explain when each pattern makes sense. This example is designed in a way that doesn't require any prior machine learning experience, and attendees will leave with an understanding of how AI systems work, what problems they're good at solving, and how to maintain and observe what has been built. Topics covered include the modern AI stack in Python, common patterns such as prompts, function calling, RAG, and simple agents, when to use a script vs an agent vs a service, how to get something working quickly without sacrificing reliability or safety, practical guardrails for handling errors and protecting data, and how to stand up common AI workflows from LLM-powered scripts to lightweight agents and MCP-style services. Attendees will leave with a clear map of the AI landscape, working Python patterns they can reuse immediately, and the confidence to start building AI features without needing a machine learning background.
+---
 
 ## What We Learned Building AI Tools with Python
 
