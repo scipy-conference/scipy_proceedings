@@ -137,3 +137,7 @@ This study has several limitations. First, there are nearly infinite possible va
 ## Conclusion
 
 One of the most valuable benefits of writing quantitative evaluations for an LLM is that it forces a decision on what questions are most important, and what "correct" means for those questions. While these are often relatively clear-cut for software engineering tasks ("Does the server run?"), they become decidedly murkier on many scientific questions. Especially in disease modeling, since "all models are wrong" [@box1976science], deciding which answers count as "correct" is often a matter of personal preference. However, even if unambiguous rigor is typically unattainable, imperfect rigor is still preferable to placing one's faith in the vibes.
+
+## Disclosures
+
+Portions of this work were assisted using generative AI tools (Claude Code and GPT). The tools were used to assist with (1) writing code, (2) taking the exams, (3) marking the exams, (4) extracting data and summarizing results, (5) generating figures, and (6) drafting the initial outline of the manuscript. At each stage of the process, outputs were reviewed, verified, and revised by the authors, and the vast majority (>95%) of the text in the manuscript was human-written. The authors take full responsibility for the accuracy and integrity of the final content.
