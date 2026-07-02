@@ -1,37 +1,37 @@
 version: 1
-extends: ../papers.yml
+extends: papers.yml
 project:
-  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2026-cliff_kerr
-  # Ensure your title is the same as in your `main.md`
   title: "Vibes, meet rigor: Evaluating and improving AI performance on complex scientific code"
-  # subtitle:
   description: >-
-    We quantitatively evaluated LLM models with and without domain-specific
+    We quantitatively evaluated LLMs with and without domain-specific
     tools (MCP servers and skills) on a Starsim disease modeling benchmark,
-    finding that tool access improved performance more than model choice alone.
+    finding that custom tools improved performance.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Cliff Kerr
-      email: cliff.kerr@gatesfoundation.org
-      # orcid: [PLACEHOLDER: add ORCID if available]
+      email: info@starsim.org
+      orcid: 0000-0003-2517-2354
       affiliations:
-        - Bill & Melinda Gates Foundation, Seattle, USA
+        - Institute for Disease Modeling, Gates Foundation, Seattle, USA
       corresponding: true
     - name: Katherine Rosenfeld
-      email: katherine.rosenfeld@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      email: katherine.rosenfeld@gatesfoundation.org
+      orcid: 0000-0001-8902-9990
       affiliations:
-        - Bill & Melinda Gates Foundation, Seattle, USA
+        - Institute for Disease Modeling, Gates Foundation, Seattle, USA
     - name: Jessica Lundin
-      email: jessica.lundin@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      email: jessica.lundin@gatesfoundation.org
       affiliations:
-        - Bill & Melinda Gates Foundation, Seattle, USA
+        - Institute for Disease Modeling, Gates Foundation, Seattle, USA
     - name: Robyn Stuart
-      email: robyn.stuart@gatesfoundation.org  # [PLACEHOLDER: confirm email]
+      email: robyn.stuart@gatesfoundation.org
+      orcid: 0000-0001-6867-9265
       affiliations:
-        - Bill & Melinda Gates Foundation, Seattle, USA
+        - Institute for Disease Modeling, Gates Foundation, Seattle, USA
     - name: Romesh Abeysuriya
-      # email: [PLACEHOLDER: add Romesh Abeysuriya's email — Burnet address unconfirmed]
+      email: romesh.abeysuriya@burnet.edu.au
+      orcid: 0000-0002-9618-6457
       affiliations:
         - Burnet Institute, Melbourne, Australia
   keywords:
@@ -41,7 +41,6 @@ project:
     - Starsim
     - Sciris
     - Inspect.ai
-    - SciCode
     - Claude
   abbreviations:
     MCP: Model Context Protocol
@@ -53,12 +52,8 @@ project:
       keys:
         - starsim
         - starsim_crn
-        - inspectai
         - scicode
         - terminalbench
-        - jupyter
-        - sklearn1
-        - sklearn2
   exports:
     - id: pdf
       format: typst
