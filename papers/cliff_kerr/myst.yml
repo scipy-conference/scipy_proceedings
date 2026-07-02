@@ -2,11 +2,13 @@ version: 1
 extends: ../papers.yml
 project:
   id: scipy-2026-cliff_kerr
-  title: "Vibes, meet rigor: Evaluating and improving AI performance on complex scientific code"
+  title:
+    'Vibes, meet rigor: Evaluating and improving AI performance on complex
+    scientific code'
   description: >-
-    We quantitatively evaluated LLMs with and without domain-specific
-    tools (MCP servers and skills) on a Starsim disease modeling benchmark,
-    finding that custom tools improved performance.
+    We quantitatively evaluated LLMs with and without domain-specific tools (MCP
+    servers and skills) on a Starsim disease modeling benchmark, finding that
+    custom tools improved performance.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Cliff Kerr
