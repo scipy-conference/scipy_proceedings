@@ -89,6 +89,7 @@ Once we documented the needs and criteria our stakeholders (educational institut
 Jasmine's team used system prompts and a data dictionary to ground the LLM in institutional data and terminology. This created a control layer between user questions, language, and underlying datasets.
 
 **Key components:**
+
 - **System prompt** defines rules, scope, and response behavior
 - **Data dictionary** defines approved institutional terms and metrics
 - Together, they constrain interpretation and reduce hallucinations
@@ -99,6 +100,7 @@ Jasmine's hackathon project involved building a chatbot to help higher education
 Prompting became the primary way we defined system behavior, privacy, and guardrails. We created a data dictionary of approved educational terms and concepts to guide the LLM toward domain-specific language and reduce hallucinations. This was important because despite datasets having overlapping subject matter, there was nuance in how data could be used. Some tables contained PII and could not be used at all for a chatbot serving data to internal stakeholders.
 
 This dictionary acted as scaffolding for the LLM:
+
 - Defining the language of the domain
 - Clarifying what concepts existed
 - Constraining how questions should be interpreted
@@ -143,6 +145,7 @@ response = llm.chat.completions.create(
 We extended the data dictionary into a live retrieval layer connected to institutional data systems.
 
 **Why it matters:**
+
 - Aligns with existing infrastructure
 - Bridges prompts with real data systems
 - Reduces hallucinations through grounding
@@ -371,12 +374,27 @@ Because we had two different use cases (Audrey's predictive analytics tool and J
 - **Prompt Logging & Observability:** Log prompts, responses, latency, token counts, and tool calls to detect degradation early
 - **Retries & Timeouts:** Set explicit timeouts on LLM API calls; use retries with exponential backoff for transient failures
 
+| Problems to be Solved | Guardrail |
+| --- | --- |
+| Malicious input | Input Sanitization |
+| Data exposure risk | Sensitive Data Handling |
+| Invalid outputs break systems | Structured Output Validation |
+| Silent failures | Prompt Logging & Observability |
+| API failures | Retries & Timeouts |
+
 ### Jasmine's Project: Institutional Data Chatbot
 
 - **Hallucination Safeguards:** Ground factual answers in verified data; require citations when needed; allow the model to say "I don't know"
 - **Detecting Off-Topic Conversations:** Identify and redirect conversations that drift too far from intended scope
 - **Rejecting Unsupported Requests / Escalating Sensitive Queries:** Redirect unsupported requests to the right workflow; escalate sensitive queries that need policy checks or special handling
 - **Dynamic Retrieval Strategy Selection:** Dynamically select retrieval strategies based on topic, intent, and confidence in the answer
+
+| Problems to be Solved | Guardrail |
+| --- | --- |
+| LLM invents facts | Hallucination Safeguards |
+| Off-topic requests | Detecting Off-Topic Conversations |
+| Out-of-scope questions | Rejecting Unsupported Requests / Escalating Sensitive Queries |
+| Wrong retrieval strategy | Dynamic Retrieval Strategy Selection |
 
 ---
 
