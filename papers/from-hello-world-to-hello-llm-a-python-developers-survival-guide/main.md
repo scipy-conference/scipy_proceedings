@@ -119,7 +119,7 @@ Rules:
 - Only return aggregate data
 - No individual student data (PII)
 - Say "out of scope" if not supported
-- Don't join the Attendance Rate data to an external, aggregate student metric table; 
+- Don't join the Attendance Rate data to an external, aggregate student metric table;
   that data contains information at an opposing grain.
 """
 
