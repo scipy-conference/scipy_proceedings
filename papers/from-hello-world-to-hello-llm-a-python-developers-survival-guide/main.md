@@ -29,23 +29,19 @@ Like many developers entering the AI space, we had to quickly navigate a growing
 Here we share the lessons learned, tooling decisions, and implementation patterns that helped us move from experimentation to working applications.
 
 Rather than treating AI as magic, we'll break it down into familiar engineering concepts:
-
 - validation
 - retrieval
 - orchestration
 - structuring inputs
 - structured outputs
 
-We'll walk through:
+## The Shift: AI as a System Component, Not Magic
 
-- the core concepts behind modern AI applications
-- common Python libraries and tooling
-- reusable code snippets and implementation patterns
-- understanding how and when to use these patterns in real systems
+The biggest shift here is the greater accessibility for anyone to build. You no longer need to train models yourself—modern large language model (LLM) APIs, embedding models, and vector databases are available with minimal setup. We view AI as not replacing your application stack, but another component to be added to existing systems that are useful for ambiguity, language, reasoning, and search.
 
-The biggest shift here is the greater accessibility for anyone to build. You no longer need to train models yourself as modern large language model (LLM) APIs, embedding models, and vector databases are available with minimal setup. We view AI as not replacing your application stack, but another component to be added to existing systems that are useful for ambiguity, language, reasoning, and search. Think of an LLM like a non-deterministic but powerful external API that needs structure, validation, retries, and observability.
+Think of an LLM like a non-deterministic but powerful external API that needs structure, validation, retries, and observability.
 
-Before we delve into these items, we'll explain the modern LLM stack.
+**AI collapses the gap between expertise & execution.** In our hackathon, we paired technologists (who bring architecture, LLM knowledge, data systems, and engineering experience) with education experts (who bring deep context, student needs, institutional knowledge, and on-the-ground experience). Together, through a modular LLM stack—prompts, tools, retrieval, embeddings, vector databases, and guardrails—we delivered working solutions in 3 days.
 
 ---
 
@@ -53,38 +49,39 @@ Before we delve into these items, we'll explain the modern LLM stack.
 
 Most AI-powered Python applications are assembled from a small set of reusable components:
 
-- LLM APIs
-  - ollama-python, litellm, transformers, vllm, llama-cpp-python
-- Embedding models
-  - sentence-transformers, transformers, InstructorEmbedding, FlagEmbedding (BGE models)
-- Vector databases
-  - faiss, chromadb, qdrant-client, weaviate-client, milvus
-- Prompt orchestration
-  - LangGraph, LangChain, Haystack, PydanticAI, CrewAI
-- Structured output validation
-  - Pydantic, Instructor, Guardrails AI, jsonschema
-- Tool calling
-  - PydanticAI, LangGraph, LangChain, smolagents, CrewAI
+**LLM APIs**
+- ollama-python, litellm, transformers, vllm, llama-cpp-python
+
+**Embedding models**
+- sentence-transformers, transformers, InstructorEmbedding, FlagEmbedding (BGE models)
+
+**Vector databases**
+- faiss, chromadb, qdrant-client, weaviate-client, milvus
+
+**Prompt orchestration**
+- LangGraph, LangChain, Haystack, PydanticAI, CrewAI
+
+**Structured output validation**
+- Pydantic, Instructor, Guardrails AI, jsonschema
+
+**Tool calling**
+- PydanticAI, LangGraph, LangChain, smolagents, CrewAI
 
 We'll show how these pieces connect in practice using code snippets and examples from our social impact hackathon project.
 
-The key takeaway: you are still writing Python. LLMs are another system dependency your application coordinates and manages. Before we began using AI in our hackathon, we started with understanding our stakeholders needs.
+**The key takeaway:** You are still writing Python. LLMs are another system dependency your application coordinates and manages.
 
 ---
 
 ## Key Terms
 
-Now, briefly on key terms you will see throughout this paper. For our purposes, during the hackathon, we used the following concepts:
+For our purposes during the hackathon, we used the following concepts:
 
 - **LLM:** Generates text from prompts
-- **Embeddings:** Embeddings turn words or sentences into numbers that capture meaning.
-  Things with similar meanings end up close together:
-  - "dog" ≈ "puppy"
-  - "pizza" ≈ "burger"
-
-  That's how AI can find related ideas, not just exact word matches. In real life, you can find related ideas in `<user_prompt>` and structures within your chatbot code.
+- **Embeddings:** Turn words or sentences into numbers that capture meaning. Similar meanings end up close together ("dog" ≈ "puppy", "pizza" ≈ "burger"). This is how AI finds related ideas, not just exact word matches.
 - **RAG:** Retrieve context before generating answers
 - **Agent:** A loop where the model can use tools and react to results
+- **Function Calling:** Structured requests where the LLM calls specific functions with typed parameters
 
 These concepts cover most real-world AI applications.
 
@@ -92,49 +89,173 @@ These concepts cover most real-world AI applications.
 
 ## Requirements Gathering Before Hacking
 
-Now, before coding in the AI hackathon, we spent time in the beginning determining what our stakeholders' thought a good result was.
+Before we began using AI, we spent time understanding what our stakeholders considered a good result.
 
-Requirements gathering was an important step to help us understand the goals of our institutions. This involved journey mapping.
+**Requirements gathering was an important step** to help us understand the goals of our institutions. This involved journey mapping.
 
 <img width="1400" height="785" alt="user_journey_map" src="https://github.com/user-attachments/assets/c2ee6cd7-9103-4402-86ad-ac343453cf54" />
 
-
-Once we documented the needs and criteria our stakeholders (educational institutions and staff) had for success, we could begin development work.
-
 Before building, we worked with educational staff to journey-map their workflows, questions, and pain points. That process helped define:
-
 - what kinds of questions the system should answer
 - what data it was allowed to access
 - what topics were out of scope
 - how responses should be phrased
 
-With the requirements distilled from our clients with this method of planning, we were able to identify LLM patterns that for our respective institution's use case. With that in mind, we'll explore patterns of LLM usage with hands on examples.
+Once we documented the needs and criteria our stakeholders (educational institutions and staff) had for success, we could begin development work.
+
+With requirements distilled from our clients through this planning method, we were able to identify LLM patterns suited to each institution's use case. With that in mind, we'll explore patterns of LLM usage with hands-on examples.
 
 ---
 
-## Core Pattern 1: Functional Calling & Controlled Output
+## Core Pattern 1: System Prompts + Data Dictionaries
 
-*Separating LLM and analysis workflows*
+Jasmine's team used system prompts and a data dictionary to ground the LLM in institutional data and terminology. This created a control layer between user questions, language, and underlying datasets.
 
-Let's start off acknowledging that not every problem requires a LLM. This first pattern will illustrate how to organize distinct flows into logic that a LLM could be beneficial for and more deterministic pieces of logic that could be solved with fixed pipelines or analysis.
+**Key components:**
+- **System prompt** defines rules, scope, and response behavior
+- **Data dictionary** defines approved institutional terms and metrics
+- Together, they constrain interpretation and reduce hallucinations
+- Ensures data is used at the correct grain and in the correct context
 
-In Audrey's hackathon project, she had to consider the various goals of the different institutions on her team. Through requirements gathering techniques like journey mapping, she was able to develop a solution that would satisfy all goals -- build a predictive analytics dashboard to help institutions better understand their student's academic trajectories and address issues early on. The predictive analytics dashboard was thus created using a host of ML models, and an associated interactive chatbot was integrated for institutions to easily gather those analysis results. The design behind this dashboard was focused on separating language understanding from analysis workflows. Instead of allowing unrestricted responses, we structured how the LLM could request information and how results from predictive analyses would be returned. This created a safer interface between the chatbot and the underlying datasets. Instead of the LLM generating predictions directly, it acted as an interface layer, deciding which analytics function to call and how to interpret the result.
+Jasmine's hackathon project involved building a chatbot to help higher education staff understand a pivotal student success dataset. The institution had an institutional research department that was overwhelmed with data requests that took days to answer. AI was an opportunity to make this self-service—but institutions were concerned about data privacy and security.
 
-This included outputs like:
+Prompting became the primary way we defined system behavior, privacy, and guardrails.
 
+We created a data dictionary of approved educational terms and concepts to guide the LLM toward domain-specific language and reduce hallucinations. This was important because despite datasets having overlapping subject matter, there was nuance in how data could be used. Some tables contained PII and could not be used at all for a chatbot serving data to internal stakeholders.
+
+This dictionary acted as scaffolding for the LLM:
+- defining the language of the domain
+- clarifying what concepts existed
+- constraining how questions should be interpreted
+- helping the model distinguish valid requests from unsupported ones
+
+Rather than relying on the model's general knowledge, we used structured context to shape how it reasoned about the problem space.
+
+```python
+SYSTEM_PROMPT = """
+You are an educational analytics assistant.
+
+### brief data dictionary ###
+Use only the approved terms below:
+- Attendance Rate
+- Engagement Score
+- Intervention Tier
+- Student Success Trend
+
+Rules:
+- Only return aggregate data
+- No individual student data (PII)
+- Say "out of scope" if not supported
+- Don't join the Attendance Rate data to an external, aggregate student metric table; 
+  that data contains information at an opposing grain.
+"""
+
+response = llm.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": "Which tiers improved attendance?"}
+    ]
+)
+```
+
+**Key takeaway:** System prompts + data dictionaries turn language into a controlled interface for data.
+
+---
+
+## Core Pattern 2: Retrieval-Augmented Generation (RAG)
+
+We extended the data dictionary into a live retrieval layer connected to institutional data systems.
+
+**Why it matters:**
+- Aligns with existing infrastructure
+- Bridges prompts with real data systems
+- Reduces hallucinations through grounding
+- Guides the chatbot toward approved terminology
+- Retrieves relevant institutional definitions and resources at query time
+- Constrains answers to known educational concepts
+
+Jasmine's hackathon project relied heavily on RAG to ground responses in a trusted educational context. Embeddings and retrieval pipelines helped guide the chatbot toward approved terminology, retrieve institutional definitions, and constrain answers to known concepts—especially important in a sensitive domain where accuracy matters.
+
+```python
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI()
+
+# Domain scaffold (data dictionary)
+data_dictionary = [
+    "Attendance Rate: % of classes attended",
+    "Engagement Score: participation metric",
+    "Intervention Tier: support level",
+]
+
+query = "Which intervention tiers improved attendance?"
+
+# Embed dictionary entries
+dict_emb = client.embeddings.create(
+    model="text-embedding-3-small",
+    input=data_dictionary
+).data
+
+# Embed the user query
+q_emb = client.embeddings.create(
+    model="text-embedding-3-small",
+    input=query
+).data[0].embedding
+
+def cosine(a, b):
+    a, b = np.array(a), np.array(b)
+    return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+# Rank dictionary items by relevance
+best = sorted(
+    zip(data_dictionary, dict_emb),
+    key=lambda x: cosine(q_emb, x[1].embedding),
+    reverse=True
+)[:2]
+
+# Build context from retrieved items
+context = "\n".join([text for text, _ in best])
+
+# Send retrieved context + query to LLM
+resp = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": context},
+        {"role": "user", "content": query}
+    ]
+)
+```
+
+**Key takeaway:** RAG connects the LLM to live institutional data systems and approved terminology.
+
+---
+
+## Core Pattern 3: Function Calling & Controlled Output
+
+Not every problem requires an LLM. For numeric forecasts, risk scoring, and trend analysis, the model should not invent results—it should request them from backend systems that can compute them deterministically.
+
+**Audrey's approach:** She used requirements gathering and journey mapping to understand the goals of her institutions. That research helped her design a predictive analytics dashboard that separated language understanding from analysis workflows, so the LLM acted as an interface layer rather than generating predictions directly.
+
+In practice, the chatbot received structured requests, passed them to backend analytics, and then explained the results back to users in clear language. The dashboard provided:
 - Retention prediction
-  - risk scores per student
-  - probability of dropping out
-  - attendance trend forecasts
+- Risk scores per student
+- Probability of dropping out
+- Attendance trend forecasts
 - Credential type prediction
 - Gateway course success prediction
 - GPA prediction
 
-For example, a flow could look as follows:
+**Key principles:**
 
-```
-Question → LLM → One Function → One Model → Result → Explanation
-```
+1. **Separate Understanding from Computation** — The LLM interprets the user's intent, but the predictive model and analytics pipeline do the actual math. This keeps forecasting logic outside the model and makes the system easier to test and trust.
+
+2. **Let the LLM Request Structured Data** — Instead of free-form answers, the LLM calls a function like `get_retention_risk(school_id)`. That request is precise, typed, and limited to the data the backend is designed to return.
+
+3. **Return Predictable Analytics** — The Python system aggregates predictions and returns structured outputs such as risk scores, dropout probability, and attendance trends. The LLM then explains those results in plain language.
+
+4. **Keep It Reproducible and Auditable** — Because predictions are computed outside the model, the same input produces the same output. That makes the system easier to audit, version, and debug—especially in a hackathon setting where you need reliable behavior fast.
 
 ```python
 from openai import OpenAI
@@ -143,16 +264,12 @@ client = OpenAI()
 
 # Predictive model wrapped as an approved function
 def get_retention_risk(school_id):
-
     students = feature_store.get_students(school_id)
-
     risk_scores = retention_model.predict_proba(students)
-
     return {
         "school_id": school_id,
         "avg_retention_risk": float(risk_scores.mean())
     }
-
 
 tools = [
     {
@@ -171,9 +288,7 @@ tools = [
     }
 ]
 
-user_question = (
-    "Which students are most at risk of not returning next semester?"
-)
+user_question = "Which students are most at risk of not returning next semester?"
 
 # Step 1: LLM determines what analytics are needed
 response = client.chat.completions.create(
@@ -192,9 +307,7 @@ response = client.chat.completions.create(
 )
 
 # Step 2: Backend executes predictive model
-analytics_result = get_retention_risk(
-    school_id="School_123"
-)
+analytics_result = get_retention_risk(school_id="School_123")
 
 # Step 3: LLM explains results
 final_response = client.chat.completions.create(
@@ -212,89 +325,32 @@ final_response = client.chat.completions.create(
 print(final_response.choices[0].message.content)
 ```
 
-This pattern ensured predictions are:
-
+This pattern ensured predictions were:
 - reproducible
 - auditable
 - computed separately from the LLM
 - token usage was optimized
 
----
-
-## Core Pattern 2: Prompting with Language and Constraints
-
-As we delved into prompting, we philosophically defined what the model should and should not be doing. To illustrate this, we'll begin by describing Jasmine's Hackathon project. Jasmine's team built a chatbot to help higher education staff at a University understand how a pivotal dataset can expedite their ability to track student success. They were trying to integrate the dataset, but were unsure where to begin. Additionally, they had an institutional research department that bore the brunt of handling requests for data from around the institution about student success with existing data that often took days to massage into final data presentations. AI was an opportunity to expedite this process and make many of the requests into self service. Unfortunately, institutions were concerned that AI posed a risk of exposing data that shouldn't be widely available. Thus, prompting became the primary way we defined system behavior, privacy, and guardrails.
-
-We also created a data dictionary of approved educational terms and concepts to guide the LLM toward domain-specific language and reduce hallucinations. This was important because the staff at the education institution were aware that despite datasets having overlapping subject matter, there was nuance in how the data could be used. Despite data sounding similar, it was not advised to join certain tables. And since some tables contained PII, they could not be used at all for a chatbot serving data out to internal stakeholders at the university.
-
-This dictionary acted as scaffolding for the LLM:
-
-- defining the language of the domain
-- clarifying what concepts existed
-- constraining how questions should be interpreted
-- helping the model distinguish valid requests from unsupported ones
-
-Rather than relying on the model's general knowledge, we used structured context to shape how it reasoned about the problem space.
-
-The prompt effectively became a lightweight interface layer between users, institutional terminology, and the underlying data systems.
-
-```python
-SYSTEM_PROMPT = """
-You are an educational analytics assistant.
-
-### brief data dictionary ###
-Use only the approved terms below:
-- Attendance Rate
-- Engagement Score
-- Intervention Tier
-- Student Success Trend
-
-Rules:
-- Only return aggregate data
-- No individual student data (PII)
-- Say "out of scope" if not supported
-- Don't join the Attendance Rate data to an external, aggregate student metric table; that data contains information at an opposing grain.
-"""
-
-response = llm.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": "Which tiers improved attendance?"}
-    ]
-)
-```
-
-To confirm the dictionary was being utilized correctly, our institutional partners wanted to see how the LLM got to its final answer by showing its logic along the way.
+**Key takeaway:** Separate language understanding from computation. Let the LLM be an orchestrator, not a calculator.
 
 ---
 
-## Core Pattern 3: Simple Agent Loops
+## Core Pattern 4: Simple Agent Loops
 
-While Core Pattern 1 focused on a single function call, many institutional questions in Audrey's project required chaining multiple tools together. This created a natural opportunity for lightweight agentic workflows, where the system could retrieve data, compute metrics, compare results, and generate explanations through a multi-step reasoning process.
+While Core Pattern 3 focused on a single function call, many institutional questions in Audrey's project required chaining multiple tools together. This created a natural opportunity for lightweight agentic workflows, where the system could retrieve data, compute metrics, compare results, and generate explanations through a multi-step reasoning process.
 
-Instead of a single query response cycle, the system often needed to:
-
+Instead of a single query-response cycle, the system often needed to:
 - retrieve a student cohort
 - compute or fetch predictive metrics
 - compare trends across groups
 - generate a narrative summary
 
-This created an iterative loop:
+This created an iterative loop: **Interpret → Retrieve → Compute → Refine → Explain**
 
-```
-interpret → retrieve → compute → refine → explain
-```
+In this setup, the LLM becomes an orchestrator that decides what to analyze next, while Python tools handle each step of computation. Predictive analytics becomes less of a model output and more of a tool-driven reasoning workflow over data.
 
-In this setup, the LLM becomes an orchestrator that decides what to analyze next, while Python tools handle each step of computation.
-
-Predictive analytics here becomes less of a model output, and more of a tool-driven reasoning workflow over data.
-
-Example Flow:
-
-```
+**Example flow:**
 Question → LLM → Tool 1: Get cohort → Tool 2: Get retention scores → Tool 3: Compare to prior semester → Tool 4: Generate summary statistics → LLM explanation
-```
 
 ```python
 # Available tools
@@ -310,17 +366,9 @@ and is retention improving or declining?
 """
 
 # Agent loop
-cohort = get_student_cohort(
-    year="first_year"
-)
-
-risk_scores = get_retention_risk(
-    students=cohort
-)
-
-trend = compare_to_previous_term(
-    current=risk_scores
-)
+cohort = get_student_cohort(year="first_year")
+risk_scores = get_retention_risk(students=cohort)
+trend = compare_to_previous_term(current=risk_scores)
 
 summary = llm.generate(
     f"""
@@ -335,127 +383,62 @@ summary = llm.generate(
 print(summary)
 ```
 
----
-
-## Core Pattern 4: Retrieval-Augmented Generation (RAG)
-
-Jasmine's hackathon project relied heavily on RAG to ground responses in a trusted educational context related to student success. Her institution was curious about "toxic" course loads, where students may be taking too many science or humanities classes simultaneously. We used the data dictionary and embeddings to determine how a user's request adheres to the domain.
-
-Embeddings and retrieval pipelines are helpful to:
-
-- guide the chatbot toward approved terminology
-- retrieve relevant institutional definitions and resources
-- constrain answers to known educational concepts
-- reduce hallucinations in a sensitive domain
-
-Given more time, we would have extended this to further cement the data dictionary as an important guardrail of the system by:
-
-- more tightly integrating the data dictionary into the embedding pipeline as a curated "semantic layer" over the domain
-- improving chunking so definitions, metrics, and relationships were retrieved together rather than in isolation
-- adding evaluation checks to verify that retrieved context matched the user's intent before generation
-- strengthening guardrails to ensure the model always preferred retrieved institutional context over general knowledge
-
-This ended up being one of the most important guardrail mechanisms in the system.
-
-```python
-import numpy as np
-
-client = YourLLM()
-
-# Domain scaffold (data dictionary)
-data_dictionary = [
-    "Attendance Rate: % of classes attended",
-    "Engagement Score: participation metric",
-    "Intervention Tier: support level",
-]
-
-query = "Which intervention tiers improved attendance?"
-
-# Embed dictionary entries (used for semantic search)
-dict_emb = client.embeddings.create(
-    model="text-embedding-3-small",
-    input=data_dictionary
-).data
-
-# Embed the user query (what we are trying to match)
-q_emb = client.embeddings.create(
-    model="text-embedding-3-small",
-    input=query
-).data[0].embedding
-
-
-def cosine(a, b):
-    # measures similarity between two embedding vectors
-    a, b = np.array(a), np.array(b)
-    return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))
-
-
-# Rank dictionary items by relevance to the query
-best = sorted(
-    zip(data_dictionary, dict_emb),  # pair each term with its embedding
-    key=lambda x: cosine(q_emb, x[1].embedding),  # compute similarity
-    reverse=True  # most relevant first
-)[:2]  # take top results
-
-# Build context for the LLM from retrieved items
-context = "\n".join([text for text, _ in best])
-
-
-# Send retrieved context + query to the LLM
-resp = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": context},
-        {"role": "user", "content": query}
-    ]
-)
-
-print(resp.choices[0].message.content)
-```
+**Key takeaway:** The LLM orchestrates, tools compute. This iterative loop enables adaptive multi-step reasoning over data.
 
 ---
 
-## Possible Extensions of LLM Usage
+## LLM Guardrails We Deployed
 
-Given more time, we would expand into additional routing and moderation logic.
+The goal is not to rely solely on the model, but to build systems that remain reliable even when it makes mistakes.
 
-### Project Optimizations
+Because we had two different use cases—Audrey's predictive analytics tool and Jasmine's institutional data chatbot—we deployed different guardrails tailored to each system's risks and requirements.
 
-- Benchmark LLM answers and validity
-- Add time series modeling to improve predictions
-- Expand the chatbot to answer broader student data questions
+### Audrey's Project: Predictive Analytics Tool
+*Student Retention & Success*
 
-### Reliability & Guardrails
+- **Input Sanitization** — Validate and clean user inputs before they reach the model
+- **Sensitive Data Handling** — Never send PII, secrets, or sensitive data to an LLM without explicit review
+- **Structured Output Validation** — Never use raw LLM output without validation; enforce schemas before downstream systems
+- **Prompt Logging & Observability** — Log prompts, responses, latency, token counts, and tool calls to detect degradation early
+- **Retries & Timeouts** — Set explicit timeouts on LLM API calls; use retries with exponential backoff for transient failures
 
-LLMs are probabilistic systems, so production reliability matters.
+### Jasmine's Project: Institutional Data Chatbot
+*Student Retention & Success Queries*
 
-- Detect and redirect off-topic queries
-- Handle sensitive data with escalation paths
-- Reject unsupported requests
-- Use retries, timeouts, and output validation
-- Log prompts for observability
-- Add hallucination checks and input sanitization
+- **Hallucination Safeguards** — Ground factual answers in verified data; require citations when needed; allow the model to say "I don't know"
+- **Detecting Off-Topic Conversations** — Identify and redirect conversations that drift too far from intended scope
+- **Rejecting Unsupported Requests / Escalating Sensitive Queries** — Redirect unsupported requests to the right workflow; escalate sensitive queries that need policy checks or special handling
+- **Dynamic Retrieval Strategy Selection** — Dynamically select retrieval strategies based on topic, intent, and confidence in the answer
 
-**Principle:** The goal is not to rely solely on the model, but to build systems that remain reliable even when it makes mistakes.
+---
+
+## Building the Right Complexity for the Problem
+
+Not every problem needs an agent. Use:
+- **A single prompt** for simple classification or extraction
+- **A pipeline** for fixed workflows
+- **An agent** only when adaptive multi-step reasoning is required
+- **Function calling** when computation must be deterministic
+- **RAG** when you need to ground answers in external knowledge
+
+**Start with the simplest working approach before adding complexity.** The path is straightforward:
+
+1. Start with a simple LLM API call
+2. Add structured outputs
+3. Add tool calling for focused, useful actions
+4. Add RAG when external knowledge matters
+5. Introduce agents only when the task genuinely requires them
 
 ---
 
 ## Conclusion
 
-Not every problem needs an agent.
+You do not need deep ML expertise to build useful AI systems. You need:
+- Strong engineering fundamentals
+- Clear abstractions
+- Careful system design that reduces cost, latency, and failure modes
+- Start small, observe everything, and expand with purpose
 
-Use:
+The core lesson from our hackathon: **The path forward is straightforward. Build on solid engineering basics, add capability in layers, and use the simplest abstraction that solves the problem.**
 
-- A single prompt for simple classification or extraction
-- A pipeline for fixed workflows
-- An agent only when adaptive multi-step reasoning is required
-
-Start with the simplest working approach before adding complexity. The path is straightforward:
-
-1. Start with a simple LLM API call
-2. Add structured outputs
-3. Add tool calling
-4. Add RAG
-5. Introduce LLMs only when necessary
-
-You do not need deep ML expertise to build useful AI systems. You need strong engineering fundamentals, clear abstractions, and careful system design.
+In three days, we went from exploring requirements to shipping working tools because we treated AI like any other system dependency—with respect for its probabilistic nature, careful validation, and thoughtful orchestration. Python developers already know how to do this. AI is just another component in your stack.
