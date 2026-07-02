@@ -38,6 +38,8 @@ The biggest shift here is the greater accessibility for anyone to build. You no 
 
 AI collapses the gap between expertise and execution. In our hackathon, we paired technologists (who bring architecture, LLM knowledge, data systems, and engineering experience) with education experts (who bring deep context, student needs, institutional knowledge, and on-the-ground experience). Together, through a modular LLM stack (prompts, tools, retrieval, embeddings, vector databases, and guardrails), we delivered working solutions in 3 days.
 
+![Collaboration during the hackathon](collab_image.png)
+
 ## The Modern AI Stack in Python
 
 Most AI-powered Python applications are assembled from a small set of reusable components:
