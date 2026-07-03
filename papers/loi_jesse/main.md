@@ -171,7 +171,7 @@ The question of location extraction might seem at first to be a closed-ended que
 However, what allows a more reasonable comparison was
 
 
-###Impacts on Retrieval Augmented Generation
+### Impacts on Retrieval Augmented Generation
 
 As mentioned previously, the goal of using these models is to provide additional context in retrieval augmented generation, especially to assist community organizations. The results here are promising in lowering the efforts in extracting information. A salient problem that remains is ensuring private use access characters are flagged and extracted using OCR, but this problem has solutions mentioned above.
 
