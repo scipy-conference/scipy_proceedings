@@ -111,11 +111,28 @@ Distribution of fuzzy match scores for double-verified human-to-human annotation
 
 Distribution of fuzzy match scores for double-verified human-to-human annotations.
 
+Here we compare the two distributions. Upon visual inspection, the results look promising, despite the large differences. However, employing both the K-S test and the Wasserstrein difference gives us a different result.
+
+K-S Statistic: 0.1027
+p-value: 0.6158
+Wasserstein Distance: 3.3351
+
+For our much smaller dataset.
+
+
+
+K-S Statistic: 0.2245
+p-value: 0.5192
+Wasserstein Distance: 9.0125
 
 
 ---
 
 ## 5. Discussion
+
+We consider our results. The initial view of the data is not promising, offering only modest success.
+
+However, what allows a more reasonable comparison.
 
 ### [cite_start]5.1 Limitations [cite: 102]
 
