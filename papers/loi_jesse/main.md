@@ -95,6 +95,16 @@ This paper presents the impacts of using Large Language Models (LLMs) to extract
 ## 4. Results
 [cite_start]After running both datathons, we compailed two datasets and managed to double-verify 120 articles[cite: 99].
 
+
+We have very promising data from our Baserow dataset. What we have so far is 123 LLM-human pairs and 85 human-human pairs, where human-human matches are those where we had two seperate volunteers identify a location for an article.
+
+
+However, the data from the Zooniverse dataset is not as promising, with only 13 human-human pairs with 123 LLM-human pairs . This is likely due to the fact that Zooniverse has no native way to capture news articles only, leading to more entries for legal documents and other types of documents.
+
+We compare the distribution for the baserow dataset here the first table displays the Baserow dataset comparison and the second table displays the Zooniverse dataset comparison.
+
+
+
 [cite_start]**[Fuzzy Comparison Data/Plots Here]** [cite: 100]
 
 ```{figure} ./Dataset1.png
@@ -104,6 +114,7 @@ This paper presents the impacts of using Large Language Models (LLMs) to extract
 
 Distribution of fuzzy match scores for double-verified human-to-human annotations.
 
+
 ```{figure} ./Table2.png
 :name: human-human-comparison
 :alt: Human-to-Human fuzzy comparison distribution plot
@@ -111,13 +122,34 @@ Distribution of fuzzy match scores for double-verified human-to-human annotation
 
 Distribution of fuzzy match scores for double-verified human-to-human annotations.
 
-Here we compare the two distributions. Upon visual inspection, the results look promising, despite the large differences. However, employing both the K-S test and the Wasserstrein difference gives us a different result.
+Here we compare the two distributions. Upon visual inspection, the results look promising, despite the large differences. We see in both cases a tri-modal distribution, with answers on the high end indicating almost exact matches, answers on the low end indicating almost no match, and answers around the 60-70 point range indicating some match.
+
+To elaborate on the significance of this comparison, we discuss examples of high, low, and mid ranking pairs from our dataset. These are represent some examples of what is included in the dataset, but are not strictly included in the final dataset.
+
+| Response 1 | Response 2 | Fuzzy Score |
+| :--- | :--- | :--- |
+| "53rd and Emerson Avenues N." | intersection of 53rd and Emerson Avenues N | 93 |
+| "1235 Reform St" | 520 Reform St., Norwood Young America MN | 63|
+| N/A | “Minnesota City Court” | 0 |
+
+
+Answers on the high end over 90 points indicate that the model and human captured the same text in their responses, with only minor phrase or wording changes. Scores around this range show promise about the model, though might represent sets of articles with a location clearly provided.
+
+We also see here that while scores as high as 63 may seem to point to the human and model reading the same chunk of text, the human reader is able to capture some crucial details that the model cannot. We go into more details of this in the discussion, but these scores likely represent articles with a clear incident location mentioned, but cannot be accessed due to scraping problems.
+
+Finally, answers on the low end, around 0-10 on the fuzzy scale, indicate almost no match between the terms. These likely represent articles where there is no clear incident location. In such cases, the human volunteer likely enters terms such as "N/A", "no location", or some other indicator that the address is unclear. In contrast, while the model is prompted to give a response without hallucinating, it will give an overly vague response or a mentioned location but that is not the incident location.
+
+
+
+However, employing both the K-S test and the Wasserstrein difference gives us a different result.
 
 K-S Statistic: 0.1027
 p-value: 0.6158
 Wasserstein Distance: 3.3351
 
-For our much smaller dataset.
+We see that the the K-S statistic shows that there is not yet enough evidence that the distributions are different. More importantly, the Wassterstein distance shows that only a 3.3% shift in the data is necessary to match one distribution to the other.
+
+For our much smaller dataset, the results are not as conclusive and show a larger difference, but still have a high p value, indicating that do not have sufficient evidence to claim that the distributions are different. Additionally, we see that the Wasserstein distance shows that only a 9% shift in the data is required to transform one distribution to the other.
 
 
 
@@ -130,14 +162,40 @@ Wasserstein Distance: 9.0125
 
 ## 5. Discussion
 
-We consider our results. The initial view of the data is not promising, offering only modest success.
+We consider our results. The initial view of the data is not promising, offering only modest success. We noticed that overall fuzzy comparisons between the model and a human to be unpromising, but such comparisons are not apt for a proper evaluation of a model. The literature discusses ways to evaluate an LLM [CITATION], but I will be making use of [CITATION] way of resolving this issue.
 
-However, what allows a more reasonable comparison.
+They handle the problem from the paradigm of "one-to-many" questions in the literature. In other words, they discuss questions for which the text generated answer is open-ended.
+
+The question of location extraction might seem at first to be a closed-ended question. After all, a police incident can only occur at
+
+However, what allows a more reasonable comparison was
+
+
+###Impacts on Retrieval Augmented Generation
+
+As mentioned previously, the goal of using these models is to provide additional context in retrieval augmented generation, especially to assist community organizations. The results here are promising in lowering the efforts in extracting information. A salient problem that remains is ensuring private use access characters are flagged and extracted using OCR, but this problem has solutions mentioned above.
 
 ### [cite_start]5.1 Limitations [cite: 102]
 
+Private use access
+
+
+Limited Articles
+
+
+Model Limitations
+
+
 ### [cite_start]5.2 Future Work [cite: 103]
 
+The results derived from this research are only cursory, and seek only to lay the groundwork for later investigation to how an LLM can mimic a human's ability to identify a location in text.
+
+#### Additional data
+
+While the trials done collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand
+
+
+We have
 ---
 
 ## [cite_start]6. Conclusion [cite: 104]
