@@ -46,24 +46,6 @@ To test the efficacy of LLMs in information extraction, we extract data from CUA
 ### 2.1 Data Extraction
 CUAPB contains a repository of articles, all stored in PDF form. To extract the data, we made use of PyMuPDF to extract pre-existing PCR data from the the repository. To conserve context space, we extract only the first 7 pages of all articles. Documents longer than 7 pages are highly likely to be court proceedings instead of the source news articles. The extraction process for the articles, after parallelizing, took a total of 4 hours.
 
-We made use of a light language model with the following prompt for each set of text:
-
-
-incident_prompt = """
-Analyze the provided news article and identify the LOCAL location of the incident in terms of the street address or physical landmarks. If the location cannot be found or is uncertain, return UNKNOWN instead. Only return a location you are confident with.
-Output only the address and no comments. Just the address. No need to provide a state or a city. Just a local address that can be accurately located in the document. IF YOU CANNOT THEN ENTER UNKNOWN
-DO NOT HALLUCINATE A LOCATION
-An example output could be:
-"A Kroger on 3rd Street"
-"1923 E Pine St St Louis 42019"
-"City Hall"
-"Defendent's home"
-"Unknown"
-"Location not found"
-"UNKNOWN"
-These are all appropriate responses.
-"""
-
 
 After a simple PyMuPDF extraction, we increased the quality of our extraction by flagging articles with the following features.
 
@@ -86,24 +68,37 @@ Some articles were scraped, but with extremely low character counts. These PDFs 
 :align: center
 ```
 
-To handle these two cases, we implemented OCR (optical character recognitions). This workflow optimzies time, as an OCR scrape of all 2700 articles would be too time exhaustive[cite: 43]. The additional OCR procedure added around 100 news articles, increasing our test sample.
+To handle these two cases, we implemented OCR (optical character recognitions). This workflow optimzies time, as an OCR scrape of all 2700 articles would be too time exhaustive[cite: 43]. The additional OCR procedure added around 100 news articles, increasing our test sample by a reasonable amount.
 
-### 2.2 Data Labeling
-We proceed to labeling the data using an LLM[cite: 45]. [cite_start]We made use of Lamma 3.1B instruct, which is a light language model[cite: 46]. [cite_start]While other models were available, we opted to use a model accessible to organizations with less compute power[cite: 47]. [cite_start]We then called it with the following prompt[cite: 48]:
+### 2.2 LLM Labeling
+We proceed to labeling the data using an LLM. We made use of Ollama's llamma 3.1:8B instruct, which is a light language model, with only 8 billion parameteres. While other models were available, we opted to use a model accessible to organizations with less compute power. Additionally, a general instruction trained model can be used for tasks other than simply just location extraction.
 
-[cite_start]“ [cite: 49]
 
-[cite_start]“ [cite: 50]
+We then called the model with the following prompt:
 
-[cite_start]We then fed it this article with the prompt[cite: 51]. [cite_start]We successfully scrapped[cite: 51].
+
+incident_prompt = """
+Analyze the provided news article and identify the LOCAL location of the incident in terms of the street address or physical landmarks. If the location cannot be found or is uncertain, return UNKNOWN instead. Only return a location you are confident with.
+Output only the address and no comments. Just the address. No need to provide a state or a city. Just a local address that can be accurately located in the document. IF YOU CANNOT THEN ENTER UNKNOWN
+DO NOT HALLUCINATE A LOCATION
+An example output could be:
+"A Kroger on 3rd Street"
+"1923 E Pine St St Louis 42019"
+"City Hall"
+"Defendent's home"
+"Unknown"
+"Location not found"
+"UNKNOWN"
+These are all appropriate responses.
+"""
 
 ### 2.3 Human labeling
-[cite_start]We still needed a human dataset to serve as the ground truth[cite: 53]. [cite_start]While a similar process could be done with a single human, having crowdsourced evaluation helped speed up the process and account of individual human bias[cite: 54]. [cite_start]We procured the data byhosting a datathon across several campuses [Seattle University, Hamline University, and Carlton College][cite: 55]. [cite_start]We had succeeded in recruiting 48 different volunteers to label the articles[cite: 56].
+We still needed a human dataset to serve as the ground truth. While a similar process could be done with a single human, having crowdsourced evaluation helped speed up the process and account of individual human bias. We procured the data byhosting a datathon across several campuses [Seattle University, Hamline University, and Carlton College]. We had succeeded in recruiting 48 different volunteers to label the articles.
 
-[cite_start]To streamline the workflow, volunteers were asked to only perform data labeling on news articles, reading through the article to label relevant officers, civillians, and incident details[cite: 57]. [cite_start]We made use of two different environments for our datathon, exploring ways to more quickly crowdsource data[cite: 58].
+To streamline the workflow, volunteers were asked to only perform data labeling on news articles, reading through the article to label relevant officers, civillians, and incident details. We made use of two different environments for our datathon, exploring ways to more quickly crowdsource data.
 
 #### Datathon 1
-[cite_start]Baserow is a platform that allows users to build databases and share permissions, similar to an online spreadsheet tool[cite: 60]. [cite_start]The initial benefits to Baserow were first, its open-source structure, allowing for high degrees of accessibility to community organizations, and second, its ability to display various views[cite: 61].
+Baserow is a platform that allows users to build databases and share permissions, similar to an online spreadsheet tool. The initial benefits to Baserow were first, its open-source structure, allowing for high degrees of accessibility to community organizations, and second, its ability to display various views.
 
 [cite_start]While coordinating large, synchronous data entry, there is the risk that entries will overlap, such as when two users try to make an edit simultaneously on a Google cloud document[cite: 62]. [cite_start]While the risk remains for a tabular database such as Baserow to fail, Baserow allows for multiple frontend views, including card formatted data that allow subsets of data to be assigned to teams of volunteers[cite: 63]. [cite_start]This data segmentation helps mitigate simultaneous data entry[cite: 64].
 
@@ -150,19 +145,20 @@ We compare the distribution for the baserow dataset here the first table display
 [cite_start]**[Fuzzy Comparison Data/Plots Here]** [cite: 100]
 
 ```{figure} ./Dataset1.png
-:name: human-human-comparison
+:name: human-human-comparison-baserow
 :alt: Human-to-Human fuzzy comparison distribution plot
 :align: center
 
-Distribution of fuzzy match scores for double-verified human-to-human annotations.
-
+Distribution of fuzzy match scores for double-verified human-to-human annotations for the Baserow dataset.
+```
 
 ```{figure} ./Table2.png
-:name: human-human-comparison
+:name: human-human-comparison-zooniverse
 :alt: Human-to-Human fuzzy comparison distribution plot
 :align: center
 
-Distribution of fuzzy match scores for double-verified human-to-human annotations.
+Distribution of fuzzy match scores for double-verified human-to-human annotations for the Zooniverse dataset.
+```
 
 Here we compare the two distributions. Upon visual inspection, the results look promising, despite the large differences. We see in both cases a tri-modal distribution, with answers on the high end indicating almost exact matches, answers on the low end indicating almost no match, and answers around the 60-70 point range indicating some match.
 
@@ -235,7 +231,7 @@ The results derived from this research are only cursory, and seek only to lay th
 
 While the trials done collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand. Future analyses can benefit from human labeling of the data. Out of the 1300, we only have 460 articles labeled. This is only a third of the articles from the CUAPB database. There is already infrastruture for this work in the form of the Zooniverse datathon page. Outside of the 1300 scraped articles, researchers in the field may be interested in exploring more data sources.
 
-Even aside from data that remains unlabeled, such comparisons with the data can be done on for both new data and with new volunteers. Recall that we only had 26 total volunteers across both datathons. While this ratio remains high, with about 16 labels per volunteer, different biases among the volunteers and predilections towards certain answers may skew the results. In particular, because the datathons were organized as community events, we can be fairly confident that some labels were not made independently of each other.
+Even aside from data that remains unlabeled, such comparisons with the data can be done on for both new data and with new volunteers. Recall that we only had 48 total volunteers across both datathons. While this ratio remains high, with about 8 documents per volunteer, different biases among the volunteers and predilections towards certain answers may skew the results. In particular, because the datathons were organized as community events, we can be fairly confident that some labels were not made independently of each other.
 
 ### Stronger Models
 
