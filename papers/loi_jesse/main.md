@@ -26,40 +26,70 @@ Despite the unambiguity of a location, data scraping from news articles can be d
 Common data scraping techniques can struggle, especially with articles that may include social media screenshots, those that resist OCR, or otherwise have an unusual table outline with many advertisements. Even older physical news articles may appear in a tabular form that requires further pre-processing.
 
 ### 1.3 Named Entity Recognition
-An initial technique, after the text has been extracted, has been named entity recognition. Birks et al. (2020) use natural language processing to read narratives and identify particular trends of burglaries. More recently, Duca (2024) takes a different approach to extraction by using named entity recognition (NER) to extract repeated entities in a text. The use of NER can be quite conducive when searching texts for dates, officers, and incident locations. NER has a benefit of extracting specific proper nouns, some of which can contain important location data[cite: 20]. [cite_start]However, a drawback of NER is that the data still requires parsing to manage[cite: 21].
+An initial technique, after the text has been extracted, has been named entity recognition. Birks et al. (2020) use natural language processing to read narratives and identify particular trends of burglaries. More recently, Duca (2024) takes a different approach to extraction by using named entity recognition (NER) to extract repeated entities in a text. The use of NER can be quite conducive when searching texts for dates, officers, and incident locations. NER has a benefit of extracting specific proper nouns, some of which can contain important location data.However, a drawback of NER is that the data still requires parsing to manage. In particular, NER provides a series of nouns in the data, but cannot help us determine which of these nouns contains the location of the incident. For example, NER could identify the address of the indcident as well as some other location mentioned in the article that are completely unrelated to the police incident. Consequently, we needa more discriminate tool that can identify the location of the incident proper.
 
-#### Context Difficulties
-[cite_start]In particular, contexts are not captured with NER, which aims to capture all entities simpliciter[cite: 23]. [cite_start]Some articles may display the article along with other relevant addresses, not all of which are related to the police incident at hand[cite: 24].
 
 ### LLMs and Hallucination
 
 While we have discussed reasons to deploying LLMs for data extraction, we should be aware of major weaknesses, namely hallucination. Huang et al. (2023) and Xu et al. (2024) have shown the difficulty of removing hallucination. Given the nature of police accountability, we will be especially vigilant in suppressing hallucination. To help, we draw on recent RAG literature. Reuter et al. (2025) have recently discussed the use of RAG to combat hallucination in the context of long legal texts.
 
-The benefit of RAG that Reuter describes is that the model has context to refer to
+The benefit of RAG that Reuter describes is that the model has context to refer to in responding. For our purposes, because we already provide the article text as context, our model becomes less likely to hallucinate. Drawing from Pahoo et al.'s (2024) paper on prompt engineering, we can deploy certain techniques to instruct our model to be more conservative in its responses.
 
 #### Can a simple LLM Model Match Human Performance?
-[cite_start]We therefore turn to LLMs to capture this context[cite: 26]. [cite_start]If a large language model can be fed an entire article and is tasked to simply extract the location, it can be used to draw locations from the paper to map that article for further data analysis[cite: 26].
+With hallucinations intially addressed, we therefore turn to LLMs to capture this context. If a large language model can be fed an entire article and is tasked to simply extract the location, it can be used to draw locations from the paper to map that article for further data analysis.
 
 ---
 
 ## 2. Methodology
-[cite_start]To test the efficacy of LLMs in information extraction, we extract data from CUAPB’s article [cite: 28]
+To test the efficacy of LLMs in information extraction, we extract data from CUAPB’s article repository at (https://complaints.cuapb.org/).
 
 ### 2.1 Data Extraction
-[cite_start]CUAPB contains a repository of articles, all stored in PDF form[cite: 30]. [cite_start]To extract the data, we made use of PyMuPDF to extract pre-existing PCR data from the the repository[cite: 31]. [cite_start]To conserve context space, we extract only the first 7 pages of all articles[cite: 32]. [cite_start]Documents longer than 7 pages are highly likely to be court proceedings instead of the source news articles[cite: 33]. [cite_start]The extraction process for the articles, after parallelizing, took a total of 4 hours[cite: 34].
+CUAPB contains a repository of articles, all stored in PDF form. To extract the data, we made use of PyMuPDF to extract pre-existing PCR data from the the repository. To conserve context space, we extract only the first 7 pages of all articles. Documents longer than 7 pages are highly likely to be court proceedings instead of the source news articles. The extraction process for the articles, after parallelizing, took a total of 4 hours.
 
-[cite_start]After a simple PyMuPDF extraction, we increased the quality of our extraction by flagging articles with the following features[cite: 35].
+We made use of a light language model with the following prompt for each set of text:
+
+
+incident_prompt = """
+Analyze the provided news article and identify the LOCAL location of the incident in terms of the street address or physical landmarks. If the location cannot be found or is uncertain, return UNKNOWN instead. Only return a location you are confident with.
+Output only the address and no comments. Just the address. No need to provide a state or a city. Just a local address that can be accurately located in the document. IF YOU CANNOT THEN ENTER UNKNOWN
+DO NOT HALLUCINATE A LOCATION
+An example output could be:
+"A Kroger on 3rd Street"
+"1923 E Pine St St Louis 42019"
+"City Hall"
+"Defendent's home"
+"Unknown"
+"Location not found"
+"UNKNOWN"
+These are all appropriate responses.
+"""
+
+
+After a simple PyMuPDF extraction, we increased the quality of our extraction by flagging articles with the following features.
 
 #### PUA
-[cite_start]Private Use Access characters are characters not properly recognized by the usual UTF character sets[cite: 37]. [cite_start]We flagged these characters by notating characters of a certain hexadecimal range[cite: 38].
+Private Use Access characters are characters not properly recognized by the usual UTF character sets. In particular, many of these characters include stylized numeric characters such as the following. PyMuPDF fails to read these characters, resulting in  a street address with no building number. We flagged these characters by notating characters of a certain hexadecimal range between E000 to F8FF.
+
+```{figure} ./PUA_Text.png
+:name: Private Use Acess Text
+:alt: Screenshot of article located at https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1627047812/Off-duty_McLeod_County_deputy__Norwood_Young_America_man_from_April_17_shooting_identified.pdf?1627047812
+:align: center
+```
+
 
 #### Images
-[cite_start]Some articles were not text included either[cite: 40]. [cite_start]As the PDFs were simply collections of images, the library could not capture these[cite: 40]. [cite_start]We flagged these articles by notig the character length[cite: 41]. [cite_start]In particular, characters of under **[TJIS amount of characters]** were [cite: 41]
+Some articles were scraped, but with extremely low character counts. These PDFs were simply collections of images and the library could not capture the embedded text. We flagged these articles by notig the character length. In particular, characters of under 876 were flagged as requiring OCR.
 
-[cite_start]To handle these two cases, we implemented OCR (optical character recognitions)[cite: 42]. [cite_start]This workflow optimzies time, as an OCR scrape of all 2700 articles would be too time exhaustive[cite: 43]. [cite_start]The additional OCR procedure added around 100 news articles, increasing our test sample[cite: 44].
+```{figure} ./Text_Embedded_Img.png
+:name: Social media screenshot with incident location on news article.
+:alt: Screenshot of article located at https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626748591/Minneapolis_cop_says_he_threatened_Somali_over_flag__department_starts_internal_probe_–_Twin_Cities.pdf?1626748591
+:align: center
+```
+
+To handle these two cases, we implemented OCR (optical character recognitions). This workflow optimzies time, as an OCR scrape of all 2700 articles would be too time exhaustive[cite: 43]. The additional OCR procedure added around 100 news articles, increasing our test sample.
 
 ### 2.2 Data Labeling
-[cite_start]We proceed to labeling the data using an LLM[cite: 45]. [cite_start]We made use of Lamma 3.1B instruct, which is a light language model[cite: 46]. [cite_start]While other models were available, we opted to use a model accessible to organizations with less compute power[cite: 47]. [cite_start]We then called it with the following prompt[cite: 48]:
+We proceed to labeling the data using an LLM[cite: 45]. [cite_start]We made use of Lamma 3.1B instruct, which is a light language model[cite: 46]. [cite_start]While other models were available, we opted to use a model accessible to organizations with less compute power[cite: 47]. [cite_start]We then called it with the following prompt[cite: 48]:
 
 [cite_start]“ [cite: 49]
 
