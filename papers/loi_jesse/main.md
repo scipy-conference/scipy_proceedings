@@ -53,8 +53,8 @@ After a simple PyMuPDF extraction, we increased the quality of our extraction by
 Private Use Access characters are characters not properly recognized by the usual UTF character sets. In particular, many of these characters include stylized numeric characters such as the following. PyMuPDF fails to read these characters, resulting in  a street address with no building number. We flagged these characters by notating characters of a certain hexadecimal range between E000 to F8FF.
 
 ```{figure} ./PUA_Text.png
-:name: Private Use Acess Text
-:alt: Screenshot of article located at https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1627047812/Off-duty_McLeod_County_deputy__Norwood_Young_America_man_from_April_17_shooting_identified.pdf?1627047812
+:name: PrivateUseAcessText
+:alt: Screenshot of article
 :align: center
 ```
 
@@ -63,9 +63,11 @@ Private Use Access characters are characters not properly recognized by the usua
 Some articles were scraped, but with extremely low character counts. These PDFs were simply collections of images and the library could not capture the embedded text. We flagged these articles by notig the character length. In particular, characters of under 876 were flagged as requiring OCR.
 
 ```{figure} ./Text_Embedded_Img.png
-:name: Social media screenshot with incident location on news article.
-:alt: Screenshot of article located at https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626748591/Minneapolis_cop_says_he_threatened_Somali_over_flag__department_starts_internal_probe_–_Twin_Cities.pdf?1626748591
+:name: SocialMediaScreenshot
+:alt: Screenshot of article
 :align: center
+Screenshot of article located at https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626748591/Minneapolis_cop_says_he_threatened_Somali_over_flag__department_starts_internal_probe_–_Twin_Cities.pdf?1626748591
+
 ```
 
 To handle these two cases, we implemented OCR (optical character recognitions). This workflow optimzies time, as an OCR scrape of all 2700 articles would be too time exhaustive. The additional OCR procedure added around 100 news articles, increasing our test sample by a reasonable amount.
@@ -107,7 +109,7 @@ The first datathon successfully labeled 460 articles and allowed double verifica
 Despite the enhanced structure that the advanced views gave, our datathon still faced strong limits, namely continued doubled verification issues. The latency of the database prevented completely real time updates to be made. Additionally, because there was not easy way to preview articles in Baserow. Consequently, tasks could be rather taxing and navigating several pages, even with the more helpful views, was quite demanding for volunteers.
 
 ```{figure} ./Baserow_Table.png
-:name: Baserow Tabular View
+:name: BaserowTabularView
 :alt: Baserow table containing volunteer entries
 :align: center
 Tabular view of the Baserow dataset
@@ -115,8 +117,8 @@ Tabular view of the Baserow dataset
 
 
 ```{figure} ./Baserow_Cards.png
-:name: Baserow Volunteer View
-:alt: Baserow table containing volunteer entries, with volunteer initials censored.
+:name: BaserowVolunteerView
+:alt: Baserow table containing censored volunteer entries.
 :align: center
 Card view of the Baserow dataset, allowing easier use by volunteers.
 ```
@@ -132,8 +134,8 @@ We reaped several advantages to Zooniverse compared to Baserow,namely:
 * Data Integrity: Each user could not modify the responses of another volunteer. Additionally, volunteers would not be influenced by the responses of another volunteer.
 
 ```{figure} ./Zooniverse_Interface.png
-:name: Zooniverse Volunteer View
-:alt: Article to be read with questions along the side, all in one screen.
+:name: ZooniverseVolunteerView
+:alt: Article to be read with questions along the side.
 :align: center
 Zooniverse Volunteer View
 ```
