@@ -283,7 +283,7 @@ Balasubramanian, J. B., Adams, D., Roxanis, I., Berrington de Gonzalez, A., Coul
 
 Birks, D., Coleman, A., & Jackson, D. (2020). Unsupervised identification of crime problems from police free-text data. *Crime Science*, *9*, Article 18. https://doi.org/10.1186/s40163-020-00127-4
 
-Bor, J., Venkataramani, A. S., Williams, D. R., & Tsai, A. C. (2018). Police killings and their spillover effects on the mental health of black Americans: A population-based, quasi-experimental study. *The Lancet*, *392*(10144), 302–310. https://doi.org/10.1016/S0140-6736(18)31310-3
+Bor, J., Venkataramani, A. S., Williams, D. R., & Tsai, A. C. (2018). Police killings and their spillover effects on the mental health of black Americans: A population-based, quasi-experimental study. *The Lancet*, *392*(10144), 302–310.
 
 Dev, S., Paskov, P., Sloan, A., Wei, K., de Lima, P. N., Chowdhury, S., Johnson, J., & Marcellino, W. (2026). *Simpler is better for autograders: Toward cost-effective LLM evaluations for open-ended tasks* (Research Report No. RR-A4618-1). RAND Corporation.
 
@@ -297,7 +297,7 @@ Etienne, H., & Romo, F. (n.d.). *Mapping police violence 2015-2020* [ArcGIS Dash
 
 Han, S., Junior, G. T., Balough, T., & Zhou, W. (2025). *Judge's verdict: A comprehensive analysis of LLM judge capability through human agreement* (arXiv:2510.09738). arXiv. https://doi.org/10.48550/arxiv.2510.09738
 
-Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., … Liu, T. (2025). A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. *ACM Transactions on Information Systems*, *43*(2), 1–55. https://doi.org/10.1145/3674140
+Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., … Liu, T. (2025). A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. *ACM Transactions on Information Systems*, *43*(2), 1–55.
 
 Hussain, T., Akram, M. U., & Salam, A. A. (2025). A novel data extraction framework using natural language processing (DEFNLP) techniques. *Natural Language Processing Journal*, *11*, Article 100149. https://doi.org/10.1016/j.nlp.2025.100149
 
