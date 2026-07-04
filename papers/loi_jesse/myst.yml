@@ -4,7 +4,7 @@ project:
   id: scipy-2026-loi_jesse
   title:
     'Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven
-    Document Analysis'
+    Document Analysis (title to be adjusted to better suit final paper)'
   description:
     'This paper presents the impacts of using LLMs to extract and use
     information from PDF documents and how effective it is compared to human
@@ -13,7 +13,7 @@ project:
 
   # Binding the abstract and contents clearly for the single-paper template
   abstract: |
-    This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Utilizing a student-led Retrieval-Augmented Generation (RAG) pipeline optimized for community-driven document analysis, we evaluate performance metrics across real-world datasets. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels, outlining trade-offs in accuracy, cost, and scalability for community research initiatives.
+    This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Hosting a multi-campus datathon, we label over 400 documents to create a ground truth for our model evaluation. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels. As a result, we demonstrate the viability of large language models in document analysis.
 
   authors:
     - name: Jesse Loi
@@ -25,7 +25,7 @@ project:
     - document extraction
     - LLMs
     - data labeling
-    - RAG pipeline
+    - LLM evaluation
 
   abbreviations:
     MyST: Markedly Structured Text
