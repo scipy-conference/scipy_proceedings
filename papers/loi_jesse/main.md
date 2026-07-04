@@ -285,7 +285,7 @@ Birks, D., Coleman, A., & Jackson, D. (2020). Unsupervised identification of cri
 
 Bor, J., Venkataramani, A. S., Williams, D. R., & Tsai, A. C. (2018). Police killings and their spillover effects on the mental health of black Americans: A population-based, quasi-experimental study. *The Lancet*, *392*(10144), 302–310. https://doi.org/10.1016/S0140-6736(18)31310-3
 
-Dev, S., Paskov, P., Sloan, A., Wei, K., de Lima, P. N., Chowdhury, S., Johnson, J., & Marcellino, W. (2026). *Simpler is better for autograders: Toward cost-effective LLM evaluations for open-ended tasks* (Research Report No. RR-A4618-1). RAND Corporation. https://www.rand.org/pubs/research_reports/RRA4618-1.html
+Dev, S., Paskov, P., Sloan, A., Wei, K., de Lima, P. N., Chowdhury, S., Johnson, J., & Marcellino, W. (2026). *Simpler is better for autograders: Toward cost-effective LLM evaluations for open-ended tasks* (Research Report No. RR-A4618-1). RAND Corporation.
 
 Dixon, A., & Birks, D. (2021). Improving policing with natural language processing. In *Proceedings of the 1st Workshop on NLP for Positive Impact* (pp. 115–124). Association for Computational Linguistics.
 
