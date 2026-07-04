@@ -1,29 +1,41 @@
 ---
-title: "Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven Document Analysis"
+title: "Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven Document Analysis (title to be altered)"
 ---
 
 (abstract)=
 ## Abstract
-This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Utilizing a student-led Retrieval-Augmented Generation (RAG) pipeline optimized for community-driven document analysis, we evaluate performance metrics across real-world datasets. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels, outlining trade-offs in accuracy, cost, and scalability for community research initiatives.
+This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Hosting a multi-campus datathon, we label over 400 documents to create a ground truth for our model evaluation. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels. As a result, we demonstrate the viability of large language models in document analysis.
 
 ## 1. Introduction
-[cite_start]Police Misconduct Investigations [cite: 2]
+Police Misconduct Investigations
 
-[cite_start]Community organizations, such as Communities United Against Police Brutality (CUAPB) take on the important task of tackling police misconduct[cite: 3]. [cite_start]However, two main bottlenecks appear in our way[cite: 4]. [cite_start]First, data sources regarding police conduct are primarily unstructured and need to be parsed, often by a human reader due to the sensitive nature of the topic[cite: 4]. [cite_start]Second, events portrayed in news articles can be graphic and emotionally exhausting for human readers to parse on masse[cite: 5]. [cite_start]Consequently, work has been done to improve data extraction from unstructured sources[cite: 6].
+Community organizations, such as Communities United Against Police Brutality (CUAPB) take on the important task of tackling police misconduct. However, two main bottlenecks appear in our way. First, data sources regarding police conduct are primarily unstructured and need to be parsed, often by a human reader to avoid false information. Second, events portrayed in news articles can be graphic and emotionally exhausting for human readers to parse on masse
+
+Trauma Spillover Effects and the Need for a Cognitive Shield
+
+Reading through massive quantities of documents can be exhausting for any researcher. LLMs have already proven their value on this end. However, another effect of researching police misconduct that goes unnoticed are the traumatic effects that spillover. While the civilians in misconduct incidents suffer trauma, the negative effects continue to spread outside of the incident itself. Bor et al (2018) describe spillover effects of how trauma affects Black Americans in the surrounding community. However, more pertinent to this research is Dubberley et al's (2020) work on on researchers who conduct research on war crimes. Their results show 44% of researchers report worse mental health as a result of their research. Thus, those working towards police accountability, such as CUAPB, are very likely to face similar psychological burden from their research. This trauma spillover from the initial event itself serves as a serious hindrance towards community efforts.
+
+Consequently, we should consider ways to shield researchers from the direct details of the event, when appropriate. For example, volunteers and organizers chronicling the occurances or locations of the events likely do not need the full extend of the details in the articles. Selective censoring of portions already require someone to have read the article. Instead, we should look towards LLMs as a way to assist in reading through documents with sensitive information. Marengo et al (2026) have helpfully discussed ways to categorize or detect trauma inducing text. Consequently, they describe how LLMs can be used to screen for severe content and assist in datathons. Already, this will help filter out documents with especially graphic details. However, with articles specifically about police misconduct, very few articles will remain. We will use LLMs not to remove articles, but to assist in reading articles. The particular data we wish to read from the text will be location.
 
 ### 1.1 Police Trends
-[cite_start]One clear area of data extraction, among many, is location identification in articles[cite: 8]. [cite_start]Particular topic has been heavily explored in the literature and lends itself well to collaboration, due to the somewhat unambiguous nature of locations[cite: 9]. [cite_start]**[Describe some ARCGIS projects]**[cite: 10]. [cite_start]Though helpful for collaboration, police misconduct information can also greatly benefit local efforts for police accountability, helping auditors target their efforts at specific regions and allowing a high level view of policing trends[cite: 10]. [cite_start]**[CITATION]**[cite: 11]. [cite_start]Additionally, almost all articles regarding police misconduct will have location data, whereas categorization data and demographic data are sometimes omitted[cite: 11].
+One clear area of data extraction, among many, is location identification in articles. Particular topic has been heavily explored in the literature and lends itself well to collaboration, due to the somewhat unambiguous nature of locations (see Lawton et al. [2001] for more). Etienne and Romo have already developed global information system (GIS) dashboards regarding police misconduct. Though helpful for collaboration, police misconduct information can also greatly benefit local efforts for police accountability, helping auditors target their efforts at specific regions and allowing a high level view of policing trends. For example, aforementioned CUAPB and the Atlanta Citizen Review Board (ACRB) are both examples of organizations. Additionally, almost all articles regarding police misconduct will have location data, demographic data are sometimes omitted. While the categorization of the misconduct incident itself is important, we set this aside due to its subjective nature. Address, on the other hand, is an objective piece of information for all incidents.
 
 ### 1.2 Data Scraping of Articles
-[cite_start]Despite the unambiguity of a location, data scraping from News Articles can be difficult due to the varied nature of the data[cite: 13]. [cite_start]Not only can the addresses included be incomplete, such as 4th avenue, the types of address can be different, such as relative and absolute addresses[cite: 14]. [cite_start]But these questions arrive only after extracting the location[cite: 15]. [cite_start]For the moment, the question to tackle is extracting a location in the first place[cite: 15].
+Despite the unambiguity of a location, data scraping from news articles can be difficult due to the varied nature of the data. Not only can the addresses included be incomplete, such as 4th avenue, the types of address can be different, such as relative and absolute addresses. But these questions arrive only after extracting the location. For the moment, the question to tackle is extracting a location in the first place.
 
-[cite_start]Common data scraping techniques can struggle, especially with articles that may include social media screenshots, those that resist OCR, or otherwise have an unusual table outline with many advertisements[cite: 16]. [cite_start]Even older physical news articles may appear in a tabular form that requires further pre-processing[cite: 17].
+Common data scraping techniques can struggle, especially with articles that may include social media screenshots, those that resist OCR, or otherwise have an unusual table outline with many advertisements. Even older physical news articles may appear in a tabular form that requires further pre-processing.
 
 ### 1.3 Named Entity Recognition
-[cite_start]An initial technique, after the text has been extracted, has been named entity recognition[cite: 19]. [cite_start]NER has a benefit of extracting specific proper nouns, some of which can contain important location data[cite: 20]. [cite_start]However, a drawback of NER is that the data still requires parsing to manage[cite: 21].
+An initial technique, after the text has been extracted, has been named entity recognition. Birks et al. (2020) use natural language processing to read narratives and identify particular trends of burglaries. More recently, Duca (2024) takes a different approach to extraction by using named entity recognition (NER) to extract repeated entities in a text. The use of NER can be quite conducive when searching texts for dates, officers, and incident locations. NER has a benefit of extracting specific proper nouns, some of which can contain important location data[cite: 20]. [cite_start]However, a drawback of NER is that the data still requires parsing to manage[cite: 21].
 
 #### Context Difficulties
 [cite_start]In particular, contexts are not captured with NER, which aims to capture all entities simpliciter[cite: 23]. [cite_start]Some articles may display the article along with other relevant addresses, not all of which are related to the police incident at hand[cite: 24].
+
+### LLMs and Hallucination
+
+While we have discussed reasons to deploying LLMs for data extraction, we should be aware of major weaknesses, namely hallucination. Huang et al. (2023) and Xu et al. (2024) have shown the difficulty of removing hallucination. Given the nature of police accountability, we will be especially vigilant in suppressing hallucination. To help, we draw on recent RAG literature. Reuter et al. (2025) have recently discussed the use of RAG to combat hallucination in the context of long legal texts.
+
+The benefit of RAG that Reuter describes is that the model has context to refer to
 
 #### Can a simple LLM Model Match Human Performance?
 [cite_start]We therefore turn to LLMs to capture this context[cite: 26]. [cite_start]If a large language model can be fed an entire article and is tasked to simply extract the location, it can be used to draw locations from the paper to map that article for further data analysis[cite: 26].
@@ -158,7 +170,6 @@ p-value: 0.5192
 Wasserstein Distance: 9.0125
 
 
----
 
 ## 5. Discussion
 
@@ -175,7 +186,7 @@ However, what allows a more reasonable comparison was
 
 As mentioned previously, the goal of using these models is to provide additional context in retrieval augmented generation, especially to assist community organizations. The results here are promising in lowering the efforts in extracting information. A salient problem that remains is ensuring private use access characters are flagged and extracted using OCR, but this problem has solutions mentioned above.
 
-### [cite_start]5.1 Limitations [cite: 102]
+### 5.1 Limitations
 
 Private use access
 
@@ -192,10 +203,14 @@ The results derived from this research are only cursory, and seek only to lay th
 
 #### Additional data
 
-While the trials done collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand
+While the trials done collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand. Future analyses can benefit from human labeling of the data. Out of the 1300, we only have 460 articles labeled. This is only a third of the articles from the CUAPB database. There is already infrastruture for this work in the form of the Zooniverse datathon page. Outside of the 1300 scraped articles, researchers in the field may be interested in exploring more data sources.
 
+Even aside from data that remains unlabeled, such comparisons with the data can be done on for both new data and with new volunteers. Recall that we only had 26 total volunteers across both datathons. While this ratio remains high, with about 16 labels per volunteer, different biases among the volunteers and predilections towards certain answers may skew the results. In particular, because the datathons were organized as community events, we can be fairly confident that some labels were not made independently of each other.
 
-We have
----
+### Stronger Models
 
-## [cite_start]6. Conclusion [cite: 104]
+Aside from further data exploration, comparison and exploration of different large language models may benefit our audience. Recall that our current model only made use of Ollama's llama 3.1:8B as the data extractor. The intention of this choice of model was to use as few parameters as possible to reduce computute resources and use a general-use model to make linking to a general RAG pipeline easier. Both of these considerations were with respect to accessibility. However, researchers interested in those areas may use more powerful models to derive more accurate locations, especially in cases where the location is unclear or implied.
+
+## 6. Conclusion
+
+We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unneccessary psychological stress from having to read details about brutal events, serving as a cognitive shield.
