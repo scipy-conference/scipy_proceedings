@@ -205,9 +205,21 @@ We also see here that while scores as high as 63 may seem to point to the human 
 
 Finally, answers on the low end, around 0-10 on the fuzzy scale, indicate almost no match between the terms. These likely represent articles where there is no clear incident location. In such cases, the human volunteer likely enters terms such as "N/A", "no location", or some other indicator that the address is unclear. In contrast, while the model is prompted to give a response without hallucinating, it will give an overly vague response or a mentioned location but that is not the incident location.
 
-NOTE TO REVIEWER: I intend to include a section covering the K-S Stastistic and Wasserstein Distance here
+| Dataset | News Articles Compared | Mean Fuzzy Score | Median Fuzzy Score Score |
+| :--- | :---: | :---: | :---: |
+| **Baserow R1** | 69 | 72 | 93 |
+| **Baserow R2** | 42 | 69 | 91 |
+| **Zooniverse** | 79 | 70.8 | 88 |
 
-However, employing both the K-S test and the Wasserstrein difference gives us a different result.
+
+At an initial glance, the data looks promising. With a mean of at least 88, we can suspect at least half the data is a reasonable match. That being said, this still entails that half the data is below, with a mass of points clustering around a fuzzy score of 0. However, fuzzy score matches by themselves are not enough.
+
+
+Employing both the Kolmogorov-Smirnov (K-S) test and the Wasserstrein difference gives us a different result. The K-S test takes two samples and provides a similarity score with p-value as to whether the difference between these distributions is statistically significant. Yu & Wang (2023) have already made use of this test for evaluating LLMs. A low statistic and a high p value for these tests would indicate that the distributions are not distinct enough to tell apart.
+
+The Wasserstein Distance is a metric, usually between two probability distributions, that provides a measure of how much one dataset needs to be altered to convert one dataset to another. For example, in two classes of 100 students and 50 students, a Wasserstein distance of 5 would entail 5% of students, 5 in one class and 2 in the other, would need to change to match the distributions together. We will use this to show that little change is required between the human-human and human-LLM fuzzy pairs.
+
+Baserow Complete Dataset
 
 K-S Statistic: 0.1027
 p-value: 0.6158
@@ -217,7 +229,7 @@ We see that the the K-S statistic shows that there is not yet enough evidence th
 
 For our much smaller dataset, the results are not as conclusive and show a larger difference, but still have a high p value, indicating that do not have sufficient evidence to claim that the distributions are different. Additionally, we see that the Wasserstein distance shows that only a 9% shift in the data is required to transform one distribution to the other.
 
-
+Zooniverse Dataset
 
 K-S Statistic: 0.2245
 p-value: 0.5192
