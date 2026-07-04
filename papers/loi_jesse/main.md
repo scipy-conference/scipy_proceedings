@@ -290,7 +290,6 @@ We present a generalized outline for how to use LLMs in data extraction, especia
 
 
 ## References
-
 Balasubramanian, J. B., Adams, D., Roxanis, I., Berrington de Gonzalez, A., Coulson, P., Almeida, J. S., & García-Closas, M. (2025). Leveraging large language models for structured information extraction from pathology reports. *Journal of Pathology Informatics*, *19*, Article 100521. https://doi.org/10.1016/j.jpi.2025.100521
 
 Birks, D., Coleman, A., & Jackson, D. (2020). Unsupervised identification of crime problems from police free-text data. *Crime Science*, *9*, Article 18. https://doi.org/10.1186/s40163-020-00127-4
@@ -330,3 +329,5 @@ Sahoo, P., Singh, A. K., Saha, S., Jain, V., Mondal, S., & Chadha, A. (2025). *A
 Wang, D., Yang, K., Zhu, H., Yang, X., Cohen, A., Li, L., & Tian, Y. (2023). *Learning personalized alignment for evaluating open-ended text generation* (arXiv:2310.03304). arXiv. https://doi.org/10.48550/arxiv.2310.03304
 
 Xu, Z., Jain, S., & Kankanhalli, M. (2024). *Hallucination is inevitable: An innate limitation of large language models* (arXiv:2401.11817). arXiv. https://arxiv.org/abs/2401.11817
+
+Yu, Z., & Wang, J. (2023). Generative AI Alignment: Statistical Approaches to Verifying Human-Like Distributional Uniformity. *Journal of Artificial Intelligence Research*, *76*, 411–434.
