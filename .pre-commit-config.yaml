@@ -4,7 +4,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-case-conflict
       - id: check-json
@@ -32,13 +32,13 @@ repos:
           )$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.1
+    rev: 0.37.4
     hooks:
       - id: check-github-workflows
         args: ['--verbose']
 
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: 'v3.6.1'
+    rev: 'v3.9.4'
     hooks:
       - id: prettier
         types_or: [yaml, html, css, scss, javascript, json, toml]
