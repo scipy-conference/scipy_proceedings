@@ -1,0 +1,15 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: "Trimming the Hairball: Three Libraries for Better Network Recovery & Metrology"
+  authors:
+    - name: Rachael Sexton
+      affiliation: National Institute for Standards & Technology
+      orcid: 0000-0001-5904-2887
+  abstract: |
+    Recovering network structure from binary co-occurrence data is a problem encountered across NLP, epidemiology, manufacturing, and recommender systems; yet there is a lack of shared tools, metrics, or common benchmarks to compare and improve techniques.
+    This talk presents three interoperable Python libraries to address this need:
+
+    - `affinis`, a structure-estimation library with a consistent and extensible API, including an implementation of *Forest Pursuit* (a novel, scalable algorithm that corrects for the systematic "clique-bias" found in co-occurrence-based methods)
+    - `MENDR`, a benchmark dataset suite and CLI for generating and evaluating network recovery experiments;
+    - `Contingency`, a vectorized metrology library enabling significantly faster scoring of high-dimensional binary classifiers.
