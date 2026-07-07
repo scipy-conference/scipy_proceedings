@@ -21,13 +21,13 @@ Building consensus is made more difficult by a lack of shared tooling or benchma
 Not only are there relatively few resources (and even fewer standard practices) around measuring uncertainty in structure recovery [@Networkreconstructionvia_Peixoto2024], but there is an increasing need for careful specificity around the exact kind of relational structure being recovered, and how transformations lose (or invent) information for analyses [@WhyHowWhen_Torres2021].
 What results from current practices around projecting bipartite "co-occurrences" into a feature relation graph is often called a "hairball", requiring significant edge reduction and careful filtering to assess underlying structures.
 
-This paper outlines three recently developed parts of a broader ecosystem developed to assist practitioners in applying best practices for "trimming" these hairballs, _and_ to promote shared benchmarking for researchers that develop these techniques for them. 
+This paper outlines three recently developed parts of a broader ecosystem developed to assist practitioners in applying best practices for "trimming" these hairballs, _and_ to promote shared benchmarking for researchers that develop these techniques for them.
 
 
 ## Consistent API for Inferring Relationships (`affinis`)
 
 One of the core difficulties of consistent network analysis comes from managing all of the various forms networks can take in data structures.
-Libraries like [NetworkX](https://networkx.org/documentation/stable/) from [](https://doi.org/10.25080/tcwv9851) create labeled property graph structures, which is a pattern followed by many libraries in other languages as well (e.g. Rust's [`petgraph`](https://github.com/petgraph/petgraph)).  
+Libraries like [NetworkX](https://networkx.org/documentation/stable/) from [](https://doi.org/10.25080/tcwv9851) create labeled property graph structures, which is a pattern followed by many libraries in other languages as well (e.g. Rust's [`petgraph`](https://github.com/petgraph/petgraph)).
 However, a good deal of efficiency (as well as compatibility with other data science and machine learning workflows) can be gained by representing graphs as matrices.
 [`scipy.sparse.csgraph`](https://docs.scipy.org/doc/scipy/reference/sparse.csgraph.html#module-scipy.sparse.csgraph) is a key example of this, which exploits the natural sparsity of adjacency matrix representations to achieve very fast graph algorithm implementations (which are the basis for many other libraries).
 Another example is [`CSRGraph`](https://github.com/VHRanger/CSRGraph), which adds the capability for random walks to be sampled from the sparse graph matrices.
@@ -37,7 +37,7 @@ Furthermore, there are a number of cases where graph matrices create related mat
 Our library `affinis` works as a systematic set of tools to consistently transform between _observational_ data on nodes (represented as binary feature activations), and the various forms of square matrices encountered when analyzing the way these features are _related_ to each other (or not).
 Much of the difficulty of "straightening out" what a given feature or square matrix represents comes from lack of clarity over the differences between them, and how they relate to one-another.
 
-Graph-related matrices can come in a number of forms: 
+Graph-related matrices can come in a number of forms:
 
 - Data (e.g. bipartite, feature/design matrix, observations, node activations)
 - Graph (e.g. adjacency, discrete Laplacian),
@@ -45,13 +45,13 @@ Graph-related matrices can come in a number of forms:
 - Distance (e.g. shortest-path lengths, generalized euclidean)
 
 For each of these, there are methods to transform between them, each with their own peculiarities and trade-offs.
-`affinis` is a centralized place that has assembled a wide variety of methods, enabling consistent, rapid experimentation and comparison between each on a per-dataset level. 
+`affinis` is a centralized place that has assembled a wide variety of methods, enabling consistent, rapid experimentation and comparison between each on a per-dataset level.
 
 :::{figure}
 :label: fig:affinis-overview
 ![](img/affinis-overview.svg)
 
-Overview of `affinis` computational submodules (shown shaded in green), and how they transform between the matrix representations of data or feature relationships.  
+Overview of `affinis` computational submodules (shown shaded in green), and how they transform between the matrix representations of data or feature relationships.
 :::
 
 
@@ -62,7 +62,7 @@ Overview of `affinis` computational submodules (shown shaded in green), and how 
 ```shell
 pip install affinis
 ```
-The source repository can be accessed from the [`usnistgov` Github repository](https://github.com/usnistgov/affinis)  
+The source repository can be accessed from the [`usnistgov` Github repository](https://github.com/usnistgov/affinis)
 :::
 
 ### Feature Relationships from Binary Data (`associations`)
@@ -75,7 +75,7 @@ $f(X): \mathbb{B}^{m\times n} \rightarrow \mathbb{R}^{n\times n}$
 
 This API is enforced _at runtime_ using array shape and dtype information via [`jaxtyping`](https://github.com/patrick-kidger/jaxtyping) with [`beartype`](https://github.com/beartype/beartype).
 This contract with the user should greatly improve data pipeline reliability and reduce the possibility for hidden failures in analysis.
-The functions currently implemented (and their primary use as documented) are: 
+The functions currently implemented (and their primary use as documented) are:
 
 Marginal counts
 : _methods:_ `coocur_prob`, `ochiai` [@Measuresecologicalassociation_Janson1981], `mutual_information`, `yule_y`, `yule_q`, `odds_ratio` [@MethodsMeasuringAssociation_Yule1912]
@@ -102,7 +102,7 @@ Probabilistic graphical models (PGM)
 
 
 Forest Pursuit, listed as a PGM, is of particular interest, since `affinis` contains the first reference implementation of this algorithm.
-Forest Pursuit was recently proposed in @sexton2025measuring, and attempts to combine the local/additivity assumptions of the marginal methods, while _also_ directly recovering an underlying network of _conditionally dependent_ pairs of nodes (as with a probabilistic graphical model). 
+Forest Pursuit was recently proposed in @sexton2025measuring, and attempts to combine the local/additivity assumptions of the marginal methods, while _also_ directly recovering an underlying network of _conditionally dependent_ pairs of nodes (as with a probabilistic graphical model).
 _Forest Pursuit_ replaces the inner product "counts" with an operator that treats observations as samples from a random spanning forest distribution (meaning that each observation is a result of a "spreading process").
 This puts it somewhere between the previously discussed association measures (computationally) and the backboning/dependency-recovery methods (theoretically), while providing exceptional scalability, accuracy, and thresholding stability.
 
@@ -114,53 +114,53 @@ A comparison of several methods applied to an example feature matrix can be seen
 
 ![](#fig:assoc-meas)
 
-Comparison of methods for edge estimation from bipartite projection. 
+Comparison of methods for edge estimation from bipartite projection.
 :::
 
-Finally, this module has added special functionality in each method for basic additive smoothing under a beta prior. 
+Finally, this module has added special functionality in each method for basic additive smoothing under a beta prior.
 Referring back to @fig:affinis-overview, many of the functions here are used to create _kernels_ (i.e. positive semi-definite matrices of similarity between features/nodes).
 However, if two nodes are never "observed together", having an undefined or "zero" similarity can be a significant issue for the quality of predictions and analysis downstream [@SpeechLanguageProcessing_Jurafsky2025].
 This brings problems with it, if unobserved combinations are receiving probability 0., even when they should still be considered _possible_ with sufficient sampling.[^1]
-As the thinking goes, just because you've never seen something, doesn't make it _impossible_, just improbable. 
+As the thinking goes, just because you've never seen something, doesn't make it _impossible_, just improbable.
 _How improbable_ depends on your priors.
 
 
 The ability to provide your priors is available in nearly all `affinis.associations` functions via the `pseudocts` parameter.
-The simplest way to "smooth" your results is to add at least one observation of each possible kind to your dataset: two trials, i.e., one success and one failure. 
+The simplest way to "smooth" your results is to add at least one observation of each possible kind to your dataset: two trials, i.e., one success and one failure.
 Add them to your overall counts to get a smoothed probability (Laplace smoothing) with `pseudocts=1.`
 
-Of course, you might not want these "pseudo-counts" to be worth as much as the "real" observations. 
-Adding `pseudocts=0.5` would be using a Jeffrey's Prior. 
+Of course, you might not want these "pseudo-counts" to be worth as much as the "real" observations.
+Adding `pseudocts=0.5` would be using a Jeffrey's Prior.
 
 :::{figure}
 :align: center
 
 ![](#additive-smoothing)
 
-Three common additive-smoothing settings, with parameter option. 
+Three common additive-smoothing settings, with parameter option.
 
 :::
 
-It turns out that these are all special cases of a beta-binomial distribution, with a symmetric prior. 
+It turns out that these are all special cases of a beta-binomial distribution, with a symmetric prior.
 
-Of course, there's no reason to necessarily stick to a symmetric prior. 
-`affinis` allows for tuples `(a,b)` as pseudocount parameters, so that you can deal with smoothing differently at the low and high ends of your association scales. 
+Of course, there's no reason to necessarily stick to a symmetric prior.
+`affinis` allows for tuples `(a,b)` as pseudocount parameters, so that you can deal with smoothing differently at the low and high ends of your association scales.
 
-With parameters `(a,b)`, the posterior expected value of the association measure will be 
+With parameters `(a,b)`, the posterior expected value of the association measure will be
 
 $$
 P = \frac{\textrm{successes}+a}{\textrm{trials}+a+b}
 $$
 
-We also provide a convenience to enforce `a+b=1`, which ensures the prior expected value is `a`, and when used for sampling purposes can prefer values of 0 or 1 (i.e. a bathtub prior). 
-This is done with the `zero-sum` option, like so: 
+We also provide a convenience to enforce `a+b=1`, which ensures the prior expected value is `a`, and when used for sampling purposes can prefer values of 0 or 1 (i.e. a bathtub prior).
+This is done with the `zero-sum` option, like so:
 
 ```python
 affinis.associations.forest_pursuit(X, pseudocts=('zero-sum',0.1))
 ```
 
 Of course, all of this assumes that we can represent a given measure as a probability in the form (successes/trials).
-While most can (even atypical ones like cosine similarity in `affinis.associations.ochiai`) a few do not have a form that is easily representable as a ratio (like `affinis.associations.hyperbolic_project`). 
+While most can (even atypical ones like cosine similarity in `affinis.associations.ochiai`) a few do not have a form that is easily representable as a ratio (like `affinis.associations.hyperbolic_project`).
 
 
 :::{image}
@@ -171,30 +171,30 @@ While most can (even atypical ones like cosine similarity in `affinis.associatio
 
 ### Visualization (`plots`)
 
-Often when comparing the ability of an association measure to recover _structure_ from a set of binary variable observations, it's not necessarily important to see the _values_ of the association, but instead _which relationships_ are strong _relative_ to the overall set. 
+Often when comparing the ability of an association measure to recover _structure_ from a set of binary variable observations, it's not necessarily important to see the _values_ of the association, but instead _which relationships_ are strong _relative_ to the overall set.
 
-Colors (like we have used above) can be somewhat hard to parse, so another option is to represent association strength with **size**. 
+Colors (like we have used above) can be somewhat hard to parse, so another option is to represent association strength with **size**.
 This intuition leads to what is commonly called a _Hinton diagram_.
-See #fig:assoc-example for a comparison of the Hinton diagrams for an example feature matrix, along with resulting feature relationship measures from `affinis.associations`. 
-Size reflects normalized weight, while color can be used for the sign (positive vs negative). 
+See #fig:assoc-example for a comparison of the Hinton diagrams for an example feature matrix, along with resulting feature relationship measures from `affinis.associations`.
+Size reflects normalized weight, while color can be used for the sign (positive vs negative).
 
 
 Unlike the commonly-used method for creating Hinton diagrams from the [Matplotlib documentation](https://matplotlib.org/stable/gallery/specialty_plots/hinton_demo.html), our custom implementation in `affinis.plots.hinton` uses a cached axis to automatically scale `matplotlib.pyplot.scatter` markers based on the user's current DPI and axis dimensions.
-This lets us take advantage of vectorized C/C++ routines, and subsequently plot Hinton diagrams for much _larger_ matrices.   
+This lets us take advantage of vectorized C/C++ routines, and subsequently plot Hinton diagrams for much _larger_ matrices.
 
 Finally, because the change in relative matrix weights over time is often important to observe, we have added a callback capability to `hinton` additionally provides an `update_from` convenience parameter to assist with animation.
-It accepts an existing `matplotlib.collections.PathCollection` container (such as a previous frame's scatterplot markers), which it will then modify in-place, rather than creating a new plot. 
+It accepts an existing `matplotlib.collections.PathCollection` container (such as a previous frame's scatterplot markers), which it will then modify in-place, rather than creating a new plot.
 
 
 ### Kernels (`proximity`, `distance`, & `filter`)
 
 These three submodules deal with transformations _between_ square matrices, based on commonly-needed workflows in network analysis:
 
-- Graphs are typically sparser than metrics/proximities, and can be created by _filtering_ edges. 
+- Graphs are typically sparser than metrics/proximities, and can be created by _filtering_ edges.
 - Distances between nodes can be created from graphs, but also by inverting similarities/kernels.
-- Kernels can be computed from graphs or from inverting distances  
+- Kernels can be computed from graphs or from inverting distances
 
-Those workflows motivate the following submodules, which can be extended in an on-going manner: 
+Those workflows motivate the following submodules, which can be extended in an on-going manner:
 
 `proximity`
 : _methods:_ `bilinear_kern`, `forest`, `forest_correlation` [@Semisupervisedlearning_Avrachenkov2017], `sinkhorn` [@Sinkhorndistanceslightspeed_Cuturi2013]
@@ -213,27 +213,27 @@ Those workflows motivate the following submodules, which can be extended in an o
 
 We will note that `affinis.proximity` is not an exhaustive catalog of existing kernels on graphs [@SimilaritiesgraphsKernels_Avrachenkov2019], but does provide an interface to a few versatile functions for estimating and modifying kernels.
 
-For instance, while not provided natively in more common graph theory libraries, the forest kernel (based on work by [Chebotarev & Shamis (2002)](https://doi.org/10.1016/S1571-0653(04)00058-7) and @Semisupervisedlearning_Avrachenkov2017) is a parameterized form of an inverse regularized Laplacian: 
+For instance, while not provided natively in more common graph theory libraries, the forest kernel (based on work by [Chebotarev & Shamis (2002)](https://doi.org/10.1016/S1571-0653(04)00058-7) and @Semisupervisedlearning_Avrachenkov2017) is a parameterized form of an inverse regularized Laplacian:
 
 $$ Q_{\beta} = \left( I+\beta L \right)^{-1} $$
 
-Entries in this proximity matrix turn out to be the probability that a node ends up sharing a tree with another node, in a randomly sampled spanning forest of the graph (hence the name). 
+Entries in this proximity matrix turn out to be the probability that a node ends up sharing a tree with another node, in a randomly sampled spanning forest of the graph (hence the name).
 Since $I+\beta L$ is positive definite (non-singular), the inversion is guaranteed to exist, and will be provably _doubly stochastic_.
-These properties make it widely usable for many network analysis tasks. 
+These properties make it widely usable for many network analysis tasks.
 See the references above for numerous applications of this kernel, its derived distances, and the underlying _Matrix Forest Theorem_, which plays a key role in the inference performed by `forest_pursuit`.
 Our implementation is slightly more efficient than using basic `np.linalg.inverse` and similar when inverting the regularized Laplacian: we directly interface with `dpotrf` and `dpotri` LAPACK routines via Scipy, for Cholesky inversion with cached indexing for positive definite matrices (like the regularized Laplacian).
 
-Alternatively, an analyst might approximate a matrix with similar stochastic properties while avoiding matrix inversion altogether, via the Sinkhorn-Knopp algorithm (`sinkhorn`).  
+Alternatively, an analyst might approximate a matrix with similar stochastic properties while avoiding matrix inversion altogether, via the Sinkhorn-Knopp algorithm (`sinkhorn`).
 It's also the basis for the `doubly_stochastic_filter` discussed above.
 
 
 For our `filter` module, we have found Numpy's [masked arrays](https://numpy.org/doc/stable/reference/maskedarray.generic.html) to be particularly useful for retaining index and value information.
-For unsupervised "minimum-connected" thresholding, `affinis` has implemented a fast routine for removing edges until the graph is about to become disconnected (using a binary search and breadth-first connectivity checks). 
+For unsupervised "minimum-connected" thresholding, `affinis` has implemented a fast routine for removing edges until the graph is about to become disconnected (using a binary search and breadth-first connectivity checks).
 
 
-Interestingly, in the limit of $\beta\rightarrow\infty$, the `distance.adjusted_forest_dists` will tend toward the Commute-time kernel (i.e. effective resistances)[@Semisupervisedlearning_Avrachenkov2017]. 
-`generalized_graph_dists` also have this property, though in this diagonally-normalized case, the lower limit $\beta\rightarrow 0^+$ will also converge to a scalar multiple of the _shortest path distances_. 
-In this way, the forest distances can be thought of as a smooth interpolation from the shortest paths to the effective resistances. 
+Interestingly, in the limit of $\beta\rightarrow\infty$, the `distance.adjusted_forest_dists` will tend toward the Commute-time kernel (i.e. effective resistances)[@Semisupervisedlearning_Avrachenkov2017].
+`generalized_graph_dists` also have this property, though in this diagonally-normalized case, the lower limit $\beta\rightarrow 0^+$ will also converge to a scalar multiple of the _shortest path distances_.
+In this way, the forest distances can be thought of as a smooth interpolation from the shortest paths to the effective resistances.
 
 
 ## Reproducibility & Community Benchmarking (`MENDR`)
@@ -243,7 +243,7 @@ To enable broad cross-disciplinary participation and development toward improved
 
 
 :::{aside}
-Repository to reproduce our synthetic data generation can be found here: 
+Repository to reproduce our synthetic data generation can be found here:
 [`usnistgov/mendr`](https://github.com/usnistgov/mendr)
 :::
 
@@ -251,13 +251,13 @@ The core purpose of this collection is to provide a way for the network reconstr
 
 ### Dataset Overview
 
-To reflect common node-activation mechanisms, we first generate a set of "ground truth" graphs from a pre-determined set of graph types: 
+To reflect common node-activation mechanisms, we first generate a set of "ground truth" graphs from a pre-determined set of graph types:
 
 - **BL**: block network
 - **TR**: tree network
 - **SC**: Scale-free (Barabasi-Albert, $m\in \{1,2\}$)
 
-Then, for each graph $G$, a number of random walks with a randomly chosen number of node-to-node "jumps" (starting at randomly chosen "root" nodes) are sampled using the `CSRGraph` library for scalability and memory efficiency.  
+Then, for each graph $G$, a number of random walks with a randomly chosen number of node-to-node "jumps" (starting at randomly chosen "root" nodes) are sampled using the `CSRGraph` library for scalability and memory efficiency.
 The data $X$ is generated as a one-walk-per-row, one-node-per column binary matrix.
 The goal of a given challenge is to recover the ground truth graph $G$, _using only the data_ $X$.
 
@@ -279,11 +279,11 @@ The parameters not included in the design are sampled randomly, using distributi
 :label: tbl:mendr-design
 
 |parameters             | values                           |
-| :-                    |:-:                               | 
+| :-                    |:-:                               |
 | random graph **kind** | BL, TR, SC                |
 | network **$n$-nodes** | 10,30,100,300                    |
 | random **walks**      | 1 sample $m\sim\text{NegBinomial}(2,\tfrac{1}{n})+10$|
-| random walk **jumps** | 1 sample $j\sim\text{Geometric}(\tfrac{1}{n})+5$     | 
+| random walk **jumps** | 1 sample $j\sim\text{Geometric}(\tfrac{1}{n})+5$     |
 | random walk **root**  | 1 sample $n_0 \sim \text{Multinomial}(n,1)$|
 | random **seed**       |  1, 2, ... ,  30                 |
 
@@ -323,7 +323,7 @@ SerialRandWalks:             # BL-N030S01
       values: 1
 ```
 
-Example serialization of MENDR dataset `BL-N030S01`. Rendered here in (abbreviated) YAML for readability. 
+Example serialization of MENDR dataset `BL-N030S01`. Rendered here in (abbreviated) YAML for readability.
 :::
 
 This data format schema is available as an importable python object, created using the json serialization tool [`pyserde`](https://github.com/yukinarit/pyserde).
@@ -344,7 +344,7 @@ to_json(experiment)
 
 Deserialization from `json` (into `sparse.COO`) is validated with `beartype` through `pyserde.json.from_json`.
 As further help, the MENDR repository contains an installable command-line interface to generate graphs and graph-recovery challenge datasets on the fly, as well as run a pre-defined set of algorithms against any number of datasets as a benchmark.
-This is how the MENDR results are calculated. 
+This is how the MENDR results are calculated.
 
 
 ### Benchmark Results
@@ -353,7 +353,7 @@ As an initial benchmark, methods from `affinis` were tested on the 4,320 current
 Because the quality of a network recovery depends on the threshold selected for edge relevance, and the standard setting for network recovery _does not have_ a ground-truth network to recover, we instead look at aggregate performance metrics over the entire threshold span.
 
 
-The results in @tbl:mendr-results show a significant performance improvement of Forest Pursuit for minimum, median, and maximum MCC scores, which is the preferred metric for highly imbalanced prediction tasks like this [@statisticalcomparisonMatthews_Chicco2023].  
+The results in @tbl:mendr-results show a significant performance improvement of Forest Pursuit for minimum, median, and maximum MCC scores, which is the preferred metric for highly imbalanced prediction tasks like this [@statisticalcomparisonMatthews_Chicco2023].
 
 :::{table}
 :label: tbl:mendr-results
@@ -388,17 +388,17 @@ Second, because edge predictions are general scalar-valued (or probabilities), t
 pip install contingency-tools
 ```
 
-The source repository can be accessed from the [`usnistgov` Github repository](https://github.com/usnistgov/Contingency)  
+The source repository can be accessed from the [`usnistgov` Github repository](https://github.com/usnistgov/Contingency)
 :::
 
-To assist with this, we have published a utility library called `Contingency`. 
+To assist with this, we have published a utility library called `Contingency`.
 This library provides a simple data structure to compute and store useful metrological information, and uses caching, subsampling, and vectorization tricks to ensure scalability for benchmarks like MENDR.
 
 
 ### The `Contingent` Data Structure
 
 Binary classification metrics are all about testing the quality of predicted labels against  _true_ labels you observed.
-Given a set of true and a set of predicted labels, a `contingency.Contingent` dataclass can be instantiated trivially: 
+Given a set of true and a set of predicted labels, a `contingency.Contingent` dataclass can be instantiated trivially:
 
 ```ipython
 from contingency import Contingent
@@ -434,12 +434,12 @@ This will set up a correctly-scaled P-R plot, with included isoclines for implie
 While the `Contingent` class does not have a method to automatically plot its own P-R curves on a contour like this, such functionality is planned to be added at a later time.
 :::
 
-### Techniques for Scalability 
+### Techniques for Scalability
 
 `Contingent.from_scalar` handles the calculation of score trajectories this as a simple broadcasting operation, since all contingency counts and derived metrics have enabled a _batch dimension_.
 In this case, rather than looping over possible thresholds, we make use of `numpy.less_equal.outer`, a so-called [`ufunc`](https://numpy.org/doc/stable/reference/generated/numpy.ufunc.outer.html) that applies the thresholding operation to all pairs of edges and thresholds, and vectorized through its C-backend.
 In addition, once the contingency counts are found, all future metric requests are derived from the cached, batched-dimension (true/false)-(positive/negative) counts.
-Unlike other binary performance metrics libraries, `Contingent` objects can be instantiated once-per-dataset, and all derived metrics only require simple arithmetic operations through Numpy. 
+Unlike other binary performance metrics libraries, `Contingent` objects can be instantiated once-per-dataset, and all derived metrics only require simple arithmetic operations through Numpy.
 For this reason, while `Contingency` is already competitive with (or even _much faster_ than) Scikit-Learn's equivalent methods, actual use of `Contingency` will involve cached calculations that make metric calculation time functionally negligible.
 The user API is shown in @contingency-use, with performance benchmarks across a wide range of dataset sizes shown in @fig:contingent-scale.
 
@@ -448,13 +448,13 @@ The user API is shown in @contingency-use, with performance benchmarks across a 
 :label: contingency-use
 
 ```ipython
-rng = np.random.default_rng(24) 
+rng = np.random.default_rng(24)
 y_true = (y_src := rng.random(1000))>0.7
 y_pred = y_src + 0.05*rng.normal(size=1000)
 
 # Contingency
 Contingent.from_scalar(y_true, y_pred).expected('aps') # uncached (APS)
-M = Contingent.from_scalar(y_true, y_pred)           
+M = Contingent.from_scalar(y_true, y_pred)
 M.expected('aps')                                      # cached (MCC)
 
 #Scikit-Learn
@@ -462,7 +462,7 @@ from sklearn.metrics import average_precision_score
 average_precision_score(y_true, y_pred)                # sklearn APS
 np.mean([
     matthews_corrcoef(y_true,x) for x in M.y_pred      # sklearn E[MCC]
-]) 
+])
 
 ```
 
@@ -495,7 +495,7 @@ To mitigate this, we have provided a `subsamples` option in `Contingent.from_sca
 This distributes the sample locations according to the density of the original threshold values while limiting the size of the batch dimension needed for contingency count caching.
 
 As shown in @fig:contingent-subsample, with only a few subsamples, the score curves quickly converge to their "true" values.
-This allows `Contingent` objects to handle the large datasets, such as the $10^4$ dataset shown in @fig:contingent-scale (where `subsamples=50` was used).  
+This allows `Contingent` objects to handle the large datasets, such as the $10^4$ dataset shown in @fig:contingent-scale (where `subsamples=50` was used).
 
 :::{figure}
 :label: fig:contingent-subsample
@@ -509,7 +509,7 @@ Demonstration of the convergence of subsampling in `Contingency.from_scalar`
 
 ## Future Work
 
-The ecosystem presented here is in its early days, and many key extensions will bring new functionality, improved performance, and enhanced interoperability to enable community network metrology. 
+The ecosystem presented here is in its early days, and many key extensions will bring new functionality, improved performance, and enhanced interoperability to enable community network metrology.
 
 
 Currently, `affinis` only makes use of sparse representations in the _feature space_, but after the gram matrix $X^T X$ is calculated, the now-square kernel is stored densely.
@@ -518,18 +518,18 @@ This is also relevant because the graph recovery tooling in `affinis.filter` is 
 The key improvement needed is a sparse-reimplementation of the `scipy.spatial.distance.squareform` function, which `affinis` uses for much of its downstream edge processing.
 This can be accomplished using the _closed form_ index mappings detailed in @ParallelEuclideandistance_Angeletti2019, and further expounded on for edge vector representation in @sexton2025measuring
 
-Secondly, support for further matrix manipulation is planned, with many of the kernels on graphs discussed in [](https://doi.org/10.1016/j.ejc.2018.02.002) being particularly straightforward to represent in our codebase. 
+Secondly, support for further matrix manipulation is planned, with many of the kernels on graphs discussed in [](https://doi.org/10.1016/j.ejc.2018.02.002) being particularly straightforward to represent in our codebase.
 A new mechanism to fold/unfold node-based vector representations into edge-based representations would also be enabled by our upcoming sparse `squareform` method, which would support graph matrix manipulation required by several optimal matching algorithms, such as in @taylor2008optimal.
 
 
 For `MENDR` (as with most benchmarks), increased coverage and the ability to more severely challenge modern algorithms would be welcome, such as with a 1000+ node graph series.
 In addition, since we have preserved the original "jump" list that generated the node activations, it is possible to add an additional challenge to approximate the jump-list rank ordering from the node activations.
-Alternatively, we could re-create the setting investigated by [](https://doi.org/10.1145/2086737.2086741), where the ordered list of jumps is used to attempt reconstruction of the graph.  
+Alternatively, we could re-create the setting investigated by [](https://doi.org/10.1145/2086737.2086741), where the ordered list of jumps is used to attempt reconstruction of the graph.
 
-Although the graph serialization was done with a custom parser, we would additionally foresee interoperability with upcoming standards for hypergraph [@HIF2025] and sparse-matrix [@binsparse2026] representation on-disk as important improvements for MENDR.  
+Although the graph serialization was done with a custom parser, we would additionally foresee interoperability with upcoming standards for hypergraph [@HIF2025] and sparse-matrix [@binsparse2026] representation on-disk as important improvements for MENDR.
 
 Lastly, for `Contingency`, several more kinds of accuracy "trajectories" (and their corresponding plots) would be useful to the community, specifically Receiver Operating Characteristic (ROC) plots.
-It would also be possible to wrap `Contingent` objects in a Scikit-Learn-compatible API that would let them be used in pre-existing data pipelines for scoring binary classifiers.  
+It would also be possible to wrap `Contingent` objects in a Scikit-Learn-compatible API that would let them be used in pre-existing data pipelines for scoring binary classifiers.
 
 
 ## Conclusion

@@ -1,7 +1,9 @@
 version: 1
 extends: ../../../proceedings.yml
 project:
-  title: "Trimming the Hairball: Three Libraries for Better Network Recovery & Metrology"
+  title:
+    'Trimming the Hairball: Three Libraries for Better Network Recovery &
+    Metrology'
   authors:
     - name: Rachael Sexton
       affiliation: National Institute for Standards & Technology

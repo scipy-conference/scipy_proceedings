@@ -4,7 +4,7 @@ project:
   # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2026-rachael_sexton
   # Ensure your title is the same as in your `main.md`
-  title: "Trimming the Hairball"
+  title: 'Trimming the Hairball'
   subtitle: A Unfied Ecosystem for Better Network Recovery & Metrology
   description: |
     Recovering network structure from binary co-occurrence data is a problem encountered across NLP, epidemiology, manufacturing, and recommender systems; yet there is a lack of shared tools, metrics, or common benchmarks to compare and improve techniques.
