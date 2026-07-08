@@ -2,7 +2,7 @@
 
 This folder contains a static decision-support widget for the SciPy 2026 paper. It is designed to be opened directly in a browser and does not call any hosted model, search service, or internal API.
 
-## Open The Widget
+## Open the Widget
 
 Open `index.html` in a browser:
 
