@@ -422,3 +422,17 @@ reproducible, more integrated with the machine-learning ecosystem, and more
 accessible. It is available on PyPI (`pip install panelbox`) and on
 GitHub [@panelbox2025], with documentation, tutorials, and full replication
 materials for this paper.
+
+## Generative AI disclosure
+
+Portions of this work were assisted using generative AI tools, specifically
+Anthropic's Claude. The tools were used to help draft and refine the prose of
+the manuscript, to improve clarity and phrasing, to suggest edits to the
+LaTeX/MyST markup, and to suggest code for parts of the PanelBox library and
+its replication scripts. Generative AI was **not** used to produce the
+numerical results, statistical validations (e.g., the comparisons against
+`xtabond2` and `plm`), or references reported here: these derive from actual
+executions of the software and were checked against the reference tools. All
+outputs were reviewed, verified, and revised by the author, who takes full
+responsibility for the accuracy and integrity of the final content, including
+all technical claims, results, and references.
