@@ -4,7 +4,7 @@ project:
   id: scipy-2026-plambeck-paper
   # Ensure your title is the same as in your `main.tex`
   title:
-    'Optimising HCP Sample Allocation in Pharma: Combining Non-Linear Ensemble
+    'Optimising HCP Sample Allocation in Pharma: Combining Nonlinear Ensemble
     Learning, Spatial Lags, and Integer Programming'
   description:
     A learning–optimisation framework that combines decile-banded CatBoost
@@ -14,6 +14,7 @@ project:
   # The original Springer-formatted source is kept for reference but not rendered.
   exclude:
     - paper-springer-formatted-v7-full.tex
+    - main_original_backup.tex
   thumbnail: figures/figure_pipeline_schematic.png
   authors:
     - name: Johannes Plambeck
@@ -82,6 +83,7 @@ project:
         - AkibaSanoYanaseOhtaKoyama2019
         - LeSagePace2009
         - Biau2012
+        - ClinCalcApixaban2023
   exports:
     - id: pdf
       format: typst
