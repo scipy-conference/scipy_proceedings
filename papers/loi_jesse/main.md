@@ -169,6 +169,9 @@ We have very promising data from our Baserow dataset. What we have so far is 123
 
 However, the data from the Zooniverse dataset is not as promising, with only 13 human-human pairs with 123 LLM-human pairs . This is likely due to the fact that Zooniverse has no native way to capture news articles only, leading to more entries for legal documents and other types of documents.
 
+We recognize the limitations of only 13 data points for the Zooniverse comparison, and discuss it later on. For transparency purposes we make the Zooniverse comparison, but rely more on our usage of the Baserow dataset.
+
+
 We compare the distribution for the baserow dataset here the first table displays the Baserow dataset comparison and the second table displays the Zooniverse dataset comparison.
 
 
@@ -260,6 +263,8 @@ More salient of an issue is that longer news articles with small snippets of tex
 Data Limitations:
 
 While our datathons labeled over 800 documents, only about a third of these were news articles, and even fewer of these articles were double-reviewed. This greatly limited the comparisons made in the results section. If more data were collected, it could be that the distributions compared would be different in a statistically significant manner.
+
+Most importantly, we must address the extremely limited human sample. Recall that we only have 13 human-human data points for the Zooniverse dataset and only 85 human-human data points from the Baserow dataset. While it is better, it remains far from ideal. We therefore wish to hedge our results, instead using this research as a framework for future research and community engagement.
 
 
 
