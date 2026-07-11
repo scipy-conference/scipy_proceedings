@@ -1,5 +1,6 @@
 ---
 title: "Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven Document Analysis (title to be altered)"
+
 ---
 
 (abstract)=
@@ -219,21 +220,15 @@ Employing both the Kolmogorov-Smirnov (K-S) test and the Wasserstrein difference
 
 The Wasserstein Distance is a metric, usually between two probability distributions, that provides a measure of how much one dataset needs to be altered to convert one dataset to another. For example, in two classes of 100 students and 50 students, a Wasserstein distance of 5 would entail 5% of students, 5 in one class and 2 in the other, would need to change to match the distributions together. We will use this to show that little change is required between the human-human and human-LLM fuzzy pairs.
 
-Baserow Complete Dataset
+| Dataset | K-S Statistic | p-value | Wasserstein Distance |
+| :--- | :---: | :---: | :---: |
+| **Baserow R1 and R2** | 0.1027 | 0.6158 | 3.3351 |
+| **Zooniverse** | 0.2245 | 0.5192 | 9.0125 |
 
-K-S Statistic: 0.1027
-p-value: 0.6158
-Wasserstein Distance: 3.3351
+For the Baserow dataset, we see that the the K-S statistic shows that there is not yet enough evidence that the distributions are different. More importantly, the Wassterstein distance shows that only a 3.3% shift in the data is necessary to match one distribution to the other.
 
-We see that the the K-S statistic shows that there is not yet enough evidence that the distributions are different. More importantly, the Wassterstein distance shows that only a 3.3% shift in the data is necessary to match one distribution to the other.
+For our much smaller Zooniverse dataset, the results are not as conclusive and show a larger difference, but still have a high p value, indicating that do not have sufficient evidence to claim that the distributions are different. Additionally, we see that the Wasserstein distance shows that only a 9% shift in the data is required to transform one distribution to the other.
 
-For our much smaller dataset, the results are not as conclusive and show a larger difference, but still have a high p value, indicating that do not have sufficient evidence to claim that the distributions are different. Additionally, we see that the Wasserstein distance shows that only a 9% shift in the data is required to transform one distribution to the other.
-
-Zooniverse Dataset
-
-K-S Statistic: 0.2245
-p-value: 0.5192
-Wasserstein Distance: 9.0125
 
 
 
@@ -287,6 +282,12 @@ Aside from further data exploration, comparison and exploration of different lar
 ## Conclusion
 
 We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unneccessary psychological stress from having to read details about brutal events, serving as a cognitive shield.
+
+
+## Data
+
+The data and code used can also be located at https://github.com/JesseLoi/Data-Accountability-LLMs-and-Scraping.
+
 
 
 ## References
