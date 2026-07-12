@@ -148,7 +148,7 @@ I propose a three-phase research program to evaluate the viability of AST:
   - Assessment of operator learning under supervised training
   - Improvement in classification accuracy
 * - 3  -  Comparative Oversight
-  - Does AST detect anomalies missed by text-based interpretability methods?
+  - Does AST detect anomalies missed by text-based interpretibility methods?
   - Head-to-head study: text labels vs. activation sonification
   - Miss rate, false alarm rate, response latency
 ```
@@ -203,13 +203,8 @@ Phase portraits may serve as useful training examples for operators learning to 
 
 A sonifier dashboard was created to convert activations to audible sound with several synthesis layers and mapping controls. Sonification parameters (pitch, timbre, spatialization, rhythm) are driven by reduced activation dimensions and entropy measures. Sonification outputs require testing with human subjects to determine perceptually useful mappings.
 
-```{figure} scipy-ast-sonofier.mp4
-:alt: AST sonifier demo
-:align: center
-:width: 800px
-
-Video: Demo of the AST sonifier dashboard.
-```
+A demonstration of the AST sonifier is available at:
+[https://youtu.be/8D0n7ruvTxk](https://youtu.be/8D0n7ruvTxk)
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-paper-2026-ast-sonification.ipynb)
 
