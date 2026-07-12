@@ -204,7 +204,7 @@ Phase portraits may serve as useful training examples for operators learning to 
 A sonifier dashboard was created to convert activations to audible sound with several synthesis layers and mapping controls. Sonification parameters (pitch, timbre, spatialization, rhythm) are driven by reduced activation dimensions and entropy measures. Sonification outputs require testing with human subjects to determine perceptually useful mappings.
 
 A demonstration of the AST sonifier is available at:
-[https://www.youtube.com/watch?v=8D0n7ruvTxk](https://youtu.be/8D0n7ruvTxk)
+[https://www.youtube.com/watch?v=8D0n7ruvTxk](https://www.youtube.com/watch?v=8D0n7ruvTxk)
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-paper-2026-ast-sonification.ipynb)
 
