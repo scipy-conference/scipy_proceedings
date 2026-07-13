@@ -52,12 +52,8 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
+        - leaddev2025ai
         - starsim
-        - starsim_crn
-        - scicode
-        - terminalbench
-        - swebench
-        - white2025livebench
   exports:
     - id: pdf
       format: typst
