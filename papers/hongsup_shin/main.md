@@ -29,7 +29,7 @@ The system is open source, and all quantitative results reported below are produ
 
 ### Datasets
 
-TJI publishes two related datasets that we treat throughout: `civilians_shot` (police shooting civilians; 1,674 records) and `officers_shot` (civilians shooting police; 282 records), spanning 2014–2024, for 1,956 records total. They use different field names for analogous concepts (in `officers_shot` the civilian is the *suspect/shooter* and the outcome is the *officer's* injury or death), a divergence the pipeline handles through a `DatasetType` enum that switches the database queries and tailors the extraction prompt to each dataset. In the source data, 57% of civilian records are missing the weapon, 22.5% are missing the subject's name, and 39% of officer records are missing the officer's name. We measure accuracy against a held-out sample of these records, defined in Evaluation design below.
+TJI publishes two related datasets that we treat throughout: `civilians_shot` (police shooting civilians; 1,674 records) and `officers_shot` (civilians shooting police; 282 records), spanning 2014–2024, for 1,956 records total. They use different field names for analogous concepts (in `officers_shot` the civilian is the *shooter* and the outcome is the *officer's* injury or death), a divergence the pipeline handles through a `DatasetType` enum that switches the database queries and tailors the extraction prompt to each dataset. In the source data, 57% of civilian records are missing the weapon, 22.5% are missing the subject's name, and 39% of officer records are missing the officer's name. We measure accuracy against a held-out sample of these records, defined in Evaluation design below.
 
 ### Pipeline architecture
 
@@ -346,7 +346,7 @@ These database fields are an imperfect reference: TJI records race in a vocabula
 
 The safety signal comes from an adversarial probe of 20 fabricated incidents: invented names, real Texas cities and dates, including six "traps" placed within days of real high-profile events so that real articles about the *wrong* person would pass date and location checks. The twenty span five designed categories: obscure towns where no coverage should exist, dates deliberately outside the validation window, the six hallucination traps, common-name confusions (a fabricated "Michael Brown" in a major city), and null-name edge cases. Only the database fetch is patched; every downstream node runs live, so the probe exercises the real retrieval, validation, and agentic layers.
 
-The same adversarial probe also grounds a baseline that tests the autonomous-agent design directly. We built a single tool-use agent on the same Claude Sonnet model, gave it free-text Tavily search, an open-web page fetch, and the incident anchor, and withheld the pipeline's judges, evaluation gate, Coordinator, and retry ladder. To keep the comparison fair, its prompt states only a generic standard of care (cite a source for each value; decline when coverage is thin) and carries none of the project's earned rules: the relevance taxonomy, the race rule, and the officer-as-suspect reframing are all absent. The agent is more capable than the pipeline along several axes, writing its own queries, fetching open-web pages, and searching without a date window. We ran it on the same twenty incidents, patched only the database fetch, three times for variance.
+The same adversarial probe also grounds a baseline that tests the autonomous-agent design directly. We built a single tool-use agent on the same Claude Sonnet model, gave it free-text Tavily search, an open-web page fetch, and the incident anchor, and withheld the pipeline's judges, evaluation gate, Coordinator, and retry ladder. To keep the comparison fair, its prompt states only a generic standard of care (cite a source for each value; decline when coverage is thin) and carries none of the project's earned rules: the relevance taxonomy, the race rule, and the civilian-as-shooter reframing are all absent. The agent is more capable than the pipeline along several axes, writing its own queries, fetching open-web pages, and searching without a date window. We ran it on the same twenty incidents, patched only the database fetch, three times for variance.
 
 ## Results
 
@@ -424,7 +424,7 @@ Per-field, the strongest civilian fields are age (95% exact) and outcome (92%); 
   - 91%
 ```
 
-```{list-table} Per-field accuracy, officers_shot (extracted counts sum to 207, the officer aggregate). Here civilian_age and civilian_race are the suspect's.
+```{list-table} Per-field accuracy, officers_shot (extracted counts sum to 207, the officer aggregate). Here civilian_age and civilian_race are the civilian shooter's.
 :label: tbl:perfield-off
 :header-rows: 1
 
@@ -497,7 +497,7 @@ Denominators differ by field because each is scored only where ground truth exis
 
 ### Agentic faithfulness *after* deterministic recovery
 
-The single largest gain on the officer dataset came from a **dataset-aware extraction prompt** and no agent was involved. It tells the model that the civilian is the suspect and the outcome is the officer's fate; without that framing, most officer records escalate as insufficient sources. Officers complete at 92% on the holdout, with insufficient-source escalations all but eliminated (1 of 100). We had expected the recovery itself to be where an agent would help, and we tested that: a ReAct extraction loop, run offline on the same officer failures, recovered nothing the dataset-aware prompt had not. That null result is why we locate agentic judgment above extraction, never inside it.
+The single largest gain on the officer dataset came from a **dataset-aware extraction prompt** and no agent was involved. It tells the model that the civilian is the shooter and the outcome is the officer's fate; without that framing, most officer records escalate as insufficient sources. Officers complete at 92% on the holdout, with insufficient-source escalations all but eliminated (1 of 100). We had expected the recovery itself to be where an agent would help, and we tested that: a ReAct extraction loop, run offline on the same officer failures, recovered nothing the dataset-aware prompt had not. That null result is why we locate agentic judgment above extraction, never inside it.
 
 The judges, by contrast, are a *faithfulness* layer that trades a little coverage for correctness: the race verifier drops civilian-race coverage from 17% to 11% while lifting exact accuracy from 65% to 91%, and the relevance judge vetoes wrong-article completions into review (three officer, seven civilian). Each drop is the system declining to assert what it cannot support.
 
