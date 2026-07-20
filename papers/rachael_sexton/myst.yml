@@ -18,7 +18,7 @@ project:
       email: rachael.sexton@nist.gov
       orcid: 0000-0001-5904-2887
       corresponding: true
-      roles: 
+      roles:
         - Conceptualization
         - Methodology
         - Software
