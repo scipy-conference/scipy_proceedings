@@ -18,6 +18,18 @@ project:
       email: rachael.sexton@nist.gov
       orcid: 0000-0001-5904-2887
       corresponding: true
+      roles: 
+        - Conceptualization
+        - Methodology
+        - Software
+        - Project administration
+        - Data curation
+        - Formal analysis
+        - Investigation
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
   bibliography: references.bib
   keywords:
     - network analysis
