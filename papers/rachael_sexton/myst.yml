@@ -26,9 +26,9 @@ project:
         - Data curation
         - Formal analysis
         - Investigation
+        - Writing – original draft
         - Validation
         - Visualization
-        - Writing – original draft
         - Writing – review & editing
   bibliography: references.bib
   keywords:
