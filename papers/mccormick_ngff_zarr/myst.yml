@@ -1,0 +1,122 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>`; the folder is `mccormick_ngff_zarr`
+  id: scipy-2026-mccormick_ngff_zarr
+  # Ensure your title is the same as in your `main.md`
+  title: 'ngff-zarr: A Lean and Kind OME-Zarr Toolkit for Bioimaging'
+  description: >-
+    ngff-zarr is a lightweight, open-source Python toolkit implementing the
+    OME-Zarr specification. It converts, validates, and generates multiscale
+    representations of extremely large bioimages out-of-core via Dask, and
+    exposes these capabilities to AI agents through a Model Context Protocol
+    server.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Matt McCormick
+      email: matt@fideus.io
+      orcid: 0000-0001-9475-3756
+      corresponding: true
+      affiliations:
+        - fideus
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Writing – original draft
+    - name: Johannes Soltwedel
+      orcid: 0000-0003-1273-2412
+      affiliations:
+        - gerbi
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
+    - name: Wouter-Michiel Vierdag
+      orcid: 0000-0003-1666-5421
+      affiliations:
+        - cellonautica
+        - scverse
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
+    - name: Valentin Boussot
+      orcid: 0009-0003-2465-5458
+      affiliations:
+        - fideus
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
+    - name: Josh Moore
+      orcid: 0000-0003-4028-811X
+      affiliations:
+        - gerbi
+      roles:
+        - Investigation
+        - Validation
+        - Supervision
+  affiliations:
+    - id: fideus
+      name: Fideus Labs LLC
+      city: Durham
+      region: North Carolina
+      country: USA
+    - id: gerbi
+      name: German BioImaging — Society for Microscopy and Image Analysis e.V.
+      city: Konstanz
+      country: Germany
+    - id: cellonautica
+      name: Cellonautica Inc
+      city: Austin
+      region: Texas
+      country: USA
+    - id: scverse
+      name: scverse
+      city: Austin
+      region: Texas
+      country: USA
+  keywords:
+    - OME-Zarr
+    - OME-NGFF
+    - bioimaging
+    - cloud-native
+    - Dask
+    - Model Context Protocol
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    OME: Open Microscopy Environment
+    NGFF: Next-Generation File Format
+    FAIR: Findable, Accessible, Interoperable, Reusable
+    MCP: Model Context Protocol
+    HCS: High-Content Screening
+    CLI: Command Line Interface
+    SIMD: Single Instruction, Multiple Data
+    RFC: Request for Comments
+    API: Application Programming Interface
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - ngff-zarr
+        - ome-zarr-spec
+        - zarr
+        - dask
+        - mcp
+        - array-api
+        - rfc4
+        - rfc9
+        - rfc5
+        - rfc3
+        - rfc8
+        - cucim
+        - zarr
+        - ome-zarr-spec
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
