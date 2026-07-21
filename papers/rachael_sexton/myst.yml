@@ -50,7 +50,7 @@ project:
       severity: ignore
       keys:
         - ParallelEuclideandistance_Angeletti2019
-        - taylor2008optimal        
+        - taylor2008optimal
   exports:
     - id: pdf
       format: typst
