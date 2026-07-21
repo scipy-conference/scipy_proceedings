@@ -90,7 +90,7 @@ project:
     NGFF: Next-Generation File Format
     FAIR: Findable, Accessible, Interoperable, Reusable
     MCP: Model Context Protocol
-    HCS: High Content Screening
+    HCS: High-Content Screening
     CLI: Command Line Interface
     SIMD: Single Instruction, Multiple Data
     RFC: Request for Comments

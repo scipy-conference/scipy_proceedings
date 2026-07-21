@@ -17,7 +17,7 @@ abstract: |
   filtering via ITK-Wasm; OME-Zarr Zip (`.ozx`) single-file archives (RFC-9);
   RFC-4 anatomical orientation metadata for medical and neuroimaging
   interoperability; emerging RFC-5 coordinate systems and transformations with
-  OME-Zarr version 0.6; High Content Screening plate and well support; TIFF,
+  OME-Zarr version 0.6; high-content screening plate and well support; TIFF,
   OME-TIFF, and Leica LIF conversion; and Zarr v3 sharding. We further describe
   the `ngff-zarr-mcp` Model Context Protocol (MCP) server, which exposes
   conversion, inspection, validation, and optimization tools to AI agents so
@@ -28,7 +28,9 @@ abstract: |
 
 ## Introduction
 
-Modern bioimaging instruments, including light-sheet microscopes, high-content screening systems, whole-slide scanners, and electron or volume-electron microscopes, routinely produce datasets that are large, multidimensional, and stored in
+Modern bioimaging instruments, including light-sheet microscopes, high-content
+screening systems, whole-slide scanners, and electron or volume-electron microscopes, routinely
+produce datasets that are large, multidimensional, and stored in
 fragmented, vendor-specific proprietary formats. A single acquisition can exceed
 the memory of any workstation, and the resulting monolithic files are not
 cloud-ready: they are difficult to stream, to share, and to align with FAIR
@@ -58,7 +60,7 @@ This paper makes three contributions. First, we describe the design and
 implementation of `ngff-zarr`: an out-of-core, Array-API-based pipeline that
 turns in-memory arrays into validated, multiscale OME-Zarr stores. Second, we
 catalog the toolkit's features and how they serve concrete bioimaging needs,
-from anatomical orientation for medical imaging to High Content Screening and
+from anatomical orientation for medical imaging to high-content screening and
 the emerging RFC-5 coordinate-transformation support targeting OME-Zarr 0.6.
 Third, we present the `ngff-zarr-mcp` Model Context Protocol server and report
 lessons learned from exposing scientific tooling to AI agents and from working
@@ -282,9 +284,9 @@ aligned with imaging axes, RFC-5 transformations describe the relationship
 between image space and anatomical space while RFC-4 supplies the biological
 orientation labels.
 
-### High Content Screening
+### High-Content Screening
 
-High Content Screening (HCS) produces multi-well plate data central to drug
+High-content screening (HCS) produces multi-well plate data central to drug
 discovery and high-throughput imaging. `ngff-zarr` implements the OME-Zarr plate
 and well metadata structures, so plates can be loaded, navigated by row and
 column, and examined field by field, with optional acquisition (time point or
