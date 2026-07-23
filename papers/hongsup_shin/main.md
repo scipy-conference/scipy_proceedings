@@ -60,35 +60,39 @@ Each run ends at one of two terminal nodes, and a human reviewer reads the JSON 
 ::::{figure}
 :label: fig:output
 
-A completed record (`civilians_shot` incident 792):
+A completed record (`civilians_shot` incident 178):
 
 ```json
 {
-  "incident_id": "792", "dataset_type": "civilians_shot",
+  "incident_id": "178", "dataset_type": "civilians_shot",
   "extracted_fields": [
-    {"field_name": "weapon", "value": "Knife", "confidence": "medium",
-     "sources": ["click2houston.com/news/local/2020/..."], "extraction_method": "llm"}
-    // 6 more: time_of_day, circumstance, officer_name, civilian_name, location_detail, outcome
+    {"field_name": "weapon", "value": "SHOTGUN", "confidence": "high",
+     "sources": ["kwtx.com/content/news/Officers-cleared-in-deadly..."],
+     "source_quotes": ["Ramirez was shot after he pointed a shotgun
+        in the direction of officers."],
+     "extraction_method": "llm"}
+    // 5 more: civilian_name, civilian_age, location_detail, time_of_day, outcome
   ],
-  "search_strategy": "name_partial", "retry_count": 2,
-  "outcome_summary": "Enriched 7 fields for incident 792 (civilians_shot)"
+  "search_strategy": "temporal_expanded", "retry_count": 1,
+  "outcome_summary": "Enriched 6 fields for incident 178 (civilians_shot)"
 }
 ```
 
-An escalated record (`officers_shot` incident 75), vetoed by the relevance judge:
+An escalated record (`officers_shot` incident 357), vetoed by the relevance judge:
 
 ```json
 {
-  "incident_id": "75", "dataset_type": "officers_shot",
-  "escalation_reason": "irrelevant_sources", "relevance_vetoed": true,
+  "incident_id": "357", "dataset_type": "officers_shot",
+  "escalation_reason": "irrelevant_sources", "current_stage": "synthesize",
   "retrieved_articles": [
     {"title": "Capital murder trial of man accused of killing SAPD officer during 2013 chase begins"}
+    // 9 more retrieved articles
   ],
-  "outcome_summary": "Escalated incident 75: no retrieved article reports this 2018 incident"
+  "outcome_summary": "Escalated incident 357: irrelevant_sources after 0 retries"
 }
 ```
 
-The two terminal outputs (field names verbatim from the pipeline's JSON schema; values abridged). The completion (top) logs each field's confidence and sources; the escalation (bottom) is the relevance judge blocking an article that passes every rule-based check but reports a different (2013) case.
+The two terminal outputs (field names and values verbatim from the pipeline's saved JSON, abridged where marked by comments and ellipses; incident identifiers are database keys, so they can exceed a dataset's record count). The completion (top) carries each field's confidence, source URLs, and supporting quotes, so a reviewer can verify a value in seconds. The escalation (bottom) is the relevance judge blocking a dossier whose strongest article passes every rule-based check — right city, published on the incident date, an officer died — but recounts a different (2013) case.
 ::::
 
 Two design choices are deliberate. First, **the orchestration is deterministic**: the Coordinator is `if`/`match` logic over state fields and the retry ladder is a fixed list. *Deterministic* here describes the control flow, not the model outputs: every LLM call is genuinely sampled (no temperature is set, so calls use the Anthropic default of 1.0, and the API exposes no seed), so its run-to-run variance, which we return to in Limitations, comes from both sampling and API-side nondeterminism; the architecture is built to catch wrong values, not to remove variance. Which nodes run, in what order, and on which outcomes is fixed code no model can redirect, save the one model-attributable route, the relevance judge's veto. We chose this over an LLM router because, in a high-stakes domain, predictable control flow is itself a safety property. Second, the system is **human-in-the-loop (HITL) by construction**. It never writes back to the source database, and escalation is a designed terminal outcome that hands the record to a human.
@@ -441,7 +445,7 @@ Per-field, the strongest civilian fields are age (95% exact) and outcome (92%); 
   - 67%
 ```
 
-Denominators differ by field because each is scored only where ground truth exists. Small cells warrant caution: `civilian_race` accuracy is over the 11 values the verifier committed, and its 95% Wilson interval (62–98%) is wide enough to span the 65% gate-off figure reported below. We therefore read the 65%→91% change as the verifier declining to assert unstated races, not a real accuracy gain. Each extracted value also carries a self-reported confidence label, and it is usefully calibrated: high-confidence extractions are markedly more accurate than medium-confidence ones (roughly 93% vs 68% exact on civilians, 86% vs 54% on officers).
+Denominators differ by field because each is scored only where ground truth exists. Small cells warrant caution: `civilian_race` accuracy is over the 11 values the verifier committed, and its 95% Wilson interval (62–98%) is wide enough to span the 65% gate-off figure reported below. We therefore read the 65%→91% change as the verifier declining to assert unstated races, not a real accuracy gain. Each committed value also carries a confidence label that encodes cross-source agreement (high when every source states the same value, medium for a single source or a majority after normalization), and corroboration predicts accuracy: high-confidence values are markedly more accurate than medium-confidence ones (roughly 93% vs 68% exact on civilians, 86% vs 54% on officers).
 
 ### Qualitative behavior
 
@@ -501,7 +505,7 @@ Cost discipline raises an obvious question: if Haiku is the cheaper model, why n
 
 ### An autonomous agent fabricates where the pipeline escalates
 
-The cheaper-model probe tested a smaller model on the same suite; this baseline tests dropping the workflow altogether. We ran the autonomous-agent baseline on the same twenty incidents and scored it identically ({ref}`tbl:baseline`). We compare on the adversarial probe rather than the 100-record holdout deliberately: the baseline tests the safety claim, and on the probe the ground truth is absolute, since every incident is fabricated and any completion is a fabrication. A holdout comparison would grade the agent on accuracy while leaving refusal, the behavior in question, untested, and would cost five times as much at the agent's roughly \$1.00 per incident. The pipeline completed none of the twenty and escalated each with a reason a reviewer can act on. The agent completed one incident, 99913, in all three runs, each time committing six fabricated fields and marking the record done with no signal that anything was wrong; it declined the other nineteen.
+The cheaper-model probe tested a smaller model on the same suite; this baseline tests dropping the workflow altogether. We ran the autonomous-agent baseline on the same twenty incidents and scored it identically ({ref}`tbl:baseline`). We compare on the adversarial probe rather than the 100-record holdout deliberately: the baseline tests the safety claim, and on the probe the ground truth is absolute, since every incident is fabricated and any completion is a fabrication. A holdout comparison would grade the agent on accuracy while leaving refusal, the behavior in question, untested, and would cost more than four times as much at the agent's roughly \$0.90 per incident. The pipeline completed none of the twenty and escalated each with a reason a reviewer can act on. The agent completed one incident, 99913, in all three runs, each time committing six fabricated fields and marking the record done with no signal that anything was wrong; it declined the other nineteen.
 
 :::{list-table} The autonomous-agent baseline against the shipped pipeline on the 20-incident adversarial probe. Agent figures are per-run means over three runs. Cost is for this probe, where 18 of 20 incidents escalate before any extraction runs; the pipeline's holdout average, which includes extraction, is higher (\$0.20).
 :label: tbl:baseline
@@ -527,7 +531,7 @@ The cheaper-model probe tested a smaller model on the same suite; this baseline 
   - 6.1
 * - Cost per incident
   - ~\$0.05 (search-dominated; 2/20 extract)
-  - ~\$1.00
+  - ~\$0.90 (\$0.75 LLM + \$0.15 search)
 :::
 
 The single completion shows that a generic instruction to check sources is not a mechanism that can act on the check ({ref}`fig:agent-trace`). The agent did the relevance reasoning the prompt asked for, and on most incidents it produced a correct decline (on the fabricated "Michael Brown" case it noted the Ferguson collision and declined). On 99913 it reasoned the same way, wrote that the planted names "don't appear in any news articles I've found," then submitted the record as complete with real Austin 2020 protest coverage attached. In one of the three runs the verification went deeper still: the agent located the published indictment lists from the Austin protest prosecutions and confirmed the planted officer absent ("the Texas Tribune article lists 19 named officers and 'Strickland' is not among them"), then rationalized the name as "potentially one of the indicted officers not widely covered by name" and submitted regardless. The relevance judge supplies the authority this instruction lacks.
@@ -554,7 +558,7 @@ The autonomous agent on adversarial incident 99913 (fabricated anchor: officer "
 The agent stated that no article names the planted officer or civilian, then completed the record anyway. The two names and the outcome carry no source; the weapon, circumstance, and location are real details from the May 2020 Austin protests, a different event that shares the city and date. This is the "right structure, wrong incident" failure of {ref}`fig:output`, committed here with no distrust signal because no judge holds authority over the record.
 ::::
 
-Autonomy was also more expensive ({ref}`tbl:baseline`): five times the searches and twenty times the cost per incident, and the extra effort bought no safety, since the additional searching on 99913 surfaced more of the adjacent Austin coverage the agent drew on. The gap in search counts is structural: the ladder caps the pipeline's searches, while the agent decides for itself when it has searched enough, and on a fabricated incident no query can succeed. A prompt could demand fewer searches, but a budget stated in prose is the kind of instruction the agent overrode on 99913; enforcing it in code recreates the workflow this baseline removed. The agent declined nineteen of twenty, so a careful prompt does much of the work and the judge closes the remaining trap; one decline was itself a near-miss (a San Antonio trap the agent chased until the turn cap stopped it), so the single committed fabrication is a floor.
+Autonomy was also more expensive ({ref}`tbl:baseline`): five times the searches and nearly twenty times the cost per incident, and the extra effort bought no safety, since the additional searching on 99913 surfaced more of the adjacent Austin coverage the agent drew on. The gap in search counts is structural: the ladder caps the pipeline's searches, while the agent decides for itself when it has searched enough, and on a fabricated incident no query can succeed. A prompt could demand fewer searches, but a budget stated in prose is the kind of instruction the agent overrode on 99913; enforcing it in code recreates the workflow this baseline removed. The agent declined nineteen of twenty, so a careful prompt does much of the work and the judge closes the remaining trap; one decline was itself a near-miss (a San Antonio trap the agent chased until the turn cap stopped it), so the single committed fabrication is a floor.
 
 ## Discussion
 
