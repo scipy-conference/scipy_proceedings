@@ -29,7 +29,13 @@ The system is open source, and all quantitative results reported below are produ
 
 ### Datasets
 
-TJI publishes two related datasets that we treat throughout: `civilians_shot` (police shooting civilians; 1,674 records) and `officers_shot` (civilians shooting police; 282 records), spanning 2014–2024, for 1,956 records total. They use different field names for analogous concepts (in `officers_shot` the civilian is the *shooter* and the outcome is the *officer's* injury or death), a divergence the pipeline handles through a `DatasetType` enum that switches the database queries and tailors the extraction prompt to each dataset. In the source data, 57% of civilian records are missing the weapon, 22.5% are missing the subject's name, and 39% of officer records are missing the officer's name. We measure accuracy against a held-out sample of these records, defined in Evaluation design below.
+TJI publishes two related datasets that we treat throughout: `civilians_shot` (police shooting civilians; 1,674 records) and `officers_shot` (civilians shooting police; 282 records), spanning 2014–2024, for 1,956 records total. They use different field names for analogous concepts (in `officers_shot` the civilian is the *shooter* and the outcome is the *officer's* injury or death), a divergence the pipeline handles through a `DatasetType` enum that switches the database queries and tailors the extraction prompt to each dataset. In the source data, 57% of civilian records are missing the weapon, 22.5% are missing the subject's name, and 39% of officer records are missing the officer's name ({ref}`fig:missing`). We measure accuracy against a held-out sample of these records, defined in Evaluation design below.
+
+:::{figure} figures/fig_missing_data.png
+:label: fig:missing
+
+Missing fields in the source data, as a share of each dataset's records (`civilians_shot` N=1,674; `officers_shot` N=282), computed from the published TJI tables. A single bar means the other dataset does not record that field.
+:::
 
 ### Pipeline architecture
 
@@ -43,37 +49,11 @@ The pipeline is a seven-node LangGraph state machine ({ref}`fig:pipeline`). Each
 
 When validation leaves too few usable articles, the Coordinator climbs a fixed three-rung search ladder, from an exact-date match to a month-and-year window to a name-only query, and escalates only after the third rung fails.
 
-::::{figure}
+:::{figure} figures/fig_pipeline.png
 :label: fig:pipeline
 
-```{mermaid}
-flowchart TD
-  Start([Start]) --> Load[Load]
-  Load -.-> Coord{0. Coordinator}
-  Coord -- "pass" --> Search[1. Search: Tavily API]
-  Search -.-> Coord
-  Coord -- "pass" --> Validate[2. Validate: date / loc / name]
-  Coord -- "retry" --> Search
-  Validate -.-> Coord
-
-  subgraph Synth [3. Synthesize]
-    direction LR
-    Extract[Extraction] --> RJ{{Relevance judge: Block}}
-    RJ --> RV{{Race verifier: Null}}
-    RV --> CA{{Conflict annotator: Advise}}
-  end
-
-  Coord -- "pass" --> Synth
-  Synth -.-> Coord
-  Coord -- "pass" --> Complete([4A. Complete: Write JSON])
-  Coord -- "escalate" --> Escalate([4B. Escalate: Human review])
-
-  classDef judge fill:#dbe9ff,stroke:#2f6fb0,color:#111
-  class RJ,RV,CA judge
-```
-
-The seven-node pipeline. After the Load entry node, the deterministic Coordinator (0) is the hub through which every transition passes (proceed, retry, or escalate); the stage numbers give the happy-path order, 1 Search, 2 Validate, and 3 Synthesize, ending at one of two terminals, 4A Complete or 4B Escalate (solid edges are the Coordinator's dispatch decisions, labeled *pass* for a cleared gate, *retry*, or *escalate* to human review; dotted edges return each node's result to the Coordinator). On thin retrieval it climbs a fixed three-rung search ladder (exact, then temporal, then name-partial) before escalating. The single *retry* and *escalate* edges each stand for several triggers, all routed through the Coordinator: a retry follows an empty search or a validation that rejects every article, and an escalation can originate at any gate (e.g., insufficient identity data at Load, an exhausted search ladder at Search or Validate, or a veto, conflict, or empty extraction at Synthesize). Inside the Synthesize node, after extraction, three bounded LLM judges (the shaded hexagons) run in sequence as the agentic layer, each with authority calibrated to stakes: the relevance judge can *block* a wrong-article completion (the Coordinator then escalates it as `irrelevant_sources`), the race verifier *nulls* an unstated race, and the conflict annotator *advises* the human reviewer. The judges run as sub-steps inside the Synthesize node, distinct from the graph's nodes.
-::::
+The seven-node pipeline. The deterministic Coordinator is the hub through which every transition passes: each processing node returns its result to the Coordinator (dashed edges), and the Coordinator dispatches the record onward, labeled *pass* along the happy path (Load, Search, Validate, Synthesize) and into the Complete terminal, *retry* back to Search, or *escalate* to the human-review terminal. On thin retrieval it climbs the fixed three-rung search ladder printed on its box (exact, then a month window, then name-only) before escalating. The *retry* and *escalate* routes each stand for several triggers, all routed through the Coordinator: a retry follows an empty search or a validation that rejects every article, and an escalation can originate at any gate (e.g., insufficient identity data at Load, an exhausted search ladder at Search or Validate, or a veto, conflict, or empty extraction at Synthesize). The bottom row expands the Synthesize node: after extraction, which only proposes values, three bounded LLM judges run in sequence as the agentic layer, each with authority calibrated to stakes: the relevance judge can *block* a wrong-article completion (the Coordinator then escalates it as `irrelevant_sources`), the race verifier *nulls* an unstated race, and the conflict annotator *advises* the human reviewer. The judges run as sub-steps inside the Synthesize node, distinct from the graph's nodes; each is a single structured-output call with no loops or tools, fail-open and read-only.
+:::
 
 Each run ends at one of two terminal nodes, and a human reviewer reads the JSON it writes ({ref}`fig:output`).
 
@@ -296,7 +276,13 @@ The cohort restriction and volume weighting make the correctness guard resistant
 A failed guard flags a change for closer review without automatically rejecting it. The relevance judge illustrates this: enabling it lowered officer completion from 95% to 92% by vetoing wrong-article completions, which trips the target guard. The change shipped because the judge had earned its authority offline (all 17 civilian vetoes among 123 reviewed records were genuine, the officer audit agreed) and the hard guards held (zero hallucinations, no cohort-correctness drop).
 ### Earn-it protocol
 
-Each agentic component was first evaluated offline on saved data, against the single dimension that matters for it (veto precision for the relevance judge, faithfulness for the race verifier, note quality for the annotator), and shipped only if it cleared that bar and the multi-objective gate. The discipline cut both ways: it gated *out* most of the agentic ideas we tried. {ref}`tbl:process` summarizes the whole process: of seven ideas, three shipped and four were gated out, failed, deferred, or declined.
+Each agentic component was first evaluated offline on saved data, against the single dimension that matters for it (veto precision for the relevance judge, faithfulness for the race verifier, note quality for the annotator), and shipped only if it cleared that bar and the multi-objective gate ({ref}`fig:gate`). The discipline cut both ways: it gated *out* most of the agentic ideas we tried. {ref}`tbl:process` summarizes the whole process: of seven ideas, three shipped and four were gated out, failed, deferred, or declined.
+
+:::{figure} figures/fig_earn_it_gate.png
+:label: fig:gate
+
+The earn-it protocol as a candidate change travels it. An offline audit reads saved runs on the one dimension that matters for the component; most rejected ideas died there. Survivors face the three gating guards of {ref}`tbl:gate`: completion (no regression), the adversarial hard veto (zero fabrications), and stable-cohort correctness (drop ≤ 0.02). Any failed guard rejects the change, with every failed reason reported; a rejection is overridable only with offline evidence, and the adversarial veto never is.
+:::
 
 ```{list-table} The agentic ideas we considered, how each was evaluated offline on saved data, and the verdict.
 :label: tbl:process
