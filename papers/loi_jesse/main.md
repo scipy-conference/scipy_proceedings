@@ -336,27 +336,18 @@ For our much smaller Zooniverse dataset, the results are not as conclusive and s
 
 ## Discussion
 
-We consider our results. The initial view of the data is not promising, offering only modest success. We noticed that overall fuzzy comparisons between the model and a human to be unpromising, but such comparisons are not apt for a proper evaluation of a model. We therefore opt for Hans et al.'s evaluation methodology.
-
-They handle the problem from the paradigm of "one-to-many" questions in the literature. In other words, they discuss questions for which the text generated answer is open-ended, hence "many answers" to "one question".
-
-The question of location extraction might seem at first to be a closed-ended question. After all, a police incident can only occur at a single location. However, recall that several terms can refer to a single address. Consequently, answers differing by a word or two should not be heavily penalized.
+We consider our results. The initial view of the data is not promising, offering only modest success. We noticed that overall fuzzy comparisons between the model and a human to be unpromising, but such comparisons are not apt for a proper evaluation of a model. We therefore opt for Hans et al.'s evaluation methodology. They handle the problem from the paradigm of "one-to-many" questions in the literature. In other words, they discuss questions for which the text generated answer is open-ended, hence "many answers" to "one question". The question of location extraction might seem at first to be a closed-ended question. After all, a police incident can only occur at a single location. However, recall that several terms can refer to a single address. Consequently, answers differing by a word or two should not be heavily penalized.
 
 
 ### Limitations
 
 Encoding and reading errors:
 
-While we had initially addressed Private Use Access Characters and text embedded in images, the solutions raised are not comprehensive. When analyzing larger and more diverse sets of articles, it is highly likely that many newer PUA characters are unreadable with the current infrastructure.
+While we had initially addressed Private Use Access Characters and text embedded in images, the solutions raised are not comprehensive. When analyzing larger and more diverse sets of articles, it is highly likely that many newer PUA characters are unreadable with the current infrastructure. More salient of an issue is that longer news articles with small snippets of text within images are not read at all. This is because our method of detecting text-based images was due to character count. In an article with high character count but many images, our data extraction pipeline is significantly weakened.
 
-More salient of an issue is that longer news articles with small snippets of text within images are not read at all. This is because our method of detecting text-based images was due to character count. In an article with high character count but many images, our data extraction pipeline is significantly weakened.
+While our datathons labeled over 800 documents, only about a third of these were news articles, and even fewer of these articles were double-reviewed. This greatly limited the comparisons made in the results section. If more data were collected, it could be that the distributions compared would be different in a statistically significant manner. Most importantly, we must address the extremely limited human sample. Recall that we only have 13 human-human data points for the Zooniverse dataset and only 85 human-human data points from the Baserow dataset. While it is better, it remains far from ideal. We therefore wish to hedge our results, instead using this research as a framework for future research and community engagement.
 
-
-Data Limitations:
-
-While our datathons labeled over 800 documents, only about a third of these were news articles, and even fewer of these articles were double-reviewed. This greatly limited the comparisons made in the results section. If more data were collected, it could be that the distributions compared would be different in a statistically significant manner.
-
-Most importantly, we must address the extremely limited human sample. Recall that we only have 13 human-human data points for the Zooniverse dataset and only 85 human-human data points from the Baserow dataset. While it is better, it remains far from ideal. We therefore wish to hedge our results, instead using this research as a framework for future research and community engagement.
+The lack of data for human comparison is the most important area of improvement for our research. There are two ways that future research can improve on our results. First, organizers can lower the total number of articles such that they can guarantee each article in the labeling set can be labeled at least twice. Second, a different route can be to collect enough data with more time and volunteers such that the volume of data is simply higher.
 
 
 
@@ -366,25 +357,15 @@ Most importantly, we must address the extremely limited human sample. Recall tha
 
 The results derived from this research are only cursory, and seek only to lay the groundwork for later investigation to how an LLM can mimic a human's ability to identify a location in text.
 
-#### Additional data
+While the trials collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand. Future analyses can benefit from human labeling of the data. Out of the 1300, we only have 460 articles labeled. This is only a third of the articles from the CUAPB database. There is already infrastruture for this work in the form of the Zooniverse datathon page. Outside of the 1300 scraped articles, researchers in the field may be interested in exploring more data sources. However, more data sources would only help given the availability of human labeling.
 
-While the trials collected over 400 data points, only 123 of these points were used to do an analysis of the data because the news article data was not labeled beforehand. Future analyses can benefit from human labeling of the data. Out of the 1300, we only have 460 articles labeled. This is only a third of the articles from the CUAPB database. There is already infrastruture for this work in the form of the Zooniverse datathon page. Outside of the 1300 scraped articles, researchers in the field may be interested in exploring more data sources.
-
-Even aside from data that remains unlabeled, such comparisons with the data can be done on for both new data and with new volunteers. Recall that we only had 48 total volunteers across both datathons. While this ratio remains high, with about 8 documents per volunteer, different biases among the volunteers and predilections towards certain answers may skew the results. In particular, because the datathons were organized as community events, we can be fairly confident that some labels were not made independently of each other. Finally, a replication of this data labeling process should include an explicit mechanism to ensure there are more human-human pairs of data points. Because all the volunteers labeled the data independently, there was no way to guarantee that the data would have duplicates.
-
-### Stronger Models
+Even aside from data that remains unlabeled, such comparisons with the data can be done on for both new data and with new volunteers. Recall that we only had 48 total volunteers across both datathons. While this ratio remains high, with about 8 documents per volunteer, different biases among the volunteers and predilections towards certain answers may skew the results. In particular, because the datathons were organized as community events, we can be fairly confident that some labels were not made independently of each other. Finally, a replication of this data labeling process should include an explicit mechanism to ensure there are more human-human pairs of data points. Because all the volunteers labeled the data independently, there was no way to guarantee that the data would have duplicates. In addition to enriching human data, there are also many ways to improve computational results.
 
 Aside from further data exploration, comparison and exploration of different large language models may benefit our audience. Recall that our current model only made use of Ollama's llama 3.1:8B as the data extractor. The intention of this choice of model was to use as few parameters as possible to reduce compute resources and use a general-use model to make linking to a general RAG pipeline easier. Both of these considerations were with respect to accessibility. However, researchers interested in those areas may use more powerful models to derive more accurate locations, especially in cases where the location is unclear or implied.
 
 ## Conclusion
 
 We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield.
-
-
-## Data
-
-The data and code used can also be located at https://github.com/JesseLoi/Data-Accountability-LLMs-and-Scraping.
-
 
 
 ## References
