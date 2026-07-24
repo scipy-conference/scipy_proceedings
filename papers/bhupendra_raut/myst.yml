@@ -79,6 +79,7 @@ project:
       keys:
         - gupta2025cloud
         - narayanan2024getting
+        - vohra2016parquet
   exports:
     - id: pdf
       format: typst
