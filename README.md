@@ -224,6 +224,10 @@ Submissions to the SciPy Proceedings should be novel scientific articles that ha
 
 Final submission acceptance will be at the discretion of the Proceedings Co-Chairs. Please contact them if you have any worries about the novelty or publication history of your submission.
 
+### Policy on Gen AI Use for Authors
+
+The SciPy conference permits the use of generative AI tools for authorship, but requires transparent disclosure of their use. Refer to the [Gen AI policy](./genai_policy.md) for more details.
+
 ### Author Workflow
 
 Below we outline the steps to submit a paper.
@@ -460,6 +464,9 @@ _Final Reviewer Decision_ deadline.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
 - September 6: Final reviewer decision deadline
 
+### Policy on Gen AI Use for Reviewers
+
+The SciPy conference permits the use of generative AI tools for reviewing, but requires transparent disclosure of their use. Refer to the [Gen AI policy](./genai_policy.md) for more details.
 
 ### Reviewer Workflow
 
