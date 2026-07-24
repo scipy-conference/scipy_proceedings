@@ -216,102 +216,15 @@ Finally, answers on the low end, around 0-10 on the fuzzy scale, indicate almost
 
 At an initial glance, the data looks promising. With a median of at least 88, we can suspect at least half the data is a reasonable match. That being said, this still entails that half the data is below, with a mass of points clustering around a fuzzy score of 0.
  To add more context, we display a handful of observations.
-
-LLM Location
-Human Location
-url
-fuzz_loc
-Explanation
-Deer River
-
-
-https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1669428027/Apitz_Itasca_Co._sheriff's_deputy_charged_with_videotaping_girl_in_bathroom.pdf?1669428027
-0
-LLM attempts answer when there is none
-UNKNOWN
-
-
-https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1670339558/Meemken_Longtime_Stearns_County_Deputy_Gets_9_Months_Jail.pdf?1670339558
-0
-Negative answers expressed differently
-KASOTA, Minn.
-LeSueur County
-https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626881948/Settlement_In_LeSueur_Co._Deputy%E2%80%99s_Fatal_Shooting_Of_Man.pdf?1626881948
-23
-Overly vague answers
-"Minneapolis City Hall"
-Eastside St Paul Checkerboard Pizza
-https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1585615610/Five_SPPD_Cops_Fired.pdf?1585615610
-30
-LLM fails to locate instance
-Red Wing City Hall
-
-
-https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613839705/Red_Wing_Police_Chief_Fired.pdf?1613839705
-33
-LLM provides
-"Interstate Hwy. 35E and University Avenue"
-Interstate Highway 35E North by University Avenue
-https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1509687779/Mark_Kaspszak_MPD_Arrested_for_DWI_010606.pdf?1509687779
-72
-
-
-"1800 block of Columbus Avenue S."
-1800 block of Columbus Avenue S
-https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613597722/Chauvin_Shooting_Article.pdf?1613597722
-100
-
-
-
-
-
-
-MAX_LOCATION
-Location (Human Ground Truth)
-Source Document
-Fuzzy Score
-Error Explanation
-Deer River
-
-
-Document 1
-0
-LLM attempts answer when there is none
-UNKNOWN
-
-
-Document 2
-0
-Negative answers expressed differently
-KASOTA, Minn.
-LeSueur County
-Document 3
-23
-Overly vague answers
-"Minneapolis City Hall"
-Eastside St Paul Checkerboard Pizza
-Document 4
-30
-LLM fails to locate instance
-Red Wing City Hall
-
-
-Document 5
-33
-LLM provides hallucinated extraction
-"Interstate Hwy. 35E and University Avenue"
-Interstate Highway 35E North by University Avenue
-Document 6
-72
-Partial match with minor phrasing variance
-"1800 block of Columbus Avenue S."
-1800 block of Columbus Avenue S
-Document 7
-100
-Exact text match
-
-
-
+| MAX_LOCATION | Location | url | fuzz_loc | Explanation |
+|---|---|---|---|---|
+| Deer River | | [source](https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1669428027/Apitz_Itasca_Co._sheriff's_deputy_charged_with_videotaping_girl_in_bathroom.pdf?1669428027) | 0 | LLM attempts answer when there is none |
+| UNKNOWN | | [source](https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1670339558/Meemken_Longtime_Stearns_County_Deputy_Gets_9_Months_Jail.pdf?1670339558) | 0 | Negative answers expressed differently |
+| "KASOTA, Minn." | LeSueur County | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626881948/Settlement_In_LeSueur_Co._Deputy%E2%80%99s_Fatal_Shooting_Of_Man.pdf?1626881948) | 23 | Overly vague answers |
+| "Minneapolis City Hall" | Eastside St Paul Checkerboard Pizza | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1585615610/Five_SPPD_Cops_Fired.pdf?1585615610) | 30 | LLM fails to locate instance |
+| "Interstate Hwy. 35E and University Avenue" | Interstate Highway 35E North by University Avenue | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1509687779/Mark_Kaspszak_MPD_Arrested_for_DWI_010606.pdf?1509687779) | 72 | |
+| "1800 block of Columbus Avenue S." | 1800 block of Columbus Avenue S | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613597722/Chauvin_Shooting_Article.pdf?1613597722) | 100 | |
+| Red Wing City Hall | | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613839705/Red_Wing_Police_Chief_Fired.pdf?1613839705) | 33 | LLM provides wrong location |
 
 We see that errors often populate when it is unclear what the location is in the article. However, fuzzy score matches by themselves are not enough.
 
