@@ -48,3 +48,5 @@ project:
       template: https://github.com/curvenote-templates/scipy.git
       article: main.md
       output: full_text.pdf
+  bibliography:
+    - references.bib
