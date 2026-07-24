@@ -3,8 +3,8 @@ extends: ../papers.yml
 project:
   id: scipy-2026-loi_jesse
   title:
-    'Bridging the Technical Gap: A Student-Led RAG Pipeline for Community-Driven
-    Document Analysis (title to be adjusted to better suit final paper)'
+    'Bridging the Technical Gap: A Student-Led Data Extraction Pipeline for
+    Community-Driven Document Analysis'
   description:
     'This paper presents the impacts of using LLMs to extract and use
     information from PDF documents and how effective it is compared to human
