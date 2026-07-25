@@ -37,11 +37,13 @@ project:
     TF-IDF: term frequency–inverse document frequency
     MNPI: material non-public information
     'MD&A': Management's Discussion and Analysis
-  # arXiv entries carry 10.48550/arXiv.* DOIs; software/tool citations have no DOI.
+  # arXiv entries carry 10.48550/arXiv.* DOIs; software/tool citations and the
+  # scikit-learn JMLR paper have no DOI.
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
+        - pedregosa2011sklearn
         - anthropic2025claude
         - deepeval
         - phoenix
