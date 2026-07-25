@@ -59,7 +59,7 @@
 }
 @article{shankar2024spade,
 	title        = {{SPADE}: Synthesizing Data Quality Assertions for Large Language Model Pipelines},
-	author       = {Shankar, Shreya and Chambers, Haotian and Naik, Tarak and Chen, Eugene and Parameswaran, Aditya G.},
+	author       = {Shankar, Shreya and Li, Haotian and Asawa, Parth and Hulsebos, Madelon and Lin, Yiming and Zamfirescu-Pereira, J.D. and Chase, Harrison and Fu-Hinthorn, Will and Parameswaran, Aditya G. and Wu, Eugene},
 	year         = 2024,
 	journal      = {Proceedings of the VLDB Endowment},
 	doi          = {10.48550/arXiv.2401.03038}
@@ -68,15 +68,15 @@
 % Closest competitors (cite + differentiate)
 % ---------------------------------------------------------------------------
 @misc{ata2025,
-	title        = {The Agent-Testing Agent: Automated Behavioral Testing for {LLM} Agents},
-	author       = {{Agent-Testing Agent Authors}},
+	title        = {Agent-Testing Agent: A Meta-Agent for Automated Testing and Evaluation of Conversational {AI} Agents},
+	author       = {Komoravolu, Sameer and Mrini, Khalil},
 	year         = 2025,
 	doi          = {10.48550/arXiv.2508.17393},
 	howpublished = {arXiv preprint}
 }
 @misc{testagent2024,
 	title        = {{TestAgent}: Automatic Benchmarking and Exploratory Interaction for Evaluating {LLM}s in Vertical Domains},
-	author       = {{TestAgent Authors}},
+	author       = {Wang, Wanying and Ma, Zeyu and Wang, Xuhong and Zhang, Yangchun and Liu, Pengfei and Chen, Mingang},
 	year         = 2024,
 	doi          = {10.48550/arXiv.2410.11507},
 	howpublished = {arXiv preprint}
@@ -93,28 +93,28 @@
 % ---------------------------------------------------------------------------
 @misc{yehudai2025survey,
 	title        = {Survey on Evaluation of {LLM}-based Agents},
-	author       = {Yehudai, Asaf and others},
+	author       = {Yehudai, Asaf and Eden, Lilach and Li, Alan and Uziel, Guy and Zhao, Yilun and Bar-Haim, Roy and Cohan, Arman and Shmueli-Scheuer, Michal},
 	year         = 2025,
 	doi          = {10.48550/arXiv.2503.16416},
 	howpublished = {arXiv preprint}
 }
 @inproceedings{mohammadi2025survey,
 	title        = {Evaluation and Benchmarking of {LLM} Agents: A Survey},
-	author       = {Mohammadi, Mahmoud and others},
+	author       = {Mohammadi, Mahmoud and Li, Yipeng and Lo, Jane and Yip, Wendy},
 	year         = 2025,
 	booktitle    = {Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)},
 	doi          = {10.48550/arXiv.2507.21504}
 }
 @misc{hui2025trident,
 	title        = {{TRIDENT}: Benchmarking {LLM} Safety in Finance, Medicine, and Law},
-	author       = {Hui, and others},
+	author       = {Hui, Zheng and Dong, Yijiang River and Shareghi, Ehsan and Collier, Nigel},
 	year         = 2025,
 	doi          = {10.48550/arXiv.2507.21134},
 	howpublished = {arXiv preprint}
 }
 @inproceedings{wang2023decodingtrust,
 	title        = {{DecodingTrust}: A Comprehensive Assessment of Trustworthiness in {GPT} Models},
-	author       = {Wang, Boxin and others},
+	author       = {Wang, Boxin and Chen, Weixin and Pei, Hengzhi and Xie, Chulin and Kang, Mintong and Zhang, Chenhui and Xu, Chejian and Xiong, Zidi and Dutta, Ritik and Schaeffer, Rylan and Truong, Sang T. and Arora, Simran and Mazeika, Mantas and Hendrycks, Dan and Lin, Zinan and Cheng, Yu and Koyejo, Sanmi and Song, Dawn and Li, Bo},
 	year         = 2023,
 	booktitle    = {Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks Track},
 	doi          = {10.48550/arXiv.2306.11698}
@@ -154,11 +154,10 @@
 % Self-bias / contamination (methodology defense)
 % ---------------------------------------------------------------------------
 @misc{silencer2025,
-	title        = {Mitigating Self-Bias in {LLM}-as-a-Judge and {LLM}-as-Benchmark-Generator Pipelines},
-	author       = {{Self-Bias Mitigation Authors}},
+	title        = {Silencer: From Discovery to Mitigation of Self-Bias in {LLM}-as-Benchmark-Generator},
+	author       = {Yuan, Peiwen and Li, Yiwei and Feng, Shaoxiong and Wang, Xinglin and Zhang, Yueqi and Shi, Jiayi and Tan, Chuyi and Pan, Boyuan and Hu, Yao and Li, Kan},
 	year         = 2025,
 	doi          = {10.48550/arXiv.2505.20738},
-	note         = {Author list to be verified before final submission},
 	howpublished = {arXiv preprint}
 }
 % ---------------------------------------------------------------------------
@@ -166,7 +165,7 @@
 % ---------------------------------------------------------------------------
 @misc{zhang2026ace,
 	title        = {Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models},
-	author       = {Zhang, and others},
+	author       = {Zhang, Qizheng and Hu, Changran and Upasani, Shubhangi and Ma, Boyuan and Hong, Fenglu and Kamanuru, Vamsidhar and Rainton, Jay and Wu, Chen and Ji, Mengmeng and Li, Hanchen and Thakker, Urmish and Zou, James and Olukotun, Kunle},
 	year         = 2026,
 	doi          = {10.48550/arXiv.2510.04618},
 	howpublished = {arXiv preprint}
@@ -174,6 +173,14 @@
 % ---------------------------------------------------------------------------
 % Software / tools (named in the paper)
 % ---------------------------------------------------------------------------
+@article{pedregosa2011sklearn,
+	title        = {Scikit-learn: Machine Learning in {P}ython},
+	author       = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, {\'E}douard},
+	year         = 2011,
+	journal      = {Journal of Machine Learning Research},
+	volume       = 12,
+	pages        = {2825--2830}
+}
 @misc{anthropic2025claude,
 	title        = {Claude},
 	author       = {{Anthropic}},

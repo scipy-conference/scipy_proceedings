@@ -33,6 +33,10 @@ project:
     OKR: objective and key result
     QA: question answering
     API: application programming interface
+    NMF: non-negative matrix factorization
+    TF-IDF: term frequency–inverse document frequency
+    MNPI: material non-public information
+    "MD&A": Management's Discussion and Analysis
   # arXiv entries carry 10.48550/arXiv.* DOIs; software/tool citations have no DOI.
   error_rules:
     - rule: doi-exists

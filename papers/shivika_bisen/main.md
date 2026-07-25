@@ -29,10 +29,10 @@ abstract: |
 ## Introduction
 
 AI agents are moving into enterprise production faster than the tooling used to evaluate them.
-Teams shipping agents over financial filings, scientific datasets, knowledge bases, and support
-transcripts hit the same wall: existing tooling measures generic {abbr}`LLM (large language
-model)` properties — hallucination rate, latency, token cost, refusal frequency — but not the
-question that blocks a launch: *did the agent do the right thing in this domain?*
+Teams shipping agents over financial filings, scientific datasets, or support transcripts hit
+the same wall: existing tooling measures generic {abbr}`LLM (large language model)` properties —
+hallucination rate, latency, token cost — but not the question that blocks a launch: *did the
+agent do the right thing in this domain?*
 
 Domain correctness is not a generic property. A data agent over a financial schema and a
 {abbr}`RAG (retrieval-augmented generation)` agent over scientific documents require different
@@ -41,11 +41,10 @@ must load the right columns and compute the metric the paper reported; a financi
 ground every figure in its filing and decline when the filing does not support an answer. Neither
 constraint is visible to a generic judge scoring token-level fluency.
 
-The state of practice is the **manually labeled golden set**, with three well-known failure modes:
-it goes *stale* the moment data, prompts, or use cases change; it is *non-reproducible*, each team
-building its own incomparable set; and it gives *no clarity on what to fix*, reporting only that
-something broke, not which domain constraint was violated. These follow from treating evaluation
-as an artifact to be *authored* rather than a pipeline to be *generated*.
+The state of practice is the **manually labeled golden set**, with three well-known failure
+modes: it goes *stale* when data or prompts change; it is *non-reproducible* across teams; and it
+gives *no clarity on what to fix*, reporting only that something broke. These follow from
+treating evaluation as an artifact to be *authored* rather than a pipeline to be *generated*.
 
 This paper presents **AI Eval Engine**, an open-source Python framework that reframes evaluation
 as a domain-driven generator. The team points at where the domain lives; the framework produces a
@@ -53,8 +52,8 @@ versioned golden set, a runnable evaluation script, and a living Domain Complian
 emergent failure modes — shifting the human role from *author* to *reviewer* and letting teams
 track agent behavior as a first-class quarter-over-quarter {abbr}`OKR (objective and key result)`.
 It leans on a language model — Anthropic's Claude [@anthropic2025claude], via the Claude
-{abbr}`API (application programming interface)` and Claude Code — for context extraction, golden
-set generation, eval-script generation, and the {abbr}`LLM (large language model)`-as-judge step.
+{abbr}`API (application programming interface)` and Claude Code — for context extraction, golden-set
+and eval-script generation, and the {abbr}`LLM (large language model)`-as-judge step.
 Using one model to both *generate* and *judge* tests raises a real objection — self-bias — which
 we confront in [](#methodology) and which drives our dataset choice.
 
@@ -81,9 +80,8 @@ generation. It is meant to be used *alongside* these tools — RAGAS or DeepEval
 extra Step-4 scorers — and self-improving methods such as Agentic Context Engineering
 [@zhang2026ace] are candidates for evaluation *by* it, not components of it.
 
-## Methodology: Domain-Aware Evaluation Without Self-Bias
-
 (methodology)=
+## Methodology: Domain-Aware Evaluation Without Self-Bias
 
 A pipeline that uses an LLM to *generate* the golden set and the same model family to *judge* the
 agent invites an obvious objection: the evaluation may simply reward outputs that look like what
@@ -106,7 +104,10 @@ follow.
 
 This principle makes the datasets in [](#use-cases) load-bearing: each was chosen because the
 agent cannot succeed without the ingested domain context, and each admits an execution- or
-grounding-based check independent of the judge.
+grounding-based check independent of the judge. One scoping note: this principle governs Step 4 —
+scoring an agent's *answers*. [](#sec:results) does not run Step 4; it evaluates Step 3 — the
+*questions* the generator produces — and its headline metric is itself judge-scored, so the
+protection there is corroboration: every judged number is paired with judge-free measurements.
 
 ## The Five-Step Framework
 
@@ -150,21 +151,25 @@ safety and compliance constraints the domain implies (e.g., "every stated figure
 a cited passage"), and quality signals (distributions, ambiguity clusters, missing-value
 patterns). Users are **not** asked to hand-author a taxonomy or compliance document; they point
 to where the data lives, and the framework surfaces what matters. Stratified sampling ensures
-the extraction sees the breadth of the domain rather than only its most common cases.
+the extraction sees the domain's breadth, not only its most common cases.
 
 ### Step 2 — Domain Compliance Runbook (Living)
 
 From the `DomainContext`, the framework assembles a single content-addressed
 `domain_compliance_runbook.json` — the **Domain Compliance Runbook** — with three sections:
-**domain facts** (definitions, conventions, units), **compliance criteria** (the extracted
-agentic-compliance anchors — domain scope, evidence grounding, privacy/confidentiality, no-advice,
-and human escalation — with severity), and **common failure modes**. The first two are seeded now,
+**domain facts** (definitions, conventions, units), **compliance criteria** (five *fixed,
+universal* agentic-compliance anchors — domain scope, evidence grounding,
+privacy/confidentiality, no-advice, human escalation — instantiated per domain with severity:
+finance's {abbr}`MNPI (material non-public information)` rule is the privacy anchor's finance
+instance), and **common failure modes**. The first two are seeded now,
 at ingestion; the third is *living* — it accumulates as the eval (Step 4) surfaces failures, which
 the framework clusters deterministically by `(category, failure_type)` and turns into a
-`recommended_check` (the golden-set addition that would catch each one). Compliance is therefore
-*discovered, not declared*: a cluster surfaced in run $N$ becomes a runbook entry the golden-set
+`recommended_check` (the golden-set addition that would catch each one). The anchor taxonomy is therefore *declared* — fixed by design, so all
+five rules are probed in every domain — while its instantiations and failure modes are
+*discovered*: a cluster surfaced in run $N$ becomes a runbook entry the golden-set
 generator (Step 3) picks up as a priority for run $N{+}1$, closing the loop between observation and
-test generation. The clustering and `recommended_check` mapping are **deterministic rules, not a
+test generation. A concern fitting none of the five is the signal to promote a new universal
+anchor, not to bolt on a one-off rule. The clustering and `recommended_check` mapping are **deterministic rules, not a
 learned model** — "living" means an accumulated, human-reviewable record, not gradient training.
 
 ### Step 3 — Automated Golden Set Generation
@@ -211,17 +216,17 @@ and the Runbook regenerate on rerun, enabling quarter-over-quarter tracking of a
 Compliance Score** (pass rate on compliance-critical cases), a **Domain Accuracy Score** (correctness on
 in-domain queries), a **Drift Indicator** (share of new failure patterns since the last run), and
 a **Coverage Score** (share of the discovered domain context represented in the golden set).
-
-## Demonstration Use Cases
+These four metrics are computed from Step-4 runs and are defined here but not measured in this
+paper.
 
 (use-cases)=
+## Demonstration Use Cases
 
 We demonstrate the framework on two contrasting, domain-dependent agent shapes that bracket the
 spectrum it targets: a **structured, execution-scored** scientific coder (ScienceAgentBench) and
 an **open-ended, grounding-scored** document-QA agent (FinanceBench) — Python program versus
-free-text-with-evidence, execution versus grounding, both failing without the ingested domain
-context. Both were chosen under the principle of [](#methodology): correctness is checkable
-independently of the judge, and one pipeline serves both.
+free-text-with-evidence, both failing without the ingested domain context, both chosen under the
+principle of [](#methodology).
 
 ### Use Case 1 — Scientific-Coding Agent on ScienceAgentBench
 
@@ -230,8 +235,7 @@ Given a scientific task and a dataset, the agent produces a self-contained Pytho
 four disciplines, each **scored by execution** (the best agents solve roughly a third, so it is
 far from saturated). Its *dataset + optional expert knowledge* input maps directly onto Step 1,
 its execution scoring is self-bias-proof, and it is SciPy-native. Step 1 ingests the task and
-expert knowledge into the Domain Compliance Runbook (Step 2); Step 3 generates capability questions
-and compliance probes; Step 4 scores by executing the program, and failures (e.g. "loads the wrong
+expert knowledge; Step 4 scores by executing the program, and failures (e.g. "loads the wrong
 columns") cluster back into the runbook.
 
 ### Use Case 2 — Financial Document QA on FinanceBench
@@ -242,26 +246,24 @@ retrieval-augmented model was wrong or refused on roughly four-fifths of a sampl
 task is genuinely hard. The agent **must** ground each answer in the supplied documents, and the
 safety dimension is intrinsic: a hallucinated figure or a wrong refusal on a regulated domain is
 the failure that matters. The pipeline is identical — Step 1 extracts the filing taxonomy and
-grounding constraints into the runbook (Step 2); Step 3 generates evidence-required and
-refusal-expected cases; Step 4 scores against cited evidence (drawing on hallucination labels such
-as RAGTruth [@wu2024ragtruth]), and failures such as "states an unsupported figure" cluster back
-into the runbook. One pipeline thus spans a structured,
-execution-verified coder and an open-ended, grounding-verified QA agent without per-domain tooling.
-
-## Results
+grounding constraints; Step 3 generates evidence-required and refusal-expected cases; Step 4
+scores against cited evidence (cf. RAGTruth [@wu2024ragtruth]). One pipeline thus spans a
+structured, execution-verified coder and an open-ended, grounding-verified QA agent.
 
 (sec:results)=
+## Results
 
 The experimental variable throughout is the **domain context supplied to the golden-set generator
-(Step 3)**. On each dataset the generator runs twice over the *same* source documents with an
-*identical* prompt — once **with** the ingested `DomainContext` (and, on FinanceBench, the
-domain-compliance runbook) and once **without** either — and we compare the two golden sets it
+(Step 3)**. On each dataset the generator runs twice — once **with** the ingested domain data and
+`DomainContext` (and, on FinanceBench, the domain-compliance runbook) and once **blind**, given
+neither the data nor the runbook — and we compare the two golden sets it
 produces. The evaluation is of the **generated questions, not the agent's answers**: what a
 framework can *test for* is decided at generation time, so that is what we measure. Every number
-below is reproducible from the committed configuration and the two saved golden sets; generation
-ran through the Claude Code workflow [@anthropic2025claude]. One metric uses an LLM-as-judge; we
-corroborate it with two judge-free metrics so that no result rests on a model grading its own
-output.
+below is reproducible from the committed configuration and the two saved golden sets. Generation
+and the LLM-as-judge both ran on Claude Opus 4.8 (`claude-opus-4-8`) via Claude Code
+[@anthropic2025claude], June 2026 (flat-rate subscription, default settings, no fixed seed;
+[](#sec:limitations)). Because generator and judge are the same model, the judged metric is
+corroborated with two judge-free ones, so no conclusion rests on a model grading its own output.
 
 ### FinanceBench: what the generated golden set can test for
 
@@ -280,9 +282,10 @@ without-context questions are valid finance questions, so they earn relevance cr
 are company-less and verify against no specific filing.
 
 **A judge-free corroboration.** Because that metric uses a judge, we repeat the comparison with a
-deterministic, offline one: each question's **domain relatedness** is its maximum TF-IDF cosine
-similarity to the closest real FinanceBench record (over all question, answer, and evidence
-text). With-context questions sit closer to real filings — median **0.263** versus **0.176**,
+deterministic, offline one: each question's **domain relatedness** is its maximum
+{abbr}`TF-IDF (term frequency–inverse document frequency)` cosine similarity to the closest real
+FinanceBench record (over all question, answer, and evidence text; scikit-learn
+`TfidfVectorizer` [@pedregosa2011sklearn] with English stop words, unigrams, and sublinear TF). With-context questions sit closer to real filings — median **0.263** versus **0.176**,
 roughly a 49% higher median (@fig:qa-grounded). Both sets are genuinely finance questions, so
 the distributions overlap; the shift is the vocabulary of real filings — named companies,
 specific line items, periods — that only the with-context generator could draw on.
@@ -298,9 +301,10 @@ filing), a judge-free offline metric; the with-context distribution shifts up wh
 the baseline.
 :::
 
-**Topic structure and the compliance gap.** Running NMF topic modeling over the raw question
-text of each set — a fully unsupervised, judge-free view of what the generator actually produced
-— recovers two very different golden sets (@fig:qa-topics, @fig:qa-flow). With context, the 50
+**Topic structure and the compliance gap.** Running {abbr}`NMF (non-negative matrix
+factorization)` topic modeling [@pedregosa2011sklearn] over the raw question text of each set
+(TF-IDF features, 1–2-grams, finance-boilerplate stop words; topic assignments hand-verified by
+reading every question) — a judge-free view of what the generator actually produced — recovers two very different golden sets (@fig:qa-topics, @fig:qa-flow). With context, the 50
 questions split into **36 grounded capability questions** across six finance topics, including
 domain-aware probes the blind generator never produces (*segment & revenue mix*,
 *metric-applicability / when-to-decline* — e.g. "is inventory turnover meaningful for a bank?"),
@@ -310,15 +314,19 @@ anchor, evidence-grounding, is enforced on every capability question).
 
 :::{figure} qa_topic_bubbles.png
 :label: fig:qa-topics
-:width: 72%
-NMF topics over the question text, placed by mean domain relatedness (x) and mean specificity
-(y); bubble area is the number of questions. With-context topics (blue) — including a cluster of
-agent-compliance probes the baseline never generates — sit higher and to the right; without-context
+:width: 62%
+NMF topics over the question text. x = mean domain relatedness (the TF-IDF metric of
+@fig:qa-grounded); y = mean **domain specificity** — the fraction of five concreteness markers
+pinned down (named company, fiscal period, statement, line item, figure verifiable in a real
+filing). Bubble area = questions. With-context *capability* topics (blue, 1–6) sit higher and to
+the right; the with-context *compliance* probes (7–10) sit low and left by design — naming an
+entity but using little filing vocabulary — and have no baseline counterpart; without-context
 topics (grey) collapse into a generic, less-grounded region.
 :::
 
 Without context, the same generator produces **only generic disclosure topics** — 25 of the 50
-are template "summarize Item 1A / MD&A / the auditor's opinion" prompts — and the
+are template "summarize Item 1A / {abbr}`MD&A (Management's Discussion and Analysis)` / the
+auditor's opinion" prompts — and the
 **agent-compliance category is empty (0 probes)**, confirmed by reading every question. This is
 the decisive result, and it is a *coverage* gap rather than a score swing: the generic golden set
 cannot test a single compliance rule, so an agent can breach all of them and the evaluation never
@@ -327,8 +335,8 @@ each golden set can — and cannot — test for.
 
 :::{figure} qa_topic_flow.png
 :label: fig:qa-flow
-:width: 52%
-Each 50-question golden set traced root → sub-category → NMF topic. *With* domain context (top):
+:width: 45%
+Each 50-question golden set traced from root to sub-category to NMF topic. *With* domain context (top):
 36 grounded capability questions across six finance topics plus 14 agent-compliance probes across
 four compliance topics. *Without* (bottom): 50 generic disclosure questions and an **empty
 agent-compliance sub-category (0)** — the blind generator writes no compliance probes at all.
@@ -349,7 +357,7 @@ agent-compliance sub-category (0)** — the blind generator writes no compliance
   - no
   - partial — common ones only
   - 36 tests across 6 topic areas
-* - ↳ of which edge-case / decline (metric not meaningful, missing line item)
+* - of which: edge-case / decline (metric not meaningful, missing line item)
   - no
   - partial
   - 5 tests (subset of the 36)
@@ -381,64 +389,67 @@ The result is a *generation-time coverage* finding rather than an accuracy swing
 golden-set generator the ingested domain context — through the Domain Compliance Runbook — changes
 what the golden set can test for. On FinanceBench it turns 50 generic, weakly-grounded disclosure
 questions with **zero** compliance probes into 36 grounded, domain-specific questions plus 14 probes
-spanning all four behavioral compliance anchors, with the questions measurably closer to real
-filings on both a judge and a judge-free metric. The added coverage exists *only because Step 1
-ran*; a generic golden set, scoring the very same agent, has no way to surface it.
+spanning all four behavioral compliance anchors, measurably closer to real filings on both
+metrics. The added coverage exists *only because Step 1 ran*; a generic golden set, scoring the
+very same agent, has no way to surface it.
 
 ## Implementation Notes
 
-The framework is implemented in Python (3.11+); all five steps are exercised in [](#sec:results).
-Only Step 1 needs a model call (Claude via the Anthropic API [@anthropic2025claude], with prompt
-caching); Steps 2–5 run offline and deterministically, so the artifacts reproduce without an API
-key. Both demos use public data with independent checks (execution for ScienceAgentBench, document
-grounding for FinanceBench), and Use Case 2 retrieves with Chroma [@chroma]. Configuration is YAML,
-and artifacts are plain-text and Git-friendly. The repository is MIT-licensed; a live demonstration
-will accompany the SciPy 2026 talk.
+The framework is implemented in Python (3.11+); [](#sec:results) exercises Steps 1–3, while the
+Step-4 scorers and Step-5 metrics are implemented and unit-tested but not evaluated there.
+Only Step 1 needs a model call; Steps 2–5 run offline and deterministically, so the artifacts
+reproduce without an API key. Both demos use public data with independent checks, and Use Case 2 retrieves with Chroma
+[@chroma]. Configuration is YAML; artifacts are plain-text and Git-friendly. The repository is
+MIT-licensed; a live demonstration will accompany the SciPy 2026 talk.
 
 ## Discussion
 
-**Reviewer, not author.** A human stays in the loop at every generation step — an artifact a domain
-expert *accepted* carries different organizational weight, so the framework optimizes for
-*acceptance latency*, not full autonomy. **Discovered, not declared.** The Domain Compliance Runbook
-grows from observed failures rather than an upfront list, on the wager that teams learn the
-constraint set only by watching the agent fail. **Verifiability as a design constraint.** Choosing
-datasets by *checkability* is what lets us claim domain-aware evaluation without conceding to
-self-bias; judged scores should be read as weaker than verified ones.
+**Reviewer, not author.** A human stays in the loop at every generation step — an *accepted*
+artifact carries different organizational weight — so the framework optimizes for *acceptance
+latency*, not full autonomy. **Fixed anchors, discovered instances.** The five compliance
+anchors are a fixed taxonomy — guaranteeing coverage by construction — while their domain
+instantiations and the runbook's failure modes grow from observed behavior — teams learn each
+constraint's *content* by watching the agent fail. **Verifiability as a design constraint.** Choosing
+datasets by *checkability* underwrites the self-bias defense; judged scores read weaker than
+verified ones.
 
 (sec:limitations)=
 ## Limitations and Future Work
 
-The current scope targets text- and code-producing agents reached over HTTP; multimodal and
-long-horizon tool-using agents are future work, though Step 1's extractor is designed to
-generalize. The Domain Compliance Runbook is a single Markdown file that will need per-sub-domain splitting at
-scale, the Step 5 dashboard is read-only (trend visualization is planned), and an
-execution-verifiable text-to-SQL slice (e.g., a small BIRD subset) is a natural third demonstration
-left for future work.
+The current scope targets text- and code-producing agents; multimodal, long-horizon tool-using
+agents are future work, though Step 1's extractor is designed to generalize. The Domain
+Compliance Runbook is a single JSON artifact (`domain_compliance_runbook.json`) that will need
+splitting at scale, the Step 5 dashboard is read-only, and an execution-verifiable text-to-SQL
+slice (e.g., a small BIRD subset) is a natural third demonstration. Two experimental limits: the blind arm lacks both the
+raw data and the extracted context, so the measured gap bounds their *combined* contribution (an
+intermediate raw-data-only arm isolating Step 1 is planned), and each arm is a single unseeded
+generation run, so the numbers carry no variance estimate.
 
 ## Conclusion
 
 AI Eval Engine treats evaluation as a *pipeline to be generated*, not an artifact to be authored:
 from a pluggable domain context it generates the golden set and eval script, scores with
-verifiable checks wherever possible, and accumulates a living Domain Compliance Runbook — a reusable,
-rerunnable, domain-aware path to tracking agent behavior as a first-class OKR. Demonstrations on an
-execution-scored coder and a grounding-scored QA agent show one pipeline across two very different
-domains, with self-bias addressed by construction.
+verifiable checks where possible, and accumulates a living Domain Compliance Runbook — a
+reusable, domain-aware path to tracking agent behavior as a first-class OKR.
 
 ## Availability
 
-Source code is released under the MIT license. The SciPy 2026 talk page and the public
-repository are linked from the proceedings entry.
+Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; the golden sets, judge
+outputs, and analysis scripts behind [](#sec:results) are under `results/ab_experiment/` there.
+The public API mirrors the paper's steps:
 
-## Generative AI Disclosure
+```python
+from ai_eval_engine import extract_domain_context, generate_golden_set
+ctx = extract_domain_context("configs/financebench.yaml")  # Step 1 -> DomainContext
+gs = generate_golden_set("configs/financebench.yaml", "out/context.json",
+    target_cases=50, runbook_path="out/domain_compliance_runbook.json")  # Step 3
+```
 
-In accordance with the SciPy generative AI policy, the author discloses that generative AI
-(Anthropic Claude, via the Claude API and Claude Code) was used in two capacities: as the
-*subject* of this work — the framework invokes Claude for context extraction, golden-set and
-eval-script generation, and LLM-as-judge scoring — and as a *writing aid* for drafting and
-refining prose and code examples. All outputs were reviewed, verified, and revised by the author,
-who takes full responsibility for the final content.
+## Disclosures
 
-## Acknowledgments
-
-This work is an independent open-source contribution to the SciPy 2026 Proceedings, separate from
+**Generative AI.** Per the SciPy generative AI policy: generative AI (Anthropic Claude, via the
+Claude API and Claude Code) was used both as the *subject* of this work — the framework invokes
+Claude for extraction, generation, and judge scoring — and as a *writing aid*. All outputs were
+reviewed, verified, and revised by the author, who takes full responsibility for the final
+content. **Affiliation.** This work is an independent open-source contribution, separate from
 the author's employer affiliation.
