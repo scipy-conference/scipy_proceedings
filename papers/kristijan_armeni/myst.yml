@@ -73,6 +73,11 @@ project:
         - romero_vicente_coordinated_2024
         - buytaert_25_2026
         - sommerville_software_2016
+        - noauthor_better_2025
+        - chris_dashboards_2025
+        - huyen_ai_2025
+        - wolf_welcome_2026
+
   exports:
     - id: pdf
       format: typst
