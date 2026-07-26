@@ -55,9 +55,9 @@ To handle these two cases, we implemented OCR (optical character recognitions). 
 
 ###  Data Labeling
 
-We label our data with an LLM and with human volunteers to serve as a ground truth set for the models. We made use of Ollama's llamma 3.1:8B instruct, which is a light language model, with only 8 billion parameteres. While other models were available, we opted to use a model accessible to organizations with less compute power. Additionally, a general instruction trained model can be used for tasks other than simply just location extraction. We then called the model with the following prompt:
+We label our data with an LLM and with human volunteers to serve as a ground truth set for the models. We made use of Ollama's llamma 3.1:8B instruct, which is a light language model, with only 8 billion parameteres. While other models were available, we opted to use a model accessible to organizations with less compute power. Additionally, a general instruction trained model can be used for tasks other than simply just location extraction. We set the model to "ollama_chat/llama3.1:8b" with a temperature of 0.0. We then called the model with the following prompt:
 
-
+````
 incident_prompt = """
 Analyze the provided news article and identify the LOCAL location of the incident in terms of the street address or physical landmarks. If the location cannot be found or is uncertain, return UNKNOWN instead. Only return a location you are confident with.
 Output only the address and no comments. Just the address. No need to provide a state or a city. Just a local address that can be accurately located in the document. IF YOU CANNOT THEN ENTER UNKNOWN
@@ -72,6 +72,7 @@ An example output could be:
 "UNKNOWN"
 These are all appropriate responses.
 """
+````
 
 This prompt makes use of both few-shot prompting and a very conservative instruction that attempts to restrain the model from hallucinating, restricting its role to extraction, not inference. Similar instructions were given to the human volunteers.
 
@@ -119,7 +120,7 @@ Zooniverse Volunteer View
 
 Our evaluation metric is designed to capture similarity between responses. While a semantic matching metric would be ideal, the short nature of the responses make close matches separate. Instead, we are interested in text similarity. In particular, when the location is present, we want to ensure that both the human and LLM return the same chunk of text. To account for natural variance in writing and potential misspelling, we use fuzzy matching from the TheFuzz library as our measure of success. Fuzzy matching assigns a score from 0 to 100 based on how closely the the characters in one chunk of text match the characters in the other chunk of text. We additionally use subset fuzzy matching, which avoids assigning a penalty if one chunk has more text than another chunk, but both texts have overlapping text. More concretely, fuzzy matching represents the calculation of the Levenshtein distance.
 
-The Levenshtein distance \text{lev}_{a,b}(i, j) is a measure between two strings a and b and is formulated with the following recusive definition.
+The Levenshtein distance \text{lev}_{a,b}(i, j) is a measure between two strings a and b and is formulated with the following recursive definition.
 
 $$\text{lev}_{a,b}(i, j) = \begin{cases}
   \max(i, j) & \text{if } \min(i, j) = 0, \\
@@ -133,7 +134,7 @@ $$\text{lev}_{a,b}(i, j) = \begin{cases}
 In the first case, \min(i, j) = 0 occurs when comparing a string to an empty string. Let i and j also represent indices in a matrix whose columns indices represent the indices of one of the strings and whose row indices represent the indices of the other string. Recursively, the “distance” is represented by the amount of steps needed to convert one string to another. Each step is either a character deletion, represented by \text{lev}_{a,b}(i-1, j) + 1, a character insertion, represented by  \text{lev}_{a,b}(i, j-1) + 1, or a character substitution  \text{lev}_{a,b}(i-1, j-1) + c(a_i, b_j).
 
 ```{figure} ./LV_Matrix.png
-:name: ZooniverseVolunteerView
+:name: LevensteinMatrix
 :alt: Article to be read with questions along the side.
 :align: center
 The following Levenshtein distance matrix shows an optimal path cost of 6.
@@ -144,7 +145,7 @@ For the above example, 6 steps are the optimal number required to convert “min
 
 $$\text{Score}_{\text{norm}} = \left(1 - \frac{\text{lev}_{a,b}(|a|, |b|)}{\max(|a|, |b|)}\right) \times 100$$
 
-The current project makes use not of general fuzzy matching, but partial ratio fuzzy matching, or subset fuzzy matching. Instead of comparing the entire string, subset fuzzy matching only matches the best matching substring of equal length. In other words, there is not a penalty for deleting ends off of a longer string. For string a length m and string b length n where $m<n$ subset fuzzy matching creates an n x n matrix and computes the levenshtein distance for every potential window of length n for string a. The choice to use a text based match motivates tuning the model to replicate a human’s identification as much as possible, where the human is instructed to be as conservative as possible in their answers. While there is no hard cut off on how high a fuzzy score an answer should be to be considered a match, scores about a 70 fuzzy match score tend to contain the same content, with 70 being a rather conservative response.
+The current project makes use not of general fuzzy matching, but partial ratio fuzzy matching, or subset fuzzy matching. Instead of comparing the entire string, subset fuzzy matching only matches the best matching substring of equal length. In other words, there is not a penalty for deleting ends off of a longer string. We prefer partial ratio matching over traditional fuzzy matching as we have found LLMs to prefix or suffice appropriate responses with additional characters, such as commentary like "The location is...", or an LLM would surround its responses with quotation marks. We do not wish to penalize this additional characters, as that would not interfere with the correctness of the LLM's response. For string a length m and string b length n where $m<n$ subset fuzzy matching creates an n x n matrix and computes the levenshtein distance for every potential window of length n for string a. The choice to use a text based match motivates tuning the model to replicate a human’s identification as much as possible, where the human is instructed to be as conservative as possible in their answers. While there is no hard cut off on how high a fuzzy score an answer should be to be considered a match, scores about a 70 fuzzy match score tend to contain the same content, with 70 being a rather conservative response.
 
 [@dev2026] have previously used fuzzy matching as an evaluation metric in the past. The main competitor as an evaluation metric would be to use an LLM-as-judge. However, to produce as deterministic a response as we can, we use fuzzy matching primarily. Dev et al. remark that fuzzy matching remains strong so long as nuance does not need to be captured. The problem of location extraction at hand is simple enough to the point where an LLM-as-judge is likely unnecessary and not computationally worth it, especially given current problems with its use as an evaluation tool [@li2025]. But we cannot use fuzzy score pairs for an LLM and human by itself, however. Such a comparison would suggest that a single human response is enough to produce ground truth, which is not necessarily true.
 
@@ -222,9 +223,9 @@ At an initial glance, the data looks promising. With a median of at least 88, we
 | UNKNOWN | | [source](https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1670339558/Meemken_Longtime_Stearns_County_Deputy_Gets_9_Months_Jail.pdf?1670339558) | 0 | Negative answers expressed differently |
 | "KASOTA, Minn." | LeSueur County | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626881948/Settlement_In_LeSueur_Co._Deputy%E2%80%99s_Fatal_Shooting_Of_Man.pdf?1626881948) | 23 | Overly vague answers |
 | "Minneapolis City Hall" | Eastside St Paul Checkerboard Pizza | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1585615610/Five_SPPD_Cops_Fired.pdf?1585615610) | 30 | LLM fails to locate instance |
+| Red Wing City Hall | | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613839705/Red_Wing_Police_Chief_Fired.pdf?1613839705) | 33 | LLM provides wrong location |
 | "Interstate Hwy. 35E and University Avenue" | Interstate Highway 35E North by University Avenue | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1509687779/Mark_Kaspszak_MPD_Arrested_for_DWI_010606.pdf?1509687779) | 72 | |
 | "1800 block of Columbus Avenue S." | 1800 block of Columbus Avenue S | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613597722/Chauvin_Shooting_Article.pdf?1613597722) | 100 | |
-| Red Wing City Hall | | [source](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1613839705/Red_Wing_Police_Chief_Fired.pdf?1613839705) | 33 | LLM provides wrong location |
 
 We see that errors often populate when it is unclear what the location is in the article. There are two main root causes for divergence in answers throughout, one on the human side and another on the LLM side. First, we note that volunteers were not heavily prompted on the types of appropriate answers during the datathons, due to time constraints. As a result, when there was not a consensus on how to respond. For example, some volunteers responded with "N/A" while others responded with an empty string. Additionally, volunteers may have been prone to making mistakes, due to the large volume of questions being asked of them. During the datathon proper, they were requested information that was not simply the location and may have divided their attention several ways. Second, we note that throughout the labeling process, the LLM would almost never state the location is not present, instead giving answers that were overly vague. For example, it would offer generally vague responses, such as the city, when giving location. Additionally, the LLM may have had difficulty interpreting the concept of an "incident location". While the goal of this pipeline was to locate the area of police misconduct, the LLM often provided the courthouse where the complaint was made or the officer was charged. However, even aside from these behavioral limitations, there are significant parts of the pipeline that limit successful answers. Particularly, a while efforts were taken to identify text that required OCR, this was done manually and not exhaustively. Often, LLMs would have no reliable text to work with. This was a natural limit of our preprocessing ability. All these features join together to result in lower fuzzy scores. However, fuzzy score matches by themselves are not enough.
 
@@ -260,7 +261,7 @@ While we had initially addressed Private Use Access Characters and text embedded
 
 While our datathons labeled over 800 documents, only about a third of these were news articles, and even fewer of these articles were double-reviewed. This greatly limited the comparisons made in the results section. If more data were collected, it could be that the distributions compared would be different in a statistically significant manner. Most importantly, we must address the extremely limited human sample. Recall that we only have 13 human-human data points for the Zooniverse dataset and only 85 human-human data points from the Baserow dataset. While it is better, it remains far from ideal. We therefore wish to hedge our results, instead using this research as a framework for future research and community engagement.
 
-The lack of data for human comparison is the most important area of improvement for our research. There are two ways that future research can improve on our results. First, organizers can lower the total number of articles such that they can guarantee each article in the labeling set can be labeled at least twice. Second, a different route can be to collect enough data with more time and volunteers such that the volume of data is simply higher.
+The lack of data for human comparison is the most important area of improvement for our research. There are two ways that future research can improve on our results. First, organizers can lower the total number of articles such that they can guarantee each article in the labeling set can be labeled at least twice. Second, a different route can be to collect enough data with more time and volunteers such that the volume of data is simply higher. While these two strategies can assist with data volume, we still note a value of this experiment to future researchers. While Zooniverse has a more user-friendly design, the indepdendent nature of task assignment makes concentrating labeling difficult, which Baserow has more success with. Future researchers should consider the trade-off between a data secure, blind assignment task that Zooniverse provides with a platform like Baserow, which contains some multi-user difficulties but allows a degree of agency when assigning tasks.
 
 
 
@@ -278,4 +279,4 @@ Aside from further data exploration, comparison and exploration of different lar
 
 ## Conclusion
 
-We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield.
+We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield. This strategy allows community organizations to better allocate their efforts.
