@@ -5,7 +5,10 @@ abstract: |
   Panel data econometrics is ubiquitous in economic and social-science
   research, yet Python has lacked a comprehensive library for advanced panel
   analysis: researchers have had to fall back on proprietary Stata or on R,
-  breaking otherwise Python-native, reproducible workflows. We introduce
+  breaking otherwise Python-native, reproducible workflows. PanelBox grew out
+  of our model-validation practice in credit risk, where econometric models
+  running in production Python systems had to be exported to Stata or R for
+  estimation and validation. We introduce
   PanelBox, the first all-in-one Python library for panel data econometrics,
   implementing more than 70 models across 11 families — static linear models,
   dynamic GMM estimators (Arellano–Bond, Blundell–Bond with the Windmeijer
@@ -25,13 +28,34 @@ abstract: |
 
 ## Introduction
 
-Panel data — repeated observations on the same entities over time — is the
-empirical backbone of modern economics and the social sciences
-[@baltagi2021; @wooldridge2010]. By combining cross-sectional and temporal
-variation, panel methods let researchers control for unobserved heterogeneity
-while estimating dynamic relationships, from labor-market adjustment
-[@arellano1991] to production functions [@blundell1998] and cross-country
-growth [@bond2001].
+PanelBox did not begin as a general-purpose econometrics library. We work in
+model validation for credit risk, where econometric models estimated on panel
+data must be independently re-estimated, stress-tested, and documented before
+they are allowed into production. Our production systems run on Python; the
+reference implementations of the methods we needed did not. Every validation
+cycle meant exporting data to Stata or R, re-importing results, and
+reconciling discrepancies by hand — slow, error-prone, and impossible to
+automate end to end. What started as an internal toolkit for validating panel
+models in pure Python grew, model family by model family, into PanelBox, once
+it became clear that the gap was far wider than our own use case: there was no
+library that let an economist take a panel model from specification to
+estimation, testing, and reporting — let alone deployment — without leaving
+Python.
+
+The data at the center of this workflow are *panel data* — repeated
+observations on the same entities over time, such as firms observed annually
+or countries tracked across decades. Panels are the empirical backbone of
+modern economics and the social sciences [@baltagi2021; @wooldridge2010], and
+for a simple reason: every firm or country has stable characteristics that no
+dataset records — management quality, institutions, culture. A cross-sectional
+regression silently attributes the effect of these *unobserved* traits to the
+variables it does observe, biasing its conclusions. Because a panel follows
+each entity over time, it can compare each entity *with itself*, removing the
+influence of anything constant — the *unobserved heterogeneity* that panel
+methods are built to neutralize. Combined with the time dimension, this lets
+researchers estimate genuinely dynamic relationships, from labor-market
+adjustment [@arellano1991] to production functions [@blundell1998] and
+cross-country growth [@bond2001].
 
 The tooling for these methods, however, is unevenly distributed across
 computing environments. Stata's `xtabond2` command [@roodman2009stata] is the
@@ -48,40 +72,52 @@ models and some instrumental-variables support but no dynamic GMM; `pyfixest`
 excels at high-dimensional fixed effects but offers neither GMM nor dynamic
 panels; and `statsmodels` [@seabold2010statsmodels] has time-series tools but
 no panel-specific GMM. Critically, *none* of them implement panel unit-root or
-cointegration tests — routine in Stata (`xtunitroot`, `xtcointtest`) and R
-(`plm::purtest`). The consequence is a broken workflow: analysts either limit
-themselves to basic models in Python, or export their data to Stata or R,
-forfeiting reproducibility and integration with the rest of the Python stack.
+cointegration tests, which are routine in Stata (`xtunitroot`, `xtcointtest`)
+and R (`plm::purtest`). The consequence is a broken workflow: analysts either
+limit themselves to basic models in Python, or export their data to Stata or
+R, forfeiting reproducibility and integration with the rest of the Python
+stack.
 
 PanelBox closes this gap. Version 1.0 implements more than 70 models across 11
 families in a single package, validated numerically against established
 software. Beyond breadth, it contributes three things that are new to Python:
 a validated dynamic-GMM implementation with the Windmeijer finite-sample
 correction; the first comprehensive panel unit-root and cointegration testing
-suite; and an intelligent algorithm for unbalanced panels that retains far more
-data than naive complete-case approaches. The library is open source (MIT),
-integrates natively with pandas, and ships with interactive visualization,
-publication-ready reporting, and 103 datasets for immediate experimentation.
+suite; and an intelligent algorithm for unbalanced panels that retains far
+more data than naive complete-case approaches. The library is open source
+(MIT), integrates natively with pandas, and ships with interactive
+visualization, publication-ready reporting, and 103 datasets for immediate
+experimentation. The paper follows the workflow a researcher actually
+traverses — specify and estimate a model, probe its assumptions, and report
+the results — with the depth reserved for the three novel contributions;
+@sec:breadth summarizes the full catalogue, and @sec:using describes how the
+library is used and extended in practice.
 
-## Library overview and design
+## Library design: one workflow from data to report
 
-@fig:architecture summarizes the architecture. A common data layer wraps a
-pandas `DataFrame` together with entity and time identifiers; every estimator
-consumes this layer, supports R-style formulas via `patsy`, and returns a
-result object following the `statsmodels` convention, with `summary()`,
-`conf_int()`, `to_latex()`, and `to_html()` methods. On top sit the 11 model
-families, a shared inference layer (11 standard-error types, four bootstrap
-methods), a diagnostics layer (50+ tests), and a reporting layer that renders
-self-contained HTML, LaTeX, or Markdown.
+PanelBox is organized around the estimation workflow rather than around a
+catalogue of methods. The user starts from a pandas `DataFrame` in long
+format; a common data layer wraps it together with entity and time
+identifiers, and everything downstream consumes that layer. Estimators accept
+R-style formulas via `patsy` and return a result object following the
+`statsmodels` conventions — `summary()`, `conf_int()`, `to_latex()`,
+`to_html()` — so that the same result flows into the shared inference layer
+(11 standard-error types, four bootstrap methods), the diagnostics layer (50+
+tests), and the reporting layer that renders self-contained HTML, LaTeX, or
+Markdown. @fig:architecture summarizes this pipeline.
 
 :::{figure} figures/fig1_architecture.png
 :label: fig:architecture
-High-level architecture of PanelBox: the 11 model families build on a shared
-data layer and feed a common inference, diagnostics, visualization, and
-reporting infrastructure.
+PanelBox as a dataflow. A long-format pandas `DataFrame` enters the shared
+data layer, flows through the 11 estimator families — with the inference
+engine supplying standard errors and bootstraps at `fit()` time — and the
+resulting objects feed the diagnostics and reporting layers. Solid colored
+boxes are the user-facing API; dashed gray boxes are internal infrastructure.
 :::
 
-A minimal estimation looks like idiomatic scientific Python:
+Because the API follows conventions the community already knows —
+`statsmodels`-style formulas and result objects, with an sklearn-like
+construct-then-fit pattern — a minimal estimation holds no surprises:
 
 ```python
 import panelbox as pb
@@ -95,8 +131,9 @@ result = fe.fit(cov_type="clustered", cluster="entity")
 print(result.summary())
 ```
 
-The static family implements pooled OLS, fixed effects (within), random effects
-(feasible GLS), the between estimator, and first differences for the model
+The workflow's entry point is the static linear family, which implements
+pooled OLS, fixed effects (within), random effects (feasible GLS), the
+between estimator, and first differences for the model
 
 ```{math}
 :label: static
@@ -109,20 +146,28 @@ effects are computed by within-transformation using sparse matrix operations
 and pandas `groupby`, so the estimator scales to large $N$ and supports
 unbalanced panels with entity-specific $T_i$.
 
-## Dynamic panel GMM
+## Estimating dynamics: panel GMM
 
-The flagship capability is dynamic panel GMM. With a lagged dependent variable,
+Many economic outcomes depend on their own past. Employment adjusts slowly
+because hiring and firing are costly; this year's GDP is anchored to last
+year's. Capturing such persistence means adding the lagged outcome
+$y_{i,t-1}$ as a regressor:
 
 ```{math}
 :label: dynamic
-y_{it} = \alpha\, y_{i,t-1} + \mathbf{x}_{it}'\boldsymbol{\beta} + \eta_i + \epsilon_{it},
+y_{it} = \alpha\, y_{i,t-1} + \mathbf{x}_{it}'\boldsymbol{\beta} + \eta_i + \epsilon_{it}.
 ```
 
-both OLS and fixed effects are inconsistent, because $y_{i,t-1}$ is correlated
-with the composite error: OLS is biased upward and the within estimator
-downward (the Nickell bias, @nickell1981). The GMM framework of @arellano1991
-and @blundell1998 resolves this by transforming away $\eta_i$ and using lagged
-values as instruments.
+That innocent-looking addition breaks both estimators of the previous
+section. The lagged outcome is itself driven by the entity effect $\eta_i$, so
+it is correlated with the composite error: pooled OLS is biased *upward*, and
+the within estimator *downward* (the Nickell bias, @nickell1981) — the true
+dynamics lie somewhere in between, and neither estimator can find them. The
+resolution, due to @arellano1991 and @blundell1998, is to transform away
+$\eta_i$ and instrument the problematic regressor with its own older lags:
+old enough to be uncorrelated with today's shock, recent enough to remain
+informative. This machinery — dynamic panel GMM — is PanelBox's flagship
+capability, and previously had no validated Python implementation.
 
 **Difference GMM** [@arellano1991] first-differences {ref}`dynamic` to remove
 $\eta_i$ and exploits the moment conditions
@@ -185,11 +230,18 @@ entity-specific instrument sets are assembled into a block-diagonal matrix,
 retaining observations that fixed-template approaches discard.
 :::
 
-## Panel unit-root and cointegration tests
+## Testing assumptions: unit roots and cointegration
 
-A capability unique to PanelBox among Python panel libraries is comprehensive
-unit-root and cointegration testing — standard in macroeconomics and finance
-but previously absent from the ecosystem.
+Estimation is only the middle of the workflow; its validity rests on
+assumptions that must themselves be tested. For macroeconomic panels the
+first question is whether each variable has a stable long-run level or
+wanders without one (a *unit root*): regressing one wandering series on
+another produces convincing-looking but spurious correlations, so testing for
+unit roots — and, when variables do wander, for a genuine shared long-run
+relationship (*cointegration*) — is the standard safety check before
+estimating relationships among variables such as GDP, prices, or exchange
+rates. This capability is unique to PanelBox among Python panel libraries,
+despite being standard in macroeconomics and finance.
 
 Three panel unit-root tests build on the entity-specific augmented
 Dickey–Fuller regression, testing $H_0: \rho_i = 0$. The LLC test
@@ -211,53 +263,96 @@ print(llc.test().pvalue)
 
 Together these enable a complete workflow — test for unit roots, test for
 cointegration when variables are $I(1)$, then estimate the appropriate model —
-illustrated in the growth application below.
+illustrated in the growth application of @sec:application.
 
-## Breadth: nonlinear, spatial, and time-series families
+(sec:breadth)=
+## Breadth: eleven model families
 
-While linear models cover many applications, economic data routinely involve
-binary outcomes, counts, censoring, spatial dependence, and efficiency
-frontiers. PanelBox implements these in a consistent interface.
+Linear panels are only part of applied practice: economic data routinely
+involve binary outcomes, counts, censoring, spatial dependence, and
+efficiency frontiers. PanelBox covers these in the same interface;
+@tbl:families maps each family to its closest Stata and R equivalents, and we
+highlight below only the capabilities not available elsewhere in Python. The
+complete catalogue, with an executable example notebook per family, is in the
+official documentation.
 
-**Discrete choice and count data.** Pooled, fixed-effects (conditional
-maximum likelihood, @chamberlain1980), and random-effects logit/probit, plus
-multinomial, ordered, and dynamic binary models with the @wooldridge2005
-initial-conditions correction. For counts, the Poisson family (pooled,
-conditional FE, QML), negative binomial for overdispersion, zero-inflated
-models, and the PPML estimator [@santossilva2006] widely used for gravity
-models. Average marginal effects, marginal effects at means, and at
-representative values are available with delta-method standard errors.
+```{list-table} The 11 model families in PanelBox and their closest equivalents in Stata and R. A dash means no established equivalent.
+:label: tbl:families
+:header-rows: 1
+* - Family
+  - Representative estimators in PanelBox
+  - Stata
+  - R
+* - Static linear
+  - Pooled OLS, FE, RE, between, first differences
+  - `xtreg`
+  - `plm`
+* - Dynamic GMM
+  - Difference/system GMM, Windmeijer correction, Anderson–Hsiao, LSDVC
+  - `xtabond2`
+  - `plm::pgmm`, `pdynmc`
+* - Unit-root & cointegration tests
+  - LLC, IPS, Fisher; Pedroni, Kao
+  - `xtunitroot`, `xtcointtest`
+  - `plm::purtest`
+* - Discrete choice
+  - Pooled/FE/RE logit & probit, multinomial, ordered, dynamic binary
+  - `xtlogit`, `xtprobit`
+  - `bife`, `pglm`
+* - Count data
+  - Poisson (pooled/FE/QML), negative binomial, zero-inflated, PPML
+  - `xtpoisson`, `ppmlhdfe`
+  - `pglm`, `fixest`
+* - Censored & selection
+  - Panel tobit, sample-selection models
+  - `xttobit`, `xtheckman`
+  - `censReg`
+* - Quantile regression
+  - Pooled, FE, Canay, Machado–Santos Silva
+  - `xtqreg`
+  - `rqpd`
+* - Spatial panels
+  - SAR, SEM, SDM, GNS, dynamic spatial
+  - `spxtregress`
+  - `splm`
+* - Stochastic frontier
+  - Battese–Coelli, Greene TFE/TRE, four-component
+  - `sfpanel`
+  - `frontier`
+* - Panel VAR/VECM
+  - IRFs, FEVD, Granger causality
+  - `pvar`
+  - `panelvar`
+* - Heterogeneous panels
+  - Mean-group estimators, SUR
+  - `xtmg`, `sureg`
+  - `plm::pmg`, `systemfit`
+```
 
-**Spatial econometrics.** Five spatial panel models — SAR, SEM, the spatial
-Durbin model (SDM), the general nesting model (GNS), and dynamic spatial
-panels — estimated by quasi-maximum likelihood [@leeyu2010]. The
-log-determinant $\ln|\mathbf{I}_N - \rho\mathbf{W}|$ is computed by
-eigenvalue decomposition, sparse LU factorization, or Chebyshev approximation
-depending on $N$, and results are decomposed into direct and indirect
-(spillover) effects via the spatial multiplier
-$(\mathbf{I}_N - \rho\mathbf{W})^{-1}\beta_k$.
-
-**Stochastic frontier analysis.** The frontier
-$\ln y_{it} = \mathbf{x}_{it}'\boldsymbol{\beta} + v_{it} - u_{it}$ with
-one-sided inefficiency $u_{it} \ge 0$, supporting four distributions for
-$u_{it}$, the Battese–Coelli time-varying and determinant specifications
-[@battesecoelli1992; @battesecoelli1995], Greene's true fixed/random effects
-[@greene2005], and a four-component model [@kumbhakar2014] that separates
-*persistent* from *transient* inefficiency — a policy-relevant decomposition
-not available in other Python libraries.
-
-**Quantile regression and panel VAR.** Pooled, fixed-effects [@koenker2004],
-Canay two-step [@canay2011], and the @machadosantossilva2019 location-scale
-estimator, which guarantees non-crossing quantiles. Panel VAR/VECM provides
-impulse-response functions with bootstrap bands, forecast-error variance
-decomposition, and Granger-causality tests.
+Several entries go beyond their Stata/R counterparts. The discrete-choice
+family includes dynamic binary models with the @wooldridge2005
+initial-conditions correction and conditional maximum-likelihood fixed
+effects [@chamberlain1980], with average and representative-value marginal
+effects computed with delta-method standard errors; the count family includes
+the PPML estimator [@santossilva2006] widely used for gravity models. The
+spatial family estimates five models by quasi-maximum likelihood [@leeyu2010]
+and decomposes results into direct and indirect (spillover) effects via the
+spatial multiplier $(\mathbf{I}_N - \rho\mathbf{W})^{-1}\beta_k$. The frontier
+family implements the @kumbhakar2014 four-component model separating
+*persistent* from *transient* inefficiency [@battesecoelli1992;
+@battesecoelli1995; @greene2005], and the quantile family includes the
+@machadosantossilva2019 location-scale estimator, which guarantees
+non-crossing quantiles [@koenker2004; @canay2011] — all three previously
+unavailable in Python.
 
 ## Inference, diagnostics, and reporting
 
-Valid inference is central. All standard errors use the sandwich form
+Once a model is estimated, the workflow turns to defending it. All standard
+errors use the sandwich form
 $\widehat{\mathrm{Var}}(\hat{\boldsymbol{\beta}}) =
 (\mathbf{X}'\mathbf{X})^{-1}\,\hat{\boldsymbol{\Omega}}\,(\mathbf{X}'\mathbf{X})^{-1}$,
-differing in the meat $\hat{\boldsymbol{\Omega}}$: HC0–HC3 for
+differing in the inner "meat" matrix $\hat{\boldsymbol{\Omega}}$ (the term of
+art for the filling of the sandwich form): HC0–HC3 for
 heteroskedasticity, one-way and two-way clustering, and the Driscoll–Kraay and
 Newey–West HAC estimators. Four bootstraps — pairs, wild, block, and
 residual — cover small-sample and non-standard cases.
@@ -281,9 +376,39 @@ pb.comparison_table(
 )
 ```
 
+(sec:using)=
+## Using and extending PanelBox
+
+PanelBox makes no assumptions about where data come from. Any long-format
+pandas `DataFrame` with an entity column and a time column works directly —
+loaded from CSV, Parquet, SQL, or an API via the usual pandas readers — and
+unbalanced panels are handled natively, so no reshaping or gap-filling is
+required. The 103 bundled datasets are conveniences for teaching,
+benchmarking, and replication, not a requirement.
+
+All estimators share one contract: construct with the data and a
+specification, call `fit()`, receive a results object with the same methods
+everywhere. Comparing a fixed-effects model with a system-GMM model is a
+one-line change of class, and `comparison_table` aligns any set of results.
+Within this contract, the supported customization points are the covariance
+estimator and bootstrap scheme (per `fit()` call), the instrument design for
+GMM (`gmm_lags`, `collapse`), arbitrary variable transformations through
+`patsy` formulas, marginal-effects options for nonlinear models, and the
+output format of every report (HTML, LaTeX, Markdown).
+
+Two honest boundaries: there is currently no public API for user-defined
+moment conditions or custom estimators — internally all models subclass a
+common base model and results class, and a documented, stable extension
+interface is on the roadmap — and GMM is restricted to linear dynamic panels.
+The official documentation includes a gallery of executable Jupyter notebooks
+covering every model family end to end, which is the recommended starting
+point for adapting the library to a new use case.
+
+(sec:application)=
 ## Application: dynamic labor demand
 
-We reproduce the canonical application of @arellano1991: a dynamic labor-demand
+To illustrate the capabilities of the library, we use it to reproduce the
+canonical application of @arellano1991: a dynamic labor-demand
 equation on UK firm-level data, a balanced panel of $N = 140$ firms over
 $T = 9$ years (1979–1987). The model
 
@@ -352,7 +477,9 @@ Across 25 specifications on 10 datasets — difference and system GMM, one- and
 two-step, with and without collapse, balanced and unbalanced — the mean
 coefficient difference is 0.0003% and the maximum 0.008%. Against `plm`, fixed-
 and random-effects coefficients, the Hausman statistic, and LLC/IPS unit-root
-statistics agree exactly.
+statistics agree to machine precision: these estimators are closed-form,
+deterministic linear algebra, so two correct implementations differ only in
+floating-point rounding, below any reported digit.
 
 ```{list-table} Numerical validation against Stata xtabond2, system GMM on the Arellano–Bond employment data. Standard errors and p-values in parentheses.
 :label: tbl:validation
@@ -410,7 +537,10 @@ GMM is validated against `xtabond2` to within 0.01% and adds an unbalanced-panel
 algorithm that retains 72% of observations where existing tools retain far
 fewer, and it offers capabilities — panel unit-root and cointegration tests,
 four-component stochastic frontiers, non-crossing quantile regression, panel
-VAR/VECM — previously unavailable in Python.
+VAR/VECM — previously unavailable in Python. The unusual emphasis on numerical
+validation throughout this paper is not incidental: it reflects the library's
+origin in production model validation, where matching the reference
+implementation is the requirement, not a nicety.
 
 Current limitations include spatial-model scalability beyond $N \approx 2{,}000$
 (mitigated by Chebyshev approximation), GMM restricted to linear dynamic panels,
@@ -419,9 +549,10 @@ panels, double/debiased machine learning for panel data, GPU acceleration via
 JAX/CuPy, and Bayesian panel models. By eliminating the need to leave Python for
 sophisticated panel analysis, PanelBox makes empirical economic research more
 reproducible, more integrated with the machine-learning ecosystem, and more
-accessible. It is available on PyPI (`pip install panelbox`) and on
-GitHub [@panelbox2025], with documentation, tutorials, and full replication
-materials for this paper.
+accessible. It is available on PyPI (`pip install panelbox`) and on GitHub at
+<https://github.com/PanelBox-Econometrics-Model/panelbox> [@panelbox2025],
+with documentation, tutorials, example notebooks for every model family, and
+full replication materials for this paper.
 
 ## Generative AI disclosure
 
