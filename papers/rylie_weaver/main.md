@@ -48,14 +48,17 @@ The core use case of `alphagenome-pt` is to allow users to train the AlphaGenome
 
 Instantiate the model and get embeddings
 ```python
-import torch, random
-from alphagenome_pt import AlphaGenome, AlphaGenomeConfig, DataBatch, SequenceEncoder
+import random, torch
+from alphagenome_pt import AlphaGenome, AlphaGenomeConfig, DataBatch
 S = 2048
 metadata = {'organisms': ['human', 'mouse']}
 model_cfg = AlphaGenomeConfig(max_seq_len=S, num_channels=96, metadata=metadata)
 model = AlphaGenome(model_cfg)
-seq_encoder = SequenceEncoder()
-dna_sequence = seq_encoder.encode("".join(random.choices("ACGT", k=S)))
+sequence = "".join(random.choices("ACGTN", k=S))
+dna_sequence = torch.tensor(
+    [[[base == nucleotide for nucleotide in "ACGT"] for base in sequence]],
+    dtype=torch.float32,
+)
 data = DataBatch(dna_sequence=dna_sequence, organism_index=torch.tensor([0]))
 predictions, embeddings = model(data)  # NOTE: predictions are empty here because we haven't defined any output heads
 print(embeddings.embeddings_1bp.shape, embeddings.embeddings_128bp.shape, embeddings.embeddings_pair.shape)
@@ -63,7 +66,7 @@ print(embeddings.embeddings_1bp.shape, embeddings.embeddings_128bp.shape, embedd
 
 Metadata specifies the organism and output heads for the model architecture. Real workflows will need to calculate the true means of nonzero target values, but dummy values are made here for simplicity.
 ```python
-from alphagenome_pt import Metadata
+from alphagenome_pt import AlphaGenome, AlphaGenomeConfig, Metadata, synthetic_batch
 
 # Dummy Example: replace with actual nonzero means
 def make_means(num_tracks):
@@ -125,6 +128,17 @@ metadata = Metadata({
         "masked_language_modeling": {},
     },
 })
+
+# Build a small model and a synthetic batch containing targets for every head.
+S = 2048
+model_cfg = AlphaGenomeConfig(max_seq_len=S, num_channels=96, metadata=metadata)
+model = AlphaGenome(model_cfg)
+data = synthetic_batch(
+    metadata,
+    batch_size=1,
+    seq_len=S,
+    num_splice_sites=model_cfg.num_splice_sites,
+)
 ```
 
 Access predictions and loss values once a model has been instantiated and data has been fed to it:
@@ -181,14 +195,13 @@ assert small_cfg.num_splice_sites / small_cfg.max_seq_len == official_cfg.num_sp
 assert small_cfg.splice_site_channels / small_cfg.num_channels == official_cfg.splice_site_channels / official_cfg.num_channels == 1
 ```
 
-In addition to training from scratch, `alphagenome-pt` supports training from converted AlphaGenome checkpoints. The package provides utilities for instantiating a checkpoint-compatible public AlphaGenome configuration, converting the released JAX parameters to PyTorch, and loading those parameters into the PyTorch model. This is useful for users who want to finetune from released AlphaGenome weights rather than begin from random initialization. At the same time, checkpoint loading is still a current limitation of the package. At present, `alphagenome-pt` supports loading the all-folds model, but we are still validating numerical equivalence with the original JAX implementation and expanding support across the other released folds.
+In addition to training from scratch, `alphagenome-pt` supports training from converted AlphaGenome checkpoints. The package provides utilities for instantiating a checkpoint-compatible public AlphaGenome configuration, converting the released JAX parameters to PyTorch, and loading those parameters into the PyTorch model. This is useful for users who want to finetune from released AlphaGenome weights rather than begin from random initialization. At the same time, checkpoint loading is still a current limitation of the package. At present, `alphagenome-pt` supports loading the all-folds model and folds 0, 1, 2, and 3, but we are still validating numerical equivalence with the original JAX implementation.
 
 To get the full public AG config
 ```python
 from pathlib import Path
 from alphagenome_pt import (
     AlphaGenome,
-    DEFAULT_ALPHAGENOME_CHECKPOINT,
     load_alphagenome_checkpoint,
     official_alphagenome_config,
 )
@@ -198,10 +211,11 @@ cfg = official_alphagenome_config()
 model = AlphaGenome(cfg)
 
 # Downloads from Hugging Face if the checkpoint is not already present
-checkpoint_path = Path("checkpoints") / DEFAULT_ALPHAGENOME_CHECKPOINT
+checkpoint_path = Path("checkpoints/alphagenome_all_folds.pt")
 load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
+    fold="all_folds",
     heads=True,       # keep released output heads
     organisms=True,	  # keep released human/mouse organism parameters
     map_location="cpu",
@@ -228,10 +242,11 @@ cfg = official_alphagenome_config(metadata=custom_metadata)
 model = AlphaGenome(cfg)
 
 # Downloads from Hugging Face if the checkpoint is not already present
-checkpoint_path = Path("checkpoints") / DEFAULT_ALPHAGENOME_CHECKPOINT
+checkpoint_path = Path("checkpoints/alphagenome_fold_1.pt")
 load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
+    fold="fold_1",
     heads=False,       	# skip released heads; keep your custom heads
     organisms=True,     # keep human/mouse organism embeddings
     map_location="cpu",
@@ -254,10 +269,11 @@ cfg = official_alphagenome_config(metadata=custom_metadata)
 model = AlphaGenome(cfg)
 
 # Downloads from Hugging Face if the checkpoint is not already present
-checkpoint_path = Path("checkpoints") / DEFAULT_ALPHAGENOME_CHECKPOINT
+checkpoint_path = Path("checkpoints/alphagenome_fold_2.pt")
 load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
+    fold="fold_2",
     heads=False,       	# skip released heads; keep your custom heads
     organisms=False,	  # skip human/mouse organism embeddings
     map_location="cpu",
@@ -269,7 +285,7 @@ Overall, `alphagenome-pt` is designed to keep the model customizable, but faithf
 
 ## Limitations and Related Work
 
-The first main area of limitation in `alphagenome-pt` is checkpoint loading. The package can load converted AlphaGenome parameters into the PyTorch implementation, and provides a checkpoint-compatible public AlphaGenome configuration for this purpose. However, we are still validating that loading from checkpoint produces numerically equivalent outputs to the original JAX implementation, and support for all released model folds is still being expanded. As a result, the most reliable use case of the package at present is training and experimentation in PyTorch, rather than exact reproduction of every released AlphaGenome checkpoint.
+The first main area of limitation in `alphagenome-pt` is checkpoint loading. The package can load converted AlphaGenome parameters for the all-folds model and folds 0, 1, 2, and 3 into the PyTorch implementation, and provides a checkpoint-compatible public AlphaGenome configuration for this purpose. However, we are still validating that loading from checkpoint produces numerically equivalent outputs to the original JAX implementation. As a result, the most reliable use case of the package at present is training and experimentation in PyTorch, rather than exact reproduction of every released AlphaGenome checkpoint.
 
 The second main area of limitation in `alphagenome-pt` is that it does not provide any preprocessing pipeline for functional genomics data. However, this is an intentional scope choice. AlphaGenome supports many target types, each of which may be stored in multiple common file formats, and large-scale HPC training may require different storage formats than smaller experiments. Rather than assuming a particular file format or data-loading strategy, `alphagenome-pt` assumes that users yield tensorized data to the model, however that is done. The package focuses on the model rather than prescribing a universal data-processing workflow.
 
@@ -284,7 +300,7 @@ We presented `alphagenome-pt`, an open-source PyTorch implementation of AlphaGen
 
 By lowering the software barrier to AlphaGenome training, `alphagenome-pt` aims to make sequence-to-function modeling more accessible beyond the released human and mouse models. More broadly, we hope this helps researchers use computational models to generate and test biological hypotheses faster.
 
-Future work will focus on validating checkpoint equivalence with the original JAX implementation and expanding checkpoint loading to all released AlphaGenome folds. We also plan to improve documentation and add distributed sequence-parallel training to support longer sequences and larger-scale HPC training.
+Future work will focus on validating checkpoint equivalence with the original JAX implementation. We also plan to improve documentation and add distributed sequence-parallel training to support longer sequences and larger-scale HPC training.
 
 
 ## Generative AI Disclosure
