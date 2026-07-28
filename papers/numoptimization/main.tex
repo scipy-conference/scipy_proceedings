@@ -253,9 +253,7 @@ The same sensitivity appears in second-order information. Hessian matrices encod
 The Hessian matrix is:
 
 \begin{equation}
-H_{ij} =
-\frac{\partial^2 f}
-{\partial x_i \partial x_j}
+H_{ij} = \left[\nabla^2 f\right]_{ij}
 \end{equation}
 
 When Hessians become singular or nearly singular, optimization becomes unstable because the local quadratic model no longer identifies a reliable direction of improvement. In least-squares problems, the analogous issue often appears through an ill-conditioned Jacobian or normal matrix $J^T J$, which can destabilize both parameter updates and uncertainty estimates in routines such as \texttt{least\_squares}.
