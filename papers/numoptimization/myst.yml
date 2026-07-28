@@ -24,6 +24,13 @@ project:
     - conditioning
     - numerical auditing
     - HIGGS
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - numdifftools
+        - jax
+        - optax
   exports:
     - id: pdf
       format: typst
