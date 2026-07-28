@@ -293,7 +293,7 @@ The pipeline operates as two cooperating threads. `AwsNexradDownloader` continuo
 
 **OpenCV and SciPy.** Dense optical flow via the Farnebäck algorithm (OpenCV) for motion estimation. Connected component labeling and morphological operations via `scipy.ndimage`. Linear sum assignment for optimal cell-to-cell matching via `scipy.optimize` [@virtanen2020scipy; @farneback2003two].
 
-**NetworkX.** The tracking module maintains a `networkx.DiGraph` of all observed cells and lineage edges across the processing session. This graph computes cell age and dominant lineage edges in split/merge complexes.
+**NetworkX.** The tracking module maintains a `networkx.DiGraph` of all observed cells and lineage edges across the processing session. This graph computes cell age and dominant lineage edges in split/merge complexes [@hagberg2008exploring].
 
 **DuckDB and PyArrow.** Per-cell statistics are persisted as Parquet, a columnar on-disk file format for analytical data [@vohra2016parquet], written via PyArrow, the Python bindings to Apache Arrow's in-memory columnar layout [@lentner2019arrow]. Downstream queries are executed by an embedded DuckDB instance within `DataClient`. DuckDB is an in-process analytical SQL engine that runs directly against Parquet files [@raasveldt2019duckdb] which apply predicate and projection pushdown without loading full datasets into memory.
 
@@ -325,7 +325,7 @@ After v1.0, community contributions will expand toward new modules, algorithms, 
 
 ### Architecture and Agentic Development
 
-Adapt is being developed at a time when scientific software is increasingly created and maintained using AI-assisted and agentic workflows. To preserve architectural integrity, the project already employs automated checks including pytest, import-linter, static type checking with `mypy`, and code-quality tools. These tools provide a first line of defense against architectural drift and unintended design violations introduced during rapid development.
+Adapt is being developed at a time when scientific software is increasingly created and maintained using AI-assisted and agentic workflows. To preserve architectural integrity, the project already employs automated checks including `pytest`, `import-linter`, static type checking with `mypy`, and code-quality tools. These tools provide a first line of defense against architectural drift and unintended design violations introduced during rapid development.
 
 We seek contributions on additional mechanisms for architecture validation and governance, including interface contracts, architecture-aware testing, machine-readable design specifications, dependency analysis, automated design-rule enforcement, and other approaches that make architectural constraints explicit and verifiable.
 
