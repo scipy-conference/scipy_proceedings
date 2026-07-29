@@ -1,0 +1,91 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-kristijan_armeni
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Commit to Community: Open Source as Social Infrastructure in Volunteer
+    Civic Tech'
+  # subtitle:
+  description:
+    A lessons learned report on the pronounced social role of open source
+    maintainership in civic tech.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Kristijan Armeni
+      email: k.armeni@pm.me
+      orcid: 0000-0001-8391-8965
+      url: https://www.kristijanarmeni.net
+      github: KristijanArmeni
+      affiliations:
+        - id: CTDC
+          name: Civic Tech DC
+          email: team@civictechdc.org
+          url: https://civictechdc.org
+          github: https://github.com/orgs/civictechdc
+          city: Washinton
+          state: Disctrict of Columbia
+          country: United States of America
+      roles:
+        - Conceptualization
+        - Software
+        - Writing – original draft
+        - Supervision
+      corresponding: true
+    - name: Helen Y. Glover
+      email: helen.glover@civictechdc.org
+      url: https://helenyglover.com
+      affiliations:
+        - CTDC
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+        - Project administration
+    - name: Ben Sando
+      email: sandobenjamin@gmail.com
+      affiliations:
+        - CTDC
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+        - Project administration
+  keywords:
+    - civic tech
+    - open source
+    - maintainership
+    - community building
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    CIB: Coordinated Inauthentic Behavior
+    CI: Continuous Integration
+    NGO: Non-Governmental Organization
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - harrell_civic_2020
+        - eghbal_working_2020
+        - fogel_producing_2023
+        - gleicher_removing_2018
+        - romero_vicente_coordinated_2024
+        - buytaert_25_2026
+        - sommerville_software_2016
+        - noauthor_better_2025
+        - chris_dashboards_2025
+        - huyen_ai_2025
+        - wolf_welcome_2026
+    - rule: links-resolve
+      severity: ignore
+      keys:
+        - https://codeforamerica.org
+        - https://scientific-python.org
+
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
