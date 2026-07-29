@@ -81,6 +81,7 @@ project:
       severity: ignore
       keys:
         - https://codeforamerica.org
+        - https://scientific-python.org
 
   exports:
     - id: pdf
