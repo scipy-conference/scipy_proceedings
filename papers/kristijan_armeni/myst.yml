@@ -77,6 +77,10 @@ project:
         - chris_dashboards_2025
         - huyen_ai_2025
         - wolf_welcome_2026
+    - rule: links-resolve
+      severity: ignore
+      keys:
+        - https://codeforamerica.org
 
   exports:
     - id: pdf
