@@ -53,6 +53,8 @@ project:
         - sklearn2
         - brooker2015backoff
         - sculley2015hidden
+        - openai2025gpt5
+        - openai2024embeddings
   exports:
     - id: pdf
       format: typst
