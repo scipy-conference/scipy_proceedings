@@ -1,0 +1,80 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Matches `scipy-2026-<folder>`; folder is `<firstname_surname>`
+  id: scipy-2026-taewoon_kim
+  # Keep this title identical to the one in `main.md`
+  title: 'ArcadeDB in Python: An In-Process Multi-Model Database'
+  description:
+    An embedded, multi-model database for scientific Python that unifies
+    documents, graphs, and vectors in one in-process runtime, with Python
+    bindings over a Java engine.
+  # Site card (square) + page header banner (wide 2.35:1), both Python + ArcadeDB branded
+  thumbnail: figures/thumbnail.png
+  banner: figures/banner.png
+  authors:
+    - name: Taewoon Kim
+      email: taewoon@humem.ai
+      orcid: 0000-0003-2892-0194
+      corresponding: true
+      affiliations:
+        - HumemAI
+  keywords:
+    - multi-model database
+    - embedded database
+    - graph database
+    - vector search
+    - HNSW
+  # Add abbreviations used in the paper here (expanded on first use automatically)
+  abbreviations:
+    OLTP: Online Transaction Processing
+    OLAP: Online Analytical Processing
+    HNSW: Hierarchical Navigable Small World
+    ANN: Approximate Nearest Neighbor
+    JRE: Java Runtime Environment
+    JVM: Java Virtual Machine
+    ACID: Atomicity, Consistency, Isolation, Durability
+    GAV: Graph Analytical View
+    ETL: Extract, Transform, Load
+    GIL: Global Interpreter Lock
+  # Ignore the doi-exists check for citation keys that legitimately have no DOI
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        # template entries without DOIs
+        - jupyter
+        - sklearn1
+        - sklearn2
+        # embedded-DB landscape entries without DOIs (official repos/sites)
+        - sqlite
+        - hnswlib
+        - chroma
+        - lancedb
+        - sqlitevec
+        - qdrant
+        - pgvector
+        - kuzu2023
+        - networkx2008
+        - neo4j
+        - tinydb
+        - lmdb
+        - rocksdb
+        - leveldb
+        - zodb
+        - arcadedb
+        - arcadedbpython
+        - jpype
+        # SciPy 2023 papers — no DOI in the source tree (cited by article URL)
+        - li2023aphylogeo
+        - alted2023blosc2
+        # dataset (Internet Archive, no DOI)
+        - crossvalidated
+        # software (PyPI, no DOI)
+        - ladybugdb
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
