@@ -42,7 +42,7 @@
   </g>
 
   <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
-    <text x="90" y="373" font-size="15" font-weight="700" fill="#202124">Quality and stability guardrails</text>
+    <text x="90" y="373" font-size="15" font-weight="700" fill="#202124">Agreement and stability guardrails</text>
     <line x1="90" y1="560" x2="790" y2="560" stroke="#202124" stroke-width="1.5"/>
     <line x1="90" y1="390" x2="90" y2="560" stroke="#202124" stroke-width="1.5"/>
     <g stroke="#e8eaed">

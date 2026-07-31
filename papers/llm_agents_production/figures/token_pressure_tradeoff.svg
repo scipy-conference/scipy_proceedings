@@ -2,7 +2,7 @@
   <title id="title">Multi-agent token-pressure operating points</title>
   <desc id="desc">Bubble chart of four multi-agent stress configurations. Throughput ranges from 7.84 to 16.69 records per minute, exact label-triplet agreement ranges from 79 to 84 percent, and bubble size represents peak token-per-minute pressure.</desc>
   <rect width="900" height="620" fill="#ffffff"/>
-  <text x="450" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#202124">Token pressure changes the operating point, not monotonically quality</text>
+  <text x="450" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#202124">Strict agreement is not monotonic under token pressure</text>
   <text x="450" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#5f6368">Known-solvable 100-record cohort; bubble size shows peak total TPM</text>
 
   <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">

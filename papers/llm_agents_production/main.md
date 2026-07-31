@@ -1,7 +1,7 @@
 ---
 title: Everything That Breaks When You Put an LLM Agent in Production
 abstract: |
-  Agentic AI systems often perform well in interactive prototypes and small evaluations, but they behave like distributed systems when deployed in production-scale workflows. We present a case study from a regulated record-processing environment where LLM-based agents were used for structured classification in two successive scaling architectures: a high-throughput single-agent batch workflow and a staged multi-agent review workflow. The goal of the study is not to introduce a new prompting method or model architecture. Instead, we evaluate the engineering controls needed to parallelize record-level agent execution while keeping it observable, recoverable, and tunable at scale.
+  Agentic AI systems often perform well in interactive prototypes and small evaluations, but they behave like distributed systems when deployed in production-scale workflows. We present a case study from a regulated record-processing environment where LLM-based agents were used for structured classification in two related workflow families: a high-throughput single-agent batch workflow and a staged multi-agent review workflow. The goal of the study is not to introduce a new prompting method or model architecture. Instead, we evaluate the engineering controls needed to parallelize record-level agent execution while keeping it observable, recoverable, and tunable at scale.
 
   Across hundreds of records and thousands of model and retrieval calls, reliability depended less on prompt design alone and more on production controls: separating local worker parallelism from hosted API concurrency, enforcing per-record wall-clock budgets, distinguishing transient from non-transient failures, preserving progress through checkpoints, and recording structured operational metadata. In the single-agent workflow, hosted API concurrency was the dominant throughput bottleneck; tuning it improved throughput by nearly 5x relative to the initial baseline while preserving completion yield.
 
@@ -15,7 +15,9 @@ Production environments expose a different class of problems. When the same agen
 
 This paper studies those reliability problems through a real production case study. We evaluate two related workflows: a single-agent batch classification pipeline that processes each record independently, and a multi-agent review workflow that retrieves supporting evidence, synthesizes a structured prediction, verifies the prediction, attempts a bounded repair when needed, and routes outputs by confidence. We frame these workflows as production systems rather than isolated model calls. That framing follows a broader lesson from production machine learning: systems fail not only because of model behavior, but because data dependencies, validation, serving, monitoring, and operational controls are handled ad hoc [@sculley2015hidden; @baylor2017tfx].
 
-The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments that parallelize record processing, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and quality guardrails. Second, we propose a failure taxonomy and measurement set that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained multi-objective optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort. This last framing is the paper's central methodological claim: production agent deployment should select a bounded operating point under reliability, cost, and auditability constraints, not simply maximize model complexity or parallelism.
+The underlying task is a structured multi-label classification problem over access-controlled records. Each input record contains free-text narrative fields and structured metadata. The system must return zero or more normalized labels from a controlled vocabulary, along with metadata that supports review and downstream persistence. In the multi-agent experiments, each predicted label has an identifier and a normalized three-component tuple. This paper reports only aggregate metrics and synthetic descriptions of the task structure; it does not disclose record text, prompts, retrieved evidence, raw outputs, or label content that could expose sensitive information. This abstraction is intentional: many scientific and industrial record-processing workflows have the same shape even when the label vocabulary and source records differ.
+
+The paper makes three contributions. First, we report operational results from single-agent and multi-agent batch experiments that parallelize record processing, including throughput, yield, timeout behavior, checkpoint recovery, failure signals, token-derived cost estimates, and strict-agreement guardrails. Second, we propose a failure taxonomy and measurement set that separates final record failures from recovered internal events and transient infrastructure signals. Third, we formulate production agent tuning as a constrained multi-objective optimization problem over worker count, API concurrency, timeout budget, retry policy, checkpoint cadence, verifier stages, fan-out, and reasoning effort. This last framing is the paper's central methodological claim: production agent deployment should select a bounded operating point under reliability, cost, and auditability constraints, not simply maximize model complexity or parallelism.
 
 The central problem is simple: an LLM agent that works once is not necessarily a production system. To deploy agents in high-volume environments, practitioners must design for the ways they fail at scale.
 
@@ -29,8 +31,8 @@ The central problem is simple: an LLM agent that works once is not necessarily a
 | Partial completion | A run can finish most records but still exit with failures | Completion yield, saved decisions, and failure logs |
 | Hidden internal recovery | The final output may succeed while an agent stage recovered from an exception | Recovered-internal-error counters |
 | Provider or policy errors | Some failures are non-transient and should not be retried indefinitely | Named error taxonomy and retry limits |
-| Cost and token pressure | Faster configurations can increase model calls or peak token load | Token totals, peak TPM, and cost per usable record |
-| Quality under concurrency | More parallel execution does not guarantee better or worse agreement | Repeat probes and strict label-set agreement |
+| Cost and token pressure | Faster configurations can increase model calls or peak token load | Token totals, peak tokens per minute (TPM), and cost per usable record |
+| Strict agreement under concurrency | More parallel execution does not guarantee better or worse agreement | Repeat probes and strict label-set agreement |
 ```
 
 ```{figure} figures/production_agent_optimization_synthesis.svg
@@ -39,6 +41,8 @@ The central problem is simple: an LLM agent that works once is not necessarily a
 
 Conceptual contribution of the paper. Production deployment exposes failure modes that require reliability controls and an empirical optimization surface before choosing an operating point.
 ```
+
+The synthesis diagram is the organizing argument for the rest of the paper: a prototype that succeeds interactively must become a measured batch system before an operating point can be selected.
 
 ## Background
 
@@ -70,9 +74,9 @@ It also changed how failures had to be represented. A production run needs struc
 
 ## Workflow Overview
 
-We evaluated two workflow architectures as an evolutionary line for scaling record-level agent work. The single-agent batch workflow processes each record independently using one LLM-based agent. The runner loads records from spreadsheet or cloud object storage, creates record-level tasks, executes them in parallel, and writes JSON outputs, spreadsheet outputs, failure logs, checkpoints, and run summaries.
+We evaluated two related workflow families in an evolutionary line for scaling record-level agent work. The single-agent batch workflow processes each record independently using one LLM-based agent. The runner loads records from spreadsheet or cloud object storage, creates record-level tasks, executes them in parallel, and writes JSON outputs, spreadsheet outputs, failure logs, checkpoints, and run summaries.
 
-The multi-agent workflow extends the same scaling problem with additional stages rather than serving as an unrelated alternative. It separates responsibilities across retrieval, reasoning, synthesis, verification, repair, and confidence routing. Retrieval gathers candidate evidence, synthesis assembles a final structured prediction, verification checks the proposed prediction, repair is one bounded correction attempt after a verifier objection, and confidence routing assigns the result to a review tier or escalation path. A verifier stage reviews proposed classifications and either passes them, requests repair, or escalates the record for additional review. Fan-out means branching a record through multiple evidence paths or agent calls, such as free-text narrative and structured fields already present in the input record, before combining the results into one final classification.
+The multi-agent workflow extends the same scaling problem with additional stages rather than serving as an unrelated alternative. It separates responsibilities across retrieval, reasoning, synthesis, verification, repair, and confidence routing. Retrieval gathers candidate evidence, synthesis assembles a final structured prediction, verification checks the proposed prediction, repair is one bounded correction attempt after a verifier objection, and confidence routing assigns the result to a review tier or escalation path. A verifier is a stage that reviews proposed classifications and either passes them, requests repair, or escalates the record for additional review. Fan-out means branching a record through multiple evidence paths or agent calls, such as free-text narrative and structured fields already present in the input record, before combining the results into one final classification. The later verifier-cap and token-pressure probes used a revised implementation of this multi-agent workflow with an explicit shared verifier-call limiter and additional token instrumentation. We treat it as an evolutionary runtime revision, not as a directly comparable third task architecture.
 
 ```{figure} figures/single_agent_batch_workflow.svg
 :name: fig-single-agent-batch-workflow
@@ -81,6 +85,8 @@ The multi-agent workflow extends the same scaling problem with additional stages
 Runtime reliability pattern for the single-agent batch workflow. The batch harness separates worker parallelism from hosted API concurrency and records structured outputs, failure logs, and resumable checkpoints.
 ```
 
+The important control in the single-agent workflow figure is the API gate between local workers and shared hosted services. It prevents the number of local record workers from becoming the same as the number of simultaneous external calls.
+
 ```{figure} figures/multi_agent_review_workflow.svg
 :name: fig-multi-agent-review-workflow
 :alt: Multi-agent review workflow with retrieval, reasoning, synthesis, verifier, repair, confidence routing, and persisted decisions.
@@ -88,9 +94,13 @@ Runtime reliability pattern for the single-agent batch workflow. The batch harne
 Runtime reliability pattern for the multi-agent workflow. Multiple agent stages interact with hosted retrieval, LLM, and persistence services to produce confidence-aware structured outputs.
 ```
 
+The multi-agent workflow figure shows how review metadata is added, but it also shows why there are more shared dependencies and more places where partial completion can occur.
+
 ## Failure Taxonomy
 
 At production scale, "failed" is not a single state. The system needs a taxonomy that distinguishes transient infrastructure errors, provider or policy failures, timeouts, malformed outputs, recovered internal exceptions, and final unrecoverable record failures.
+
+We organized the taxonomy around standard batch-system failure classes, such as success, retryable infrastructure errors, timeouts, and final failures. During operational debugging, we refined it to capture agent-specific signals that otherwise disappeared inside logs, such as provider policy failures, malformed model outputs, and recovered internal exceptions. The result is a reusable observability schema rather than a post-hoc list of one-off incidents.
 
 ```{table} Failure taxonomy used for production agent observability.
 :label: tab-failure-taxonomy
@@ -122,7 +132,7 @@ The experiments were designed to evaluate operational reliability rather than br
 | Workflow | Dataset | Experiment size | Purpose |
 |---|---:|---:|---|
 | Single-agent optimization sweeps | 1,000-record access-controlled source file | 200 records per run | Worker/API throughput and cost |
-| Single-agent quality guardrail | Labeled calibration subset | 12 records, 3 repeats per configuration | Output stability under higher concurrency |
+| Single-agent output-stability guardrail | Labeled calibration subset | 12 records, 3 repeats per configuration | Strict-agreement stability under higher concurrency |
 | Single-agent timeout tests | Access-controlled source-file subset | 50 records per run | Timeout budget calibration |
 | Single-agent checkpoint/replay tests | Access-controlled source-file subsets | 300-record checkpoint run and 367-record replay audit | Checkpoint recovery and replay behavior |
 | Multi-agent review | Access-controlled review sample | Four 50-record variant runs | Verifier and fan-out reliability |
@@ -132,13 +142,17 @@ The experiments were designed to evaluate operational reliability rather than br
 | Multi-agent token-pressure stress tests | 100 known-solvable records | 4 configurations x 100 records = 400 record-runs | Reasoning-effort and token-pressure behavior |
 ```
 
-A record-run is one record processed once under one configuration and repeat. A known-solvable cohort is a deliberately selected regression set: records that a previous run solved exactly and that are therefore useful for testing whether a new configuration destabilizes previously successful behavior. A verifier concurrency cap is the maximum number of verifier-stage model calls allowed to run at the same time.
+A record-run is one record processed once under one configuration and repeat. A known-solvable cohort is a deliberately selected regression set: records whose label-identifier sets matched the reference sets in a previous run and that are therefore useful for testing whether a new configuration destabilizes previously successful behavior. Selection by identifier-set agreement does not imply that the stricter three-component tuples also matched. A verifier concurrency cap is the maximum number of verifier-stage model calls allowed to run at the same time.
+
+Comparisons within a sweep used the same selected record cohort. Most single-agent worker and API sweep points, and each token-pressure stress configuration, were observed once; experiments with repeated runs are identified explicitly. The single-agent and multi-agent campaigns used different source cohorts, execution hosts, code paths, and service-call graphs, so their absolute throughput and agreement values should not be interpreted as a head-to-head architecture benchmark. The later verifier-cap and token-pressure results should likewise be compared within their revised multi-agent runtime rather than against absolute agreement levels from the earlier multi-agent implementation.
 
 We report aggregate operational measurements only: configuration settings, record counts, completion status, wall-clock runtime, timeout and error counts, token totals, estimated cost, checkpoint recovery behavior, and verifier or routing summaries. Source narratives, prompts, retrieved evidence, raw logs, per-record outputs, and checkpoint files are not published because they may contain sensitive regulated information.
 
-Cost estimates are market approximations based on public API pricing at the time of analysis: GPT-5 input tokens at USD 1.25 per 1M tokens, GPT-5 output tokens at USD 10.00 per 1M tokens, and text-embedding-3-small at USD 0.02 per 1M tokens. These estimates do not reflect negotiated enterprise pricing, Azure-specific billing, cached-input discounts, reserved capacity, or confidential commercial terms.
+Token pressure means the rate at which prompt, completion, reasoning, and embedding tokens are consumed by hosted model services. We summarize this as peak tokens per minute (TPM) over a 60-second window. Reasoning effort is a model configuration that changes the internal reasoning budget available to the model when the provider exposes such a setting. It is distinct from workflow confidence tiers, severity labels, or human review categories.
 
-In the multi-agent structured-prediction experiments, each predicted label can include multiple normalized components. We refer to the strict comparison of the full normalized component tuple as an exact label-triplet match.
+Cost estimates are market approximations based on a June 12, 2026 snapshot of public list prices: GPT-5 input tokens at USD 1.25 per 1M tokens, GPT-5 output tokens at USD 10.00 per 1M tokens, and text-embedding-3-small at USD 0.02 per 1M tokens [@openai2025gpt5; @openai2024embeddings]. These estimates do not reflect negotiated enterprise pricing, Azure-specific billing, cached-input discounts, reserved capacity, or confidential commercial terms.
+
+In the multi-agent structured-prediction experiments, we evaluate two representations of each predicted label: its identifier and its normalized three-component tuple. We refer to strict set comparison of those representations as exact label-ID match and exact label-triplet match, respectively.
 
 ```{table} Metrics used in the experiments.
 :label: tab-metrics
@@ -152,14 +166,15 @@ In the multi-agent structured-prediction experiments, each predicted label can i
 | Checkpoint recovery | Records preserved rather than reprocessed after interruption |
 | Token usage | Prompt, completion, total, and embedding tokens |
 | Estimated cost | Token-derived public-pricing approximation |
-| Prediction yield | Records with a non-empty predicted label set |
-| Exact label-ID match | Predicted label identifier set exactly equals reference set |
-| Exact label-text match | Predicted normalized label-component set exactly equals reference set |
-| Exact label-triplet match | Predicted normalized triplet-label set exactly equals reference set |
+| Prediction yield | Records with a non-empty predicted label set divided by attempted records |
+| Exact label-ID match | Predicted label-identifier set exactly equals the reference identifier set |
+| Exact label-triplet match | Predicted normalized three-component tuple set exactly equals the reference tuple set |
 | Repeat consistency | Records whose predicted label set remains stable across repeated runs |
 | Peak TPM | Maximum observed tokens per minute in a 60-second window |
 | Reasoning tokens | Completion-side internal reasoning tokens reported by the model provider when available |
 ```
+
+The exact-match metrics are intentionally strict. For example, if the reference label-ID set is `{A, B}`, then `{B, A}` is an exact label-ID match because the set is identical, but `{A}` fails because it is missing `B`, and `{A, B, C}` fails because it adds `C`. Separately, if a reference label has the normalized tuple `(term_1, context_1, outcome_1)`, then `(term_1, context_2, outcome_1)` is not an exact label-triplet match even when its associated label identifier is correct. This strictness makes the metrics useful for stability and regression testing, but it can understate partial or semantically close agreement.
 
 ## Single-Agent Results
 
@@ -212,11 +227,11 @@ Hosted API concurrency was the dominant throughput bottleneck. Throughput increa
 
 The best single-agent run consumed 13,745,153 chat prompt tokens, 685,051 chat completion tokens, and 6,843 embedding tokens. Using the public-pricing approximation described above, the estimated cost was approximately USD 24 for the 200-record run, or about USD 0.12 per record.
 
-### Quality Guardrail, Timeouts, Checkpointing, And Replay
+### Output-Stability Guardrail, Timeouts, Checkpointing, And Replay
 
-Because full reference labels were not available for all 1,000 records, we used a 12-record labeled calibration subset to test whether higher concurrency introduced measurable output degradation. Each configuration was run three times, producing 36 record-level comparisons per configuration.
+Because full reference labels were not available for all 1,000 records, we used a 12-record labeled calibration subset to test whether higher concurrency changed strict label agreement on a small known-labeled sample. Each configuration was run three times, producing 36 record-level comparisons per configuration. This is an output-stability guardrail, not evidence of general quality preservation.
 
-```{table} Single-agent quality guardrail on 12 labeled records.
+```{table} Single-agent output-stability guardrail on 12 labeled records.
 :label: tab-single-quality
 
 | Config | Workers | API concurrency | Repeats | Record-runs | Exact matches | Exact match rate | Consistency rate |
@@ -225,7 +240,7 @@ Because full reference labels were not available for all 1,000 records, we used 
 | `w12_a12` | 12 | 12 | 3 | 36 | 34 | 94.44% | 91.67% |
 ```
 
-The higher-throughput `w12_a12` configuration did not show quality degradation on this labeled calibration subset. The result should be interpreted as a sanity check rather than a definitive accuracy benchmark.
+The observed exact-match rate was similar across the two settings: 91.67% for `w12_a3` and 94.44% for `w12_a12`. Repeat consistency decreased from 100.00% to 91.67%, corresponding to one of 12 records. Because the subset contains only 12 labeled records, these mixed observations should be interpreted as a guardrail sanity check for concurrency changes, not as evidence of general quality preservation or as a definitive accuracy benchmark.
 
 Timeout experiments showed why wall-clock budgets must be calibrated rather than minimized. A 60-second budget completed only 17 of 50 records and produced 33 timeout errors. A 120-second budget completed all 50 records in 23.3 minutes. A 300-second budget also completed all 50 records in 20.5 minutes. The 60-second budget was faster but unacceptable under a near-100% completion requirement.
 
@@ -233,7 +248,7 @@ Checkpointing avoided repeated work. In a 300-record run, a checkpoint preserved
 
 ## Multi-Agent Results
 
-The multi-agent results are organized in three phases. First, we compare review-workflow variants to understand how verification and fan-out affect reliability signals. Second, we evaluate the workflow as a multi-label classification task against reference labels. Third, we use known-solvable records to stress concurrency, verifier concurrency caps, token pressure, and reasoning effort as operational controls. This sequence separates operational reliability, strict label agreement, and regression-style pressure testing.
+The multi-agent results are organized in three phases. First, we compare review-workflow variants to understand how verification and fan-out affect reliability signals. Second, we evaluate the workflow as a multi-label classification task against reference labels. Third, we use known-solvable records to stress concurrency, verifier concurrency caps, token pressure, and reasoning effort as operational controls. The verifier-cap and token-pressure experiments in the third phase used the revised multi-agent runtime described above. This sequence separates operational reliability, strict label agreement, and regression-style pressure testing. The agreement-related rows should therefore be read according to their workload and runtime version: the 200-record baseline estimates agreement with available reference labels, while the known-solvable probes test whether previously successful cases remain stable under pressure.
 
 ### Verifier And Fan-Out Runs
 
@@ -250,7 +265,7 @@ This table compares review-workflow variants, not reasoning-effort settings. The
 | Fan-out, structured fields OFF | 48/50 | 1183.4 | 2.54 | 26 | 20 | 2 | 46 | 1 | 1 |
 ```
 
-Verifier and fan-out settings produced richer review metadata, but increased orchestration cost and still produced partial completion.
+Verifier and fan-out settings produced richer review metadata, but increased orchestration cost and still produced partial completion. In the review-workflow comparison table, turning the verifier off improved throughput from 2.53 to 3.07 records per minute relative to the verifier-on run, but removed verifier pass, repair, and escalation metadata.
 
 ```{table} Multi-agent operational error signals.
 :label: tab-multi-errors
@@ -263,35 +278,37 @@ Verifier and fan-out settings produced richer review metadata, but increased orc
 | Verifier ON, retry 1 | 8 | 0 | 4 | 2 |
 ```
 
-Provider content-filter signals were the most frequent named error category in these runs. One fan-out configuration also produced read-timeout signals. Connection-pool warnings were operational signals but did not by themselves terminate the batch.
+Provider content-filter signals were the most frequent named error category in the operational-error table. One fan-out configuration also produced read-timeout signals. Connection-pool warnings were operational signals but did not by themselves terminate the batch.
 
 ### Multi-Label Classification Baseline
 
-We next evaluated the multi-agent workflow as a multi-label classification task. Each input record had a reference set of target labels, and the system predicted a set of labels. In the later triplet-based probes, each label is represented as a normalized tuple of label components, and the strictest metric requires the full tuple set to match. A prediction counted as an exact label-ID match when the predicted set of label identifiers equaled the reference set. A stricter exact label-text match additionally required normalized label components to match. Prediction yield measured whether the workflow produced at least one predicted label for a record.
+We next evaluated the multi-agent workflow as a multi-label classification task. Each input record had a reference set of target labels, and the system predicted a set of labels. Each label is represented by an identifier and a normalized three-component tuple. A prediction counted as an exact label-ID match when the predicted identifier set equaled the reference identifier set. The stricter exact label-triplet metric required the full predicted tuple set to equal the reference tuple set. Prediction yield measured whether the workflow produced at least one predicted label for a record.
 
-These metrics evaluate agreement with the experiment's reference labels. We use exact set agreement intentionally as a strict stability measure; partial semantic correctness is outside the scope of this paper. The metrics should not be interpreted as a comprehensive assessment of downstream workflow quality or domain-level correctness.
+These metrics evaluate agreement with the experiment's reference labels. We use exact set agreement intentionally as a strict stability measure; partial semantic correctness is outside the scope of this paper. The metrics should not be interpreted as a comprehensive assessment of downstream workflow quality, domain-level correctness, or real-world review outcomes.
+
+Both baseline runs used medium reasoning, the verifier, and the optional structured-input evidence path; record-level concurrency was the varied setting.
 
 ```{table} Multi-agent 200-record multi-label classification baseline.
 :label: tab-multi-label-baseline
 
-| Config | Concurrency | Saved/total | Hard errors | Prediction yield | Exact label-ID | Exact label-text | Wall min | Usable predictions/min | Est. cost |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| `c2_verifier_on_source_labels_on_medium` | 2 | 193/200 | 7 | 187/200 (93.5%) | 96/200 (48.0%) | 47/200 (23.5%) | 87.3 | 2.14 | USD 10.22 |
-| `c6_verifier_on_source_labels_on_medium` | 6 | 196/200 | 4 | 193/200 (96.5%) | 100/200 (50.0%) | 51/200 (25.5%) | 28.8 | 6.70 | USD 10.32 |
+| Concurrency | Saved/total | Hard errors | Prediction yield | Exact label-ID | Exact label-triplet | Wall min | Usable predictions/min | Est. cost |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 2 | 193/200 | 7 | 187/200 (93.5%) | 96/200 (48.0%) | 47/200 (23.5%) | 87.3 | 2.14 | USD 10.22 |
+| 6 | 196/200 | 4 | 193/200 (96.5%) | 100/200 (50.0%) | 51/200 (25.5%) | 28.8 | 6.70 | USD 10.32 |
 ```
 
-Increasing record-level concurrency from 2 to 6 improved throughput by approximately 3.1x, improved prediction yield from 93.5% to 96.5%, and slightly improved exact label agreement. Both process runs returned nonzero exit codes because a small number of records encountered provider content-filter failures, but the runs still saved most record-level decisions and produced usable aggregate results.
+Increasing record-level concurrency from 2 to 6 improved throughput by approximately 3.1x, from 2.14 to 6.70 usable predictions per minute, and improved prediction yield from 93.5% to 96.5%. Exact label-ID agreement increased from 48.0% to 50.0%, while exact label-triplet agreement increased from 23.5% to 25.5%. Both process runs returned nonzero exit codes because a small number of records encountered provider content-filter failures, but the runs still saved most record-level decisions and produced usable aggregate results.
 
 ### Known-Solvable Concurrency Stability Probe
 
-To test whether higher record-level concurrency degraded the workflow on records it had already shown it could solve, we constructed a 100-record known-solvable cohort from the 200-record concurrency-6 baseline. The cohort included records where the predicted label-ID set exactly matched the reference label-ID set in that run. This cohort is useful for stability testing, but it is not an unbiased estimate of overall classification accuracy because it was selected from prior successes.
+To test whether higher record-level concurrency degraded the workflow on records it had already shown it could solve, we constructed a 100-record known-solvable cohort from the 200-record concurrency-6 baseline. The cohort included records where the predicted label-ID set exactly matched the reference label-ID set in that run. This cohort is useful for stability testing, but it is not an unbiased estimate of overall classification accuracy because it was selected from prior successes. Its purpose is closer to a regression test: a configuration that destabilizes these cases is operationally concerning, but a high score on this cohort does not imply high accuracy on arbitrary future records.
 
 Each concurrency setting was run three times, producing 300 record-runs per setting.
 
 ```{table} Known-solvable concurrency stability probe.
 :label: tab-known-solvable
 
-| Concurrency | Repeats | Record-runs | Prediction yield | Exact label-ID | Exact label-text | Label-text consistency | Avg wall min/100 | Usable predictions/min | Est. cost/100 usable |
+| Concurrency | Repeats | Record-runs | Prediction yield | Exact label-ID | Exact label-triplet | Triplet consistency | Avg wall min/100 | Usable predictions/min | Est. cost/100 usable |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 2 | 3 | 300 | 288/300 (96.0%) | 279/300 (93.0%) | 102/300 (34.0%) | 93.0% | 46.9 | 2.05 | USD 4.99 |
 | 6 | 3 | 300 | 292/300 (97.3%) | 278/300 (92.7%) | 96/300 (32.0%) | 93.0% | 16.0 | 6.09 | USD 4.98 |
@@ -302,21 +319,21 @@ Each concurrency setting was run three times, producing 300 record-runs per sett
 :name: fig-multi-agent-concurrency-stability
 :alt: Two-panel chart showing multi-agent throughput increasing with concurrency while prediction yield, exact label-ID agreement, and repeat consistency remain stable.
 
-Known-solvable multi-agent concurrency stability probe. Record-level concurrency improved usable predictions per minute from 2.05 to 8.92, while prediction yield, exact label-ID agreement, and repeat consistency remained stable across the tested settings.
+Known-solvable multi-agent concurrency stability probe. Record-level concurrency improved usable predictions per minute from 2.05 to 8.92, while prediction yield, exact label-ID agreement, and repeat consistency changed only modestly across the tested settings.
 ```
 
-On the known-solvable cohort, increasing record-level concurrency from 2 to 12 improved throughput by approximately 4.4x without observed degradation in prediction yield, exact label-ID agreement, exact label-text agreement, or repeat consistency. This supports workflow-level parallelism: concurrency was applied across independent records, while each record retained its own reasoning and synthesis path. It should not be read as a general claim that arbitrary parallel reasoning is always safe.
+On the known-solvable cohort, increasing record-level concurrency from 2 to 12 improved throughput by approximately 4.4x, from 2.05 to 8.92 usable predictions per minute. At those endpoints, prediction yield was 96.0% in both settings, exact label-ID agreement was 93.0% and 93.7%, exact label-triplet agreement was 34.0% and 34.3%, and repeat consistency was 93.0% and 96.0%. The intermediate concurrency-6 setting had lower exact label-triplet agreement at 32.0%, so these results show no monotonic degradation across the tested settings rather than statistical equivalence. This supports workflow-level parallelism across independent records, while each record retains its own reasoning and synthesis path. It should not be read as a general claim that arbitrary parallel reasoning is always safe.
 
 ### Verifier Concurrency And Token-Pressure Probes
 
-We next asked whether quality would degrade when the multi-agent workflow placed more pressure on shared hosted-model capacity. Token pressure means the volume of prompt, completion, reasoning, and embedding tokens sent through the hosted model stack per minute. We tested this pressure in two ways. First, we held batch concurrency at 10 records and varied the verifier concurrency cap, which limits how many verifier calls may run at the same time. Second, we ran a stress matrix that changed batch concurrency, verifier concurrency, reasoning effort, and optional classifier stages. These probes use the same 100-record known-solvable cohort as the preceding stability probe, so they should be interpreted as regression and pressure tests rather than unbiased accuracy estimates.
+We next asked whether strict agreement would degrade when the multi-agent workflow placed more pressure on shared hosted-model capacity. Token pressure means the volume of prompt, completion, reasoning, and embedding tokens sent through the hosted model stack per minute. We tested this pressure in two ways. First, we held batch concurrency at 10 records and varied the verifier concurrency cap, which limits how many verifier calls may run at the same time. Second, we ran a stress matrix that changed batch concurrency, verifier concurrency, reasoning effort, and optional classifier stages. These probes use the same 100-record known-solvable cohort as the preceding stability probe, so they should be interpreted as regression and pressure tests rather than unbiased accuracy estimates.
 
-The verifier concurrency cap sweep used medium reasoning effort, 100 records, and three repeats per setting. A lower cap serialized verifier calls more aggressively; a higher cap allowed verifier calls to fan out more freely.
+The verifier concurrency cap sweep used medium reasoning effort, 100 records, and three repeats per setting. A lower cap serialized verifier calls more aggressively; a higher cap allowed verifier calls to fan out more freely. Because this sweep uses the known-solvable cohort, the exact label-triplet values in the verifier-cap table are pressure-test and repeat-stability measurements, not an unbiased accuracy estimate.
 
 ```{table} Verifier concurrency cap sweep.
 :label: tab-verifier-cap-sweep
 
-| Verifier concurrency cap | Record-runs | Prediction yield | Exact label-triplet | Repeat consistency | Avg records/min | Peak total TPM | Est. cost/100 |
+| Verifier concurrency cap | Record-runs | Prediction yield | Exact label-triplet | Repeat consistency | Avg records/min | Peak total TPM | Est. cost/100 usable |
 |---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | 300 | 86.3% | 80.7% | 81.0% | 9.69 | 329k | USD 5.63 |
 | 3 | 300 | 89.0% | 84.0% | 91.0% | 10.30 | 393k | USD 5.63 |
@@ -325,14 +342,14 @@ The verifier concurrency cap sweep used medium reasoning effort, 100 records, an
 | 20 | 300 | 88.0% | 83.3% | 82.0% | 9.91 | 389k | USD 5.61 |
 ```
 
-Increasing verifier concurrency did not show a monotonic relationship with quality. The verifier concurrency cap of 3 had the strongest repeat consistency, while the verifier concurrency cap of 10 had the highest exact label-triplet agreement and throughput. The operational lesson is that verifier calls should have an explicit concurrency cap, but the cap should be tuned empirically rather than assumed to be as high as possible.
+Increasing verifier concurrency did not show a monotonic relationship with strict agreement. The verifier concurrency cap of 3 had the strongest repeat consistency, while the verifier concurrency cap of 10 had the highest exact label-triplet agreement and throughput. The operational lesson is that verifier calls should have an explicit concurrency cap, but the cap should be tuned empirically rather than assumed to be as high as possible.
 
-The stress probe then compared a medium-reasoning baseline against high reasoning, higher record-level concurrency, and a maximum-pressure setting that combined high reasoning, higher batch concurrency, higher verifier concurrency, and an additional classifier stage.
+The stress probe then compared a medium-reasoning baseline against high reasoning, higher record-level concurrency, and a maximum-pressure setting that combined high reasoning, higher batch concurrency, higher verifier concurrency, and an additional classifier stage. Like the verifier-cap sweep, the token-pressure stress table is a regression and pressure test on previously successful records.
 
 ```{table} Token-pressure stress probe on the known-solvable cohort.
 :label: tab-token-pressure-stress
 
-| Config | Batch/verifier concurrency | Reasoning / extra stage | Prediction yield | Exact label-triplet | Records/min | Reasoning tokens | Peak total TPM | Est. cost/100 |
+| Config | Batch/verifier concurrency | Reasoning / extra stage | Prediction yield | Exact label-triplet | Records/min | Reasoning tokens | Peak total TPM | Est. cost/100 usable |
 |---|---:|---|---:|---:|---:|---:|---:|---:|
 | Baseline | 10 / 3 | Medium / off | 88/100 | 82/100 | 10.18 | 176k | 364k | USD 5.61 |
 | High reasoning confirmation | 10 / 3 | High / off | 88/100 | 83/100 | 7.84 | 312k | 288k | USD 7.01 |
@@ -349,9 +366,9 @@ Multi-agent token-pressure operating points. Higher concurrency and reasoning ef
 
 One high-reasoning run in the first stress matrix ended as a partial operational run. We excluded that partial result from the table and reran the high-reasoning configuration successfully as a confirmation run.
 
-The stress results were more nuanced than the hypothesis that higher token pressure would necessarily reduce quality. High reasoning increased reasoning-token usage by approximately 1.8x and cost by roughly 25% relative to the medium baseline, while reducing throughput from 10.18 to 7.84 records per minute; exact label-triplet agreement remained similar. Higher concurrency with medium reasoning increased throughput to 16.69 records per minute but showed a small drop in exact label-triplet agreement. The maximum-pressure configuration had the highest exact label-triplet agreement among the stress settings, but at higher cost and higher peak token pressure. These results support treating token pressure as an optimization variable, not as a one-directional failure mechanism.
+The stress results were more nuanced than the hypothesis that higher token pressure would necessarily reduce strict agreement. High reasoning increased reasoning-token usage by approximately 1.8x and cost by roughly 25% relative to the medium baseline, while reducing throughput from 10.18 to 7.84 records per minute; exact label-triplet agreement remained similar. Higher concurrency with medium reasoning increased throughput to 16.69 records per minute but showed a small drop in exact label-triplet agreement. The maximum-pressure configuration had the highest exact label-triplet agreement among the stress settings, but at higher cost and higher peak token pressure. These results support treating token pressure as an optimization variable, not as a one-directional failure mechanism.
 
-We also computed an observed Pareto set from the multi-agent runs that used the same 100-record known-solvable cohort and reported exact label-triplet agreement. This includes the verifier concurrency cap sweep and token-pressure stress runs. The Pareto calculation compares cost per usable record, throughput, prediction yield, and strict agreement, following the standard multi-objective optimization idea of non-dominated alternatives [@miettinen1999nonlinear]. This is not a global frontier over all possible settings; it is the non-dominated set among the calibration rows we ran.
+We also computed an observed Pareto set from the revised-runtime multi-agent runs that used the same 100-record known-solvable cohort and reported exact label-triplet agreement. This includes the verifier concurrency cap sweep and token-pressure stress runs, but excludes the earlier multi-agent concurrency-stability phase because it used a different runtime version. The Pareto calculation compares cost per usable record, throughput, prediction yield, and strict agreement, following the standard multi-objective optimization idea of non-dominated alternatives [@miettinen1999nonlinear]. This is not a global frontier over all possible settings or an unbiased accuracy frontier; it is the non-dominated set among the comparable calibration rows we ran.
 
 ```{table} Observed multi-agent Pareto-relevant operating points.
 :label: tab-observed-pareto
@@ -418,7 +435,7 @@ This framing changes the design question from "How many workers should we run?" 
 
 The verifier concurrency cap and token-pressure probes further refine this framework. Higher concurrency increased peak token-per-minute pressure, and higher reasoning effort increased reasoning-token usage and cost, but neither variable produced a simple monotonic degradation in exact label agreement. Each configuration moved the operating point across throughput, cost, token pressure, prediction yield, and strict agreement. Production tuning should therefore be measured as a constrained optimization problem rather than decided by intuition alone.
 
-The same framework can support an interactive decision-support widget. Rather than launching expensive LLM calls for every user interaction, the widget can use saved aggregate calibration runs to simulate expected outcomes without exposing record-level source data. Users can adjust worker count, API concurrency, verifier concurrency cap, reasoning effort, and token-pressure constraints, then inspect observed throughput, cost, yield, strict agreement, and peak token pressure. The current widget is static: it does not launch LLM calls or process new records. It lets users explore saved aggregate calibration results. A future internal version could trigger new calibration runs inside an approved environment.
+The same framework can support an interactive decision-support widget. The widget is a supplemental artifact and a demonstration of the paper's operating-point methodology, not a live deployment interface. Rather than launching expensive LLM calls for every user interaction, the widget uses saved aggregate calibration runs to simulate expected outcomes without exposing record-level source data. Users can adjust worker count, API concurrency, verifier concurrency cap, reasoning effort, and token-pressure constraints, then inspect observed throughput, cost, yield, strict agreement, and peak token pressure. The current widget is static: it does not launch LLM calls or process new records. It lets users explore saved aggregate calibration results. A future internal version could trigger new calibration runs inside an approved environment.
 
 ```{figure} figures/optimization_widget_screenshot.png
 :name: fig-optimization-widget
@@ -445,7 +462,9 @@ Finally, design for partial completion. A run that completes 196 of 200 records 
 
 ## Data And Artifact Availability
 
-The experiments were conducted in an internal secured environment using access-controlled records and production-like cloud dependencies. Record-level source artifacts, raw narratives, prompts, retrieved evidence, raw logs, per-record outputs, and checkpoints are not public because they may contain sensitive regulated information. Shareable paper-supporting artifacts include the proceedings source, embedded figures, aggregate result tables, and a static decision-support widget built from aggregate calibration rows. Experiment scripts and broader run manifests can be shared only through approved internal access controls. This paper therefore supports procedural reproducibility on an equivalent authorized dataset and interactive exploration of aggregate operating points, but not public release of the underlying records or raw execution artifacts.
+The experiments were conducted in an internal secured environment using access-controlled records and production-like cloud dependencies. Record-level source artifacts, raw narratives, prompts, retrieved evidence, raw logs, per-record outputs, and checkpoints are not public because they may contain sensitive regulated information. Shareable paper-supporting artifacts include the proceedings source, embedded figures, aggregate result tables, and a static decision-support widget built from aggregate calibration rows. Experiment scripts and broader run manifests can be shared only through approved internal access controls.
+
+The reproducibility claim is therefore procedural rather than direct. The public artifact supports inspection of the measurement framework, operating-point tables, figures, and static widget behavior. It does not support direct reproduction of the exact numerical results from the original records, prompts, raw logs, outputs, or checkpoints. A reader with an equivalent authorized dataset and comparable hosted services could reproduce the procedure: define a workload, run baseline and sweep configurations, record the same aggregate measurements, and choose a bounded operating point under local constraints.
 
 ## Limitations
 
@@ -466,6 +485,6 @@ LLM agents that work in interactive prototypes are not automatically production-
 
 Through single-agent and multi-agent structured classification workflows, we showed that reliability requires explicit engineering controls around the agent. Separating compute parallelism from API concurrency improved scalability. Wall-clock budgets made stalls observable. Checkpointing preserved progress. Failure taxonomies and structured metadata made it possible to distinguish final record failures from recovered internal errors.
 
-The final multi-agent probes showed that record-level concurrency, verifier concurrency caps, reasoning effort, and optional classification stages can be tuned as operational controls. On known-solvable cohorts, these controls changed throughput, cost, peak token pressure, and strict label agreement, but quality did not move monotonically with any single setting. The useful production question is therefore not which knob should be maximized, but which bounded configuration satisfies the required yield and agreement targets at acceptable cost.
+The final multi-agent probes showed that record-level concurrency, verifier concurrency caps, reasoning effort, and optional classification stages can be tuned as operational controls. On known-solvable cohorts, these controls changed throughput, cost, peak token pressure, and strict label agreement, but strict agreement did not move monotonically with any single setting. The useful production question is therefore not which knob should be maximized, but which bounded configuration satisfies the required yield and agreement targets at acceptable cost.
 
 The broader lesson is that production agentic AI is not only a modeling problem. It is a systems engineering problem and an optimization problem. Robust deployment requires designing for failure from the beginning so agent workflows are observable, recoverable, tunable, and auditable at scale.
