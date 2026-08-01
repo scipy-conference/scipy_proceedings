@@ -3,9 +3,15 @@ extends: ../papers.yml
 project:
   id: SHAURYA_AGARWAL_The_Silmaril_Strikes_Again
   title: The Silmaril Strikes Again
-  subtitle: "Ontologies: from CWM to modern reasoning engines - building better AI systems with deterministic reasoning capabilities"
+  subtitle:
+    'Ontologies: from CWM to modern reasoning engines - building better AI
+    systems with deterministic reasoning capabilities'
   description: >-
-    This paper examines how ontology and rule-based reasoning systems can provide stable identity, multi-hop inference, and auditable derivations alongside large language models. It uses CWM as a historical case and outlines a columnar, distributed design for deterministic reasoning in agentic AI systems.
+    This paper examines how ontology and rule-based reasoning systems can
+    provide stable identity, multi-hop inference, and auditable derivations
+    alongside large language models. It uses CWM as a historical case and
+    outlines a columnar, distributed design for deterministic reasoning in
+    agentic AI systems.
   authors:
     - name: Shaurya Agarwal
       email: 3shauryashaurya@gmail.com
