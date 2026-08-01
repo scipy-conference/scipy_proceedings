@@ -2,7 +2,7 @@ version: 1
 extends: ../papers.yml
 
 project:
-  id: scipy-2026-SHAURYA_AGARWAL_The_Silmaril_Strikes_Again
+  id: scipy-2026-SHAURYA_AGARWAL
   title: The Silmaril Strikes Again
   subtitle:
     'Ontologies: from CWM to modern reasoning engines - building better AI
