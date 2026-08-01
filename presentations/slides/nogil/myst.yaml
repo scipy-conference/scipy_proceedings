@@ -1,0 +1,13 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'Tying Up Loose Threads: Making your Project No-GIL Ready'
+  authors:
+    - name: Charlie Lin
+      affiliation: ''
+      orcid: ''
+  abstract:
+    'If your project uses C, C++, or Rust to speedup critical hotpaths, or to
+    wrap native libraries, and want to increase performance of highly parallel
+    workloads even more, switching to the free-threaded interpreter is worth the
+    investment!'
