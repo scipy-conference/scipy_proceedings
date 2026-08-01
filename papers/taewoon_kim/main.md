@@ -568,7 +568,7 @@ itself runs at Java speed from Python (the JPype call is a direct method invocat
 measurable cost is materializing results into Python objects, which the binding's bulk paths
 keep small — ≈1.1× a pure-Java baseline for vector search and ≈1.6× for full-table scans on
 this host — so the boundary tax is paid per batch, not per row. *Packaging*: a `jlink`-trimmed JRE
-still makes each wheel ≈62 MB, paid once at install.
+still makes each wheel ≈67 MB, paid once at install.
 
 **Maturity and scope.** Beyond the three models shown, the engine and binding cover more than
 this paper exercises (additional data types and query surfaces, batch import paths, and an
