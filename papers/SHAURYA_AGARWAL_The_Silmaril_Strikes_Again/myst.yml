@@ -1,0 +1,69 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: SHAURYA_AGARWAL_The_Silmaril_Strikes_Again
+  title: The Silmaril Strikes Again
+  subtitle: "Ontologies: from CWM to modern reasoning engines - building better AI systems with deterministic reasoning capabilities"
+  description: >-
+    This paper examines how ontology and rule-based reasoning systems can provide stable identity, multi-hop inference, and auditable derivations alongside large language models. It uses CWM as a historical case and outlines a columnar, distributed design for deterministic reasoning in agentic AI systems.
+  authors:
+    - name: Shaurya Agarwal
+      email: 3shauryashaurya@gmail.com
+      affiliations:
+        - INDEPENDENT
+      corresponding: true
+  keywords:
+    - ontology engineering
+    - reasoning engines
+    - deterministic reasoning
+    - agentic AI
+    - provenance
+    - rule systems
+    - CWM
+    - Notation3
+  abbreviations:
+    AI: Artificial Intelligence
+    ASP: Answer Set Programming
+    ATMS: Assumption-based Truth Maintenance System
+    CDCL: Conflict-Driven Clause Learning
+    CSP: Constraint Satisfaction Problem
+    CUDA: Compute Unified Device Architecture
+    CWM: Closed World Machine
+    DL: Description Logic
+    EL: A tractable description logic family
+    GNN: Graph Neural Network
+    GPU: Graphics Processing Unit
+    ILP: Inductive Logic Programming
+    IVM: Incremental View Maintenance
+    JTMS: Justification-based Truth Maintenance System
+    KG: Knowledge Graph
+    LLM: Large Language Model
+    N3: Notation3
+    NL: Natural Language
+    OWL: Web Ontology Language
+    OWL-RL: Web Ontology Language 2 RL profile
+    QSQ: Query-Subquery
+    RAM: Random Access Memory
+    RETE: Rete rule-matching algorithm
+    SLD: Selective Linear Definite clause resolution
+    SLG: Tabled resolution method
+    SMT: Satisfiability Modulo Theories
+    TMS: Truth Maintenance System
+    TREAT: A Rete-family rule-matching algorithm
+    URI: Uniform Resource Identifier
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - shauryaagarwalthesilmaril
+        - theslimarilshauryaagarwalscipy2025
+        - theslimarilshauryaagarwalscipy2026
+        - bernerslee2009cwm
+        - bernerslee2011n3
+        - swapRepository
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: The Silmaril strikes again v01.md
+      output: The Silmaril strikes again v01.pdf
