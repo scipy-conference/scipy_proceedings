@@ -26,7 +26,8 @@ It provides functionality for pre-processing (including filtering, downsampling,
 
 ### Ecosystem
 
-MNE-Python's functionality is further expanded by more than 50 compatible satellite packages; examples include extensions for specialized analyses (brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], phase-amplitude coupling [@pactools]), for specific data types (intracranial electrodes [@Rockhill2022], near-infrared spectroscopy [@LukeEtAl2021]), for specific data resources (OpenNeuro [@openneuropy], the Human Connectome Project [@mne_hcp]), for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids], for handling real-time data streams [@mne_lsl], and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
+MNE-Python's functionality is further expanded by more than 50 compatible satellite packages.
+Examples include extensions for specialized analyses like brain connectivity [@mne_connectivity], microstate analysis [@mne_microstates;@pycrostates], representational similarity analysis [@mne_rsa], or phase-amplitude coupling [@pactools]; for specific data types like intracranial electrodes [@Rockhill2022] or near-infrared spectroscopy [@LukeEtAl2021]; for specific data resources like OpenNeuro [@openneuropy] or the Human Connectome Project [@mne_hcp]; for organizing data to conform to the Brain Imaging Data Structure standard [@mne_bids;@bids]; for handling real-time data streams [@mne_lsl]; and for managing data processing pipelines for large datasets [@mne_bids_pipeline;@autoreject;@pyprep].
 Many of these related packages are hosted within the MNE-Tools organization on GitHub, and looked after by members of the MNE-Python Maintainer Team.
 
 ### Community and Governance
@@ -93,18 +94,6 @@ Each day, a short lecture or tutorial was provided by senior community members w
 Lectures focused on career trajectory, experiences in the MNE-Python community, and how the speakers benefitted from being contributors.
 Tutorials focused on knowledge relevant to the contributing workflow: writing and running tests, checking code coverage, reading tracebacks, and similar topics.
 
-```{figure} figure1.png
-:label: fig:reten
-
-Contributor retention of the two New Developer Sprints. The lines show how many years the contributors stayed active after the sprint. The teal-colored line represents the 2021 cohort, the purple line the 2022 cohort.
-```
-
-Figure @fig:reten shows the retention of New Developer Sprint attendees as contributors to MNE-Python.
-For both sprints, around half of the attendees continued to contribute beyond the first year. Taking both sprints together, ten attendees contributed for two years or longer.
-In 2026, five and four years after the sprints, four attendees are still regularly contributing.
-Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
-This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
-
 ### Intermediate Sprint
 
 In 2023, we held an Intermediate Sprint, open to alumni of the New Developer Sprints who wanted to advance their contributing skills.
@@ -155,14 +144,29 @@ This is due to a mixture of factors: a small pool of qualified people, the unfav
 
 ### Onboarding Results
 
-In contrast to our past network-based recruitment practices, our current approach has been bottom-up: first training users how to contribute, then upskilling contributors to facilitate repeat contributions, and finally providing intensive training in maintainer-specific skills.
+@fig:reten shows the retention of sprint attendees as contributors to MNE-Python.
+For both sprints, around half of the attendees continued to contribute beyond the first year.
+Taking both sprints together, ten attendees contributed for two years or longer.
+In 2026, five and four years after the sprints, four attendees are still regularly contributing.
+Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
+This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
+
+```{figure} figure1.png
+:label: fig:reten
+
+Contributor retention after the sprints. Each row is a sprint attendee, and each dot is a contribution in one of seven MNE-Tools repositories (`mne-python`, `mne-bids`, `mne-connectivity`, `mne-gui-addons`, `mne-hfo`, `mne-icalabel`, `mne-qt-browser`). Vertical dashed lines show the dates of the two New Developer Sprints and the Intermediate Sprint. For participants who contributed at least 6 months after their sprint, the time span of their contributions is labeled.
+```
+
+In contrast to our past network-based recruitment practices, the current approach has been bottom-up: first training users how to contribute, then upskilling contributors to facilitate repeat contributions, and finally providing intensive training in maintainer-specific skills.
 In our experience, providing education on how to contribute to open-source software, especially information specific to our project,
 greatly lowers the threshold for our users to be willing to attempt a contribution.
 This approach also allowed us to prioritize inclusivity in our recruitment and to address barriers that disproportionately impact underrepresented groups in our training.
 As of now, this has lead to a slight increase in the diversity of our regular contributors and maintainers.
 Overall, we have retained roughly a third of the attendees for two years or longer.
 We do not have any insight into why long-term active attendees stop contributing, but assume that new careers, possibly outside of neuroscience, and the academic incentive system play a major role.
-However, that seven attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding curriculum on the project.
+However, that seven attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding approach on the project.
+
+
 
 ### Onboarding Costs
 
@@ -183,7 +187,6 @@ We hope that by publicizing our onboarding curriculum and creating other "contri
 we will empower more users to self-educate about the open-source contribution process and the path to maintainership.
 This will hopefully increase the input stream of contributors to open-source scientific software projects, and may also increase retention:
 by making contribution easier through upskilling, hopefully each single contribution becomes less effortful and thus more likely to be attempted.
-At the same time, we hope to spark a discussion among open-source software maintainers about the communities’ efforts toward educating and retaining talented maintainers.
 
 
 ## Funding acknowledgment
