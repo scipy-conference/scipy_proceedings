@@ -165,6 +165,25 @@ our workflows use pandas to load and prepare the source data. Bulk graph constru
 available through a `graph_batch` context manager that amortizes edge creation. Together these
 keep the engine feeling native to a NumPy/pandas workflow rather than like a foreign service.
 
+For bulk results the binding also exposes columnar exports, and the choice between them is
+about types rather than speed. `to_columns()` returns NumPy arrays, which is the natural fit
+until a column contains nulls: NumPy has no missing value for integers, so a nullable
+`INTEGER` must widen to `float64` with `NaN` holes, losing the type and any precision above
+$2^{53}$, and a nullable boolean degrades to a Python list. `to_arrow()` reads the same buffer
+into a `pyarrow.Table`, keeping the validity bitmap the buffer already carries, so those
+columns stay `int64` and `bool`. It is not a second serialization path — the columnar
+transport already emits packed columns with a null bitmap, and Arrow's layout for strings is
+the same offsets-plus-blob representation — so the export adds no Java and no bytes to the
+wheel, and pyarrow is an optional extra rather than a dependency.
+
+The speed difference follows from what the two paths must do rather than from Arrow being
+faster in general. Measured to a `pandas.DataFrame` over 100k rows (median of 5, one otherwise
+idle host), string-heavy results are **1.75×** faster through Arrow because the strings are
+wrapped rather than decoded into one Python `str` per row, mixed results with nulls
+**1.42×**, and purely numeric results **0.98×** — that is, no gain at all, because
+neither the string decode nor the null promotion applies. We report the split rather than one
+figure: averaging them would hide the case where the answer is to keep using `to_columns()`.
+
 **Cross-platform packaging: the bundled-JRE wheel.** Distribution is an easily overlooked but
 important part of the contribution. Java bytecode is platform-agnostic, so the
 engine's `.jar` files are identical everywhere. The only platform-specific dependency is the
@@ -384,7 +403,10 @@ is a reporting detail rather than a confound. Those ArcadeDB versions are the
 pins in `experiments/build_images.sh` and are authoritative; the `lib_version` column in
 `results/runs.csv` reads `26.8.1.dev0` for every ArcadeDB row, because
 `arcadedb_embedded.__version__` was baked at build time and did not track the wheel until
-26.8.1.dev21, which is later than every wheel used here. DuckDB 1.5.4, SQLite
+26.8.1.dev21, which is later than every wheel used here. The columnar-export
+comparison of the previous section is the one measurement outside this set: `to_arrow()`
+landed after these lanes were run, so it was measured separately on 26.8.1.dev27, on the same
+host and under the same serial protocol. DuckDB 1.5.4, SQLite
 3.46.1, LadybugDB (`ladybug`) 0.18.1, Chroma 1.5.9. Embeddings are 384-dimensional
 (`all-MiniLM-L6-v2`).
 
