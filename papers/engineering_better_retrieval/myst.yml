@@ -59,6 +59,8 @@ project:
         - reimers2019sentencebert
         - carbonell1998mmr
         - retrieval_playground
+        - zheng2024stepback
+        - singh2024chunkrag
   exports:
     - id: pdf
       format: typst
