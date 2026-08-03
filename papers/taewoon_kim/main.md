@@ -229,9 +229,12 @@ db.query("opencypher",
     "ORDER BY a.score DESC", {"qid": 3}).to_list()
 ```
 
-For graph *analytics* over the same data, a Graph Analytical View can be built once
+For graph *analytics* over the same data, a Graph Analytical View is created
 (`CREATE GRAPH ANALYTICAL VIEW ...`) and polled until ready. Subsequent analytical traversals
 run against the accelerated view, while transactional writes continue against the base graph.
+Only the view's *definition* is persisted, so the view itself is rebuilt by scanning the graph
+each time the database is opened, and the build cost reported below is paid once per session
+rather than once for the life of the database.
 This is the "strong transactional core, *and* graph OLAP via GAV" story we quantify in the comparison.
 
 ### Vectors, via an HNSW index
@@ -436,9 +439,14 @@ percentiles ([](#tbl-latency)), by 2.8–9.0× across both operations. The 1-hop
 a percentile, but we report it because it is the shape a JVM engine gives you: better
 typical latency, a longer worst case. On graph analytics the analytics-oriented LadybugDB wins
 (≈66 ms vs ≈800 ms). The GAV
-is worth it on its own terms: ablating it on this corpus (N=5 per arm) takes the analytical
-suite from ≈165 ms to ≈476 ms at the median, so the view is worth **2.9×** for a one-time
-≈1.4 s build. It narrows rather than closes the gap to a dedicated analytical
+is worth it on its own terms, with a caveat about when: ablating it on this corpus (N=5 per
+arm) takes the analytical suite from ≈165 ms to ≈476 ms at the median, so the view is worth
+**2.9×** per run against a ≈1.4 s build. Because the build is repeated on every database
+open, that 2.9× is a within-session return: the view saves ≈311 ms per run of the suite and
+costs ≈1.4 s to construct, so it repays its build after roughly five runs in one session, and
+a session that runs the suite once is slower with the view (≈1.6 s) than without it (≈476 ms).
+The view is therefore an optimization for analytical sessions that ask many questions, not a
+standing property of the database. It narrows rather than closes the gap to a dedicated analytical
 graph engine. The costs are space and build memory. We build with ArcadeDB's default
 *bidirectional* edges, which store adjacency pointers on both endpoints so traversals run
 either way and the analytical planner can start from either end; this is the out-of-the-box
@@ -448,7 +456,7 @@ against LadybugDB's ≈684 MiB C++ footprint). The on-disk graph is ≈43× Lady
 store (≈1,774 vs ≈41 MiB). Again, the summary is complementarity: transactional graph writes and
 point traversals here, heavy graph analytics on a specialist.
 
-:::{table} Graph lane (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s). OLAP is a multi-query analytical suite (ms). ArcadeDB OLAP uses a Graph Analytical View (one-time build shown); ablating it raises the suite median from ≈165 ms to ≈476 ms, so the view is worth 2.9× (N=5 per arm). Values are median [min–max] over 5 reps. Durability contracts: LadybugDB fsyncs per commit (no relaxation knob); ArcadeDB shown at its async default — at matched per-commit fsync (ablation) its suite throughput is ≈539 ops/s, near parity with LadybugDB. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size (MiB).
+:::{table} Graph lane (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s). OLAP is a multi-query analytical suite (ms). ArcadeDB OLAP uses a Graph Analytical View, whose build is shown separately; only the view definition is persisted, so the build is repeated on every database open rather than paid once. Ablating the view raises the suite median from ≈165 ms to ≈476 ms, so it is worth 2.9× per run (N=5 per arm), repaying its build after roughly five runs within a session. Values are median [min–max] over 5 reps. Durability contracts: LadybugDB fsyncs per commit (no relaxation knob); ArcadeDB shown at its async default — at matched per-commit fsync (ablation) its suite throughput is ≈539 ops/s, near parity with LadybugDB. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size (MiB).
 :label: tbl-graph
 | Backend | OLTP ops/s | OLAP ms | GAV build s | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|
