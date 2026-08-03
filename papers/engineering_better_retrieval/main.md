@@ -105,15 +105,15 @@ User queries often arrive abbreviated, multi-intent, or dependent on prior conve
 | Self-querying | How do modern RAG systems handle multimodal documents? | What chunking strategies do RAG systems use for tables and images?; How is multimodal content embedded and retrieved? |
 :::
 
-*Query expansion* resolves abbreviations and compressed phrasing when intent is clear but vocabulary does not match the index. *Query decomposition* splits compound requests into atomic sub-queries retrieved and merged separately. *Query rewriting* uses conversation history to make follow-ups standalone. *Self-querying* generates multiple focused search queries when a single reformulation cannot cover an open-ended request. 
+*Query expansion* resolves abbreviations and compressed phrasing when intent is clear but vocabulary does not match the index. *Query decomposition* splits compound requests into atomic sub-queries retrieved and merged separately. *Query rewriting* uses conversation history to make follow-ups standalone. *Self-querying* generates multiple focused search queries when a single reformulation cannot cover an open-ended request.
 
-When combining these techniques, we recommend applying decomposition before expansion, since expanding a compound query may blur the semantic boundaries between independent information needs. For example let's consider this query: "Explain Docling's table extraction and compare it with TableFormer." 
+When combining these techniques, we recommend applying decomposition before expansion, since expanding a compound query may blur the semantic boundaries between independent information needs. For example let's consider this query: "Explain Docling's table extraction and compare it with TableFormer."
 
-Decomposing first produces two independent searches: 
+Decomposing first produces two independent searches:
 
-(1) Explain Docling's table extraction and 
+(1) Explain Docling's table extraction and
 
-(2) Compare Docling with TableFormer. 
+(2) Compare Docling with TableFormer.
 
 Expanding each sub-query separately keeps the retrieved context focused. Expanding the original compound query first may introduce unrelated synonyms or concepts across both tasks, making retrieval less precise.
 
@@ -163,7 +163,7 @@ Parent-child expansion decouples search granularity from the unit passed to the 
 Dense retrieval captures paraphrases and conceptual similarity but misses exact keywords, acronyms, and rare terms; BM25 captures those lexical signals but not meaning. *Hybrid retrieval* runs both in parallel and merges the ranked lists. Weighted score fusion is one option; *reciprocal rank fusion* (RRF) is a rank-agnostic alternative that needs no score normalization:
 
 $$\text{RRF}(d) = \sum_{L \in \mathcal{L}} \frac{1}{k + \text{rank}_L(d)}$$
-where $d$ is a retrieved document (or chunk), $\mathcal{L}$ is the set of ranked retrieval lists being fused (e.g., dense retrieval and BM25), $\text{rank}_L(d)$ is the rank of $d$ in list $L$, and $k$ is a positive smoothing constant that reduces the influence of very high-ranked documents. 
+where $d$ is a retrieved document (or chunk), $\mathcal{L}$ is the set of ranked retrieval lists being fused (e.g., dense retrieval and BM25), $\text{rank}_L(d)$ is the rank of $d$ in list $L$, and $k$ is a positive smoothing constant that reduces the influence of very high-ranked documents.
 
 Documents appearing in multiple lists rank higher. The same fusion step applies when pre-retrieval query expansion produces several search variants: each variant yields a ranked list, and RRF merges them into one candidate pool without prescribing how those queries were generated.
 
