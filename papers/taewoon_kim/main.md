@@ -380,10 +380,9 @@ indexes. All versions, image digests, host details, and per-run memory time-seri
 captured in a manifest for reproducibility. All runs were on a single host: a 12th-gen Intel Core i9-12900HK with 20 logical cores, of
 which 8 reached each container via `--cpuset-cpus 0-7`. It has 61 GiB usable RAM and a Samsung
 980 PRO 2 TB NVMe SSD (PCIe 4.0) holding the databases and datasets, on Linux kernel 7.0.0
-(x86-64) and Docker 29.5.3. Every ArcadeDB
-measurement reported in this section — all three lanes, both durability ablations, the view
-ablation, the hybrid workflow and the transport table — comes from one released version,
-**`arcadedb-embedded` 26.8.1**, on this host. The one figure quoted from an earlier engine is
+(x86-64) and Docker 29.5.3. Every ArcadeDB measurement reported below comes from one released version,
+**`arcadedb-embedded` 26.8.1**, on this host. That covers all three lanes, both durability
+ablations, the view ablation, the hybrid workflow and the transport table. The one figure quoted from an earlier engine is
 the binding-overhead ratio in the discussion, which compares Python against Java on the *same*
 build and is noted where it appears. DuckDB 1.5.4, SQLite 3.46.1, LadybugDB (`ladybug`) 0.18.1,
 Chroma 1.5.9. Embeddings are 384-dimensional (`all-MiniLM-L6-v2`).
@@ -409,9 +408,9 @@ nearest-neighbor queries and reports recall@10 against an exact brute-force grou
 exact query text for every lane is in the public benchmark suite.
 
 **Tabular ([](#tbl-tabular)).** Transactional throughput comparisons are durability-sensitive,
-so we state the contracts first. SQLite runs WAL + `synchronous=NORMAL` — its own
-documentation's recommendation, fsyncing at checkpoints rather than per commit — and ArcadeDB
-runs its default asynchronous WAL flush; both are bounded-loss contracts. DuckDB fsyncs per
+so we state the contracts first. SQLite runs WAL + `synchronous=NORMAL`, which its own documentation recommends and which
+fsyncs at checkpoints rather than per commit. ArcadeDB runs its default asynchronous WAL
+flush. Both are bounded-loss contracts. DuckDB fsyncs per
 commit and exposes no relaxation, so it is the one fully-durable engine in this table. At this
 matched-relaxed operating point the in-process C library dominates the mixed point workload:
 SQLite sustains ≈87,000 ops/s to ArcadeDB's ≈6,400 (≈14×), while ArcadeDB in turn runs ≈29×
