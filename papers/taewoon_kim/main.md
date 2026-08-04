@@ -176,13 +176,9 @@ transport already emits packed columns with a null bitmap, and Arrow's layout fo
 the same offsets-plus-blob representation — so the export adds no Java and no bytes to the
 wheel, and pyarrow is an optional extra rather than a dependency.
 
-The speed difference follows from what the two paths must do rather than from Arrow being
-faster in general. Measured to a `pandas.DataFrame` over 100k rows (median of 5, one otherwise
-idle host), string-heavy results are **1.75×** faster through Arrow because the strings are
-wrapped rather than decoded into one Python `str` per row, mixed results with nulls
-**1.42×**, and purely numeric results **0.98×** — that is, no gain at all, because
-neither the string decode nor the null promotion applies. We report the split rather than one
-figure: averaging them would hide the case where the answer is to keep using `to_columns()`.
+Which export a caller should reach for is a measurable question rather than a stylistic one,
+and it turns out to matter more than any engine-level difference this paper reports. We
+return to it with numbers in [](#sec-transport).
 
 **Cross-platform packaging: the bundled-JRE wheel.** Distribution is an easily overlooked but
 important part of the contribution. Java bytecode is platform-agnostic, so the
@@ -314,9 +310,12 @@ and the SQL step's surviving ids feed the graph traversal directly, with no seri
 copying rows between processes, no second system to keep consistent, and no ETL. Over the
 complete set of Cross Validated questions and answers (all 213,761 questions and 208,986
 answers, with the 108,101 users linked to them), the end-to-end workflow runs warm in
-**≈16 ms** (vector ≈10 ms, SQL ≈5 ms, Cypher ≈1.4 ms; median over 20 reps after 5
-warmups, range 15–17 ms). The graph is stored with ArcadeDB's default bidirectional
-edges, the Cypher traversal is accelerated by a Graph Analytical View (measured at 2.9×
+**≈13 ms** (vector ≈5.9 ms, SQL ≈5.0 ms, Cypher ≈2.0 ms; median over 20 reps after 5
+warmups). Nineteen of the twenty reps land between 11.4 and 16.2 ms; the twentieth is
+31.8 ms, one SQL step stalling to 24 ms, which is the same managed-runtime tail
+[](#tbl-latency) reports and we leave it in the range rather than trim it. The graph is
+stored with ArcadeDB's default bidirectional
+edges, the Cypher traversal is accelerated by a Graph Analytical View (measured at 2.4×
 on the analytical suite, see below), and the same
 traversal through ArcadeDB's native SQL `MATCH` surface answers in ≈3 ms: both surfaces
 run the same traversal over the same storage, within about 2× of each other, with neither
@@ -392,23 +391,24 @@ indexes. All versions, image digests, host details, and per-run memory time-seri
 captured in a manifest for reproducibility. Runs were executed on a single host: a 12th-gen
 Intel Core i9-12900HK (20 logical cores, of which 8 were exposed to each container via
 `--cpuset-cpus 0-7`), 61 GiB usable RAM, a Samsung 980 PRO 2 TB NVMe SSD (PCIe 4.0) holding
-the databases and datasets, Linux kernel 7.0.0 (x86-64), and Docker 29.5.3. Engine and
-competitor versions were pinned per lane, since the lanes were measured as the engine fixes
-this work produced landed: ArcadeDB (`arcadedb-embedded`) 26.8.1.dev2 for the graph lane,
-26.8.1.dev3 for the tabular lane and the hybrid workflow of the previous section, and
-26.8.1.dev20 for the vector lane, which was re-measured last at matched graph degree. Re-running
-the graph lane on 26.8.1.dev20 reproduces its published numbers within run-to-run spread (OLAP
-796.4 ms vs 796.3, GAV build 1.40 s vs 1.43, OLTP 3,762 ops/s vs 3,929), so the version spread
-is a reporting detail rather than a confound. Those ArcadeDB versions are the
-pins in `experiments/build_images.sh` and are authoritative; the `lib_version` column in
-`results/runs.csv` reads `26.8.1.dev0` for every ArcadeDB row, because
-`arcadedb_embedded.__version__` was baked at build time and did not track the wheel until
-26.8.1.dev21, which is later than every wheel used here. The columnar-export
-comparison of the previous section is the one measurement outside this set: `to_arrow()`
-landed after these lanes were run, so it was measured separately on 26.8.1.dev27, on the same
-host and under the same serial protocol. DuckDB 1.5.4, SQLite
-3.46.1, LadybugDB (`ladybug`) 0.18.1, Chroma 1.5.9. Embeddings are 384-dimensional
-(`all-MiniLM-L6-v2`).
+the databases and datasets, Linux kernel 7.0.0 (x86-64), and Docker 29.5.3. Every ArcadeDB
+measurement reported in this section — all three lanes, both durability ablations, the view
+ablation, the hybrid workflow and the transport table — comes from one released version,
+**`arcadedb-embedded` 26.8.1**, on this host. The one figure quoted from an earlier engine is
+the binding-overhead ratio in the discussion, which compares Python against Java on the *same*
+build and is noted where it appears. DuckDB 1.5.4, SQLite 3.46.1, LadybugDB (`ladybug`) 0.18.1,
+Chroma 1.5.9. Embeddings are 384-dimensional (`all-MiniLM-L6-v2`).
+
+The SQLite, DuckDB and LadybugDB rows are carried forward from the earlier session that
+measured them, since those engines and their pins did not change; only ArcadeDB moved. To
+check that carrying them forward is safe rather than merely convenient, we re-ran one
+untouched comparator as a control: Chroma, across all three tiers, on the same host on the
+same night as the ArcadeDB re-measurement. It reproduces its earlier numbers within 2% at
+every tier (query latency ratios 1.02×, 1.00×, 1.02× at medium, small and tiny), so host
+drift over the interval is bounded well below the differences the tables report. That control
+is direct evidence for the vector lane, where both engines are freshly measured; for the
+tabular and graph lanes it bounds drift on the same host and period rather than re-measuring
+those comparators, which is a weaker claim and we do not stretch it further.
 
 **Workloads.** OLTP is a mixed point-operation workload issued by id and reported as sustained
 throughput (ops/s): 5,000 operations for the tabular lane (60% reads, 20% updates, 10%
@@ -426,74 +426,78 @@ documentation's recommendation, fsyncing at checkpoints rather than per commit �
 runs its default asynchronous WAL flush; both are bounded-loss contracts. DuckDB fsyncs per
 commit and exposes no relaxation, so it is the one fully-durable engine in this table. At this
 matched-relaxed operating point the in-process C library dominates the mixed point workload:
-SQLite sustains ≈87,000 ops/s to ArcadeDB's ≈5,800 (≈15×), while ArcadeDB in turn runs ≈26×
+SQLite sustains ≈87,000 ops/s to ArcadeDB's ≈6,400 (≈14×), while ArcadeDB in turn runs ≈29×
 DuckDB's fully-durable ≈219. Under the *strict* pairing — per-commit fsync for both, measured
 as an ablation (`arcadedb.txWalFlush=2` vs `synchronous=FULL`) — the two converge to the
-disk's fsync floor: ≈242 vs ≈187 ops/s. An earlier version of this benchmark ran SQLite at
+disk's fsync floor: ≈262 vs ≈187 ops/s (ArcadeDB re-measured with the rest of this session;
+SQLite's side carried forward with its engine, as in the table). An earlier version of this
+benchmark ran SQLite at
 library defaults (rollback journal, `synchronous=FULL`) against ArcadeDB's async default,
 which inflated ArcadeDB's apparent advantage to 24–31×; we consider the corrected numbers the
 honest ones and flag the asymmetry so others avoid it. On analytical SQL the specialists win
 decisively: DuckDB's columnar engine answers the analytics suite in ≈9 ms versus ArcadeDB's
-≈1,300 ms. The summary is unglamorous and useful: for single-model point work an embedded
+≈1,400 ms. The summary is unglamorous and useful: for single-model point work an embedded
 C library is untouchable; ArcadeDB's transactional throughput is ample for application
 workloads and comes attached to the graph and vector models that the rest of this paper is
 about.
 
-:::{table} Tabular lane (Cross Validated corpus): SQLite, DuckDB, ArcadeDB. OLTP is a mixed point read/insert/update workload (ops/s, higher is better). OLAP is an analytical aggregation suite (ms, lower is better). Values are median [min–max] over 5 reps. Durability contracts: SQLite WAL+NORMAL and ArcadeDB async WAL (both bounded-loss); DuckDB per-commit fsync (fully durable). At matched per-commit fsync (ablation), ArcadeDB ≈242 ops/s vs SQLite ≈187. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size after load (MiB).
+:::{table} Tabular lane (Cross Validated corpus): SQLite, DuckDB, ArcadeDB. OLTP is a mixed point read/insert/update workload (ops/s, higher is better). OLAP is an analytical aggregation suite (ms, lower is better). Values are median [min–max] over 5 reps. Durability contracts: SQLite WAL+NORMAL and ArcadeDB async WAL (both bounded-loss); DuckDB per-commit fsync (fully durable). At matched per-commit fsync (ablation), ArcadeDB ≈262 ops/s vs SQLite ≈187. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size after load (MiB).
 :label: tbl-tabular
 | Backend | OLTP ops/s | OLAP ms | Ingest s | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|
 | SQLite | 87,150 [59,138–88,591] | 292.8 [284.4–293.9] | 0.33 [0.32–0.36] | 299 [277–304] | 20.1 |
 | DuckDB | 219 [199–226] | 9.3 [9.3–9.6] | 0.38 [0.37–0.39] | 301 [296–308] | 17.3 |
-| ArcadeDB | 5,786 [5,067–5,892] | 1,299.6 [1,276.3–1,317.6] | 13.98 [13.76–14.42] | 852 [785–950] | 38.3 |
+| ArcadeDB | 6,416 [6,091–6,826] | 1,406.6 [1,382.1–1,432.4] | 17.52 [17.15–17.95] | 803 [763–846] | 38.5 |
 :::
 
 **Graph ([](#tbl-graph)).** The durability lens matters here too: LadybugDB commits with
 full per-commit durability by default (we measured its single-transaction writes at the same
 ≈110/s fsync floor as everyone else's strict mode) and exposes no relaxation knob. At the
-engines' respective defaults ArcadeDB runs ≈7.5× LadybugDB's mixed-OLTP throughput (≈3,900
-vs ≈525 ops/s) — but at ArcadeDB's matched-strict ablation the suite converges to near
-parity (≈539 vs ≈525), so the headline gap is a difference in default durability contracts
-at least as much as in engines. Where ArcadeDB's advantage is contract-independent is
+engines' respective defaults ArcadeDB runs ≈6.1× LadybugDB's mixed-OLTP throughput (≈3,200
+vs ≈525 ops/s) — but at ArcadeDB's matched-strict ablation the gap closes to 1.1× (≈595 vs
+≈525), so the headline figure is a difference in default durability contracts at least as
+much as in engines. Where ArcadeDB's advantage is contract-independent is
 per-operation read latency: its point and 1-hop reads beat LadybugDB's at both reported
-percentiles ([](#tbl-latency)), by 2.8–9.0× across both operations. The 1-hop
-*maximum* inverts (74.7 ms against 11.0), which is one worst-case observation rather than
+percentiles ([](#tbl-latency)), by 1.7–6.7× across both operations. The 1-hop
+*maximum* inverts (90.3 ms against 11.0), which is one worst-case observation rather than
 a percentile, but we report it because it is the shape a JVM engine gives you: better
 typical latency, a longer worst case. On graph analytics the analytics-oriented LadybugDB wins
-(≈66 ms vs ≈800 ms). The GAV
+(≈66 ms vs ≈840 ms). The GAV
 is worth it on its own terms, with a caveat about when: ablating it on this corpus (N=5 per
-arm) takes the analytical suite from ≈165 ms to ≈476 ms at the median, so the view is worth
-**2.9×** per run against a ≈1.4 s build. Because the build is repeated on every database
-open, that 2.9× is a within-session return: the view saves ≈311 ms per run of the suite and
-costs ≈1.4 s to construct, so it repays its build after roughly five runs in one session, and
-a session that runs the suite once is slower with the view (≈1.6 s) than without it (≈476 ms).
-The view is therefore an optimization for analytical sessions that ask many questions, not a
-standing property of the database. It narrows rather than closes the gap to a dedicated analytical
+arm, same engine, host and harness as the table) takes the analytical suite from ≈840 ms to
+≈2,023 ms at the median, so the view is worth **2.4×** per run against a ≈1.5 s build. The
+OLTP arm is unchanged by the same switch (≈3,185 vs ≈3,212 ops/s), which is the control this
+ablation should pass: the view is built only for the analytical workload, so it should move
+that number and nothing else. Because the build is repeated on every database open, the 2.4×
+is a within-session return rather than a property of the stored database: the view saves
+≈1.18 s per run of the suite and costs ≈1.5 s to construct, so a session that asks one
+question is marginally slower with the view (≈2.3 s against ≈2.0 s) and any session that asks
+two or more is ahead. It narrows rather than closes the gap to a dedicated analytical
 graph engine. The costs are space and build memory. We build with ArcadeDB's default
 *bidirectional* edges, which store adjacency pointers on both endpoints so traversals run
 either way and the analytical planner can start from either end; this is the out-of-the-box
-behavior and the fair one to measure, but it roughly doubles the on-disk graph (≈1,774 vs a
+behavior and the fair one to measure, but it roughly doubles the on-disk graph (≈1,841 vs a
 one-way ≈800 MiB) and raises peak build memory (a JVM growing its heap under a generous cap,
-against LadybugDB's ≈684 MiB C++ footprint). The on-disk graph is ≈43× LadybugDB's columnar
-store (≈1,774 vs ≈41 MiB). Again, the summary is complementarity: transactional graph writes and
+against LadybugDB's ≈684 MiB C++ footprint). The on-disk graph is ≈44× LadybugDB's columnar
+store (≈1,841 vs ≈41 MiB). Again, the summary is complementarity: transactional graph writes and
 point traversals here, heavy graph analytics on a specialist.
 
-:::{table} Graph lane (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s). OLAP is a multi-query analytical suite (ms). ArcadeDB OLAP uses a Graph Analytical View, whose build is shown separately; only the view definition is persisted, so the build is repeated on every database open rather than paid once. Ablating the view raises the suite median from ≈165 ms to ≈476 ms, so it is worth 2.9× per run (N=5 per arm), repaying its build after roughly five runs within a session. Values are median [min–max] over 5 reps. Durability contracts: LadybugDB fsyncs per commit (no relaxation knob); ArcadeDB shown at its async default — at matched per-commit fsync (ablation) its suite throughput is ≈539 ops/s, near parity with LadybugDB. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size (MiB).
+:::{table} Graph lane (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s). OLAP is a multi-query analytical suite (ms). ArcadeDB OLAP uses a Graph Analytical View, whose build is shown separately; only the view definition is persisted, so the build is repeated on every database open rather than paid once. Ablating the view raises the suite median from ≈840 ms to ≈2,023 ms, so it is worth 2.4× per run (N=5 per arm), and pays for its ≈1.5 s build from the second run of the suite onward. Values are median [min–max] over 5 reps. Durability contracts: LadybugDB fsyncs per commit (no relaxation knob); ArcadeDB shown at its async default — at matched per-commit fsync (ablation) its suite throughput is ≈595 ops/s, within 1.1× of LadybugDB. On-disk DB size is deterministic across reps (no range). Peak = container memory, DB = on-disk size (MiB).
 :label: tbl-graph
 | Backend | OLTP ops/s | OLAP ms | GAV build s | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|
 | LadybugDB | 525 [467–532] | 65.7 [64.9–66.9] | — | 684 [675–688] | 41.4 |
-| ArcadeDB | 3,929 [3,466–4,422] | 796.3 [781.3–845.6] | 1.43 [1.38–1.66] | 11,458 [10,302–11,663] | 1,774.1 |
+| ArcadeDB | 3,212 [3,034–3,629] | 839.6 [794.7–875.1] | 1.49 [1.39–1.77] | 11,037 [10,561–11,190] | 1,840.8 |
 :::
 
 **Vector ([](#tbl-vector)).** With graph degree matched by effect rather than by name
 (`maxConnections` $= 2M$), ArcadeDB is *competitive while being multi-model*, and the
 comparison lands differently than a name-matched one would. Recall@10 is **higher** than
-Chroma's (0.979 vs 0.973), so ArcadeDB is the more exact of the two at this operating point,
-not the more approximate. The costs are build time (≈546 s vs ≈318 s for 1.24 M vectors) and
-query latency, ≈3.4× higher (≈3.9 ms vs ≈1.2 ms) but still single-digit milliseconds. The
-notable result is memory: ArcadeDB's *peak* memory is **lower** than Chroma's (≈15.2 GiB vs
-≈24.6 GiB, a 38% reduction), because the engine keeps vectors on disk rather than holding the
+Chroma's (0.980 vs 0.972), so ArcadeDB is the more exact of the two at this operating point,
+not the more approximate. The costs are build time (≈546 s vs ≈319 s for 1.24 M vectors) and
+query latency, ≈3.5× higher (≈4.2 ms vs ≈1.2 ms) but still single-digit milliseconds. The
+notable result is memory: ArcadeDB's *peak* memory is **lower** than Chroma's (≈21.1 GiB vs
+≈24.6 GiB, a 14% reduction), because the engine keeps vectors on disk rather than holding the
 entire set resident in RAM as the pure-Python HNSW path does. The trade is deliberate: you
 give up some query latency relative to a dedicated vector store and get vectors that live in
 the same engine as your documents and graph.
@@ -508,21 +512,21 @@ to ≈546 s) is the price of that recall. The mapping is now documented upstream
 :label: tbl-vector
 | Backend | Build s | Query ms | recall@10 | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|
-| Chroma | 317.9 [317.2–320.1] | 1.16 [1.15–1.19] | 0.973 [0.972–0.974] | 25,176 [25,168–25,186] | 2,208 |
-| ArcadeDB | 545.5 [542.0–547.5] | 3.93 [3.77–4.00] | 0.979 [0.977–0.979] | 15,593 [14,841–17,480] | 2,857 |
+| Chroma | 319.1 [315.7–320.6] | 1.17 [1.15–1.17] | 0.972 [0.970–0.972] | 25,212 [25,173–27,002] | 2,208 |
+| ArcadeDB | 546.1 [541.3–550.6] | 4.15 [3.86–4.17] | 0.980 [0.978–0.981] | 21,650 [19,680–21,791] | 2,856 |
 :::
 
 Beyond the headline throughput and latency numbers, the benchmark suite isolates each
 lifecycle phase (import, JVM init, open, schema, ingest, index build, close), and two
 cross-cutting results bear on concerns a JVM-backed binding raises. First, **JVM startup is
-negligible**: isolated JVM initialization is ≈0.16 s and database open ≈0.12 s, a one-time,
+negligible**: isolated JVM initialization is ≈0.18 s and database open ≈0.12 s, a one-time,
 sub-second cost amortized over any real session, and in fact *smaller* than Chroma's Python
 import alone (≈0.37 s). The bulk of an ArcadeDB vector build is the HNSW index phase (≈514 s of
 the ≈546 s total), not startup. Second, ArcadeDB's **typical latencies are excellent**
-([](#tbl-latency)): graph point and 1-hop p99 (0.45 ms, 0.56 ms) beat LadybugDB's (1.24 ms,
+([](#tbl-latency)): graph point and 1-hop p99 (0.74 ms, 0.81 ms) beat LadybugDB's (1.24 ms,
 4.34 ms), and tabular read p99 (0.17 ms) beats DuckDB's (1.89 ms) — though not WAL-mode
 SQLite's memory-mapped reads (0.007 ms), which nothing in this table touches. But the JVM
-shows a **tail**: occasional max latencies of tens of milliseconds (e.g. a 34–75 ms outlier
+shows a **tail**: occasional max latencies of tens of milliseconds (e.g. a 35–90 ms outlier
 under GC), the cost
 of a managed runtime. For interactive and batch analytics this tail is irrelevant. For hard
 real-time serving it matters.
@@ -531,19 +535,72 @@ real-time serving it matters.
 :label: tbl-latency
 | Lane / op | Backend | p50 | p99 | max |
 |---|---|--:|--:|--:|
-| vector query | Chroma | 1.16 | 1.36 | 1.6 |
-| vector query | ArcadeDB | 3.79 | 6.93 | 8.8 |
+| vector query | Chroma | 1.18 | 1.36 | 1.5 |
+| vector query | ArcadeDB | 3.86 | 7.11 | 145.9 |
 | tabular read | SQLite | 0.004 | 0.007 | 0.1 |
 | tabular read | DuckDB | 0.93 | 1.89 | 2.9 |
-| tabular read | ArcadeDB | 0.06 | 0.17 | 33.9 |
+| tabular read | ArcadeDB | 0.06 | 0.17 | 34.9 |
 | graph point | LadybugDB | 0.41 | 1.24 | 1.8 |
-| graph point | ArcadeDB | 0.14 | 0.45 | 1.5 |
+| graph point | ArcadeDB | 0.18 | 0.74 | 1.5 |
 | graph hop | LadybugDB | 1.44 | 4.34 | 11.0 |
-| graph hop | ArcadeDB | 0.16 | 0.56 | 74.7 |
+| graph hop | ArcadeDB | 0.22 | 0.81 | 90.3 |
 :::
 
+(sec-transport)=
+### How results cross into Python
+
+Every comparison so far measures an *engine*. This one measures the *binding*, and for a
+Python caller it is the larger effect. The query is identical in all four arms and so is the
+work the engine does; the only thing that differs is how the rows are handed across the
+Java/Python boundary. `iter_dicts()` crosses per row. `to_json_list()` serializes one JSON
+string per batch, which Python then parses. `to_columns()` reads a packed columnar buffer
+with `numpy.frombuffer`. `to_arrow()` wraps that same buffer as a `pyarrow.Table`.
+
+:::{table} Result transport, 200k-row document type, four columns (two integer, one double,
+one string). Median of 7 timed passes after 2 warmups, milliseconds, lower is better. The
+engine executes the same query in every arm.
+:label: tbl-transport
+| Rows | `iter_dicts` | `to_json_list` | `to_columns` | `to_arrow` |
+|---|--:|--:|--:|--:|
+| 10 | 2.04 | 1.70 | 0.82 | 0.59 |
+| 100 | 2.66 | 1.10 | 0.93 | 0.79 |
+| 1,000 | 20.12 | 2.97 | 2.28 | 1.49 |
+| 10,000 | 197.29 | 25.87 | 15.87 | 14.20 |
+| 100,000 | 1,978.27 | 278.22 | 135.51 | 109.03 |
+:::
+
+At 100k rows the spread between the most obvious API and the fastest one is **18×** (1,978 ms
+against 109 ms). That is larger than any engine-versus-engine gap in
+[](#tbl-tabular)–[](#tbl-vector), and it is entirely on the Python side: no query planner, no
+index, no storage format is involved. The per-row path is the one a newcomer reaches for,
+because iterating rows is what every database tutorial shows.
+
+The gap is not uniform, and reporting only the headline would mislead. At 10 rows the
+columnar framing's fixed cost dominates and `iter_dicts` is only 2.5× behind `to_columns`;
+the ratio grows with row count as the per-row crossing amortizes nothing. For small result sets the choice
+does not matter, and we say so rather than implying columnar is always right.
+
+`to_arrow()` is faster than `to_columns()` at every size here (0.65–0.90×), which is the
+opposite of what "Arrow is just a different wrapper over the same bytes" would suggest. The
+buffer is indeed the same; what differs is that the NumPy path materializes a string column
+into one Python `str` per row, while Arrow keeps the offsets-plus-blob layout the buffer
+already has. A purely numeric result would narrow this.
+
+The stronger reason to prefer Arrow is not speed but types. NumPy has no missing value for
+integers, so a nullable `INTEGER` column must widen. Querying a 3,000-row table in which every
+third reading is absent:
+
+| | dtype | integer? | missing |
+|---|---|---|---|
+| `to_columns()` | `float64` | no | 1,000 `NaN` |
+| `to_arrow()` | `int64` | yes | 1,000 nulls |
+
+Same buffer, same query, and only one path still has integers at the end. For a scientific
+user that is a correctness property rather than a performance one, and it is why `to_arrow()`
+exists as more than an alias.
+
 **Memory is the cost.** On the transactional workload ArcadeDB's footprint is larger than the
-lean C-based specialists (≈852 MiB vs ≈299–301 MiB), the cost of a running JVM and a
+lean C-based specialists (≈803 MiB vs ≈299–301 MiB), the cost of a running JVM and a
 general-purpose engine, and on the graph build it is larger still (the bidirectional property
 graph plus a heap growing under a generous cap, discussed above). The vector lane is the
 exception that proves the rule: its disk-backed index makes it *more* memory-frugal than an
@@ -555,7 +612,7 @@ draft of it. ArcadeDB-from-Python has *excellent point-operation latencies* (gra
 the graph specialist at p50 and p99, with a longer worst case; tabular reads beat DuckDB), *ample transactional
 throughput under either durability contract* (converging with the specialists at the fsync
 floor when strict), is *competitive on vector search at matched graph degree, trading query
-latency for slightly higher recall and 38% lower peak memory*, is *outclassed by specialists on heavy analytics and by in-process C on raw
+latency for slightly higher recall and 14% lower peak memory*, is *outclassed by specialists on heavy analytics and by in-process C on raw
 single-model point throughput*, and is *clear about its memory cost*. None of these numbers
 alone justifies a multi-model engine; the case is the previous section's: three models, one
 process, one transaction — with per-model performance that is good enough to keep everything
@@ -590,14 +647,16 @@ several models over the same data in one process.
 **Costs to plan for.** Four, briefly. *Memory*: a JVM plus a general-purpose engine carries a
 higher baseline than C-based specialists, and large vector indexes need an enlarged heap (set
 from Python via `jvm_kwargs`). *Startup*: the in-process JVM adds a one-time ≈0.3 s to the
-first operation (≈0.16 s init plus ≈0.13 s open), amortized over the session and negligible
+first operation (≈0.18 s init plus ≈0.12 s open), amortized over the session and negligible
 outside very short scripts. *Concurrency*: JPype calls cross the CPython↔JVM boundary under the
 GIL, so Python-driven parallel query throughput is constrained as with any native extension,
 though process-level and engine-internal parallelism remain. *Binding overhead*: the engine
 itself runs at Java speed from Python (the JPype call is a direct method invocation); the
 measurable cost is materializing results into Python objects, which the binding's bulk paths
 keep small — ≈1.1× a pure-Java baseline for vector search and ≈1.6× for full-table scans on
-this host — so the boundary tax is paid per batch, not per row. *Packaging*: a `jlink`-trimmed JRE
+this host — so the boundary tax is paid per batch, not per row. (That pair is a Python-vs-Java
+ratio measured on one earlier build of the engine, since it compares the two languages against
+the same engine rather than one engine against another.) *Packaging*: a `jlink`-trimmed JRE
 still makes each wheel ≈67 MB, paid once at install.
 
 **Maturity and scope.** Beyond the three models shown, the engine and binding cover more than
