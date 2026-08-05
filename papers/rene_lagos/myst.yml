@@ -21,17 +21,14 @@ project:
         - Grupo de Ciencia de Datos para la Salud Pública
       corresponding: true
     - name: Cristóbal Cuadrado
-      email: ccuadrado@uchile.cl
       orcid: 0000-0002-0174-5958
       affiliations:
         - Escuela de Salud Pública, Universidad de Chile
         - Centro para la Prevención y Control del Cáncer (CECAN)
     - name: Francisca Jofré
-      email: franciscajofree@gmail.com
       affiliations:
         - Grupo de Ciencia de Datos para la Salud Pública
     - name: Arnoldo Riquelme
-      email: a.riquelme.perez@gmail.com
       orcid: 0000-0002-8259-8960
       affiliations:
         - Center for Cancer Prevention and Control (CECAN)

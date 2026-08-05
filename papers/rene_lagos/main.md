@@ -3,9 +3,9 @@ title: A Reproducible Data Lakehouse for High-Resolution Gastric Cancer Epidemio
 abstract: |
   Cancer is the main cause of mortality in Chile since 2019. National surveillance of cancer incidence, often requires merging massive and heterogeneous datasets to generate high resolution insights. For a PhD researcher in Public Health set to understand the spatio-temporal trends of cancer incidence, the lack of high-performance server infrastructure and limitations of traditional epidemiological tools when handling longitudinal Big Data on local machines can act as substantial barriers.
 
-  We developed a portable, open-source Data Lakehouse architecture built entirely within the Python ecosystem to study gastric cancer incidence in the Chilean population. For this purpose, we used anonymized longitudinal data, over a 21 years and 20 million inhabitants including mortality records, hospital discharges, and insurance claims by age, sex, and county, which were stored using Parquet files and Google Drive provided by the University of Chile. Inspired by a Dynamic-ETL approach (Ong et al. 2017), we implemented a modular ELT workflow using Jupyter Notebooks and Google Colab, where each notebook was designed to perform a specific extraction, normalization or loading process for each dataset. In addition, we employed `rpy2` and mgvc packages for age-standardized time-series modeling, GeoPandas and Sci-kit for spatial analysis and identification of high-risk zones; and NetworkX to model patient-consultation trajectories, identifying gastroenterology referral clusters in the national health system. Finally, we developed a Streamlit dashboard that allows team members and the general public to visualize cancer incidence time-series charts and referrals clusters dynamically.
+  We developed a portable, open-source Data Lakehouse architecture built entirely within the Python ecosystem to study gastric cancer incidence in the Chilean population. For this purpose, we used anonymized longitudinal data, over a 21 years and 20 million inhabitants including mortality records, hospital discharges, and insurance claims by age, sex, and county, which were stored using Parquet files and Google Drive provided by the University of Chile. We implemented a modular ELT workflow using Jupyter Notebooks and Google Colab, where each notebook was designed to perform a specific extraction, normalization or loading process for each dataset. In addition, we employed `rpy2` and `mgvc` packages for age-standardized time-series modeling, GeoPandas and Sci-kit for spatial analysis and identification of high-risk zones; and NetworkX to model patient-consultation trajectories, identifying gastroenterology referral clusters in the national health system. Finally, we developed a Streamlit dashboard that allows team members and the general public to visualize cancer incidence time-series charts and referrals clusters dynamically.
 
-  This architecture supported the submission of three conference abstracts and a manuscript to a public health journal, ensuring fully reproducible and documented results. This project demonstrates that high-resolution, national-level public health research does not require expensive enterprise software and can be enabled by the production of public health data infrastructure. By utilizing a version-controlled, cloud-collaborative, and nearly zero-cost Python stack, we provide a blueprint for researchers in resource-limited settings to conduct reproducible epidemiological surveillance.
+  This architecture served as the analytical backbone for a PhD thesis, supporting the submission of three conference abstracts and three manuscripts to a public health journals, ensuring fully reproducible and documented results. This project demonstrates that high-resolution, national-level public health research does not require expensive enterprise software and can be enabled by the production of public health data infrastructure. By utilizing a version-controlled, cloud-collaborative, and nearly zero-cost Python stack, we provide a blueprint for researchers in resource-limited settings to conduct reproducible epidemiological surveillance.
 
 ---
 
@@ -38,17 +38,17 @@ Jupyter Notebook, a friendly and open source web platform [@jupyter], was used a
 We used Parquet format to store all datasets due to its high performance for storage and loading. Also, it allowed for storing text metadata, such as text encoding, which is often problematic in Spanish due to special characters. Figure 1 shows the tools used.
 
 :::{figure} figure1.png
-:label: fig:stream
+:label: fig:process-diagram
 Tools used to implement Dynamic Extraction-Load-Transform workflow.
 :::
 
 ### Data model and sources
 
-We used an Effective Coverage framework that distinguishes populations, needs, resources, production and health outcomes [@marsh_effective_2020] and the Chilean Norm for Health Information for data modeling [@departamento_de_estadistica_e_informacion_de_salud_norma_2016; @departamento_de_estadisticas_e_informacion_de_salud_norma_2023]. Figure 2 shows the entities, attributes and relationships used to model GC prevention that were stored in the data lake. Figure 3 shows the star-schema for the data cube (multidimensional table) used to analyze GC incidence.
+We used an Effective Coverage framework that distinguishes populations, needs, resources, production and health outcomes [@marsh_effective_2020] and the Chilean Norm for Health Information for data modeling [@departamento_de_estadistica_e_informacion_de_salud_norma_2016; @departamento_de_estadisticas_e_informacion_de_salud_norma_2023]. @fig:entity-relationship-diagram shows the entities, attributes and relationships used to model GC prevention that were stored in the data lake. @fig:star-schema shows the star-schema for the data cube (multidimensional table) used to analyze GC incidence.
 
 
 :::{figure} figure2.png
-:label: fig:em
+:label: fig:entity-relationship-diagram
 Entity-Relationship Diagram.
 Colors: blue=populations; yellow=resources; brown=production; green=needs; red=health outcomes.
 *Individual-level data.
@@ -56,7 +56,7 @@ Colors: blue=populations; yellow=resources; brown=production; green=needs; red=h
 :::
 
 :::{figure} figure3.png
-:label: fig:em
+:label: fig:star-schema
 Star schema of data cube used to analyze gastric cancer incidence in Chile 2003-2024.
 :::
 
@@ -302,19 +302,30 @@ DIM tables were dimensions common to all analyses used to optimize data normaliz
 </table>
 :::
 
+The developed data lakehouse has demonstrated significant utility in supporting multiple epidemiological analyses and the dissemination of PhD thesis results.
 
-Each analysis folder was replicated multiple times. The GC incidence scripts were replicated to prepare a congress poster and a scientific journal manuscript [@lagos_como_2025]. This last version was published in a [Github repository](https://github.com/rlagosb/GastricCancerIncidence) as part of a manuscript publication.
+### GC incidence scripts
+The GC incidence scripts were used to prepare a congress poster and a scientific journal manuscript [@lagos_como_2025]. This last version was published in a [Github repository](https://github.com/rlagosb/GastricCancerIncidence) as part of a manuscript publication.
 
 :::{figure} figure4.jpg
-:label: fig:stream
+:label: fig:incidence
 Variation of gastric cancer incidence across risk clusters and periods.
+
+We identified a high-risk cluster in southern Chile and submitted our findings to scientific congresses and a peer-reviewed journal, sharing all data and scripts to ensure full reproducibility.
 :::
 
-The diagnosis network scripts were replicated three times: first to generate a report for the Ministry of Health, second to present a poster at a congress, and third to prepare a scientific journal manuscript [@lagos_caracterizacion_2025]. And the diagnosis coverage scripts were replicated for a congress poster and a manuscript [@lagos_effective_2026]. The dashboard was published in streamlit cloud and used in congress presentations, but most oftenly for personal use: [tesisrenelagos.streamlit.app](https://tesisrenelagos.streamlit.app/).
+### Diagnosis network scripts
+The digestive cancer diagnosis network scripts were used to generate a report for the Ministry of Health,  to present a poster at a congress, and to prepare a scientific journal manuscript [@lagos_caracterizacion_2025]. A [GitHub repository](https://github.com/rlagosb/DigestiveCancerDiagnosisNetworks) was published to support the paper results.
 
 :::{figure} figure5.png
-:label: fig:stream
-Gastric cancer diagnosis networks identified in a high risk region using NetworkX:::
+:label: fig:networks
+Gastric cancer diagnosis networks identified in rural and urban regions using NetworkX.
+
+Networks identified in Maule Health Authority (left) and South East Metropolitan Health Authority (right). In total, eleven health authorities were divided into local diagnosis networks, allowing higher granularity of cancer diagnosis coverage metrics.
+:::
+
+### Diagnosis network scripts
+Finally, the diagnosis coverage scripts were used for a congress poster and a manuscript [@lagos_effective_2026]. A [Github repository](https://github.com/rlagosb/GastricCancerEffectiveCoverage) was published to support the manuscript submission. The dashboard was published in streamlit cloud and used in congress presentations, but most oftenly for personal use: [tesisrenelagos.streamlit.app](https://tesisrenelagos.streamlit.app/).
 
 ## Discussion
 
