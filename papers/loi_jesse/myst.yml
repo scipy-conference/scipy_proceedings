@@ -20,7 +20,11 @@ project:
       email: jesse.loi418@gmail.com
       affiliations:
         - Seattle University
-
+    - name: Ariana Mendible
+      email: mendible@seattleu.edu
+      affiliations:
+        - Seattle University
+      orchid: 0000-0001-7820-3658
   keywords:
     - document extraction
     - LLMs
