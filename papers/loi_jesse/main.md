@@ -223,7 +223,7 @@ Finally, answers on the low end, around 0-10 on the fuzzy scale, indicate almost
 
 At an initial glance, the data looks promising. With a median of at least 88, we can suspect at least half the data is a reasonable match. That being said, this still entails that half the data is below, with a mass of points clustering around a fuzzy score of 0.
  To add more context, we display a handful of observations.
-| MAX_LOCATION | Location | url | fuzz_loc | Explanation |
+| LLM Location | Human Location | url | fuzzy score | Explanation |
 |---|---|---|---|---|
 | Deer River | | [source](https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1669428027/Apitz_Itasca_Co._sheriff's_deputy_charged_with_videotaping_girl_in_bathroom.pdf?1669428027) | 0 | LLM attempts answer when there is none |
 | UNKNOWN | | [source](https://assets.nationbuilder.com/cuapb/pages/1472/attachments/original/1670339558/Meemken_Longtime_Stearns_County_Deputy_Gets_9_Months_Jail.pdf?1670339558) | 0 | Negative answers expressed differently |
@@ -294,3 +294,7 @@ Aside from further data exploration, comparison and exploration of different lar
 ## Conclusion
 
 We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield. This strategy allows community organizations to better allocate their efforts.
+
+## Acknowledgements
+
+We would like to thank the QSIDE institute for their funding for the two datathons as well as to all 48 of the volunteers across Carlton College, Hamline University, and Seattle University for making both datathon events a success. We would also like to extend a thanks to Mark Daza, for initial drafts of the code used to extract locations from text, as well as to David Stanko, for assistance cleaning the scraped articles and helpful discussions regarding NER. The project's technical success would not have been possible without them.
