@@ -468,9 +468,13 @@ simulated within a PyMC model by calling the `.pymc()` function, which has a
 signature that mirrors the base simulation call. This means that it can take
 parameter configurations and settings to control the MCMC sampling process. The
 `.pymc()` function also takes observed data values and uncertainties by supplying
-`Observation` objects to the `observations` parameter, shown in [Program %s](#code:pred_prey-pymc).
-Reno turns these values into likelihood functions,
-which PyMC uses during its MCMC sampling process.
+`Observation` objects to the `observations` parameter, shown in [Program %s](#code:pred_prey-pymc). Reno turns these observations into gaussian likelihood functions, with mean
+values centered around the observed equation (connecting it to the system
+simulation), a user-specified standard deviation to
+allow for uncertainty in the observations (`1.0` in the example in [Program
+%s](#code:pred_prey-pymc)), and the actual observed values for PyMC to target
+(`[100]` in the example). These likelihood functions are used by PyMC during its
+MCMC sampling process to approximate the posteriors.
 
 
 ```{code-block} python
