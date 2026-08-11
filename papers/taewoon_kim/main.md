@@ -377,14 +377,14 @@ rather than by name (Chroma $M = 16$ gives a base layer of 32, and ArcadeDB `max
 $= 32$), with `ef_construction` $= 100$ and `ef_search` $= 100$. We report recall@10 against an
 exact ground truth. Graph OLAP for ArcadeDB uses a GAV, and tabular OLAP for ArcadeDB uses secondary
 indexes. All versions, image digests, host details, and per-run memory time-series are
-captured in a manifest for reproducibility. All runs were on a single host: a 12th-gen Intel Core i9-12900HK with 20 logical cores, of
+captured in a manifest for reproducibility, published with the benchmark suite
+(link at the end of the paper). All runs were on a single host: a 12th-gen Intel Core i9-12900HK with 20 logical cores, of
 which 8 reached each container via `--cpuset-cpus 0-7`. It has 61 GiB usable RAM and a Samsung
 980 PRO 2 TB NVMe SSD (PCIe 4.0) holding the databases and datasets, on Linux kernel 7.0.0
 (x86-64) and Docker 29.5.3. Every ArcadeDB measurement reported below comes from one released version,
 **`arcadedb-embedded` 26.8.1**, on this host. That covers all three lanes, both durability
-ablations, the view ablation, the hybrid workflow and the transport table. The one figure quoted from an earlier engine is
-the binding-overhead ratio in the discussion, which compares Python against Java on the *same*
-build and is noted where it appears. DuckDB 1.5.4, SQLite 3.46.1, LadybugDB (`ladybug`) 0.18.1,
+ablations, the view ablation, the hybrid workflow, the transport table and the
+binding-overhead ratio in the discussion. DuckDB 1.5.4, SQLite 3.46.1, LadybugDB (`ladybug`) 0.18.1,
 Chroma 1.5.9. Embeddings are 384-dimensional (`all-MiniLM-L6-v2`).
 
 The SQLite, DuckDB and LadybugDB rows are carried forward from the earlier session that
@@ -416,10 +416,9 @@ matched-relaxed operating point the in-process C library dominates the mixed poi
 SQLite sustains ≈87,000 ops/s to ArcadeDB's ≈6,400 (≈14×), while ArcadeDB in turn runs ≈29×
 DuckDB's fully-durable ≈219. Under the *strict* pairing, per-commit fsync for both (`arcadedb.txWalFlush=2` against
 `synchronous=FULL`), the two converge on the disk's fsync floor: ≈262 against ≈187 ops/s.
-ArcadeDB was re-measured with the rest of this session, and SQLite's side is carried forward
-with its engine, as in the table. An earlier version of this
-benchmark ran SQLite at library defaults against ArcadeDB's async default, inflating
-ArcadeDB's apparent advantage to 24–31×; we flag the asymmetry so others avoid it. On analytical SQL the specialists win
+SQLite's side is carried forward with its engine, as in the table. Pairing each
+engine at its own default would compare durability contracts rather than
+engines, which is why both pairings are reported. On analytical SQL the specialists win
 decisively: DuckDB's columnar engine answers the analytics suite in ≈9 ms versus ArcadeDB's
 ≈1,400 ms. The summary is unglamorous and useful: for single-model point work an embedded
 C library is untouchable; ArcadeDB's transactional throughput is ample for application
@@ -613,8 +612,8 @@ first operation, negligible outside very short scripts. *Concurrency*: JPype cal
 CPython↔JVM boundary under the GIL, so Python-driven parallel throughput is constrained as
 with any native extension, while process-level and engine-internal parallelism remain.
 *Binding overhead*: the engine runs at Java speed, and only result materialization costs
-anything, ≈1.1× a pure-Java baseline for vector search and ≈1.6× for full-table scans. That
-pair compares two languages on one earlier build, not two engines. *Packaging*: ≈67 MB per
+anything, ≈1.3× a pure-Java baseline for vector search and ≈1.6× for full-table scans. That
+pair compares two languages, not two engines. *Packaging*: ≈67 MB per
 wheel, paid once at install.
 
 The engine and binding cover more than this paper exercises. We keep to the
@@ -638,6 +637,8 @@ is reproducible end to end.
 
 - Repository: <https://github.com/humemai/arcadedb-embedded-python>
 - Documentation: <https://docs.humem.ai/arcadedb/>
+- Benchmark suite, curated per-run results and the run manifest:
+  <https://github.com/humemai/arcadedb-embedded-python/tree/main/benchmarks/python-bindings>
 
 ## Acknowledgements
 
