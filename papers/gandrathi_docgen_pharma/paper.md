@@ -8,6 +8,7 @@ authors:
     affiliation: ZS Associates
   - name: Rahul Sahu
     affiliation: ZS Associates
+    email: rahul.sahu@zs.com
 keywords: [Agentic AI, Knowledge Graph, Neo4j, Blueprint-driven generation, RAG, LangGraph, Regulatory authoring, Pharma, Production deployment]
 abstract: |
   Pharmaceutical regulatory authoring requires generating large, structured, and evidence-backed documents under strict constraints of consistency, traceability, and reviewability. This paper presents a production-grade architecture for blueprint-driven regulatory document authoring in pharmaceutical R&D. Rather than treating document generation as a single-pass language model task, the system resolves a document blueprint in advance to specify section structure, dependencies, evidence requirements, retrieval constraints, and validation rules. An agentic orchestration framework decomposes the blueprint into parallel section-level tasks executed by specialist agents responsible for retrieval, drafting, critique, and replanning. Evidence grounding is provided through a graph database platform with semantic retrieval, exposed via governed tool contracts aligned with the Model Context Protocol (MCP). Production deployment across five regulated document types demonstrates the viability of this approach for enterprise pharmaceutical authoring.
@@ -29,7 +30,7 @@ Regulatory authoring presents four substantive challenges that single-pass langu
 
 - **Structural Inconsistency:** Without a governing blueprint, models are prone to generating contradictory or duplicated content across sections of large documents.
 - **Flat Retrieval Lacks Traceability:** Vector-based search surfaces relevant content but cannot establish which source section supports a specific claim, limiting auditability.
-- **Sequential Generation Does Not Scale:** At approximately 25 language model calls across 60 sections, sequential generation imposes unacceptable latency for enterprise regulatory workflows.
+- **Sequential Generation Does Not Scale:** Load testing of the platform recorded approximately 25 chat-completion calls and 20 embedding calls per section, at roughly 60 sections per document; executed sequentially rather than in parallel, this call volume imposes latency unacceptable for enterprise regulatory workflows. These figures are load-test measurements against the deployed system, not production telemetry averaged over completed documents, and not a pre-set design target.
 - **Published Systems Are QA Tools, Not Authoring Systems:** The majority of published research addresses question answering or compliance monitoring rather than end-to-end, blueprint-driven document authoring.
 
 Taken together, these limitations underscore the gap between prototype LLM applications and production-grade regulatory authoring. The central challenge addressed in this work is how to advance from exploratory prototype systems to production-ready regulatory document generation.
@@ -61,7 +62,7 @@ The agentic orchestration layer manages section-level document generation end to
 
 ### 4.2 Knowledge Layer with Graph-Grounded Retrieval
 
-The knowledge layer grounds generation in verifiable source evidence. Documents are parsed into a graph database platform comprising sections, entities, and evidence nodes connected by typed relationships. This structure enables relational retrieval and end-to-end provenance that flat vector search cannot support. A semantic search engine augments the graph layer with passage-level retrieval to broaden evidence coverage.
+The knowledge layer grounds generation in verifiable source evidence. Documents are parsed into a graph database platform comprising sections, entities, and evidence nodes connected by typed relationships. This structure enables relational retrieval and end-to-end provenance that flat vector search cannot support: a flat vector index returns passages ranked by embedding similarity, with no explicit record of which section, clause, or entity a passage originated from beyond the passage text itself, so reconstructing provenance at section or sentence granularity requires unreliable post hoc text matching. The graph layer instead stores explicit typed edges from evidence nodes to their source sections, so provenance is retrievable directly as part of the query rather than inferred afterward. A semantic search engine augments the graph layer with passage-level retrieval to broaden evidence coverage.
 
 ### 4.3 Blueprint Layer
 
@@ -71,9 +72,59 @@ The blueprint layer defines document structure, section dependencies, evidence r
 
 Agents interact with the knowledge layer through a governed tool contract layer aligned with the Model Context Protocol (MCP). This layer provides standardized interfaces for section retrieval, semantic retrieval, table retrieval, and image retrieval, while enforcing governance over what agents may query, how queries are executed, and what evidence is returned.
 
+@code-tool-contract shows a representative tool contract of this kind. The schema shown is illustrative, not the production schema, but reproduces the shape used in practice: a typed input/output contract plus a `governance` block restricting which agent roles may invoke the tool and requiring the call to be logged.
+
+```{code-block} json
+:label: code-tool-contract
+:caption: Illustrative MCP-aligned tool contract for section-level evidence retrieval. Field names and structure are representative of the pattern described in Section 4.4, not a reproduction of the production schema.
+{
+  "name": "retrieve_section_evidence",
+  "description": "Retrieve evidence nodes supporting a blueprint section, constrained by document scope, evidence type, and source relationship.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "document_id": { "type": "string" },
+      "section_id": { "type": "string" },
+      "evidence_types": {
+        "type": "array",
+        "items": { "enum": ["text", "table", "image"] }
+      },
+      "max_results": { "type": "integer", "default": 10 }
+    },
+    "required": ["document_id", "section_id"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "evidence_id": { "type": "string" },
+            "content": { "type": "string" },
+            "source_section_id": { "type": "string" },
+            "relationship_type": { "type": "string" },
+            "confidence": { "type": "number" }
+          }
+        }
+      }
+    }
+  },
+  "governance": {
+    "allowed_callers": ["retrieval_agent"],
+    "audit_log": true
+  }
+}
+```
+
 ### 4.5 Production Execution and Observability Layer
 
 The production layer enables reliable, enterprise-scale execution through asynchronous workers, job queues, retry logic, idempotent task design, and circuit breakers. Distributed tracing, token-cost tracking, and automated quality evaluation provide end-to-end observability. Parallel section execution respects blueprint-defined dependencies, and validated outputs are assembled with embedded links to source evidence and generation traces.
+
+### 4.6 Scientific Python Implementation
+
+The architectural patterns above are language-agnostic, but the deployed system is implemented predominantly in Python. The agentic orchestration layer (Section 4.1) is built on LangGraph, with the supervisor and specialist agents represented as nodes in a directed workflow graph; section-level tasks execute asynchronously across Celery workers backed by a Redis queue, and the authoring API is served with FastAPI, with Pydantic models validating every request and response payload at the API boundary. The governed tool contract layer (Section 4.4) is served through FastMCP, exposing the typed, discoverable retrieval tools described above; the underlying graph queries run against Neo4j through its Python driver, and semantic retrieval is served through an OpenSearch vector index. Observability and quality evaluation (Section 4.5) are implemented with Langfuse, which traces every LLM and tool call, attributes token cost per agent, and drives RAGAS-based [5] automated quality scoring; automated tests use pytest and pytest-asyncio. This Python-based stack is what makes the governance properties in Section 4.4 and Section 7 concretely auditable: retrieval, generation, and critique are traced, typed, independently testable units rather than steps inside an opaque prompt chain.
 
 Overall, the architecture shifts regulatory authoring from prompt-centric generation to blueprint-driven document construction. The blueprint defines what must be written; the knowledge layer grounds what may be asserted; the agentic layer governs how sections are produced; and the production layer ensures the workflow is scalable, observable, and auditable.
 
@@ -96,29 +147,34 @@ The system was evaluated through production deployment and load-tested authoring
 
 The deployment demonstrated that regulatory authoring scales more effectively when document generation is treated as a governed workflow rather than a one-shot prompting task. The combination of blueprint-first planning, graph-grounded retrieval, asynchronous execution, and structured human review provides a practical and validated path from prototype document generation to production-scale authoring.
 
-@tbl-results summarizes the principal metrics from the platform design specification.
+@tbl-results summarizes the principal metrics from the platform design specification. These metrics are not uniform in evidentiary status — they mix a pre-deployment design target, a load-test measurement, a configured capacity limit, and an observed deployment fact — so each row is labeled with its basis rather than presented as a single class of "result."
 
-```{list-table} Results and impact metrics from the platform design specification.
+```{list-table} Results and impact metrics from the platform design specification, labeled by evidentiary basis.
 :label: tbl-results
 :header-rows: 1
 * - Metric
   - Value
+  - Basis
   - Description
 * - Authoring time reduction
   - 50%+
-  - Target reduction in authoring time vs. the manual baseline
+  - Design target
+  - Target reduction in authoring time vs. the manual baseline; not a post-deployment measured outcome
 * - Sections per document
   - ~60
+  - Load-test result
   - Sections per document at load-tested scale
 * - Maximum parallel section tasks
   - 256
-  - 8 workers × 4 cores × batch 8
+  - Configured capacity
+  - 8 workers × 4 cores × batch 8; the provisioned ceiling, not an empirically observed throughput limit
 * - Document types deployed
   - 5+
+  - Production deployment
   - ICF, SOA, CSR, CMC, HAI
 ```
 
-**Note:** All four figures are drawn from the platform design specification. The 50% figure is a design target versus the manual baseline, not a post-deployment measured outcome.
+**Note:** Of the four metrics above, only "Document types deployed" reflects a directly measured production outcome. "Authoring time reduction" is a design target set prior to deployment; "Sections per document" comes from load testing rather than production telemetry; "Maximum parallel section tasks" is provisioned worker capacity rather than a measured throughput ceiling.
 
 :::{figure} figures/results.png
 :label: fig-results
@@ -127,7 +183,7 @@ Results and impact metrics: target authoring-time reduction, sections per docume
 
 ## 7. Lessons Learnt
 
-Advancing from prototype to production required the system to generate structured, traceable, and review-ready content across many sections simultaneously, while rigorously controlling cost, latency, access, and failure modes — demands that far exceed what prototype viability entails. Several consequential lessons emerged from deployment.
+Advancing from prototype to production required the system to generate structured, traceable, and review-ready content across many sections simultaneously, while rigorously controlling cost, latency, access, and failure modes — demands that far exceed what prototype viability entails. Several consequential lessons emerged from deployment. The quantitative figures below are drawn from the platform's load-testing evaluation and deployment monitoring telemetry; they are operational observations from the deployed system rather than measurements from a controlled study with a fixed, disclosed sample size, and are reported here as engineering guidance rather than statistically validated research findings.
 
 - **Governed tool contracts make every interaction auditable.** All agent-to-data interactions pass through typed MCP tool contracts, which means that every tool call and retrieval is logged and auditable. In a regulated environment this governance proved as important as the generated text itself, because reviewers must be able to reconstruct exactly which evidence an agent accessed and how it was queried.
 - **Blueprint quality matters more than model selection.** Investing in rigorous blueprint design measurably reduced missing, duplicate, and mis-scoped content across documents exceeding 60 sections. Across functionally similar document types, careful blueprint engineering delivered a higher return on investment than switching between comparable language models.
