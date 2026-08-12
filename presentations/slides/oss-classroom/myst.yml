@@ -1,0 +1,31 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'Learning in the Open: Integrating Open Source Contributions into the Classroom'
+  authors:
+    - name: Mohammad Mundiwala
+      orcid: 0009-0001-5282-9414
+      affiliation: University of Connecticut
+    - name: Ryan C. Cooper
+      orcid: 0000-0000-0000-0001
+      affiliations:
+        - University of Connecticut
+    - name: Ryan Curtin
+      orcid: 0000-0000-0000-0001
+      affiliations:
+        - mlpack
+    - name: Inessa Pawson
+      orcid: 0000-0001-7294-122X
+      affiliations:
+        - University of Connecticut
+        - OpenTeams
+  abstract: |
+    In Fall 2025, the UConn School of Mechanical, Aerospace, and Manufacturing Engineering launched
+    Open Source Experiences, an elective course developed in partnership with six NumFOCUS-supported
+    projects (napari, BiocPy, Blosc, MNE-Python, mlpack, JuliaHub). The course embedded students directly
+    into active open source communities, where they contributed to the codebases, collaborated with project
+    maintainers, and learned about community-driven open source software development. In this talk, we will
+    share the lessons learned from piloting this collaboration model, and how these experiences benefit
+    students, open source and open science communities, and educators alike. Attendees will take away
+    actionable insights for integrating open source contributions into their own classrooms and programs.
+
