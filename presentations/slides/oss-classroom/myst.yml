@@ -1,7 +1,9 @@
 version: 1
 extends: ../../../proceedings.yml
 project:
-  title: 'Learning in the Open: Integrating Open Source Contributions into the Classroom'
+  title:
+    'Learning in the Open: Integrating Open Source Contributions into the
+    Classroom'
   authors:
     - name: Mohammad Mundiwala
       orcid: 0009-0001-5282-9414
@@ -28,4 +30,3 @@ project:
     share the lessons learned from piloting this collaboration model, and how these experiences benefit
     students, open source and open science communities, and educators alike. Attendees will take away
     actionable insights for integrating open source contributions into their own classrooms and programs.
-
