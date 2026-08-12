@@ -9,7 +9,7 @@ project:
       orcid: 0009-0001-5282-9414
       affiliation: University of Connecticut
     - name: Ryan C. Cooper
-      orcid: 0000-0000-0000-0001
+      orcid:
       affiliations:
         - University of Connecticut
     - name: Ryan Curtin
