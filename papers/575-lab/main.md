@@ -48,9 +48,11 @@ provide mechanistic insight:
    correlations but not causal mechanisms.
 2. **Behavioral testing**: Probing with test inputs characterizes input-output relationships
    without explaining intermediate computations.
-3. **Chain-of-thought inspection**: Examining generated reasoning text provides a narrative but
-   not the actual computation. Models can produce plausible-sounding explanations that do not
-   reflect their true decision process.
+3. **Chain-of-thought inspection**: Examining generated reasoning text or prompting the model for
+   self-explanations provides a narrative rather than the underlying computation. Prior work
+   [@turpin2023languagemodelsdontalways] demonstrates that such generated rationales can be
+   unfaithful, producing plausible-sounding justifications (confabulations) that do not reflect
+   the internal representations actually driving decisions.
 
 Mechanistic interpretability offers an alternative: directly examining the model's internal
 representations to identify the computational features that contribute to decisions. Recent work
@@ -188,8 +190,11 @@ Our pipeline consists of six sequential steps (see [](#fig:pipeline)):
 The pipeline uses two large language models in separate memory contexts: a generation model
 (Qwen3-VL-235B-A22B-Instruct-FP8) for pair generation, feature labeling, and fuzzing judgment;
 and a subject model (NVIDIA Nemotron-3-Nano-30B-A3B-BF16) for activation extraction. The produced
-SAE model is built to work in conjunction with the subject model. The generation model can be
-replaced with a closed source model API like OpenAI GPT-5.2 or Anthropic's Claude Sonnet 4.5.
+SAE model is built to work in conjunction with the subject model. Crucially, mechanistic
+interpretability requires full access to model weights and internal hidden states; thus, the subject
+model must be an open-weights model. Closed-source API models (which hide internal activations)
+cannot serve as subject models, though they can optionally replace the auxiliary generation model for
+offline pair generation and feature labeling.
 
 ```{figure} images/training_pipeline.png
 :label: fig:pipeline
