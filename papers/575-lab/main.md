@@ -361,19 +361,19 @@ estimator with bandwidth $\varepsilon$ and rectangular kernel $K$. For the JumpR
 
 ```{math}
 :label: eq:pseudo-jumprelu
-\frac{\tilde{\partial}}{\partial \theta_i} \text{JumpReLU}_{\theta_i}(z) = -\frac{\theta_i}{\varepsilon}\, K\!\left(\frac{z - \theta_i}{\varepsilon}\right)
+\frac{\widetilde{\partial}}{\partial \theta_i} \text{JumpReLU}_{\theta_i}(z) = -\frac{\theta_i}{\varepsilon}\, K\!\left(\frac{z - \theta_i}{\varepsilon}\right)
 ```
 
 For the Heaviside step function in the L0 penalty:
 
 ```{math}
 :label: eq:pseudo-heaviside
-\frac{\tilde{\partial}}{\partial \theta_i} H(z - \theta_i) = -\frac{1}{\varepsilon}\, K\!\left(\frac{z - \theta_i}{\varepsilon}\right)
+\frac{\widetilde{\partial}}{\partial \theta_i} H(z - \theta_i) = -\frac{1}{\varepsilon}\, K\!\left(\frac{z - \theta_i}{\varepsilon}\right)
 ```
 
 where $K(u) = \frac{1}{2}\mathbb{1}\{|u| \leq 1\}$ is the rectangular kernel. Gradients with
 respect to pre-activations use a standard straight-through estimator:
-$\tilde{\partial} f_i / \partial \pi_i = \mathbb{1}\{\pi_i > \theta_i\}$.
+$\widetilde{\partial} f_i / \partial \pi_i = \mathbb{1}\{\pi_i > \theta_i\}$.
 
 ```{figure} images/sae_architecture.png
 :label: fig:sae
