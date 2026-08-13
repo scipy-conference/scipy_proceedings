@@ -36,11 +36,7 @@ reference implementations of the methods we needed did not. Every validation
 cycle meant exporting data to Stata or R, re-importing results, and
 reconciling discrepancies by hand — slow, error-prone, and impossible to
 automate end to end. What started as an internal toolkit for validating panel
-models in pure Python grew, model family by model family, into PanelBox, once
-it became clear that the gap was far wider than our own use case: there was no
-library that let an economist take a panel model from specification to
-estimation, testing, and reporting — let alone deployment — without leaving
-Python.
+models in pure Python grew, model family by model family, into PanelBox.
 
 The data at the center of this workflow are *panel data* — repeated
 observations on the same entities over time, such as firms observed annually
@@ -48,17 +44,18 @@ or countries tracked across decades. Panels are the empirical backbone of
 modern economics and the social sciences [@baltagi2021; @wooldridge2010], and
 for a simple reason: every firm or country has stable characteristics that no
 dataset records — management quality, institutions, culture. A cross-sectional
-regression silently attributes the effect of these *unobserved* traits to the
+regression silently attributes the effect of these unobserved traits to the
 variables it does observe, biasing its conclusions. Because a panel follows
-each entity over time, it can compare each entity *with itself*, removing the
+each entity over time, it can compare each entity with itself, removing the
 influence of anything constant — the *unobserved heterogeneity* that panel
 methods are built to neutralize. Combined with the time dimension, this lets
 researchers estimate genuinely dynamic relationships, from labor-market
 adjustment [@arellano1991] to production functions [@blundell1998] and
 cross-country growth [@bond2001].
 
-The tooling for these methods, however, is unevenly distributed across
-computing environments. Stata's `xtabond2` command [@roodman2009stata] is the
+The gap we encountered, it turned out, is far wider than our use case: the
+tooling for these methods is unevenly distributed across computing
+environments. Stata's `xtabond2` command [@roodman2009stata] is the
 de facto standard for dynamic panel GMM, and R offers the mature `plm`
 package [@croissant2008plm] for linear panels and specialized packages such as
 `pdynmc` [@fritsch2019pdynmc] for dynamic ones. Python — now dominant in data
@@ -68,10 +65,14 @@ SciPy [@scipy] — has lagged conspicuously behind in panel econometrics.
 
 Existing Python libraries cover only fragments of the workflow.
 `linearmodels` [@linearmodels2019] provides static fixed- and random-effects
-models and some instrumental-variables support but no dynamic GMM; `pyfixest`
+models — the workhorse estimators that remove, or explicitly model, the
+stable entity traits discussed above — and some support for instrumental
+variables (proxy regressors used in place of a variable that is correlated
+with the error term), but no dynamic GMM, the estimator required when the
+outcome depends on its own past, introduced in detail below. `pyfixest`
 excels at high-dimensional fixed effects but offers neither GMM nor dynamic
 panels; and `statsmodels` [@seabold2010statsmodels] has time-series tools but
-no panel-specific GMM. Critically, *none* of them implement panel unit-root or
+no panel-specific GMM. Critically, none of them implement panel unit-root or
 cointegration tests, which are routine in Stata (`xtunitroot`, `xtcointtest`)
 and R (`plm::purtest`). The consequence is a broken workflow: analysts either
 limit themselves to basic models in Python, or export their data to Stata or
@@ -141,7 +142,10 @@ y_{it} = \mathbf{x}_{it}'\boldsymbol{\beta} + \alpha_i + \lambda_t + \epsilon_{i
 \qquad i = 1,\dots,N,\; t = 1,\dots,T,
 ```
 
-where $\alpha_i$ are entity effects and $\lambda_t$ are time effects. Fixed
+where $\alpha_i$ are entity effects — absorbing everything specific to entity
+$i$ that is constant over time, such as a firm's management quality — and
+$\lambda_t$ are time effects, absorbing shocks common to all entities in
+period $t$, such as a recession year. Fixed
 effects are computed by within-transformation using sparse matrix operations
 and pandas `groupby`, so the estimator scales to large $N$ and supports
 unbalanced panels with entity-specific $T_i$.
@@ -160,8 +164,8 @@ y_{it} = \alpha\, y_{i,t-1} + \mathbf{x}_{it}'\boldsymbol{\beta} + \eta_i + \eps
 
 That innocent-looking addition breaks both estimators of the previous
 section. The lagged outcome is itself driven by the entity effect $\eta_i$, so
-it is correlated with the composite error: pooled OLS is biased *upward*, and
-the within estimator *downward* (the Nickell bias, @nickell1981) — the true
+it is correlated with the composite error: pooled OLS is biased upward, and
+the within estimator downward (the Nickell bias, @nickell1981) — the true
 dynamics lie somewhere in between, and neither estimator can find them. The
 resolution, due to @arellano1991 and @blundell1998, is to transform away
 $\eta_i$ and instrument the problematic regressor with its own older lags:
@@ -176,8 +180,10 @@ instrument the differenced regressors. **System GMM** [@blundell1998] augments
 the differenced equations with the level equations, instrumenting them with
 lagged differences; this restores efficiency and reduces finite-sample bias
 when $\alpha$ is close to unity and lagged levels are weak instruments.
-PanelBox implements both, in one-step and two-step variants, and generates the
-instrument sets automatically:
+PanelBox implements both, in one-step and two-step variants — one-step GMM
+weights the moment conditions with a fixed matrix, while two-step re-estimates
+the weights from the first step's residuals to gain asymptotic efficiency —
+and generates the instrument sets automatically:
 
 ```python
 gmm = pb.SystemGMM(
@@ -218,7 +224,7 @@ entity $i$ and period $t$ it (1) identifies the required instrument lags, (2)
 checks their availability, (3) builds an entity-specific instrument set from
 whatever lags exist, and (4) assembles the block-diagonal instrument matrix
 $\mathbf{Z}$ from variable-sized blocks (@fig:unbalanced). An observation is
-kept whenever *valid instruments exist*, rather than discarding the whole
+kept whenever valid instruments exist, rather than discarding the whole
 entity. On the Arellano–Bond employment data this retains 72% of observations,
 against roughly 40% for `xtabond2` and 0% for naive complete-case analysis,
 shrinking standard errors without compromising instrument validity.
@@ -361,7 +367,7 @@ The diagnostic suite includes the Hausman test [@hausman1978] comparing FE and
 RE, and the GMM trio that governs dynamic-panel validity: the Hansen $J$ test
 of overidentifying restrictions [@hansen1982], and the Arellano–Bond AR(1) and
 AR(2) tests for serial correlation, where AR(1) is expected to reject and AR(2)
-to *not* reject.
+to not reject.
 
 Result objects render publication-ready output. `comparison_table` aligns
 several models side by side, and the reporting layer produces self-contained
