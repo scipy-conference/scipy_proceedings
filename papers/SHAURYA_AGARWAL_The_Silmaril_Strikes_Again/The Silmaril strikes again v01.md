@@ -4,16 +4,46 @@
 
 **SHAURYA AGARWAL**
 
----
-
-This paper is a follow up from  a four-hour tutorial on ontology engineering presented at the 2025 edition of SciPy. The argument in one line: the reasoning-engine ideas that Tim Berners-Lee's cwm prefigured in 2000 are the durable substrate for reliable, deterministic agentic AI today.
 
 ---
 
 # Abstract
 
-Large language models operate on token sequences with no stable identity, no guaranteed transitive inference, and no audit trail. Those are exactly the guarantees an ontology and reasoning layer supplies. This paper traces the evolution of reasoners from a single abstraction, a quad store with forward chaining to a fixpoint, a built-in escape hatch, and native provenance, from its reference implementation in cwm (the Closed World Machine) through a modern columnar, distributed, and GPU-accelerated re-engineering, and through the wider family of reasoning engines (backward chaining, RETE with truth maintenance, stratified negation, description-logic tableau, resolution, the chase, answer-set and probabilistic reasoning).
-The organizing thesis is a division of labor: the model proposes, a reasoning engine disposes, and the decision carries a proof. The author shows that cwm already implemented the core mechanics (an incremental RETE-style agenda, cost-ordered conjunctive joins, reflective graph operators, proofs as a first-class output), that its honest limits (single process, monotonic, write-amplified) are precisely the axes a modern system must address, and that addressing them yields a deterministic core able to materialize the multi-hop, provenance-carrying world model agentic AI requires. The contribution overall is then integrative: a fully coherent map from a historical reasoner to a production-grade deterministic substrate, with the agentic architecture, the engine-to-guarantee mapping, and the deployment requirements stated explicitly.
+Large language models now power many agentic systems.    
+Common interaction patterns include:    
+    
+* plan first, then execute [@wang2023plansolve]    
+* reason and act in turns, as in ReAct [@yao2023react]    
+* reflect on feedback and try again, as in Reflexion [@shinn2023reflexion]    
+* call external tools and APIs [@schick2023toolformer]    
+* ...and more
+    
+These patterns make language models more useful as agents. But the agent is still largely driven by model-generated state, reasoning, and decisions.    
+    
+That creates four pressures:    
+    
+* **Grounding:** the system needs stable identities for entities and typed relations between them.    
+* **Multi-hop reasoning:** the system may need conclusions that follow through several relations or rules.    
+* **Coordination:** several agents or tools need a shared meaning for entities, classes, properties, and constraints.    
+* **Verification and audit:** important decisions need a result that can be checked, replayed, and linked to the facts and rules that produced it.    
+    
+These are areas where language-model generation alone does not provide formal guarantees. Entity tracking varies across models and task complexity [@kim2023entitytracking]. Multi-hop reasoning can fail or follow plausible but incorrect paths [@yang2024latentmultihop; @bhuiya2024multihop]. Generated chain-of-thought is not necessarily a faithful account of how an answer was produced [@lanham2023faithfulness]. Model responses can also move toward a user's stated views in tested settings [@sharma2023sycophancy].    
+    
+Ontologies and reasoning engines provide a different layer. Ontologies represent selected entities, classes, properties, and axioms under explicit semantics [@w3c2012owl2overview]. Reasoners can then derive conclusions, answer queries, check consistency, test constraints, and record justifications under defined procedures.    
+    
+This paper starts with the Closed World Machine (CWM) as a historical Python reasoner. It then explains forward and backward reasoning, RETE, truth maintenance, description-logic reasoning, stratified negation, resolution, Satisfiability Modulo Theories, and the chase.    
+    
+The paper then shows how these methods can be composed inside a **propose-check-repair** loop for agentic systems:    
+    
+* the language model **proposes**    
+* one or more reasoners **check**    
+* failed checks return structured evidence    
+* the model **repairs** the proposal    
+* accepted results can move to a separate action policy    
+    
+The language model remains the flexible generative component. The ontology and reasoning layer provides formal checks that language generation alone does not guarantee.    
+    
+The paper finally discusses columnar, distributed, and GPU execution as possible ways to scale selected reasoning workloads. It does not present a completed production reasoner or new performance results.  
 
 ---
 
@@ -32,6 +62,17 @@ A reasoning engine closes exactly these gaps: stable identifiers and identity co
 
 Four pressures push systems toward this layer. Grounding: an ontology pins each entity to a distinct identifier with typed relations, so retrieval and tool calls resolve to entities, not strings. Multi-hop reasoning: a reasoner materializes the n-hop consequences once, after which reads are cheap and exact, where a single similarity pass surfaces only neighbors. Coordination: a shared ontology is the contract (agreed types, predicates, constraints) without which agents talk past each other. Verifiable retrieval and audit: a rule engine emits a proof, the derivation tree of which facts and rules produced a conclusion; for any regulated decision that is the whole point.
 
+## The argument in a nutshell
+1. Agent systems already use planning, reflection, self-critique, and external tools.
+2. Those patterns do not necessarily move the acceptance decision out of the generative model.
+3. The paper proposes a reasoner-mediated propose-check-repair loop.
+4. The LLM proposes a fact, answer, plan, argument, or action.
+5. The application grounds that proposal in an ontology-backed formal state.
+6. A reasoning engine is called as a tool.
+7. The reasoner returns a formal result and whatever evidence that method supports.
+8. A failed check goes back to the LLM for repair.
+9. A passed check can go to a separate action policy.
+10. The model can remain stochastic, while selected acceptance checks can be deterministic and replayable when their formal inputs, rules, solver version, and configuration are fixed.
 ---
 
 # Ontology as load-bearing infrastructure
@@ -268,6 +309,11 @@ Around that deterministic core, the wider family of reasoning engines supplies t
 The governing pattern is a division of labor: the LLM proposes across an open, messy world; the engine disposes with a proof; a human signs. The propose-check-repair loop, with the engine's counterexample driving targeted repair, turns a fluent proposal into an auditable decision.
 
 This paper aims to be integrative: a coherent map from a historical reasoner to a production-grade deterministic substrate, with the agentic architecture, the engine-to-guarantee mapping, the selection heuristics, and the deployment requirements made explicit. These engines do not make the model smarter; they make its output decidable, explainable, verifiable, and sound under incomplete information, with proofs an institution can show a reviewer. That is the part that does not hallucinate, and in a regulated setting it is the part worth the most.
+
+---
+# Appendix
+
+This paper is a follow up from  a four-hour tutorial on ontology engineering presented at the 2025 edition of SciPy. The argument in one line: the reasoning-engine ideas that Tim Berners-Lee's cwm prefigured in 2000 are the durable substrate for reliable, deterministic agentic AI today.
 
 ---
 
