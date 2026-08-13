@@ -1,0 +1,10 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: 'NumPy annual update'
+  authors:
+    - name: Inessa Pawson
+      orcid: 0000-0001-7294-122X
+      affiliation: OpenTeams
+  abstract: Comprehensive overview of the latest release and major milestones for the NumPy library and its contributor community
+
