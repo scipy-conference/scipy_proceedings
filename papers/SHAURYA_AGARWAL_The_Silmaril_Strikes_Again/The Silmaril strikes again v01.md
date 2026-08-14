@@ -83,44 +83,33 @@ For some tasks, a separate formal checking layer is useful and can add a measure
 9. A passed check can go to a separate action policy.    
 10. The model can remain stochastic, while selected acceptance checks can be deterministic and replayable when their formal inputs, rules, solver version, and configuration are fixed.    
     
-## A small running example    
+## Examples used in the paper    
     
-The examples in this paper are intentionally small so that every reasoning step can be inspected.    
+We construct a very simple example that can be used to show the mechanics behind each reasoning engine we discuss in this paper.    
     
-The example data is hand-authored for teaching:    
-    
-```text    
+```python    
 Fido type Terrier    
 Fido age 12    
-Amelie type Film    
-I Choose You song_by Sara Bareilles    
-```    
-    
-The ontology also contains simple class relations:    
-    
-```text    
 Terrier subClassOf Dog    
 Dog subClassOf Mammal    
-Film subClassOf CreativeWork    
+````     
+    
+To show that the reasoning mechanics generalize well to any arbitrary domain, we also use 2 other domains - Films and Music:    
+    
+Films:    
+```python    
+Amelie type Film    
+Film subClassOf CreativeWork      
+```    
+Music:    
+```python    
+I Choose You song_by Sara Bareilles    
+song_by domain Song    
+song_by range Person    
 Song subClassOf CreativeWork    
 ```    
-    
-Fido's age is included only to demonstrate a rule that combines class membership with a numeric condition.    
-    
-For example, the toy rule used later in the code is:    
-    
-```text    
-Dog(x) AND age(x) > 10 -> health_check(x)    
-```    
-    
-The threshold is an arbitrary teaching rule, not veterinary guidance.    
-It lets the RETE and Satisfiability Modulo Theories examples show something beyond class inheritance.    
-    
-The same examples also cross domains.    
-`Amelie` provides a film example, while `I Choose You` and `Sara Bareilles` provide a music example.    
-The point is that the reasoning algorithms operate over the formal statements, not over one particular subject area.    
-    
-The examples are rather simple to help readability and clear communication.    
+       
+The examples focus on readability and clear communication.    
 Once the concepts are well understood, the same approach and structure can grow to represent much larger and more complex domains.    
 * A finance or banking ontology can contain customers, accounts, ownership, transactions, eligibility rules, and permissions.    
 * A reinsurance ontology can contain contracts, layers, counterparties, risks, and exposures.    
@@ -137,7 +126,7 @@ An agent needs a stable way to refer to things.
     
 For example:    
     
-```text    
+```python    
 Fido    
 Amelie    
 I Choose You    
@@ -161,7 +150,7 @@ Agentic tasks often require conclusions that follow through several steps.
     
 For example:    
     
-```text    
+```python    
 Fido type Terrier    
 Terrier subClassOf Dog    
 Dog subClassOf Mammal    
@@ -169,7 +158,7 @@ Dog subClassOf Mammal
     
 A reasoner can derive:    
     
-```text    
+```python    
 Fido type Dog    
 Fido type Mammal    
 ```    
@@ -184,13 +173,13 @@ It is obvious to see that the situation may tend to generate even more pronounce
       
 The distinction is not:    
       
-```text    
+```python    
 LLMs cannot reason.    
 ```    
       
 It is:    
       
-```text    
+```python    
 An LLM answer does not by itself establish that every required inference step *followed* from a stated formal system.    
 ```    
     
@@ -206,13 +195,13 @@ An agent may interact with:
 * APIs    
 * planning tools, schedulers, triggers, tools,     
 * reasoning engines    
-* ...and other systems...
+* ...and other systems...    
     
 Those components need a shared meaning for the data they exchange.    
     
 For e.g., the following nouns (or noun-like vocabulary indicating objects, things, relationships, capabilities etc.):    
     
-```text    
+```python    
 - Dog    
 - Mammal    
 - CreativeWork    
@@ -320,7 +309,7 @@ These methods are not interchangeable.
     
 Then we explore how we can compose these methods as "tools" inside a carefully crafted interaction pattern that *the author here proposes*:    
     
-```text    
+```python    
 propose -> check -> repair    
 ```    
     
@@ -343,234 +332,1189 @@ For the rest of the paper, we'll consider the following:
 * We show how those engines can compose inside the **propose-check-repair** pattern for agentic systems.    
 * To address high volume and high variety scenarios for large enterprises - we discusses columnar, distributed, and GPU processing as *possible* ways to scale selected reasoning workloads.    
     
-This keeps the language model where it is strongest: **interpretation and generation**.    
+This lets us use the language model for its strongest features: **interpretation and generation**.    
     
-The author's solution moves selected questions about entailment, consistency, constraints, and justification into components designed to answer those questions *formally*.    
+The author's solution moves selected questions about entailment, consistency, constraints, and justification into components designed to solve for the answers *formally*.    
     
     
-# The ur-example: how cwm works    
+# Ontologies and reasoners in plain terms    
     
-The Closed World Machine (CWM) is the first widely used, general-purpose, web-scale, rule-driven forward-chaining reasoner combining one representation for facts and rules, first-class quoted graphs (a graph can be the subject or object of a statement), a pluggable builtin system, native proofs, and follow-your-nose closure. The folklore that it re-scans all rules every pass is wrong: it is an incremental, RETE-style, index-driven forward chainer with cardinality-ordered joins, interleaved builtin evaluation, recursive sub-formula reasoning with conclusion caching, and native provenance. Much of what the current generation rediscovers (graph-structured retrieval, agent memory, tool-augmented reasoning, verifiable inference) has an ancestor here.    
+An **ontology** describes the **what** - that is:    
+1. the *types of things* in a domain       
+2. the *relations* between them, and       
+3. formal statements that *constrain or connect* those types and relations.    
+       
+In the Resource Description Framework (RDF), a basic assertion is a subject-predicate-object triple, and a set of triples forms a graph [@w3c2014rdf11].       
+An RDF dataset can contain a default graph and named graphs.       
+Implementations often store a triple together with a graph or context identifier as a quad.       
+Notation3 (N3) extends RDF with quoted formulae, variables, implication, and built-in predicates [@bernerslee2011n3].    
+      
+A **reasoning system** can be described through 5 basic parts:    
+        
+1. **Facts.** These are statements supplied to the system, such as `Fido is a Terrier`.    
+2. **Vocabulary and ontology.** These define classes and relations such as `Terrier`, `Dog`, and `hasOwner`.    
+3. **Axioms and rules.** These define allowed conclusions, such as `Every Terrier is a Dog`.    
+4. **Evaluation procedure.** This determines how the system searches for conclusions.    
+5. **Results and evidence.** The output may be a derived fact, answer, proof, model, inconsistency, or failed check.    
     
-Mental model. Load N3 documents into one mutable working formula holding facts and rules in the same syntax, where a rule is `{antecedent} log:implies {consequent}`. Run `think`: find rules, match each antecedent, instantiate the consequent for every match, repeat to a fixpoint, serialize out. It is recalculation for a graph; because derived facts trigger more rules, it cascades to a fixed point.    
+A derivation record states which supplied facts and rules support a conclusion.    
+It does not establish that the supplied facts are true in the external world.    
     
-Data model. Everything is a `Term`: identifiers (`Symbol`, `Fragment`), typed literals whose `value()` projects to a native value (the boundary between logic and computation), variables, and `Formula`, a set of statements treated as one object and itself a `Term`, which is the move that lets a graph be quoted as a term. Interning gives one canonical object per term, so equality is pointer identity and indexing is O(1); unification with an occurs-check matches patterns against data.    
+## Reasoning up and down an ontology    
     
-Store. A statement is a quad (context, predicate, subject, object); the context is the asserting graph, which makes provenance and quoted-graph reasoning possible. The store keeps an eight-way index over every bound/unbound combination of (predicate, subject, object), so any pattern lookup is an O(1) hit and a bucket's cardinality is the planner's cost estimate. The cost is on writes: every insertion maintains all eight indexes, roughly eightfold write amplification, which the source notes dominates a typical run. Insertion also smushes (eagerly merges terms known to denote the same thing): list-chain collapse, and union-find over `owl:sameAs` with in-place rewrite. Smushing is the entity-resolution step folded into the store.    
+Suppose the ontology states:    
     
-Reasoner. Each rule subscribes as a consumer of the index bucket holding triples it could match; that subscription is the RETE alpha network. A new statement in a bucket schedules only the subscribed rules, and only against the new triple; conclusions re-enter buckets and schedule more firings, cascading to a fixpoint. The loop is "each new fact wakes only the rules that care," not "for each pass scan all facts," which is the difference between O(rules x facts) per pass and incremental delta propagation. Solving one body is a cost-directed backtracking join: pop the highest-priority conjunct, ties broken by smallest cardinality (do the most selective conjunct first). Priority states order light builtins (cheap, deterministic) before store search, ordinary patterns in cardinality order, heavy builtins (fetch, parse, nested proof) after search so a known fact short-circuits the cost, and remote conjuncts batched per service.    
+- `Terrier` is a subclass of `Dog`.    
+- `SeniorDog` is a subclass of `Dog` where age is greater than 10    
+- `Dog` is a subclass of `Mammal`.    
+- `Fido` is a `Terrier`.    
     
-Conclusions, builtins, provenance, closure. A conclusion instantiates the consequent with fresh variable names (safe skolemization), attaches a reason, and suppresses duplicates. Builtins are predicates in code: light versus heavy decides when to run; Function and ReverseFunction declare directionality (a mode that tells the planner which way to evaluate); MultipleFunction returns many results. The reflective builtins (dereference and parse a URI into a formula, run a nested `think` with caching, test graph entailment) are graphs reasoning about graphs, and are exactly where a modern engine registers an LLM builtin: a heavy, non-invertible MultipleFunction emitting candidate object bindings. Provenance is structural: with tracking on, the store refuses unreasoned statements and "why" reconstructs the derivation tree. Closure makes the formula expand itself by dereferencing identifiers it encounters, which is linked-data materialization, and why one process is called web-scale.    
     
-Honest limits set the agenda for modernization.    
+A reasoner can classify Fido as a Dog and a Mammal.    
+This lets the logic move from a more *specific* class to *generic* classes that contain the instance `Fido`.    
+The reverse inference is not valid: knowing only that `Fido is a Mammal` does not establish that `Fido is a Terrier` (going from *generic* to *specific* or *derived* needs more qualifying criteria).    
     
-| Limit | Consequence |    
-| :---- | :---- |    
-| Single process, in-memory | capacity is RAM; no spill, sharding, or cross-core parallelism |    
-| Write amplification | eight buckets per statement; O(1) reads but heavy serial ingestion |    
-| Object-per-term overhead | every term and statement is a heap object with interning bookkeeping |    
-| Monotonic only | retraction does not retract consequences; truth maintenance is not done |    
-| Snapshot-scoped negation | closed-world negation correct only against a frozen graph |    
-| Serial reasoning | one-thread agenda; firing, joins, closure fetches are sequential |    
+A query-directed procedure can start with `Is Fido a Mammal?` and search for support through `Dog` and `Terrier`.    
+Notice how this is different from deriving every available consequence in advance, we can reason up and down an ontology at runtime.      
+It should be obvious how this approach is valuable in a complex enterprise where, facts may not be available (as arbitrary transactions are being created or retrieved from archives) at all times.     
     
-The determinism contribution of cwm is the template: a quad store, an incremental cost-ordered forward chainer, a built-in escape hatch, reflective operators, and proofs. The rest of the paper keeps the template and removes the limits.    
+## Ontologies and object-oriented programming    
     
----    
+Ontologies and object-oriented programming (OOP) use some of the same words, including class, instance, property, and inheritance.    
+The meanings are different.    
+Python classes bundle data and functionality, and inheritance lets derived classes reuse or override behavior from base classes [@pythonDocsClasses].    
+Ontology classes describe categories of entities under formal semantics.    
     
-# The engine families    
+For example:     
+* In OOP (Python) we can create `fido = Terrier()` and inherit methods from a `Dog` base class.    
+* Setting `fido.age = 12` does not by itself reclassify the object as a `SeniorDog`.    
+however,     
+* An ontology reasoner can infer such a classification if `SeniorDog` is formally defined by conditions that Fido satisfies.       
+      
+So, we see that OOP can be used to implement an ontology tool or reasoner, but OOP inheritance does not itself provide description-logic inference.    
     
-Each engine below is summarized by the determinism guarantee it contributes. The first three are closed-world rule engines on the cwm lineage; the rest broaden the foundation.    
+# CWM as a historical starting point    
     
-Forward chaining (semi-naive Datalog). Start from facts, fire every matching rule, add heads, repeat to a fixpoint; materialize the whole closure, after which reads are lookups. The efficient form is semi-naive evaluation: each round joins only the previous round's delta against the full relation, since any new fact must use a fact that was new last round, which is cwm firing only against the new triple, lifted to a whole delta. On synthetic data, an ancestry closure over 14 edges stabilizes in four rounds (tree depth), and a subclass-plus-type classification inflates 10 asserted type facts to 36, which is OWL-RL-style reasoning as forward rules. Contribution: exact, complete materialization of multi-hop consequences, computed once, so agent tool lookups are O(1) and the closure is identical every run.    
+The Closed World Machine (CWM) is a general-purpose Semantic Web data processor and forward-chaining reasoner written in Python [@bernerslee2009cwm; @bernersleeReasonerWeb].    
     
-Backward chaining (SLD resolution). Start from a goal, unify it with rule heads, turn each body into subgoals, recurse to facts; compute only what the query needs. Variable renaming per activation is mandatory, or a recursive rule aliases its variables. The duality: forward asks "given these facts, what is true," backward asks "is this true, with what bindings." On the same knowledge base, asked for one individual's types backward returns its three types where forward materialized 36 for all individuals; pay for the slice you query. Naive backward loops on left-recursion; defenses are right-recursive rules with a branch cycle guard (terminates on acyclic data) or tabling (memoize goals and answers to a fixpoint), the production-grade answer. Contribution: a minimal proof tree for one question, the faithful explanation or reason code, on demand.    
+Its name does not mean that every CWM operation uses a closed-world assumption.    
+CWM reads RDF or Notation3 (N3), applies rules, invokes built-in functions, can retrieve Web resources, and can produce records that explain derived results [@bernerslee2009cwm; @cwmCommandSource].    
     
-RETE with retraction. The classic fast forward chainer when many rules and facts exist but few facts change per cycle. It compiles rules into a dataflow network: an alpha network of constant tests fills per-condition alpha memories; a beta network of join nodes joins partial matches (tokens) on shared variables; a terminal node fires the head per complete match. It removes temporal redundancy (retain partial-match state, propagate only deltas) and structural redundancy (rules with common body prefixes share alpha memories and joins).    
+CWM is useful here because one Python tool combines:    
     
-*\[...cont’d on next page\]*    
+- formal statements    
+- rule execution    
+- external functions    
+- Web retrieval    
+- derivation records    
     
-```mermaid    
-flowchart TD    
-    WM["facts (working memory)"]    
-    WM --> AN["alpha network: constant tests per condition"]    
-    AN --> A1["alphaA (candidate facts, cond A)"]    
-    AN --> A2["alphaB (candidate facts, cond B)"]    
-    AN --> A3["alphaC (candidate facts, cond C)"]    
-    A1 --> JAB["join node A x B (left beta mem x right alpha mem)"]    
-    A2 --> JAB    
-    JAB --> BAB["betaAB (partial matches / tokens)"]    
-    BAB --> JABC["join node AB x C"]    
-    A3 --> JABC    
-    JABC --> BABC["betaABC (partial matches / tokens)"]    
-    BABC --> T["terminal node -> fire head"]    
+These are also useful parts of the agent pattern discussed later in this paper: a formal state, executable rules, calls to external computation, and evidence about derived results.    
+    
+The paper does not claim that CWM is the first rule engine or the first solver-augmented architecture.    
+    
+## Rule execution and matching    
+    
+A simplified CWM workflow is:    
+    
+- Load RDF or N3 into a working formula.    
+- Read rules whose antecedents and consequents are N3 formulae.    
+- Match the antecedents against the working data.    
+- Add instantiated consequents.    
+- With `--think`, repeat rule application until no further rule matches, unless a rule or built-in continues to create new results [@cwmCommandSource].    
+    
+The CWM systems paper describes recursive template matching with two important optimizations:    
+    
+- It analyzes dependencies between rules so that rules can sometimes be evaluated in a useful order.    
+- Within a rule body, it tries statement patterns in an order based on the size of the relevant index, preferring smaller candidate sets [@bernerslee2009cwm].    
+    
+### Indexed statement matching    
+    
+CWM works by maintaining several indexes [@bernerslee2009cwm] - a walkthrough of these demonstrates the mechanics of reasoning and is helpful in building our conceptual model of a reasoner, also gives us intuition on how it would be helpful in a Agentic AI based stack:    
+    
+- **Subject index:** finds statements in which a given term appears as the subject.    
+- **Predicate index:** finds statements in which a given term appears as the predicate.    
+- **Object index:** finds statements in which a given term appears as the object.    
+    
+Consider the following ontology-backed state:    
+    
+```python    
+Fido type Terrier    
+Fido age 12    
+Terrier subClassOf Dog    
+Dog subClassOf Mammal    
+````    
+    
+For the triple-like statement:    
+    
+```python    
+Fido type Terrier    
 ```    
     
-The decisive addition over cwm is retraction. Each derived fact records its support (the tokens that justify it); removing a fact deletes its tokens down the network and withdraws them from the supports of what they produced, and a fact that loses its last support is itself retracted, cascading. Over ancestry rules, retracting a middle edge un-derives exactly the pairs whose only path crossed it and leaves the rest, nothing recomputed; re-asserting restores the closure. The boundary is well-foundedness: support counting is correct only when derivations are acyclic. Contribution: a live belief state that fires on a stream's delta and withdraws a conclusion cleanly when its basis is gone (truth maintenance for agent memory).    
+CWM makes the statement reachable through several indexes:    
     
-Rules as a first-class concern. A body is a conjunction of positive atoms (matched against facts), builtins (inequality, comparison; evaluated as tests), and negated atoms (true when not derivable; negation as failure). Two static checks gate evaluation. Range restriction: every variable in the head, a negated literal, or a builtin must be bound by a positive literal, or the rule could derive facts with variables or evaluate a test on an unbound variable (floundering). Stratification: a negated predicate must be fully computed before any rule that negates it, so each predicate gets a level (positive dependency weakly below, negated strictly below); no valid assignment means a negative cycle and rejection. Evaluating stratum by stratum, each a semi-naive fixpoint with negation resolved against materialized lower strata, an inequality builtin removes spurious self-pairs and a negation removes already-seen candidates, so a rule reads as intended. Contribution: sound "unless / except" policy logic, with two conditions that keep it sound and decidable.    
+```python    
+subject index:    
+Fido -> Fido type Terrier    
     
-The wider landscape, one line each.    
+predicate index:    
+type -> Fido type Terrier    
     
-| Family | Representative methods | What it uniquely gives |    
-| :---- | :---- | :---- |    
-| Control and evaluation | naive, semi-naive, SLD, tabling (SLG), Magic Sets, QSQ | direction and fixpoint strategy; tabling terminates where SLD loops; Magic Sets give backward focus with forward efficiency |    
-| RETE family | RETE, TREAT, LEAPS, differential dataflow / IVM | incremental matching under change; IVM generalizes retraction to distributed high-throughput streams |    
-| Classical theorem proving | resolution, superposition, tableaux, DPLL/CDCL, SMT, term rewriting | prove entailment over full logic; refutation-complete for first-order logic; SMT decides rich theories |    
-| Description-logic reasoners | tableau, hypertableau, consequence-based saturation | open-world consistency and classification; saturation is polynomial on a tractable profile |    
-| Truth maintenance | JTMS, ATMS | track justifications for belief revision; ATMS reasons over many hypothetical contexts at once |    
-| Constraint and search | arc consistency, backtracking with MAC, local search | feasibility and resource constraints; prune the search space |    
-| Probabilistic | Bayesian networks, belief propagation, Markov logic, probabilistic Datalog | degrees of belief; soft weighted logic where rules are genuinely probabilistic |    
-| Inference modes | deductive, abductive, inductive (ILP) | abduction generates best-explanation hypotheses; induction learns the rules |    
-| Neuro-symbolic | KG embeddings, GNN reasoners, neural theorem provers, LLM reasoning | learned, approximate inference; the unverifiable proposer this work contrasts with proofs |    
-    
-The highest-value use of the open-world engines is verification: a plan, argument set, or belief checked against a formal model before execution, with a proof or counterexample. The two canonical open-world complements and natural next builds are a tableau description-logic reasoner (model construction, the basis of OWL reasoning: satisfiability, classification, clash detection, blocking) and a resolution or superposition prover (refutation: prove a goal by deriving a contradiction from its negation). An ontology-weighted alternative swaps resolution for the chase, which extends the Datalog forward chainer with existential quantification and labeled nulls to build a universal model under the open-world assumption.    
-    
----    
-    
-# Scaling the deterministic core    
-    
-The guarantees above need an engine that can materialize and maintain a large closure. The single structural change: stop reasoning one match at a time over interned objects and reason set-at-a-time over columns. The abstraction is unchanged; only the substrate changes.    
-    
-Representation. The columnar analog of interning is dictionary encoding: assign every term an integer id, store terms once, and represent statements as four integer columns. Joins become integer-key joins; the object-per-term overhead is gone. The id is a content hash of the term, not an auto-increment value, so any node computes the same id with no coordinator, which makes ingestion embarrassingly parallel. Physical layout is a columnar format with dictionary and run-length encoding, sorted and partitioned by predicate; a table format on top adds immutable snapshots (the principled fix for snapshot-scoped negation: a closed-world test reads a specific snapshot), transactional appends (each round is a new snapshot, no half-written reads), and metadata cardinality for join ordering without scanning data. The eightfold write amplification is gone.    
-    
-| cwm | Columnar reasoner |    
-| :---- | :---- |    
-| interning (object identity) | dictionary encoding (content-hash int ids) |    
-| eight-way in-memory index | one sorted, partitioned relation |    
-| tuple-at-a-time backtracking join | set-at-a-time vectorized multi-way join |    
-| pop best by bucket cardinality | join ordering from table metadata |    
-| incremental agenda to fixpoint | semi-naive delta evaluation to fixpoint |    
-| dedup via index probe | anti-join against the full relation |    
-| light builtin per tuple | vectorized column expression |    
-| heavy builtin per tuple | batched async stage between rounds |    
-| LLM per-match call (hypothetical) | one batched inference per round on the delta |    
-| reason object per statement | derivations relation (queryable proofs) |    
-| no truth maintenance | Delete-Rederive over provenance |    
-| snapshot-scoped negation | stratified negation over snapshots |    
-    
-Rules and fixpoint. An N3 rule is a conjunctive query whose head is the consequent: antecedent triples are scans with constants pushed down, shared variables are equi-join keys, the consequent is a projection emitting new rows. cwm's backtracking solver becomes one multi-way join per rule, and its cost-ordered conjunct selection becomes metadata-driven join ordering. The fixpoint is semi-naive: evaluate each rule forcing at least one body atom from the delta and the rest from the full relation, union, anti-join against the full relation to keep genuinely new facts, stop when the delta is empty. Pure Datalog terminates because the derivable set is bounded by a finite term universe; value-minting builtins can diverge (cwm's "or forever") and must be stratified out of the recursive core.    
-    
-Builtins and the LLM. Light builtins become vectorized column expressions, often a hundred to a thousand times faster than per-row dispatch. Heavy builtins become a batched async stage between rounds. The LLM is a heavy, non-invertible, batched MultipleFunction: where cwm would call it per matching tuple, the columnar engine collects the round's whole column of bound subjects and issues one batched call. Three properties make it sound: it runs after cheap rules on the round's delta only; it is declared one-way and placed in its own stratum so its nondeterminism cannot feed a recursive cycle; and its outputs intern through the same content-hash dictionary as first-class terms carrying provenance that marks them model-derived versus rule-proved. This is the structurally correct fusion: a relational operator with a typed signature at a defined firing point, not an oracle threaded through reasoning.    
-    
-Provenance and maintenance. The columnar analog of cwm's reason objects is a derivations table (derived id, rule id, round, premise ids), which is queryable: a proof is a recursive query back to base facts, so "why" is a query. The same table solves truth maintenance via Delete-Rederive: over-delete everything transitively derived from retracted facts, then re-derive any with alternative support. With snapshots this gives a versioned, auditable, incrementally maintained knowledge base, which cwm's monotonic in-memory design could not offer.    
-    
-Distribution and CUDA. The set-at-a-time shape scales across a cluster and onto a GPU. It distributes well (rules are joins partitioned by key; semi-naive rounds are bulk-synchronous; content-hash ids make ingestion coordination-free) and fights back on recursion (host-driven loop), shuffle (consecutive joins use different keys, the dominant cost), and skew (power-law graphs). The design is shuffle minimization (co-partition by the recursive join key), recursion orchestration (checkpoint each round, append the delta as a snapshot, test the empty-delta barrier), and skew handling (broadcast small sides, salt hot keys). On the GPU, set-at-a-time integer-column operations are the sweet spot; the columnar move already converted branchy backtracking into regular data-parallel joins. Three workloads, in increasing payoff: rule joins as GPU hash joins with the relation kept resident so only the delta and the termination scalar cross the bus; transitive closure as sparse boolean matrix multiplication (reachability is the fixpoint of `R <- R OR (R x A)`, reached in `O(log(diameter))` steps by squaring), the biggest win, targeting exactly the multi-hop capability the agent needs most; and batched LLM inference co-located on the same device. The production shape is tiered: columnar storage at rest, a distributed engine for large relations, a GPU tier for recursive closures and the LLM builtin, routing each rule to the cheapest engine that fits. Nothing in the concept changed, only the substrate, from one heap in 2000 to a tiered columnar-and-GPU system that materializes a multi-hop, provenance-carrying world model deterministically and at scale.    
-    
----    
-    
-# The deterministic core in agentic AI    
-    
-The substrate is the one cwm prefigured and the columnar work scaled; the agent is the loop around it.    
-    
-*\[...cont’d on next page\]*    
-    
-```mermaid    
-flowchart TD    
-    W["world"] --> P["PERCEPTION: NL, tools, docs -> facts; LLM-as-builtin batched extraction -> typed quads"]    
-    P -->|"intern (content-hash ids) + smush (sameAs)"| KS["KNOWLEDGE SUBSTRATE: ontology; quads + materialized closure; derivations table (provenance); snapshots = versioned agent memory"]    
-    KS --> R["REASONING: forward/semi-naive materialize world model; backward/tabling answer goals; RETE/IVM incremental update + retract; DL tableau/EL consistency + classification; resolution/SMT plan + constraint verification"]    
-    R -->|"belief revision (retraction)"| KS    
-    R --> D["DECISION / PLANNING: propose-check-repair loop"]    
-    D -->|"verified action only"| A["ACTION: permissioned, deny-by-default, proof-gated"]    
+object index:    
+Terrier -> Fido type Terrier    
 ```    
     
-Propose-check-repair is the central loop. The LLM proposes an artifact (fact, answer, plan, argument set); the engine checks it; on failure it returns a counterexample or unsat core that the LLM uses to repair; the loop ends on acceptance or budget. "Check" varies by claim: a derived fact must follow by the rules (backward) and keep the base consistent (DL); a plan's preconditions must hold and constraints satisfy (SMT) without violating policy (a Datalog query). The counterexample is the asset: resolution yields an unsat core, SMT a falsifying assignment, DL the clashing axioms, Datalog the violated rule. Feeding it back turns a blind retry into a targeted repair, the difference between an agent that converges and one that loops.    
+So the mechanics of finding facts should be trivial now:    
+Suppose a rule needs to match:    
     
-The patterns, briefly. Grounding: the LLM extracts mentions and candidate types, the engine assigns identifiers and smushes co-referents, so the engine, not the prompt, is the system of record for identity. Verifiable graph-structured retrieval: resolve query entities to identifiers, retrieve typed neighborhoods, and compute connecting paths (transitive closure, the GPU workload), assembled by backward chaining, every fact carrying provenance so the citation is the derivation. Planning as reasoning: the LLM proposes actions and orderings; the engine decomposes goals (backward/tabling), checks preconditions and effects (forward closure), and does constrained planning (answer-set, CSP/SMT); an uncertifiable plan never executes. Agent memory with revision: observations enter as base facts, beliefs are materialized, and retracting an observation triggers the RETE/IVM cascade that withdraws dependents and nothing else, with snapshots giving episodic time-travel. Policy as derived facts: do not encode policy in the prompt; materialize permission and prohibition by forward chaining, and let a deny-by-default action layer execute only on a proven permission fact, whose proof is the audit record. Multi-agent coordination: each agent asserts into its own named graph; a DL reasoner flags joint inconsistency and conflicts surface as entailments, not free-text negotiation. The LLM-as-builtin seam holds four invariants: batched, stratified, interned-and-attributed, confidence-aware (scores go to the probabilistic layer, not the hard core).    
+```python    
+Fido type ?class    
+```    
     
-Cross-cutting. Provenance: every belief and action traces back through the derivations table; the proof is the replayable, diffable audit artifact an LLM-only agent cannot offer. Determinism: pin the base to a snapshot and cache model outputs keyed by input, and the engine's results are deterministic given snapshot and cache even though the model is not, which makes certification possible. Latency: place the work (materialize stable closures offline, answer the rest on demand, batch model calls, keep recursive closures GPU-resident) rather than removing guarantees. Failure modes the engine catches: hallucinated facts by consistency checks, non-termination by decidability and stratification, floundering by range restriction, cyclic retraction by a proper truth-maintenance system. Safety: verification before action, deny-by-default, with the unsat core as both stop and explanation.    
+The subject index can first retrieve statements about `Fido`:    
     
----    
+```python    
+Fido type Terrier    
+Fido age 12    
+```    
     
-# The guarantees an LLM cannot give, and the engine for each    
+The matcher can then test the predicate and retain:    
     
-An LLM can imitate any guarantee in prose but cannot ensure it, and the difference between imitating and guaranteeing is the difference between a defensible decision and an audit finding.    
+```python    
+Fido type Terrier    
+```    
     
-| \# | Guarantee the LLM lacks | What it means | Engine that supplies it |    
-| :---- | :---- | :---- | :---- |    
-| 1 | completeness of inference | every consequence found exactly, not approximately | forward chaining (semi-naive) |    
-| 2 | faithful explanation | the stated reason is the decision logic, not a post-hoc story | backward chaining (SLD); the proof tree |    
-| 3 | verification | a property proved to hold, or a counterexample, pre-commit | resolution (refutation) |    
-| 4 | soundness under the unknown | absence of evidence is not evidence of absence | the chase (open-world) |    
-| 5 | truth maintenance | a conclusion withdrawn when its basis is removed | RETE with retraction |    
-| 6 | sound exceptions | "X holds unless Y" with no paradox | stratified negation |    
+This binds:    
     
-Real systems combine them; the dominant question picks the primary engine and the rest fill gaps. The comparison axes that decide the mix:    
+```python    
+?class = Terrier    
+```    
     
-| Axis | Closed-world rule engines | Open-world classical | Probabilistic |    
-| :---- | :---- | :---- | :---- |    
-| world assumption | closed (negation as failure) | open | model-dependent |    
-| monotonic | yes (answer-set: no) | yes | degrees |    
-| negation | as failure / stable model | classical | soft / probabilistic |    
-| output | facts / models | proof or model | probabilities |    
-| decidable | yes (Datalog) | first-order no, DL yes | often hard |    
-| best at | materialization, queries | entailment, consistency | uncertainty, ranking |    
-| guarantees | sound derivations \+ proofs | sound and complete proofs | calibrated belief |    
+Using `?` to mean "any value", the seven useful subject-predicate-object patterns are naturally read as:    
     
-The consolidated capability-to-engine-to-guarantee map:    
+- **S P O:** subject, predicate, and object are all known.    
+- **S P ?:** subject and predicate are known; object is unknown.    
+- **S ? O:** subject and object are known; predicate is unknown.    
+- **? P O:** predicate and object are known; subject is unknown.    
+- **S ? ?:** only the subject is known.    
+- **? P ?:** only the predicate is known.    
+- **? ? O:** only the object is known.    
     
-| \# | Agent capability | Engine | Guarantee |    
-| :---- | :---- | :---- | :---- |    
-| 1 | coherent identity | smushing / DL classify | one entity, one identifier |    
-| 2 | multi-hop answers | forward \+ backward \+ graph closure | exact paths, with proof |    
-| 3 | consistency of beliefs | DL tableau / EL | no contradictions admitted |    
-| 4 | plan feasibility | backward \+ SMT / ASP / CSP | certified preconditions |    
-| 5 | policy / permissions | forward \+ backward query | deny-by-default, proven |    
-| 6 | belief revision | RETE / IVM (TMS) | stale beliefs withdrawn |    
-| 7 | hypothesis ranking | Markov logic / probabilistic Datalog | calibrated under uncertainty |    
-| 8 | audit | derivations table (proofs) | replayable justification |    
-| 9 | LLM integration | LLM-as-builtin (stratified) | attributed, batched, bounded |    
+So in a more complex implementation we can create additional types of indexes (one for every '?') to answer more complicated queries faster.     
     
-Choosing the primary engine: answer in order, and the first "yes" usually names it. Does the input change continuously and must conclusions be withdrawn when their basis disappears (RETE)? Is data incomplete, so "not stated" must not mean false (chase)? Is the task to prove or refute (resolution)? Do you need one answer and its reasons (backward)? Do you need every consequence materialized (forward)? Modifiers: disjunction points to resolution; "unless / except" adds stratified negation; schema consistency and subsumption point to a tableau / DL reasoner.    
+The general mechanism that we discover is:    
     
-Representative regulated workloads (org-free, illustrative of the engine mix):    
+```python    
+known term    
+	-> indexed lookup    
+	-> smaller candidate set    
+	-> additional variable bindings    
+	-> evaluate the remaining rule conditions    
+	-> derive a new statement    
+```    
+      
+CWM can emit proof information, and `why.py` contains structures used to represent reasons for statements [@cwmWhySource].    
+CWM also includes `check.py`, described as a simple proof checker [@cwmCheckSource].    
+These source-supported features make CWM a useful historical example of rule execution with inspectable derivations.      
+       
+# Reasoning engines and what they do    
+       
+We used CWM to mainly illustrate forward rule processing, but an Agent (in any arbitrarily complex Agentic AI stack) may need other forms of reasoning.    
+The CWM mechanism: keep a formal state, find matching statements, apply rules, and add derived statements is one kind of reasoning.    
     
-| Workload | Primary engine(s) | Value not otherwise possible |    
-| :---- | :---- | :---- |    
-| Beneficial-ownership / control adjudication | forward \+ chase \+ resolution | exact ultimate-owner closure; open-world flag of undisclosed control; proof of a linkage |    
-| Credit-style eligibility underwriting | backward \+ resolution \+ chase | deterministic adverse-action reason codes; pre-commit no-breach certificate; certain-versus-possible under incomplete data |    
-| Transaction / order surveillance | RETE \+ resolution | incremental alerting that withdraws on cancels and amends; a proof of the flagged pattern |    
-| Entitlements / access control | backward \+ resolution | deny-by-default with a proof of permission |    
-| Ring / network discovery | forward \+ RETE | transitive ring discovery, maintained as it changes |    
-| Coverage / claim determination | backward \+ resolution \+ stratified negation | a proof a claim is covered, or that an exclusion contradicts coverage; "covered unless excluded" soundly |    
-| Accumulation / exposure aggregation | forward \+ RETE | exact exposure rollup, maintained incrementally as data streams |    
-| Wording / contract verification | resolution \+ chase | prove no coverage gap or overlap; the chase exposes an uncovered layer as an existential hole |    
-| Delegated-authority compliance | resolution \+ forward | prove an actor stayed within authority; aggregate against capacity with a breach proof |    
+An agentic system may need other kinds of formal checks.    
+There's no one "best" reasoner nor are they "the same kind of thing" - instead we should ask "What formal question does the agent need answered?" and choose the reasoner accordingly.    
+        
+- Forward and backward reasoning describe directions for deriving or searching for conclusions. [@bernerslee2009cwm; @nenov2015rdfox; @chen1995slg]    
+- RETE is an incremental rule-matching algorithm. [@forgy1982rete]    
+- Truth and materialization maintenance track what should remain true when inputs change. [@motik2015bf]     
+- Description logic is a family of formal languages and semantics for ontologies. [@baader2010dlhandbook]     
+- Stratified negation gives a controlled meaning to some forms of "not known". [@apt1988stratified]     
+- Resolution is a proof procedure over logical clauses. [@robinson1965resolution]     
+- Satisfiability Modulo Theories (SMT) checks logical constraints together with theories such as arithmetic. [@demoura2008z3]     
+- The chase applies database dependencies, including rules that require some entity to exist. [@maier1979chase; @bellomarini2018vadalog]     
+
+We group all these reasoners here in the paper because each can provide a different formal service inside an agent.  
+
+## Revisiting and updating the ontology-backed states for discussing all the reasoners    
     
-The single highest-value engine across these is resolution, because each must at some point prove that something is within the rules, the one thing an LLM categorically cannot do.    
+To keep the examples easy to follow, let's review our pup Fido's ontology, this is what we will use for each reasoner.    
+We also introduced a new relationship `disjointWith` to show two completely separate (mutually exclusive) classes. 
     
----    
     
-# What a production deployment additionally needs    
+```python    
+Fido type Terrier    
+Fido age 12    
     
-The engines are the core; production needs a ring around them, generalized across regulated domains.    
+Terrier subClassOf Dog    
+Dog subClassOf Mammal    
+Mammal disjointWith Reptile    
+Reptile is Dangerous
+```    
+
+For rule-oriented examples, the two subclass statements can be read as:    
     
-Trust and governance. Provenance as a service: every derived fact carries a full, queryable, tamper-evident, versioned derivation; the "why" is the product, not a debug log. Bitemporal reasoning: decisions reconstructable as-of a date in both valid and transaction time, for facts and rules. Rule lifecycle management: rules are governed artifacts needing version control, change approval with separation of duties, regression testing, and the same model-risk and AI-governance discipline as the model. Validation of the rule base: prove consistency, coverage, and reachability, meta-reasoning that resolution and a tableau / DL reasoner perform on the policy.    
+```python    
+Terrier(x) -> Dog(x)    
+Dog(x) -> Mammal(x)    
+```    
     
-Expressiveness gaps. Uncertainty: a principled join of hard logical constraints with calibrated probability, with confidence on the propose side. Equality and identity at scale: entity resolution (one entity, one identifier across sources) needs reasoning with equality fed by a probabilistic layer, kept auditable. Defeasible reasoning: stratified negation handles "unless" but not "rule A overrides rule B," so explicit priorities and a recorded conflict-resolution order are needed. Description-logic consistency and classification: the open-world companion to the chase and resolution, the natural next build.    
+The examples will also try to reason about Fido's age, if he is dangerous (reptiles are dangerous) etc. this looks something like:    
     
-Scale, latency, security. Incremental maintenance at volume: billions of facts with truth maintenance need the columnar and distributed execution and Delete-Rederive; retraction must scale to the stream. Latency tiering: cache materialized closures, reserve the model for proposal steps, keep the hot path on the engine. Reasoning under access control: a fact must not be derivable from data the requester may not see; fact-level security interacts with closure and must be designed in. Integration: governed connectors and a structured-to-facts pipeline, with the model as an attributed, batched builtin for unstructured extraction, model-derived facts flagged distinctly.    
+```python    
+Dog(x) AND age(x) > 10 -> health_check(x)    
     
-Human and multi-agent operation. Human-in-the-loop: case management, escalation, and structured override capture, the override re-entering the governed lifecycle. Audience-specific explanation: the same proof rendered for a regulator, a validator, and an end user, plus counterfactuals (the smallest change that flips the decision). Multi-agent coordination: consistency, cross-agent belief revision, and coordination-free interning so agents agree on entities without a central bottleneck.    
+Dog(x) AND NOT dangerous(x) -> may_enter(x)    
     
----    
+```    
+    
+The age number was chosen arbitrarily to demonstrate how a rule combines class membership with a numeric condition.    
+Please do not consider it as veterinary guidance.    
+    
+The SMT example uses a separate small set of numeric constraints:    
+    
+```python    
+meals is an integer    
+2 <= meals <= 4    
+meal_cost = 3    
+total_cost = meals * meal_cost    
+total_cost <= 9    
+```    
+    
+Two small examples from other domains are present only to show that the reasoning mechanisms generalize to arbitrary domains:    
+    
+```python    
+Amelie type Film    
+Film subClassOf CreativeWork    
+    
+I Choose You song_by Sara Bareilles    
+song_by domain Song    
+song_by range Person    
+Song subClassOf CreativeWork    
+```    
+    
+We return to those examples briefly after the Fido walkthroughs.      
+       
+## Forward chaining    
+    
+**Question:** Given the facts and rules we already have, what else follows?    
+    
+Forward chaining starts with the current facts.    
+It finds rules whose conditions are satisfied and adds their conclusions.    
+New conclusions can then enable more rules.    
+    
+Start with:    
+    
+```python    
+Fido type Terrier    
+```    
+    
+and the class relationship:    
+    
+```python    
+Terrier subClassOf Dog    
+```    
+    
+The first rule application gives:    
+    
+```python    
+Fido type Dog    
+```    
+    
+Now use:    
+    
+```python    
+Dog subClassOf Mammal    
+```    
+    
+to derive:    
+    
+```python    
+Fido type Mammal    
+```    
+    
+The reasoning path is therefore:    
+    
+```python    
+Fido type Terrier    
+-> Fido type Dog    
+-> Fido type Mammal    
+```    
+    
+The engine can continue applying rules until another pass produces no new statements.    
+That final state is often called a fixpoint.    
+    
+The important point is the direction of work:    
+    
+```python    
+known facts    
+-> matching rules    
+-> new facts    
+```    
+    
+Forward chaining is useful when the agent expects many later questions to reuse the same derived facts.    
+Instead of proving `Fido type Mammal` again for every query, the derived statement can already be present in the formal state.    
+    
+CWM is one example of this style of rule execution [@bernerslee2009cwm; @bernersleeReasonerWeb].    
+    
+## Backward or query-directed reasoning    
+    
+**Question:** Can this particular conclusion be supported?    
+    
+Backward reasoning starts with the question rather than deriving every available consequence.    
+    
+Suppose the agent asks:    
+    
+```python    
+Is Fido a Mammal?    
+```    
+    
+The initial goal is:    
+    
+```python    
+Fido type Mammal    
+```    
+    
+The reasoner asks what could establish that goal.    
+    
+From:    
+    
+```python    
+Dog subClassOf Mammal    
+```    
+    
+it obtains a smaller subgoal:    
+    
+```python    
+Fido type Dog    
+```    
+    
+To establish that, it can use:    
+    
+```python    
+Terrier subClassOf Dog    
+```    
+    
+which creates another subgoal:    
+    
+```python    
+Fido type Terrier    
+```    
+    
+That statement is already asserted.    
+    
+The support chain is:    
+    
+```python    
+goal: Fido type Mammal    
+    
+needs:    
+Fido type Dog    
+    
+needs:    
+Fido type Terrier    
+    
+found:    
+Fido type Terrier    
+```    
+    
+The answer is therefore supported.    
+    
+The important direction is:    
+    
+```python    
+goal    
+-> required support    
+-> smaller subgoals    
+-> asserted fact    
+```    
+    
+This is useful when the agent needs one focused answer and does not need every consequence of the knowledge base.    
+    
+Practical backward reasoners can remember answers to repeated subgoals so they do not solve the same subproblem repeatedly.    
+Tabling and SLG evaluation are examples of that implementation technique [@chen1995slg].    
+    
+## RETE-based matching    
+    
+**Question:** If rules are checked repeatedly as facts arrive or change, how can the matcher avoid repeating unaffected work?    
+    
+RETE is an incremental matching algorithm for production rules [@forgy1982rete].    
+    
+It is not a separate ontology semantics.    
+Its job is to remember matching work.    
+    
+Use the rule already declared above:    
+    
+```python    
+Dog(x) AND age(x) > 10 -> health_check(x)    
+```    
+    
+After the earlier class reasoning, we have:    
+    
+```python    
+Fido type Dog    
+```    
+    
+We also have:    
+    
+```python    
+Fido age 12    
+```    
+    
+A simplified RETE network can treat the two rule conditions separately.    
+    
+The first condition matches:    
+    
+```python    
+Dog(Fido)    
+```    
+    
+and stores that match in an alpha memory.    
+    
+The second condition matches:    
+    
+```python    
+age(Fido) = 12    
+```    
+    
+and the numeric test confirms:    
+    
+```python    
+12 > 10    
+```    
+    
+That matching result can also be retained.    
+    
+The network then joins the two matches on the shared variable:    
+    
+```python    
+x = Fido    
+```    
+    
+This join is the important step:    
+    
+```python    
+Dog(Fido)    
++    
+age(Fido) = 12    
++    
+12 > 10    
+=    
+complete rule match    
+```    
+    
+The rule can now derive:    
+    
+```python    
+health_check(Fido)    
+```    
+    
+The value of RETE becomes clearer when the facts arrive at different times.    
+    
+If the Dog match is already stored, a later age fact does not require the engine to rediscover every unaffected part of the rule.    
+The retained partial match can participate in the new join.    
+    
+So the core mechanism is:    
+    
+```python    
+match individual conditions    
+-> remember those matches    
+-> join compatible partial matches    
+-> fire the rule when the full pattern is satisfied    
+```    
+    
+This is different from the native CWM matching described earlier.    
+CWM searches indexed statements while recursively matching a rule.    
+RETE retains partial matching state between updates.    
+    
+The CWM systems paper discusses Pychinko separately as a Python RETE implementation, and the preserved SWAP repository contains that implementation [@bernersleeReasonerWeb; @cwmPychinkoSource].    
+This is why Pychinko is easier to understand here, after the RETE mechanism itself has been introduced.    
+    
+## Maintaining derived conclusions after change    
+    
+**Question:** If an asserted fact is removed, which derived conclusions should also disappear?    
+    
+Our current support chain is:    
+    
+```python    
+Fido type Terrier    
+-> Fido type Dog    
+-> Fido type Mammal    
+```    
+    
+Now apply the test operation declared earlier:    
+    
+```python    
+remove "Fido type Terrier"    
+```    
+    
+The system should not blindly leave:    
+    
+```python    
+Fido type Dog    
+Fido type Mammal    
+```    
+    
+in the derived state.    
+    
+Instead it asks:    
+    
+```python    
+Does Fido type Dog still have another valid support?    
+```    
+    
+If the answer is no, `Fido type Dog` is withdrawn.    
+    
+That then raises the next question:    
+    
+```python    
+Does Fido type Mammal still have another valid support?    
+```    
+    
+If the answer is also no, `Fido type Mammal` is withdrawn.    
+    
+The support graph has therefore changed from:    
+    
+```python    
+Terrier fact    
+-> Dog conclusion    
+-> Mammal conclusion    
+```    
+    
+to:    
+    
+```python    
+Terrier fact removed    
+-> Dog no longer supported    
+-> Mammal no longer supported    
+```    
+    
+If some independent fact or rule still supported Dog or Mammal, that conclusion could remain.    
+    
+This is the central idea behind truth-maintenance and incremental materialization techniques: derived statements need a connection to the support that justifies keeping them.    
+    
+At larger scale, systems use different strategies for updating materialized consequences.    
+Delete/Rederive and the Backward/Forward algorithm are two such approaches, with different recomputation and bookkeeping tradeoffs [@motik2015bf].    
+    
+RETE and truth maintenance therefore answer different questions:    
+    
+```python    
+RETE:    
+Which rule matches can I reuse?    
+    
+maintenance:    
+Which conclusions are still supported?    
+```    
+    
+## Description-logic reasoning    
+    
+**Question:** What follows from the ontology's class and property semantics, and are the statements mutually consistent?    
+    
+Description logic is different from the previous sections.    
+It is a family of formal languages for describing classes, properties, individuals, and restrictions [@baader2010dlhandbook].    
+    
+It is not itself another name for forward or backward chaining.    
+Different description-logic reasoners can use different algorithms.    
+    
+Start again with the ontology:    
+    
+```python    
+Fido type Terrier    
+Terrier subClassOf Dog    
+Dog subClassOf Mammal    
+Mammal disjointWith Reptile    
+```    
+    
+The class relationships imply:    
+    
+```python    
+Fido type Mammal    
+```    
+    
+Now apply the consistency-test assertion declared at the top of the section:    
+    
+```python    
+Fido type Reptile    
+```    
+    
+The reasoner now has both:    
+    
+```python    
+Fido type Mammal    
+Fido type Reptile    
+```    
+    
+but the ontology also states:    
+    
+```python    
+Mammal disjointWith Reptile    
+```    
+    
+Those statements cannot all hold together under the stated ontology semantics.    
+    
+The useful result is therefore not merely another derived class.    
+The reasoner can report an inconsistency in the formal state.    
+    
+This gives the agent a different kind of check:    
+    
+```python    
+classification:    
+What classes does Fido belong to?    
+    
+consistency:    
+Can all of these ontology statements hold together?    
+```    
+    
+The exact guarantees depend on the description-logic language or OWL profile being used.    
+For example, OWL 2 RL is an OWL profile designed so that specified reasoning can be implemented with rule-based techniques under its stated restrictions [@w3c2012owl2profiles].    
+    
+## Stratified negation    
+    
+**Question:** Can a rule depend on the absence of a fact without creating circular negative reasoning?    
+    
+Use the rule declared earlier:    
+    
+```python    
+Dog(x) AND NOT dangerous(x) -> may_enter(x)    
+```    
+    
+We already know:    
+    
+```python    
+Fido type Dog    
+```    
+    
+For this example, `dangerous` is evaluated in a closed snapshot.    
+The top of this section explicitly states that:    
+    
+```python    
+dangerous(Fido)    
+```    
+    
+is not asserted in that snapshot.    
+    
+The negative condition can therefore succeed:    
+    
+```python    
+NOT dangerous(Fido)    
+```    
+    
+and the rule can derive:    
+    
+```python    
+may_enter(Fido)    
+```    
+    
+The important qualification is that this is a scoped rule interpretation.    
+    
+It does not mean that an open-world ontology has proved:    
+    
+```python    
+Fido is not dangerous    
+```    
+    
+It means only that the relevant closed rule layer did not derive or contain `dangerous(Fido)` when the negative condition was evaluated.    
+    
+Stratification makes this safer by ordering predicates so that a negative test is evaluated only after the predicates it depends on have already been computed.    
+It rules out certain circular dependencies through negation [@apt1988stratified].    
+    
+The mechanism is:    
+    
+```python    
+compute the lower dependency first    
+-> freeze that result for the current evaluation    
+-> test absence    
+-> apply the higher rule    
+```    
+    
+## Resolution    
+    
+**Question:** Can a logical claim be proved by showing that its negation leads to contradiction?    
+    
+Resolution is a proof procedure over clauses [@robinson1965resolution].    
+    
+We can use the same Fido information.    
+    
+Write the facts and class rules in clause form:    
+    
+```python    
+1. Terrier(Fido)    
+    
+2. NOT Terrier(x) OR Dog(x)    
+    
+3. NOT Dog(x) OR Mammal(x)    
+```    
+    
+We want to prove:    
+    
+```python    
+Mammal(Fido)    
+```    
+    
+A refutation proof temporarily adds the opposite claim:    
+    
+```python    
+4. NOT Mammal(Fido)    
+```    
+    
+Resolve clause 1 with clause 2:    
+    
+```python    
+Dog(Fido)    
+```    
+    
+Resolve that result with clause 3:    
+    
+```python    
+Mammal(Fido)    
+```    
+    
+Now resolve:    
+    
+```python    
+Mammal(Fido)    
+```    
+    
+with:    
+    
+```python    
+NOT Mammal(Fido)    
+```    
+    
+The result is the empty clause:    
+    
+```python    
+{}    
+```    
+    
+The empty clause represents contradiction.    
+    
+Therefore the temporary assumption:    
+    
+```python    
+NOT Mammal(Fido)    
+```    
+    
+cannot hold together with the original clauses.    
+    
+Within this formal system, the original target is proved.    
+    
+The same Fido conclusion has now been reached using a different proof mechanism:    
+    
+```python    
+forward chaining:    
+derive the target from the facts    
+    
+backward reasoning:    
+search from the target to its support    
+    
+resolution:    
+negate the target and derive contradiction    
+```    
+    
+## Satisfiability Modulo Theories    
+    
+**Question:** Can all of these explicit logical and numeric constraints be true at the same time?    
+    
+Satisfiability Modulo Theories (SMT) extends satisfiability checking with supported theories such as arithmetic, equality, arrays, and bit vectors [@demoura2008z3].    
+    
+Use the constraints declared at the top:    
+    
+```python    
+meals is an integer    
+2 <= meals <= 4    
+meal_cost = 3    
+total_cost = meals * meal_cost    
+total_cost <= 9    
+```    
+    
+Suppose the agent proposes:    
+    
+```python    
+meals = 4    
+```    
+    
+The solver combines that proposal with the existing constraints:    
+    
+```python    
+total_cost = 4 * 3    
+total_cost = 12    
+total_cost <= 9    
+```    
+    
+Those conditions cannot all be satisfied.    
+    
+So the proposal:    
+    
+```python    
+meals = 4    
+```    
+    
+fails the check.    
+    
+If the fixed proposal is removed and the solver is asked for a satisfying value, it can return a model such as:    
+    
+```python    
+meals = 3    
+total_cost = 9    
+```    
+    
+or:    
+    
+```python    
+meals = 2    
+total_cost = 6    
+```    
+    
+This maps directly onto the agent pattern developed later in the paper:    
+    
+```python    
+propose:    
+meals = 4    
+    
+check:    
+constraint set is unsatisfied    
+    
+repair:    
+propose a different value    
+    
+check:    
+meals = 3 satisfies the constraints    
+```    
+    
+The SMT solver is not deciding whether Fido is a Mammal.    
+It is answering a different formal question: whether the explicit constraints can all hold together.    
+    
+## The chase    
+    
+**Question:** If a rule says that something must exist, what new placeholder is required to satisfy that rule?    
+    
+The chase is a procedure used with database dependencies, including rules with existential conclusions [@maier1979chase].    
+    
+Use the rule declared earlier:    
+    
+```python    
+Dog(x) -> EXISTS y hasOwner(x,y)    
+```    
+    
+We already derived:    
+    
+```python    
+Fido type Dog    
+```    
+    
+The rule therefore requires some owner to exist.    
+    
+But our state does not identify a particular owner.    
+    
+A chase procedure can introduce a fresh placeholder:    
+    
+```python    
+owner_1    
+```    
+    
+and add:    
+    
+```python    
+Fido hasOwner owner_1    
+```    
+    
+The placeholder means:    
+    
+```python    
+some owner is required here    
+```    
+    
+It does not mean:    
+    
+```python    
+owner_1 is the real-world identity of Fido's owner    
+```    
+    
+That distinction is important.    
+    
+The chase can satisfy an existential requirement without inventing a claim that the system knows the real entity.    
+    
+The mechanism is:    
+    
+```python    
+match a dependency    
+-> detect an existential requirement    
+-> create a fresh placeholder    
+-> add the required relation    
+```    
+    
+Our one-rule example stops after the ownership requirement is satisfied.    
+With more expressive recursive existential rules, chase procedures can continue creating new placeholders, so termination depends on the dependencies and chase variant being used [@bellomarini2018vadalog].    
+    
+## The same mechanisms are not specific to Fido    
+    
+The Fido example is deliberately repetitive because it lets us compare reasoning methods without changing the domain at every step.    
+    
+The same formal mechanisms can operate over other vocabularies.    
+For example, the class statement `Amelie type Film` together with `Film subClassOf CreativeWork` can support `Amelie type CreativeWork`.    
+    
+Likewise, in a rule or ontology implementation that gives the declared `domain`, `range`, and `subClassOf` statements their intended semantics, the music facts can support:    
+    
+```python    
+I Choose You type Song    
+I Choose You type CreativeWork    
+Sara Bareilles type Person    
+```    
+    
+The reasoning mechanism has not become a "movie reasoner" or a "music reasoner".    
+Only the formal vocabulary and facts have changed.    
+    
+## What each reasoner contributes    
+    
+The reasoners can now be separated by the question they answer:    
+    
+- **Forward chaining:** What new facts follow from the current facts and rules? [@bernerslee2009cwm; @nenov2015rdfox]
+- **Backward reasoning:** Can this particular goal be supported? [@chen1995slg]
+- **RETE:** Which previous rule matches can be reused when facts change? [@forgy1982rete]
+- **Truth or materialization maintenance:** Which derived conclusions remain supported after an update? [@motik2015bf]
+- **Description-logic reasoning:** What follows from the ontology semantics, and is the ontology-backed state consistent? [@baader2010dlhandbook]
+- **Stratified negation:** Can a rule safely depend on scoped absence after the required lower predicates are fixed? [@apt1988stratified]
+- **Resolution:** Can a logical target be proved by refuting its negation? [@robinson1965resolution]
+- **SMT:** Can a set of explicit logical and theory constraints be satisfied? [@demoura2008z3]
+- **Chase:** What fresh placeholders are required by existential dependencies? [@maier1979chase; @bellomarini2018vadalog]  
+    
+These methods are complementary rather than interchangeable.    
+    
+An agent does not need to run every reasoner on every proposal.    
+It can select the formal check required by the task.    
+    
+This gives us the bridge to the interaction pattern developed later:    
+    
+```python    
+language model proposes    
+-> formal state represents the relevant facts and constraints    
+-> the appropriate reasoner checks the formal question    
+-> the result supplies evidence    
+-> the agent accepts or repairs the proposal    
+```    
+    
+The **shared ontology** gives these different reasoners a common place to obtain entities, classes, properties, and relations.    
+The reasoners then contribute different kinds of **formal evidence** over the shared ontology-state.  
+    
+# Composing reasoning engines into propose-check-repair    
+    
+The reasoning methods above become useful to an agent when they are exposed as tools over a shared formal state.    
+The proposed interaction pattern keeps generation, formal checking, repair, and action as separate steps.    
+    
+The loop has six steps:    
+    
+1. **Propose.** The LLM proposes a candidate fact, answer, plan, argument, or action.    
+2. **Ground.** The application maps the candidate to stable identifiers, typed relations, rules, and constraints in an ontology-backed state.    
+3. **Select a reasoner tool.** The application chooses a reasoning method that matches the property being checked.    
+4. **Derive or check.** The reasoner evaluates the formal state and returns its result and available evidence.    
+5. **Repair.** If the check fails, the result is returned to the agent as structured feedback for another proposal.    
+6. **Act.** If the check passes, a separate application policy decides whether the accepted proposal may proceed.    
+    
+A short Python-shaped control flow is:    
+    
+```python    
+candidate = agent.propose(task, state)    
+result = reasoner.check(candidate, state)    
+    
+if result.accepted:    
+    policy.act(candidate, result.evidence)    
+else:    
+    agent.repair(candidate, result.evidence)    
+```    
+    
+The key point is that `reasoner` need not be one universal engine.    
+It can be a tool interface over several reasoners that share the same formal entities and relations.    
+    
+For example:    
+    
+- A candidate classification can go to a description-logic or OWL reasoner.    
+- A multi-hop rule query can go to forward or backward rule evaluation.    
+- A stream update can use RETE-style matching and a separate maintenance method.    
+- A policy exception can use stratified negation in a closed-world rule layer.    
+- A clause-level proof task can go to a resolution prover.    
+- A plan with arithmetic or ordering constraints can go to an SMT solver.    
+- An existential dependency can go to a chase-based reasoner.    
+    
+These reasoners do not return the same form of evidence.    
+A rule engine may return a derivation.    
+An SMT solver may return a satisfying model or an unsatisfiable result and, when supported, an unsatisfiable core.    
+A description-logic reasoner may return classifications or an inconsistency explanation.    
+A resolution prover may return a refutation proof.    
+The loop should preserve these differences rather than converting all results into one generic explanation string.    
+    
+## Why the ontology-backed state matters    
+    
+The ontology-backed state gives the different reasoning tools a common formal reference:    
+    
+- **Stable reference.** An entity can have a stable identifier so later checks refer to the same formal object. The ontology does not solve ambiguous entity resolution by itself; a model or matching process may still propose the identifier.    
+- **Typed relations.** Candidate statements are converted from free text into explicit predicates and types.    
+- **Formal semantics.** A selected reasoner can evaluate subclass relations, rules, constraints, or consistency under stated semantics.    
+- **Shared state.** Different reasoner tools can operate on the same entities and relations instead of each tool receiving an unrelated natural-language description.    
+    
+This makes the reasoning tools composable.    
+One reasoner can derive a fact that becomes input to a later check, as long as the semantics and provenance of that fact are preserved.    
+For example, forward rule evaluation may materialize a permission fact, while an SMT solver separately checks numeric limits on the proposed action.    
+The agent can then receive both results before deciding whether to repair the proposal.    
+    
+## What becomes deterministic    
+    
+The pattern does not make model generation deterministic.    
+It moves selected acceptance conditions into separate formal procedures.    
+    
+For fixed formal inputs and a deterministic reasoner configuration, the following kinds of checks can be replayed:    
+    
+- Whether a rule query is entailed under a stated rule semantics.    
+- Whether an ontology is consistent under a stated description logic or OWL profile.    
+- Whether a set of supported SMT constraints is satisfiable.    
+- Whether a permission fact is derived by a stated policy rule set.    
+- Whether a previously derived fact still has support under the selected maintenance method.    
+    
+The result is scoped to the formalization.    
+A reasoner can apply a wrong rule correctly.    
+A model can map the user's request into the wrong entity or predicate.    
+A formal model can omit a real-world condition that matters.    
+The pattern therefore provides a deterministic gate for selected formal checks, not a guarantee of general truth or safety.    
+    
+This separation also limits, but does not remove, model behaviors such as sycophancy.    
+Once the formal facts, rules, and acceptance condition are fixed, conversational tone or a request for agreement does not change the reasoner's entailment relation.    
+However, the model can still make a biased proposal or create a biased formalization before the check.    
+    
+# A map from reasoning work to larger-scale execution    
+    
+The propose-check-repair loop does not require a new monolithic reasoner.    
+A future implementation can combine existing reasoning tools or implement a selected subset.    
+This section discusses execution directions that may matter when the formal state and reasoning workload become large.    
+It does not report a completed columnar, distributed, or GPU reasoner.    
+    
+## Columnar and set-oriented processing    
+    
+A columnar representation can dictionary-encode terms as integer identifiers and store statement fields in separate columns.    
+Conjunctive rule bodies can then be evaluated as set-oriented joins, and semi-naive recursion can keep newly derived rows in separate delta relations.    
+This direction is consistent with existing work on large Datalog and RDF materialization rather than a claim of a new technique [@nenov2015rdfox; @jordan2016souffle].    
+    
+Questions that need measurement include:    
+    
+- Which indexes are needed for the rule and query mix?    
+- How much storage is needed for derivation records?    
+- When does columnar batching improve rule joins enough to offset update cost?    
+- How should deletions and alternate derivations be maintained?    
+    
+Delete-Rederive is one option for deletions, but it can remove facts that still have another derivation and then derive them again.    
+Backward/Forward maintenance reduces some of that unnecessary work by checking for alternative support [@motik2015bf].    
+The paper therefore does not select one maintenance method without a workload.    
+    
+## Distributed processing    
+    
+Relations that exceed one machine can be partitioned across workers.    
+Recursive rule evaluation then has to manage partitioning keys, data movement, skew, duplicate suppression, failures, and completion of each recursive round.    
+RDFox and Differential Dataflow provide existing points of comparison for parallel materialization and iterative computations over changing inputs [@nenov2015rdfox; @mcsherry2013differential].    
+    
+The relevant design question is which reasoning operations benefit from distributed execution and which remain cheaper on one node.    
+The answer depends on data size, rule shape, update rate, and the amount of evidence that must be stored.    
+    
+## GPU processing    
+    
+GPU execution is useful when reasoning work can be expressed as regular operations over many values.    
+Possible candidates include filtering, hashing, joins, frontier expansion, and sparse matrix operations.    
+Gunrock represents a frontier-based graph-processing approach [@wang2016gunrock].    
+GraphBLAS represents graph algorithms through sparse linear algebra [@kepner2016graphblas].    
+    
+Neither approach is assumed to be best for transitive closure.    
+Repeated Boolean matrix operations can reduce the number of rounds while increasing intermediate density and memory use.    
+Frontier methods can require more rounds while processing a smaller active set.    
+A comparison needs runtime, peak memory, data transfer, graph degree distribution, intermediate size, and final closure density.    
+    
+The scaling map remains secondary to the reasoner composition.    
+The reasoner map defines which formal operation is needed.    
+Columnar, distributed, and GPU methods concern how some of those operations may execute at larger scale.    
+    
+# Python example and reproducibility    
+    
+Python is present in both the historical case and the companion material.    
+CWM is implemented in Python, and the cited source modules expose the command flow, store, formula representation, derivation structures, and proof checker [@swapRepository].    
+The Silmaril repository contains the SciPy 2025 ontology-engineering material and Python examples [@shauryasilmarilRepository2026; @agarwal_2025_17297865].    
+    
+This revision also includes two small Python files:    
+    
+- `reasoner_loop.py`    
+- `test_reasoner_loop.py`    
+    
+The example uses no reasoning library and showcases a 'from scratch' implementation specific to the examples discussed in this paper.    
+It implements narrow teaching versions of the reasoning methods discussed in the paper from basic Python data structures.    
+    
+The shared example contains three domains:    
+    
+- Fido is a Terrier, with `Terrier -> Dog -> Mammal`.    
+- Amelie is a Film, with `Film -> CreativeWork`.    
+- `I Choose You` is linked to Sara Bareilles, with a property-domain rule that classifies the work as a Song and then as a CreativeWork.    
+    
+The file demonstrates:    
+    
+- forward materialization to a fixpoint    
+- backward proof search from a query    
+- RETE-style alpha memories and a beta join    
+- truth maintenance through explicit justifications and retraction    
+- description-logic-style classification and disjointness checking    
+- stratified negation after the positive stratum is fixed    
+- ground resolution by refutation    
+- a small DPLL(T)-style SMT example over bounded integer constraints    
+- composition of several checks inside the propose-check-repair loop    
+    
+Each reasoner prints a trace.    
+The traces use the same ontology terms as the paper, such as asserted fact, class assertion, subclass axiom, entailment, justification, retraction, stratum, clause, resolvent, constraint, and model.    
+    
+The tests assert the expected results and print the traces when run:    
+    
+```python    
+python examples/test_reasoner_loop_v03.py    
+```    
+    
+These examples are not general-purpose reasoners.    
+They are small executable demonstrations of the algorithms and interaction boundaries discussed in the paper.    
+They do not establish performance or scalability.    
+    
+The paper reports no new speedup, closure-size benchmark, or GPU performance result.    
+A performance study needs fixed datasets, rules, environment versions, commands, baselines, and measurements before such claims are added.    
+    
+# Limits and next steps    
+    
+The reasoner-mediated loop has several limits that require implementation and evaluation:    
+    
+- **Formalization error.** The LLM or parser can map language into the wrong entity, relation, rule, or constraint.    
+- **Incomplete ontology.** A formal check cannot enforce a condition that is missing from the model.    
+- **Reasoner selection.** Different checks need different reasoning procedures and semantics.    
+- **Composition semantics.** When one reasoner's output becomes another reasoner's input, the system must preserve the meaning and source of the derived fact.    
+- **Update semantics.** A changing agent state needs a defined method for retracting unsupported conclusions.    
+- **Tool trust.** A reasoning implementation can contain software defects, and its version and configuration need to be recorded for replay.    
+- **Action policy.** Passing a formal check does not by itself authorize a real-world action.    
+- **Scale.** Columnar, distributed, and GPU execution need benchmarks against representative rule and graph workloads.    
+    
+These limits define the next experiments.    
+They do not change the central composition: reasoning engines provide different formal operations, the ontology-backed state lets them work over shared entities and relations, and the propose-check-repair loop decides when those tools are called.    
     
 # Summary    
     
-A reasoner and an Ontology, makes the LLM a batched relational operator at a stratification boundary, turns provenance and truth maintenance into queryable relations, and unlocks the possibilities to make the workload distributable and GPU-resident, with multi-hop closure expressed as sparse boolean matrix multiplication.    
+This paper starts with CWM as a historical Python example of RDF and N3 rule processing, built-ins, Web access, and derivation records.    
+It then discusses a focused set of reasoning methods that answer different formal questions: forward and backward rule evaluation, RETE, truth maintenance, description-logic reasoning, stratified negation, resolution, SMT, and the chase.    
     
-Around that deterministic core, the wider family of reasoning engines supplies the guarantees an LLM cannot give alone: forward for complete materialization, backward for a faithful proof, RETE for truth maintenance, stratified negation for sound exceptions, the chase for soundness under incomplete data, resolution for pre-commit verification, description-logic reasoning for open-world consistency and classification.    
+The paper then composes these methods into a reasoner-mediated propose-check-repair loop for agentic AI.    
+The LLM remains the generative component.    
+An ontology-backed state gives selected entities and relations explicit identifiers and semantics.    
+One or more reasoning engines are exposed as tools that derive or check properties of that state.    
+A failed check returns evidence for repair, while an accepted result can pass to a separate action policy.    
     
-The governing pattern is a division of labor: the LLM proposes across an open, messy world; the engine disposes with a proof; a human signs. The propose-check-repair loop, with the engine's counterexample driving targeted repair, turns a fluent proposal into an auditable decision.    
+The deterministic claim is deliberately narrow.    
+The model and the language-to-ontology mapping can remain stochastic or wrong.    
+For fixed formal inputs and a deterministic reasoner configuration, selected checks can be replayed without asking the model to judge its own proposal.    
+This gives the agent a formal acceptance boundary for selected questions while keeping generation and formal verification separate.    
     
-This paper aims to be integrative: a coherent map from a historical reasoner to a production-grade deterministic substrate, with the agentic architecture, the engine-to-guarantee mapping, the selection heuristics, and the deployment requirements made explicit. These engines do not make the model smarter; they make its output decidable, explainable, verifiable, and sound under incomplete information, with proofs an institution can show a reviewer. That is the part that does not hallucinate, and in a regulated setting it is the part worth the most.    
+Columnar, distributed, and GPU methods are discussed only as possible execution directions for scaling selected reasoning workloads.    
+The next step is to implement and benchmark selected reasoner combinations inside the same loop while preserving the distinction between proposal, formal state, reasoner output, repair, and action.    
     
----    
 # Appendix    
     
-This paper is a follow up from  a four-hour tutorial on ontology engineering presented at the 2025 edition of SciPy. The argument in one line: the reasoning-engine ideas that Tim Berners-Lee's cwm prefigured in 2000 are the durable substrate for reliable, deterministic agentic AI today.    
-    
----    
+This paper is a follow up from  a four-hour tutorial on ontology engineering presented at the 2025 edition of SciPy.       
+       
     
 # References    
     
