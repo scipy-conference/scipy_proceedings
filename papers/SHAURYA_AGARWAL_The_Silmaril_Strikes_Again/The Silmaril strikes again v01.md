@@ -31,7 +31,7 @@ The paper then shows how these methods can be composed inside a **propose-check-
 * failed checks return structured evidence
 * the model **repairs** the proposal
 * accepted results can move to a separate action policy
-The language model remains the flexible generative component. The ontology and reasoning layer provides formal checks that language generation alone does not guarantee.  
+The language model remains the flexible generative component. The ontology and reasoning layer provides formal checks that language generation alone does not guarantee.
 The paper finally discusses columnar, distributed, and GPU execution as possible ways to scale selected reasoning workloads. It does not present a completed production reasoner or new performance results.
 
 ---
