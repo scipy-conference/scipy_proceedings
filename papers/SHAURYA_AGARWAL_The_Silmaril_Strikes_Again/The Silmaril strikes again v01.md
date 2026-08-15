@@ -1,25 +1,25 @@
 # THE SILMARIL STRIKES AGAIN: building better AI systems with deterministic reasoning capabilities using Ontologies
 
 
-# Abstract   
-    
-Large language models now power many agentic systems.    
-Common interaction patterns include:    
+# Abstract
+
+Large language models now power many agentic systems.
+Common interaction patterns include:
 * plan first, then execute [@wang2023plansolve]
 * reason and act in turns, as in ReAct [@yao2023react]
 * reflect on feedback and try again, as in Reflexion [@shinn2023reflexion]
 * call external tools and APIs [@schick2023toolformer]
 * ...and more
-These patterns make language models more useful as agents. 
+These patterns make language models more useful as agents.
 But the agent is still largely driven by model-generated state, reasoning, and decisions.
 That creates four pressures:
 * **Grounding:** the system needs stable identities for entities and typed relations between them.
 * **Multi-hop reasoning:** the system may need conclusions that follow through several relations or rules.
 * **Coordination:** several agents or tools need a shared meaning for entities, classes, properties, and constraints.
-* **Verification and audit:** important decisions need a result that can be checked, replayed, and linked to the facts and rules that produced it.  
+* **Verification and audit:** important decisions need a result that can be checked, replayed, and linked to the facts and rules that produced it.
 These are areas where language-model generation alone does not provide formal guarantees. Entity tracking varies across models and task complexity [@kim2023entitytracking]. Multi-hop reasoning can fail or follow plausible but incorrect paths [@yang2024latentmultihop; @bhuiya2024multihop]. Generated chain-of-thought is not necessarily a faithful account of how an answer was produced [@lanham2023faithfulness]. Model responses can also move toward a user's stated views in tested settings [@sharma2023sycophancy].
-Ontologies and reasoning engines provide a different layer. Ontologies represent selected entities, classes, properties, and axioms under explicit semantics [@w3c2012owl2overview]. Reasoners can then derive conclusions, answer queries, check consistency, test constraints, and record justifications under defined procedures.  
-This paper starts with the Closed World Machine (CWM) as a historical Python reasoner. It then explains forward and backward reasoning, RETE, truth maintenance, description-logic reasoning, stratified negation, resolution, Satisfiability Modulo Theories, and the chase.  
+Ontologies and reasoning engines provide a different layer. Ontologies represent selected entities, classes, properties, and axioms under explicit semantics [@w3c2012owl2overview]. Reasoners can then derive conclusions, answer queries, check consistency, test constraints, and record justifications under defined procedures.
+This paper starts with the Closed World Machine (CWM) as a historical Python reasoner. It then explains forward and backward reasoning, RETE, truth maintenance, description-logic reasoning, stratified negation, resolution, Satisfiability Modulo Theories, and the chase.
 
 The paper then shows how these methods can be composed inside a **propose-check-repair** loop for agentic systems:
 * the language model **proposes**
@@ -27,7 +27,7 @@ The paper then shows how these methods can be composed inside a **propose-check-
 * failed checks return structured evidence
 * the model **repairs** the proposal
 * accepted results can move to a separate action policy
-The language model remains the flexible generative component. The ontology and reasoning layer provides formal checks that language generation alone does not guarantee.  
+The language model remains the flexible generative component. The ontology and reasoning layer provides formal checks that language generation alone does not guarantee.
 The paper finally discusses columnar, distributed, and GPU execution as possible ways to scale selected reasoning workloads. It does not present a completed production reasoner or new performance results.
 
 ---
