@@ -62,12 +62,17 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - shauryaagarwalthesilmaril
-        - theslimarilshauryaagarwalscipy2025
-        - theslimarilshauryaagarwalscipy2026
+        - shauryasilmarilRepository2026
         - bernerslee2009cwm
         - bernerslee2011n3
+        - bernersleeReasonerWeb
+        - cwmCheckSource
+        - cwmCommandSource
+        - cwmWhySource
         - swapRepository
+        - w3c2012owl2overview
+        - w3c2014rdf11
+        - mcsherry2013differential
   exports:
     - id: pdf
       format: typst
