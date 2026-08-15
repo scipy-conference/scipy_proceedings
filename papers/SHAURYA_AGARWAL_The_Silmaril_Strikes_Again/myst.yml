@@ -77,6 +77,7 @@ project:
         - w3c2012owl2overview
         - w3c2014rdf11
         - mcsherry2013differential
+        - pythonDocsClasses
   exports:
     - id: pdf
       format: typst
