@@ -68,7 +68,7 @@ For our purposes, during the hackathon, we used the following concepts:
 - **LLM:** Generates text from prompts
 - **Embeddings:** Turn words or sentences into numbers that capture meaning. Things with similar meanings end up close together ("dog" ≈ "puppy", "pizza" ≈ "burger"). That's how AI can find related ideas, not just exact word matches.
 - **RAG:** Retrieve context before generating answers
-- **Agent:** A loop where the model can use tools and react to results
+- **Agent:** A loop where the model decides which tools to call, in what order, based on intermediate results
 
 These concepts cover most real-world AI applications.
 
@@ -96,7 +96,7 @@ Jasmine's team used system prompts and a data dictionary to ground the LLM in in
 - Together, they constrain interpretation and reduce hallucinations
 - Ensures data is used at the correct grain and in the correct context
 
-Jasmine's hackathon project involved building a chatbot to help higher education staff understand a pivotal student success dataset. The university had an institutional research department that was overwhelmed with data requests that took days to answer. AI was an opportunity to make this self-service, but institutions were concerned about data privacy and security.
+Jasmine's hackathon project involved building a chatbot to help higher education staff understand a pivotal student success dataset. The university had an institutional research department that was overwhelmed with data requests that took days to answer. AI was an opportunity to make this self-service, but institutions were concerned about data privacy and security. To address that, the chatbot was scoped to return **aggregate data only**, with no individual student-level information exposed.
 
 Prompting became the primary way we defined system behavior, privacy, and guardrails. We created a data dictionary of approved educational terms and concepts to guide the LLM toward domain-specific language and reduce hallucinations. This was important because despite datasets having overlapping subject matter, there was nuance in how data could be used. Some tables contained PII and could not be used at all for a chatbot serving data to internal stakeholders.
 
@@ -140,7 +140,7 @@ response = llm.chat.completions.create(
 **Key takeaway:** System prompts and data dictionaries turn language into a controlled interface for data.
 
 
-## Core Pattern 2: Retrieval-Augmented Generation (RAG)
+## Core Pattern 2: Context Retrieval for Grounding (Database-Backed, RAG-Style)
 
 We extended the data dictionary into a live retrieval layer connected to institutional data systems.
 
@@ -153,7 +153,7 @@ We extended the data dictionary into a live retrieval layer connected to institu
 - Retrieves relevant institutional definitions and resources at query time
 - Constrains answers to known educational concepts
 
-Jasmine's hackathon project relied heavily on RAG to ground responses in a trusted educational context. Embeddings and retrieval pipelines helped guide the chatbot toward approved terminology, retrieve institutional definitions, and constrain answers to known concepts, especially important in a sensitive domain where accuracy matters.
+Jasmine's hackathon project relied on retrieval to ground responses in a trusted educational context, always at the aggregate level described in Pattern 1. In production, this kind of grounding is often implemented with embeddings and a vector store; under hackathon time constraints, we instead built a simplified, database-backed version of the same idea: a keyword check followed by a direct SQL lookup. Both approaches serve the same purpose, retrieving relevant, approved context before the LLM generates an answer, and both helped guide the chatbot toward approved terminology and constrain it to known concepts. We call this out explicitly here because it's a lighter-weight stand-in for full embedding-based RAG, not a complete RAG pipeline.
 
 ![RAG Pipeline Flow](core_pattern_rag_flow.png)
 
@@ -163,7 +163,10 @@ DATA_SOURCES = {
     "sql": "...Azure SQL / AAD auth..."
 }
 
-# Retrieval layer
+# Simplified retrieval layer: a keyword check + direct SQL lookup.
+# In production, this step would typically embed the query and
+# search a vector store; here we use a lighter database-backed
+# lookup to illustrate the same grounding principle.
 def fetch_metrics(query):
     if "retention" in query:
         return sql("""
@@ -189,14 +192,14 @@ def answer(query, model="gpt-4o"):
     return response, log
 ```
 
-**Key takeaway:** RAG connects the LLM to live institutional data systems and approved terminology.
+**Key takeaway:** Database-backed context retrieval, a simplified stand-in for full embedding-based RAG, connects the LLM to live institutional data systems and approved terminology.
 
 
 ## Core Pattern 3: Function Calling & Controlled Output
 
 Not every problem requires an LLM. For numeric forecasts, risk scoring, and trend analysis, the model should not invent results. It should request them from backend systems that can compute them deterministically.
 
-**Audrey's approach:** She used requirements gathering and journey mapping to understand the goals of her institutions. That research helped her design a predictive analytics dashboard that separated language understanding from analysis workflows, so the LLM acted as an interface layer rather than generating predictions directly.
+**Audrey's approach:** She used requirements gathering and journey mapping to understand the goals of her institutions. That research helped her design a predictive analytics dashboard that separated language understanding from analysis workflows, so the LLM acted as an interface layer rather than generating predictions directly. This dashboard was built for authorized advisor use, a different audience and access scope than Jasmine's aggregate-only chatbot, so the two systems apply different levels of data granularity appropriate to their users.
 
 In practice, the chatbot received structured requests, passed them to backend analytics, and then explained the results back to users in clear language. The dashboard provided:
 
@@ -223,7 +226,9 @@ from openai import OpenAI
 
 client = OpenAI()
 
-# Predictive model wrapped as an approved function
+# Predictive model wrapped as an approved function.
+# This function returns a school-level average, so the
+# question posed to the LLM should match that grain.
 def get_retention_risk(school_id):
     students = feature_store.get_students(school_id)
     risk_scores = retention_model.predict_proba(students)
@@ -250,7 +255,7 @@ tools = [
 ]
 
 user_question = (
-    "Which students are most at risk of not returning next semester?"
+    "What is the average retention risk for School_123 this semester?"
 )
 
 # Step 1: LLM determines what analytics are needed
@@ -297,64 +302,87 @@ This pattern ensured predictions were:
 - Computed separately from the LLM
 - Token usage was optimized
 
-**Key takeaway:** Separate language understanding from computation. Let the LLM be an orchestrator, not a calculator.
+**Key takeaway:** Separate language understanding from computation. Let the LLM be an orchestrator, not a calculator, and keep the question you send it aligned with the grain of data the function actually returns.
 
 
 ## Core Pattern 4: Simple Agent Loops
 
-While Core Pattern 3 focused on a single function call, many institutional questions in Audrey's project required chaining multiple tools together. This created a natural opportunity for lightweight agentic workflows, where the system could retrieve data, compute metrics, compare results, and generate explanations through a multi-step reasoning process.
+While Core Pattern 3 focused on a single function call, many institutional questions in Audrey's project required chaining multiple tools together, and the right tool to call next often depended on what the previous tool returned. This is what separates an agent from a script: instead of Python deciding the order of operations up front, the LLM sees each tool result and decides what to do next, including when it has enough information to stop and answer.
 
-Instead of a single query-response cycle, the system often needed to:
+A simple agent loop looks like this:
 
-- Retrieve a student cohort
-- Compute or fetch predictive metrics
-- Compare trends across groups
-- Generate a narrative summary
+1. Send the conversation, including any tool results so far, to the LLM
+2. If the LLM responds with a tool call, execute that tool in Python and append the result to the conversation
+3. Repeat until the LLM responds with a final answer instead of a tool call
 
-This created an iterative loop: Interpret, Retrieve, Compute, Refine, Explain
-
-In this setup, the LLM becomes an orchestrator that decides what to analyze next, while Python tools handle each step of computation. Predictive analytics becomes less of a model output and more of a tool-driven reasoning workflow over data.
+Consistent with the advisor-facing scope described in Pattern 3, this agent works with cohort-level and segment-level data rather than naming individual students.
 
 ```python
-# Available tools
 tools = [
-    get_student_cohort,
-    get_retention_risk,
-    compare_to_previous_term
+    get_student_cohort_tool,
+    get_retention_risk_tool,
+    compare_to_previous_term_tool
 ]
 
-query = """
-Which first-year students are most at risk,
-and is retention improving or declining?
-"""
+def execute_tool(name, arguments):
+    if name == "get_student_cohort":
+        return get_student_cohort(**arguments)
+    if name == "get_retention_risk":
+        return get_retention_risk(**arguments)
+    if name == "compare_to_previous_term":
+        return compare_to_previous_term(**arguments)
+    raise ValueError(f"Unknown tool: {name}")
 
-# Agent loop
-cohort = get_student_cohort(
-    year="first_year"
-)
+messages = [
+    {
+        "role": "system",
+        "content": (
+            "You are a retention analytics assistant for university advisors. "
+            "Use the available tools to gather whatever data you need before "
+            "answering. Report findings at the cohort or segment level only, "
+            "never by naming individual students."
+        )
+    },
+    {
+        "role": "user",
+        "content": (
+            "Which first-year student segments carry the most retention risk, "
+            "and is risk improving or declining relative to last term?"
+        )
+    }
+]
 
-risk_scores = get_retention_risk(
-    students=cohort
-)
+# Agent loop: the LLM decides which tool to call next, based on what
+# earlier tool calls returned, until it decides it has enough to answer.
+while True:
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+        tools=tools
+    )
+    choice = response.choices[0].message
 
-trend = compare_to_previous_term(
-    current=risk_scores
-)
+    if not choice.tool_calls:
+        print(choice.content)
+        break
 
-summary = llm.generate(
-    f"""
-    Cohort: {cohort}
-    Risk Scores: {risk_scores}
-    Trend Analysis: {trend}
+    messages.append(choice)
 
-    Summarize findings for university advisors.
-    """
-)
-
-print(summary)
+    for tool_call in choice.tool_calls:
+        result = execute_tool(
+            tool_call.function.name,
+            json.loads(tool_call.function.arguments)
+        )
+        messages.append({
+            "role": "tool",
+            "tool_call_id": tool_call.id,
+            "content": str(result)
+        })
 ```
 
-**Key takeaway:** The LLM orchestrates, tools compute. This iterative loop enables adaptive multi-step reasoning over data.
+In a run like this, the model might first call `get_student_cohort` to pull the first-year class, then call `get_retention_risk` on that cohort, then decide on its own whether `compare_to_previous_term` is actually needed to answer the question, or call it again with a narrower segment if the first risk scores looked uneven across groups. None of that branching is written in Python. It comes from the LLM reading each tool result and choosing the next step.
+
+**Key takeaway:** In a true agent loop, the model decides which tool to call next based on intermediate results, and the loop only ends when the model itself decides it has enough information to answer.
 
 
 ## LLM Guardrails We Deployed
@@ -409,8 +437,8 @@ Start with the simplest working approach before adding complexity. The path is s
 1. Start with a simple LLM API call
 2. Add structured outputs
 3. Add tool calling for focused, useful actions
-4. Add RAG when external knowledge matters
-5. Introduce agents only when the task genuinely requires them
+4. Add retrieval-based grounding when external knowledge matters
+5. Introduce agent loops only when the task genuinely requires the model to decide what to do next
 
 
 ## Conclusion
