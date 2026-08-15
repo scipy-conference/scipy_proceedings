@@ -8,11 +8,12 @@ project:
     'Ontologies: from CWM to modern reasoning engines - building better AI
     systems with deterministic reasoning capabilities'
   description: >-
-    This paper examines how ontology and rule-based reasoning systems can
-    provide stable identity, multi-hop inference, and auditable derivations
-    alongside large language models. It uses CWM as a historical case and
-    outlines a columnar, distributed design for deterministic reasoning in
-    agentic AI systems.
+    This paper examines how ontology and formal reasoning systems can provide
+    explicit state and replayable checks alongside large language models.
+    It uses CWM as a historical case, explains several reasoning methods,
+    proposes a reasoner-mediated propose-check-repair interaction pattern,
+    and discusses columnar, distributed, and GPU execution as possible
+    scaling directions for selected workloads.
   authors:
     - name: Shaurya Agarwal
       email: 3shauryashaurya@gmail.com
@@ -69,6 +70,9 @@ project:
         - cwmCheckSource
         - cwmCommandSource
         - cwmWhySource
+        - cwmLlynSource
+        - cwmFormulaSource
+        - cwmPychinkoSource
         - swapRepository
         - w3c2012owl2overview
         - w3c2014rdf11

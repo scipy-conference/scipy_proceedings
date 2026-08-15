@@ -410,7 +410,7 @@ So, we see that OOP can be used to implement an ontology tool or reasoner, but O
 The Closed World Machine (CWM) is a general-purpose Semantic Web data processor and forward-chaining reasoner written in Python [@bernerslee2009cwm; @bernersleeReasonerWeb].
 
 Its name does not mean that every CWM operation uses a closed-world assumption.
-CWM reads RDF or Notation3 (N3), applies rules, invokes built-in functions, can retrieve Web resources, and can produce records that explain derived results [@bernerslee2009cwm; @cwmCommandSource].
+CWM reads RDF or Notation3 (N3), applies rules, invokes built-in functions, can retrieve Web resources, and can produce records that explain derived results [@bernersleeReasonerWeb; @bernerslee2009cwm; @cwmCommandSource].
 
 CWM is useful here because one Python tool combines:
 
@@ -437,11 +437,11 @@ A simplified CWM workflow is:
 The CWM systems paper describes recursive template matching with two important optimizations:
 
 - It analyzes dependencies between rules so that rules can sometimes be evaluated in a useful order.
-- Within a rule body, it tries statement patterns in an order based on the size of the relevant index, preferring smaller candidate sets [@bernerslee2009cwm].
+- Within a rule body, it tries statement patterns in an order based on the size of the relevant index, preferring smaller candidate sets [@bernersleeReasonerWeb; @bernerslee2009cwm].
 
 ### Indexed statement matching
 
-CWM works by maintaining several indexes [@bernerslee2009cwm] - a walkthrough of these demonstrates the mechanics of reasoning and is helpful in building our conceptual model of a reasoner, also gives us intuition on how it would be helpful in a Agentic AI based stack:
+CWM works by maintaining several indexes [@bernersleeReasonerWeb] - a walkthrough of these demonstrates the mechanics of reasoning and is helpful in building our conceptual model of a reasoner, also gives us intuition on how it would be helpful in a Agentic AI based stack:
 
 - **Subject index:** finds statements in which a given term appears as the subject.
 - **Predicate index:** finds statements in which a given term appears as the predicate.
@@ -511,7 +511,7 @@ Using `?` to mean "any value", the seven useful subject-predicate-object pattern
 - **? P ?:** only the predicate is known.
 - **? ? O:** only the object is known.
 
-So in a more complex implementation we can create additional types of indexes (one for every '?') to answer more complicated queries faster.
+So when we think about building a more complex implementation that can respond efficiently to different types of queries - it is plain to see that building additional indexes (one for every '?') would allow us to answer more complicated queries faster.  
 
 The general mechanism that we discover is:
 
@@ -526,7 +526,9 @@ known term
 
 CWM can emit proof information, and `why.py` contains structures used to represent reasons for statements [@cwmWhySource].
 CWM also includes `check.py`, described as a simple proof checker [@cwmCheckSource].
-These source-supported features make CWM a useful historical example of rule execution with inspectable derivations.
+These source-supported features make CWM a useful historical example of rule execution with inspectable derivations.  
+   
+**NOTE**: The systems paper reports that later versions added more indexes to cover almost every subject-predicate-object wildcard pattern, trading faster matching for additional indexing cost [@bernersleeReasonerWeb]. Due to the word-limit of the paper (6K words or fewer), we are not providing a literal analysis of the other indices that actually show up in the CWM code or how these compare to RETE. CWM and RETE are not the same but CWM ported some of the efficiencies of RETE engine used in Pychinko into its own source-code [@bernersleeReasonerWeb].
 
 # Reasoning engines and what they do
 
@@ -918,6 +920,7 @@ python test_reasoner_loop.py
 ```
 
 These are teaching examples, not general-purpose reasoners or benchmarks.
+The files are located in the [author's main GitHub repository](https://github.com/shauryashaurya/The-Silmaril/tree/main/scipy-2026).
 
 # Limits and next steps
 
