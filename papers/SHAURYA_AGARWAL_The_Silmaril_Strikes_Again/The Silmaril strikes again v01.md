@@ -1,29 +1,16 @@
 # THE SILMARIL STRIKES AGAIN: building better AI systems with deterministic reasoning capabilities using Ontologies
 
 
-<<<<<<< HEAD
 # Abstract   
     
 Large language models now power many agentic systems.    
 Common interaction patterns include:    
-=======
-# Abstract
-
-Large language models now power many agentic systems.
-Common interaction patterns include:
-
->>>>>>> bd56e59bcad97ee7582ac4ed43fbc5e4a6c028d5
 * plan first, then execute [@wang2023plansolve]
 * reason and act in turns, as in ReAct [@yao2023react]
 * reflect on feedback and try again, as in Reflexion [@shinn2023reflexion]
 * call external tools and APIs [@schick2023toolformer]
 * ...and more
-<<<<<<< HEAD
 These patterns make language models more useful as agents. 
-=======
-
-These patterns make language models more useful as agents.
->>>>>>> bd56e59bcad97ee7582ac4ed43fbc5e4a6c028d5
 But the agent is still largely driven by model-generated state, reasoning, and decisions.
 That creates four pressures:
 * **Grounding:** the system needs stable identities for entities and typed relations between them.
