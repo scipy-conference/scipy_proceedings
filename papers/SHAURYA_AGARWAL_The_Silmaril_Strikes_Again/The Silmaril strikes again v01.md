@@ -3,10 +3,10 @@
 **SHAURYA AGARWAL**
 
 
-# Abstract   
-    
-Large language models now power many agentic systems.    
-Common interaction patterns include:    
+# Abstract
+
+Large language models now power many agentic systems.
+Common interaction patterns include:
 
 * plan first, then execute [@wang2023plansolve]
 * reason and act in turns, as in ReAct [@yao2023react]
@@ -14,7 +14,7 @@ Common interaction patterns include:
 * call external tools and APIs [@schick2023toolformer]
 * ...and more
 
-These patterns make language models more useful as agents. 
+These patterns make language models more useful as agents.
 But the agent is still largely driven by model-generated state, reasoning, and decisions.
 
 That creates four pressures:
