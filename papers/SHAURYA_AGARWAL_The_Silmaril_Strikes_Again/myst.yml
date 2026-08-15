@@ -9,11 +9,11 @@ project:
     systems with deterministic reasoning capabilities'
   description: >-
     This paper examines how ontology and formal reasoning systems can provide
-    explicit state and replayable checks alongside large language models.
-    It uses CWM as a historical case, explains several reasoning methods,
-    proposes a reasoner-mediated propose-check-repair interaction pattern,
-    and discusses columnar, distributed, and GPU execution as possible
-    scaling directions for selected workloads.
+    explicit state and replayable checks alongside large language models. It
+    uses CWM as a historical case, explains several reasoning methods, proposes
+    a reasoner-mediated propose-check-repair interaction pattern, and discusses
+    columnar, distributed, and GPU execution as possible scaling directions for
+    selected workloads.
   authors:
     - name: Shaurya Agarwal
       email: 3shauryashaurya@gmail.com
