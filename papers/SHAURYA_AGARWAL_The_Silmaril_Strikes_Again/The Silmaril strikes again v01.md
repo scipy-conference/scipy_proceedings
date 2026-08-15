@@ -511,7 +511,7 @@ Using `?` to mean "any value", the seven useful subject-predicate-object pattern
 - **? P ?:** only the predicate is known.
 - **? ? O:** only the object is known.
 
-So when we think about building a more complex implementation that can respond efficiently to different types of queries - it is plain to see that building additional indexes (one for every '?') would allow us to answer more complicated queries faster.  
+So when we think about building a more complex implementation that can respond efficiently to different types of queries - it is plain to see that building additional indexes (one for every '?') would allow us to answer more complicated queries faster.
 
 The general mechanism that we discover is:
 
@@ -526,8 +526,8 @@ known term
 
 CWM can emit proof information, and `why.py` contains structures used to represent reasons for statements [@cwmWhySource].
 CWM also includes `check.py`, described as a simple proof checker [@cwmCheckSource].
-These source-supported features make CWM a useful historical example of rule execution with inspectable derivations.  
-   
+These source-supported features make CWM a useful historical example of rule execution with inspectable derivations.
+
 **NOTE**: The systems paper reports that later versions added more indexes to cover almost every subject-predicate-object wildcard pattern, trading faster matching for additional indexing cost [@bernersleeReasonerWeb]. Due to the word-limit of the paper (6K words or fewer), we are not providing a literal analysis of the other indices that actually show up in the CWM code or how these compare to RETE. CWM and RETE are not the same but CWM ported some of the efficiencies of RETE engine used in Pychinko into its own source-code [@bernersleeReasonerWeb].
 
 # Reasoning engines and what they do
