@@ -1,0 +1,44 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-shaurya_agarwal
+  title: VOGON POETRY
+  subtitle: A concept framework for recurring data engineering tradeoffs in artificial intelligence systems
+  description: >-
+    A curated framework that organizes recurring data engineering tradeoffs into 8 families and 18 instincts.
+    The paper connects established mechanisms across data representation, execution, distribution, state, operations, policy, cost, retrieval, and training-data delivery.
+  authors:
+    - name: Shaurya Agarwal
+      email: 3shauryashaurya@gmail.com
+      affiliations:
+        - INDEPENDENT
+      corresponding: true
+  keywords:
+    - data engineering
+    - database systems
+    - distributed systems
+    - machine learning systems
+    - data architecture
+  abbreviations:
+    AI: artificial intelligence
+    ARIES: Algorithms for Recovery and Isolation Exploiting Semantics
+    BM25: Best Matching 25
+    SQL: Structured Query Language
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - boncz2005
+        - python_docs
+        - arrow_spec
+        - parquet_spec
+        - iceberg_spec
+        - substrait_spec
+        - openlineage_spec
+        - shauryavogonscipy2026
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: VOGON-POETRY-v01.md
+      output: full_text.pdf
