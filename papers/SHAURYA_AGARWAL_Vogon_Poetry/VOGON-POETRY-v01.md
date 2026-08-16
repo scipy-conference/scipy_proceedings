@@ -1,5 +1,5 @@
 ---
-title: VOGON POETRY   
+title: VOGON POETRY
 abstract: |
   Data engineering tools change quickly, but many design decisions still depend on recurring system constraints.
   Those constraints include data representation, query execution, distribution, state, operations, policy, cost, retrieval, and training-data delivery.
@@ -10,56 +10,56 @@ abstract: |
   Examples include file layout, shuffle cost, recovery, partitioning, data contracts, retrieval, and accelerator input pipelines.
   The paper uses small Python examples to make selected mechanisms executable and cites established research or specifications for the technical claims.
   It does not evaluate the earlier hypothesis that concept-first teaching transfers better than tool-first teaching.
----  
-      
+---
+
 ## Introduction
-      
+
 Data engineers regularly move between systems whose interfaces differ while the underlying engineering constraints remain recognizable.
 * A columnar file still trades record locality for efficient scans.
 * A distributed join still depends on placement and movement.
 * A replayable pipeline still depends on state and identity even when product names change.
 These mechanisms have long research histories in database systems, distributed processing, streaming, information retrieval, and machine learning systems.
 Representative references are cited throughout [@codd1970; @dean2008; @akidau2015; @sculley2015].
-    
+
 "Vogon Poetry" is a framework for organizing these recurring mechanisms.
 It uses the term "instinct" for a short engineering mnemonic that helps identify a recurring tradeoff.
 An instinct is not a universal law or a mathematical invariant.
 The term "family" groups instincts that operate at a similar layer of a data system.
-    
+
 The framework contains 8 families, 18 instincts, and 80 'ideas' or 'concepts'.
 The companion concept viewer publishes the full concept set and its typed relationships [@shauryavogonscipy2026].
 This paper is self-contained and does not require the viewer.
 The paper explains all 18 instincts and uses representative concepts to show how a decision in one family can affect another.
-   
+
 The main contribution is the **dependency-oriented organization** of these concepts.
 For example, choosing a physical layout can affect scan cost, compression, network transfer, partition pruning, cloud cost, and the shape of training-data access.
 When architecting AI systems and data-intensive applications, these topics are usually discussed in isolation. Treating them as independent definitions hides the dependencies between the decisions and blocks a coherent discussion of the overall solution. This framework makes those dependencies explicit, without claiming a new implementation of the underlying mechanisms.
-   
+
 The paper also uses a small canonical banking and reinsurance schema so that examples refer to the same entities throughout.
 The examples are illustrative and use synthetic rows rather than external data.
 No benchmark results, statistical analysis, or empirical claims about teaching effectiveness are reported.
-   
+
 ## Scope and method
-  
+
 The framework is a curation of concepts selected for practical recurrence across data-system design.
 The current work did not use a systematic literature-search protocol, so it should not be read as a systematic review.
 The references are used to ground the technical mechanisms and to connect the framework to established research and specifications.
-   
+
 The paper follows three selection rules.
 * First, a concept must describe a mechanism or tradeoff that appears across more than one tool or implementation.
 * Second, it must affect a design decision involving correctness, latency, resource use, operability, policy, cost, retrieval, or training-data delivery.
 * Third, the concept must connect naturally to at least one other part of the framework.
-  
+
 The paper limits named software to cases where a concrete implementation clarifies a mechanism.
 It otherwise uses mechanism-level language.
 Acronyms are expanded at first use where they appear in the prose.
-    
-The computational examples are deliberately small.  
+
+The computational examples are deliberately small.
 They are used to demonstrate representation, replay safety, and batch loading rather than to report performance.
 The executable examples use Python [@python_docs].
 The Python examples in this revision were executed during preparation of the manuscript.
 No external dataset is required to reproduce them.
-    
+
 ## Related work
 
 Relational data management established a separation between logical data models and physical implementation [@codd1970].
@@ -462,7 +462,7 @@ These examples show why the framework is organized around dependencies rather th
 The individual mechanisms are established, but their interactions determine the behavior of a deployed system.
 
 ## Verification, availability, and limitations
-   
+
 The paper does not analyze an external dataset.
 All example rows are synthetic, so there is no external data source or data license to reproduce.
 
