@@ -37,3 +37,10 @@ project:
       template: https://github.com/curvenote-templates/scipy.git
       article: main.tex
       output: full_text.pdf
+  downloads:
+    - title: Download PDF
+      url: full_text.pdf
+      static: true
+    - title: Download supplementary notebook
+      url: numoptimization.ipynb
+      static: true

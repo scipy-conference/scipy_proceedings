@@ -18,7 +18,7 @@ However, optimization routines can fail in subtle ways: a solution may appear ma
 
 This paper investigates these failures at the workflow level. Rather than proposing new algorithms, it studies how existing SciPy-based pipelines fail and how those failures can be diagnosed through residual scale, gradient norm, step history, condition number, perturbation sensitivity, and consistency across algorithmic choices. The central thesis is that reliability often depends more strongly on conditioning, preprocessing, and numerical auditing than on optimizer choice alone.
 
-The paper makes three practical contributions. First, it organizes common optimizer failures into a taxonomy of geometric, arithmetic, differential, and structural instability. Second, it presents a large-scale empirical study of SciPy optimizers on the UCI HIGGS dataset, emphasizing preprocessing, Hessian conditioning, and computational cost. Third, it synthesizes these observations into a workflow-oriented auditing protocol for researchers who use optimization inside larger scientific workflows.
+The paper makes three practical contributions. First, it organizes common optimizer failures into a taxonomy of geometric, arithmetic, differential, and structural instability. Second, it presents a large-scale empirical study of SciPy optimizers on the University of California, Irvine (UCI) HIGGS dataset, emphasizing preprocessing, Hessian conditioning, and computational cost. Third, it synthesizes these observations into a workflow-oriented auditing protocol for researchers who use optimization inside larger scientific workflows.
 
 The discussion complements classical numerical analysis texts and software documentation rather than replacing them. References such as Nocedal and Wright~\cite{nocedal} and Higham~\cite{higham} provide rigorous treatments of conditioning, floating-point arithmetic, and convergence theory. The present work addresses a different gap: the distance between algorithmic theory and the practical behavior of end-to-end scientific Python workflows. Standard references explain what can go wrong in principle, but they do not show how reliably these failures appear across randomized runs in SciPy pipelines or package the resulting checks as a staged auditing protocol for working researchers. The contribution here is therefore organizational and empirical rather than theoretical: it connects instability mechanisms to observable diagnostic signatures, quantifies their frequency under controlled stress conditions, and assembles the guidance into a reproducible protocol targeted at the scientific Python ecosystem.
 
@@ -59,7 +59,7 @@ Initialization sensitivity & Different runs give different optima & Use multi-st
 
 Conditioning measures how strongly a numerical problem amplifies perturbations. In optimization, it determines whether small errors in data, arithmetic, or intermediate calculations remain harmless or become large changes in the returned solution.
 
-The condition number of a matrix $A$ is defined as:
+For a nonsingular matrix $A$, the normwise condition number is defined as~\cite{golub,trefethen}:
 
 \begin{equation}
 \kappa(A) = \|A\| \cdot \|A^{-1}\|
@@ -105,7 +105,7 @@ These numerical symptoms matter because they directly affect scientific interpre
 
 Polynomial regression using Vandermonde feature construction provides a controlled example of geometric instability in scientific optimization workflows. As polynomial degree increases, the resulting design matrix becomes progressively ill-conditioned, amplifying sensitivity to perturbation and destabilizing least-squares estimation.
 
-To quantify this effect, Vandermonde matrices were constructed across 100 random uniformly sampled grids on the interval $[0,1]$. Table~\ref{tab:vandermonde_conditioning} reports the resulting condition-number statistics as polynomial degree increases.
+To quantify this effect, Vandermonde matrices were constructed across 100 random uniformly sampled grids on the interval $[0,1]$, with 100 sample points in each grid. Table~\ref{tab:vandermonde_conditioning} reports the resulting condition-number statistics as polynomial degree increases.
 
 The results demonstrate rapid instability amplification under increasing polynomial complexity. By degree 20, condition numbers frequently exceeded $10^{15}$, entering regimes associated with catastrophic numerical sensitivity and effectively singular optimization geometry.
 
@@ -190,7 +190,7 @@ Forward finite differences are commonly used:
 f'(x) \approx \frac{f(x+h)-f(x)}{h}
 \end{equation}
 
-Choosing a stable step size $h$ is difficult because the approximation must balance two competing error sources. SciPy finite-difference settings are often reasonable for well-scaled variables, but they can fail when parameters are extremely small, extremely large, or measured in incompatible units.
+Choosing a stable step size $h$ is difficult because the approximation must balance two competing error sources~\cite{press}. SciPy finite-difference settings are often reasonable for well-scaled variables, but they can fail when parameters are extremely small, extremely large, or measured in incompatible units.
 
 \subsection{Roundoff Error}
 
@@ -338,7 +338,7 @@ The empirical study is not intended to establish universal optimizer rankings. I
 
 \subsection{UCI HIGGS Dataset}
 
-The main experiment uses the HIGGS dataset (UCI Machine Learning Repository dataset 280, DOI: \href{https://doi.org/10.24432/C5V312}{10.24432/C5V312})~\cite{higgs}. From the repository's \texttt{HIGGS.csv.gz} release, the study samples 250,000 of the 11,000,000 simulated events, each containing 28 real-valued physics features and a binary classification target. The optimization problem is logistic regression, solved through SciPy optimizers across 100 randomized train/test splits. The complete HIGGS pipeline and instability stress test are available in a \href{https://colab.research.google.com/drive/1fyLZOFQgY3BjOMfyGLsHgvY4hCZUUPW2?usp=sharing}{reproducible Google Colab notebook}. Logistic regression was selected because it provides a smooth and interpretable optimization landscape whose conditioning behavior can be analyzed directly without introducing deep-learning-specific optimizer dynamics. This setting combines a real scientific dataset, moderate-dimensional feature geometry, and a smooth objective whose Hessian conditioning can be measured directly.
+The main experiment uses the HIGGS dataset (UCI Machine Learning Repository dataset 280, DOI: \href{https://doi.org/10.24432/C5V312}{10.24432/C5V312})~\cite{higgs}. From the repository's \texttt{HIGGS.csv.gz} release, the study samples 250,000 of the 11,000,000 simulated events, each containing 28 real-valued physics features and a binary classification target. The optimization problem is logistic regression, solved through SciPy optimizers across 100 randomized train/test splits. The complete HIGGS pipeline and instability stress test are archived with the paper as a \href{numoptimization.ipynb}{supplementary Jupyter notebook}. Logistic regression was selected because it provides a smooth and interpretable optimization landscape whose conditioning behavior can be analyzed directly without introducing deep-learning-specific optimizer dynamics~\cite{boyd}. This setting combines a real scientific dataset, moderate-dimensional feature geometry, and a smooth objective whose Hessian conditioning can be measured directly.
 
 The evaluated methods are BFGS, CG, L-BFGS-B, and Powell. Powell was retained because derivative-free optimization remains common in scientific workflows where stable analytic derivatives are unavailable. Each method is run with and without feature scaling so that optimizer behavior can be compared under different conditioning regimes. The reported metrics include success rate, test log loss, test accuracy, Hessian condition number, function evaluations, iterations, and runtime. These HIGGS results are the core empirical evidence in the paper; the earlier analytic examples serve only to explain mechanisms.
 
