@@ -1,5 +1,38 @@
 \begin{abstract}
-Scientific datasets often contain subtle anomalies caused by sensor faults, experimental drift, measurement noise, rare events, or abnormal signal behavior. In many scientific workflows, anomaly detection must be not only accurate but also interpretable, because researchers need to understand whether unusual observations reflect meaningful phenomena, instrument error, or changes in experimental conditions. This paper presents a SciPy-based anomaly detection workflow using statistical and signal-processing tools. Rather than evaluating the workflow only on a single benchmark dataset, we construct a controlled multi-domain experiment using six scientific signal domains: EEG-like signals, environmental sensor signals, spectroscopy-like signals, vibration signals, astronomical photometry-like signals, and fluid-sensor signals. Five controlled anomaly mechanisms are injected into these signals: spike, drift, dropout, oscillation disturbance, and distribution shift. SciPy statistical, signal-processing, residual, spectral, local-window, and complexity features are extracted from every signal. The experiment evaluates binary anomaly detection, anomaly-mechanism classification, relative feature-group signatures, and rule-based diagnosis. In the controlled experiment, SciPy-derived features achieved perfect binary anomaly detection, but anomaly-mechanism classification was substantially harder, with the best SciPy-feature model achieving macro-F1 = 0.4578 across five anomaly types. A hand-written rule-based diagnosis system using relative feature-group signatures achieved only 0.1993 accuracy, approximately chance. This shows that detection performance does not imply diagnostic interpretability. To test whether the workflow transfers beyond controlled injection, we also evaluate it on the UCR Time Series Anomaly Archive \citep{wu2021ucr}. Because the controlled benchmark provides known anomaly labels while the UCR archive provides only normal training regions, the two experiments evaluate complementary supervised and unsupervised settings. Across 56 evaluated real anomaly files, the best SciPy method achieved mean point-adjusted F1 = 0.2884, ROC-AUC = 0.7758, PR-AUC = 0.1801, and event recall = 0.4107. These results show that SciPy features provide a useful and transparent anomaly-detection baseline, but also reveal the limits of global feature summaries: real anomaly detection remains difficult, and mechanism diagnosis requires more than simple feature-group explanations.
+Scientific datasets often contain subtle anomalies caused by sensor faults,
+experimental drift, measurement noise, rare events, or abnormal signal behavior.
+In many scientific workflows, anomaly detection must be not only accurate but also
+interpretable, because researchers need to understand whether unusual observations
+reflect meaningful phenomena, instrument error, or changes in experimental
+conditions. This paper presents a SciPy-based anomaly detection workflow using
+statistical and signal-processing tools. Rather than evaluating the workflow only
+on a single benchmark dataset, we construct a controlled multi-domain experiment
+using six scientific signal domains: electroencephalography (EEG)-like signals,
+environmental sensor signals, spectroscopy-like signals, vibration signals,
+astronomical photometry-like signals, and fluid-sensor signals. Five controlled
+anomaly mechanisms are injected into these signals: spike, drift, dropout,
+oscillation disturbance, and distribution shift. SciPy statistical,
+signal-processing, residual, spectral, local-window, and complexity features are
+extracted from every signal. The experiment evaluates binary anomaly detection,
+anomaly-mechanism classification, relative feature-group signatures, and
+rule-based diagnosis. In the controlled experiment, SciPy-derived features
+achieved perfect binary anomaly detection, but anomaly-mechanism classification
+was substantially harder, with the best SciPy-feature model achieving macro-F1 =
+0.4578 across five anomaly types. A hand-written rule-based diagnosis system using
+relative feature-group signatures achieved only 0.1993 accuracy, approximately
+chance. This shows that detection performance does not imply diagnostic
+interpretability. To test whether the workflow transfers beyond controlled
+injection, we also evaluate it on the University of California, Riverside (UCR)
+Time Series Anomaly Archive \citep{wu2021ucr}. Because the controlled benchmark
+provides known anomaly labels while the UCR archive provides only normal training
+regions, the two experiments evaluate complementary supervised and unsupervised
+settings. Across 56 evaluated real anomaly files, the best SciPy method achieved
+mean point-adjusted F1 = 0.2884, receiver operating characteristic area under the
+curve (ROC-AUC) = 0.7758, precision-recall area under the curve (PR-AUC) = 0.1801,
+and event detection rate = 0.4107. These results show that SciPy features provide a useful
+and transparent anomaly-detection baseline, but also reveal the limits of global
+feature summaries: real anomaly detection remains difficult, and mechanism
+diagnosis requires more than simple feature-group explanations.
 \end{abstract}
 
 
@@ -44,7 +77,7 @@ For this reason, anomaly detection in scientific workflows requires more than hi
 
 \subsection{SciPy as an Anomaly Detection Toolkit}
 
-SciPy provides many tools that are directly useful for anomaly detection. Statistical features from \texttt{scipy.stats} can summarize distributional shape, spread, skewness, kurtosis, entropy, and deviations from normality. Signal-processing features from \texttt{scipy.signal} can detect peaks, estimate local trends, compute residuals, and analyze spectral content. For example, the Savitzky Golay filter can be used to estimate a smooth local signal trend, while Welch's method estimates power spectral density by averaging periodograms over segments \citep{welch1967use}.
+SciPy provides many tools that are directly useful for anomaly detection. Statistical features from \texttt{scipy.stats} can summarize distributional shape, spread, skewness, kurtosis, entropy, and deviations from normality. Signal-processing features from \texttt{scipy.signal} can detect peaks, estimate local trends, compute residuals, and analyze spectral content. For example, the Savitzky-Golay filter can be used to estimate a smooth local signal trend, while Welch's method estimates power spectral density by averaging periodograms over segments \citep{welch1967use}.
 
 These features are attractive for scientific workflows because they are named, reproducible, computationally lightweight, and connected to interpretable signal properties. However, this does not automatically make them scientifically interpretable. A feature is not useful merely because it has a name. Interpretability must be operationalized: the feature or feature group should support a diagnostic conclusion about the anomaly mechanism.
 
@@ -59,7 +92,7 @@ This paper therefore evaluates both tasks. The binary task asks whether a signal
 
 Time-series anomaly detection has a long history in statistical process monitoring. Classical approaches include threshold-based monitoring, Shewhart control charts, cumulative sum methods (CUSUM), and exponentially weighted moving average methods. These approaches are attractive because they are simple, interpretable, and computationally lightweight, but they often require assumptions about stationarity, distributional behavior, or known control limits.
 
-Unsupervised machine-learning methods provide a more flexible alternative when labeled anomalies are rare. Isolation Forest is a widely used representative method that isolates anomalies through randomized partitioning rather than explicitly modeling normal density \citep{liu2008isolation}. One-class methods such as One-Class SVM similarly learn a boundary around normal data and are commonly used when only normal training samples are available. These methods are relevant to the UCR validation setting in this paper, where training regions are treated as normal and anomaly labels are used only for evaluation.
+Unsupervised machine-learning methods provide a more flexible alternative when labeled anomalies are rare. Isolation Forest is a widely used representative method that isolates anomalies through randomized partitioning rather than explicitly modeling normal density \citep{liu2008isolation}. One-class methods such as One-Class SVM similarly learn a boundary around normal data and are commonly used when only normal training samples are available \citep{scholkopf2001estimating}. These methods are relevant to the UCR validation setting in this paper, where training regions are treated as normal and anomaly labels are used only for evaluation.
 
 Deep learning methods have also been widely studied for time-series anomaly detection. LSTM encoder-decoder models learn to reconstruct normal temporal behavior and use reconstruction error as an anomaly score \citep{malhotra2016lstm}. More recent models such as THOC use temporal hierarchical one-class learning to capture multi-scale temporal structure \citep{shen2020thoc}, while transformer-based models such as TranAD use attention mechanisms for multivariate time-series anomaly detection and diagnosis \citep{tuli2022tranad}. These models can be powerful, but they are often more difficult to inspect and may require more data, tuning, and computational resources than classical feature-based methods.
 
@@ -126,11 +159,33 @@ and four noise levels:
 \[
 1.0,\; 2.0,\; 3.0,\; 5.0.
 \]
-For each setting, 20 repeats are generated. Additional clean samples are generated to reduce class imbalance. The final controlled dataset contains 33,600 signals, each with 512 time points. The extracted feature matrix contains 56 SciPy-derived features.
+For each anomalous setting, 20 repeats are generated, giving \(6 \times 5 \times 7 \times 4 \times 20 = 16{,}800\) anomalous traces. We independently generate 16,800 clean traces, balanced across the six domains and four noise levels. The final controlled dataset therefore contains 33,600 signals (50\% clean and 50\% anomalous), each with 512 time points. The extracted feature matrix contains the 56 SciPy-derived features listed in Table~\ref{tab:feature-list}.
 
 \subsection{SciPy Feature Extraction}
 
 For each signal \(x = [x_1, x_2, \ldots, x_T]\), we extract statistical, signal-processing, spectral, residual, local-window, and complexity features.
+
+For the controlled 512-point signals, Savitzky-Golay smoothing used a 51-sample window, polynomial order 3, and \texttt{mode=interp}. Global Welch power spectral density estimates used \texttt{nperseg=128}; the local spectral features divided each signal into 128-sample windows with a 32-sample step and used \texttt{nperseg=64} within each window. The code left \texttt{noverlap} unspecified, so SciPy's default half-segment overlap gave 64 samples for the global estimates and 32 samples for the local estimates. For the 128-point windows in the UCR validation, the corresponding settings were a 31-sample Savitzky-Golay window with polynomial order 3 and \texttt{mode=interp}, and Welch \texttt{nperseg=64} with the default 32-sample overlap.
+
+Listing~\ref{lst:savgol-residual} shows the core residual calculation used for the controlled signals.
+
+\begin{lstlisting}[label=lst:savgol-residual,language=Python,caption=Savitzky-Golay residual features.]
+smooth = signal.savgol_filter(
+    x, window_length=51, polyorder=3, mode="interp"
+)
+residual = x - smooth
+residual_energy = np.mean(residual ** 2)
+residual_abs_mean = np.mean(np.abs(residual))
+residual_max = np.max(np.abs(residual))
+\end{lstlisting}
+
+Listing~\ref{lst:welch-bandpower} shows the global Welch bandpower calculation. The notebook uses the same power spectral density for the spectral entropy, dominant-frequency, and high-frequency-ratio features.
+
+\begin{lstlisting}[label=lst:welch-bandpower,language=Python,caption=Welch bandpower feature.]
+freqs, psd = signal.welch(x, fs=fs, nperseg=128)
+mask = (freqs >= low) & (freqs <= high)
+bandpower = simpson(psd[mask], x=freqs[mask])
+\end{lstlisting}
 
 \subsubsection{Statistical Features}
 
@@ -178,7 +233,7 @@ These features are intended to capture sharp transient events such as spikes.
 
 \subsubsection{Trend and Residual Features}
 
-Trend-residual features are computed using Savitzky Golay smoothing. The signal is smoothed, and residuals are computed as the difference between the original signal and the smoothed trend. Features include:
+Trend-residual features are computed using Savitzky-Golay smoothing. The signal is smoothed, and residuals are computed as the difference between the original signal and the smoothed trend. Features include:
 
 \begin{itemize}
     \item residual energy;
@@ -230,6 +285,51 @@ Complexity features include:
 
 These features summarize temporal variability and signal complexity.
 
+\begin{table*}[htbp]
+\centering
+\caption{The 56 extracted SciPy-derived features. Names match the notebook output columns.}
+\label{tab:feature-list}
+\small
+\begin{tabular}{p{0.20\textwidth}p{0.74\textwidth}}
+\toprule
+\textbf{Category} & \textbf{Feature names} \\
+\midrule
+Statistical distribution &
+\texttt{mean}, \texttt{std}, \texttt{variance}, \texttt{min}, \texttt{max},
+\texttt{range}, \texttt{median}, \texttt{iqr}, \texttt{mad},
+\texttt{skewness}, \texttt{kurtosis}, \texttt{hist\_entropy},
+\texttt{normaltest\_stat}, \texttt{normaltest\_p},
+\texttt{shapiro\_stat}, \texttt{shapiro\_p} \\
+Amplitude and energy &
+\texttt{abs\_mean}, \texttt{rms}, \texttt{energy}, \texttt{line\_length} \\
+Peak and transient &
+\texttt{peak\_count}, \texttt{peak\_density},
+\texttt{mean\_peak\_prominence}, \texttt{max\_peak\_prominence},
+\texttt{mean\_peak\_width}, \texttt{derivative\_max},
+\texttt{second\_derivative\_max} \\
+Trend and residual &
+\texttt{savgol\_residual\_energy}, \texttt{savgol\_residual\_abs\_mean},
+\texttt{savgol\_residual\_max}, \texttt{rolling\_mean\_max\_change} \\
+Dropout and flatness &
+\texttt{rolling\_var\_min}, \texttt{rolling\_var\_max},
+\texttt{rolling\_var\_ratio}, \texttt{flatness\_fraction} \\
+Spectral frequency &
+\texttt{delta\_power}, \texttt{theta\_power}, \texttt{alpha\_power},
+\texttt{beta\_power}, \texttt{gamma\_power}, \texttt{delta\_ratio},
+\texttt{theta\_ratio}, \texttt{alpha\_ratio}, \texttt{beta\_ratio},
+\texttt{gamma\_ratio}, \texttt{spectral\_entropy},
+\texttt{dominant\_frequency}, \texttt{high\_frequency\_ratio},
+\texttt{local\_high\_freq\_ratio\_max},
+\texttt{local\_high\_freq\_ratio\_std},
+\texttt{local\_spectral\_entropy\_min},
+\texttt{local\_spectral\_entropy\_std} \\
+Complexity &
+\texttt{zero\_crossing\_rate}, \texttt{hjorth\_activity},
+\texttt{hjorth\_mobility}, \texttt{hjorth\_complexity} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \subsection{Relative Feature-Group Signatures}
 
 To test interpretability, features are grouped into seven feature groups:
@@ -244,7 +344,9 @@ To test interpretability, features are grouped into seven feature groups:
     \item complexity.
 \end{itemize}
 
-For each domain, clean signals define a robust baseline. For each feature, we compute a robust absolute z-score relative to the clean baseline of the same domain. Extreme z-scores are clipped to reduce domination by large-magnitude features. Within each feature group, the median clipped z-score is used as the group response. The group responses are then normalized so that they sum to one. This produces a relative feature-group signature for each sample.
+For each domain, clean signals define a robust baseline. For each feature, we compute a robust absolute z-score relative to the clean baseline of the same domain, using the domain-specific median and \(1.4826\) times the median absolute deviation. Absolute z-scores are clipped at 8.0 to reduce domination by large-magnitude features. Within each feature group, the median clipped z-score is used as the group response. The group responses are then normalized so that they sum to one. This produces a relative feature-group signature for each sample. Of the 56 extracted features, 53 enter these groups; \texttt{normaltest\_p}, \texttt{shapiro\_p}, and \texttt{rolling\_var\_max} are retained in the full feature vectors but excluded from the relative signatures.
+
+As implemented in the reported experiment, the domain baselines are estimated once from all 16,800 clean traces before the train-test split, rather than from the training partition alone. Thus test-set clean traces contribute to the robust centering and scaling used by the relative-signature representation; the full-feature and raw-signal representations do not use this baseline transformation.
 
 The goal is to test whether anomaly mechanisms map to distinct relative feature-group patterns.
 
@@ -258,7 +360,39 @@ We evaluate three representations:
     \item raw time-domain signals.
 \end{itemize}
 
-For binary anomaly detection, we evaluate Logistic Regression, SVM-RBF, Random Forest, and Extra Trees models where applicable. For anomaly-type classification, we compare SciPy-feature models, relative-signature models, and raw-signal models.
+For binary anomaly detection, we evaluate Logistic Regression, SVM-RBF, Random Forest, and Extra Trees models where applicable. For anomaly-type classification, we compare SciPy-feature models, relative-signature models, and raw-signal models. Both tasks use a row-level, stratified random split with 75\% of rows for training and 25\% for testing (random seed 42). The split is not grouped by repeat or domain. Only the separate leave-one-domain-out (LODO) evaluation holds out complete domains.
+
+Table~\ref{tab:model-hyperparameters} records the non-default model settings used in the controlled and UCR experiments. Parameters not shown retain their scikit-learn defaults. Logistic Regression, SVM-RBF, and One-Class SVM inputs are standardized; the UCR feature and raw-window inputs are robustly standardized from their normal training windows.
+
+\begin{table*}[htbp]
+\centering
+\caption{Model hyperparameters used in the reported experiments.}
+\label{tab:model-hyperparameters}
+\small
+\begin{tabular}{p{0.20\textwidth}p{0.18\textwidth}p{0.54\textwidth}}
+\toprule
+\textbf{Model} & \textbf{Use} & \textbf{Hyperparameters} \\
+\midrule
+Logistic Regression & Controlled &
+\texttt{max\_iter=3000}, \texttt{class\_weight=balanced}, seed 42 \\
+SVM-RBF & Controlled binary &
+RBF kernel, \(C=1\), \texttt{gamma=scale}, \texttt{probability=True},
+\texttt{class\_weight=balanced}, seed 42 \\
+Random Forest & Controlled &
+300 trees for binary detection; 400 trees for anomaly-type classification;
+\texttt{class\_weight=balanced}, seed 42, all CPU cores \\
+Extra Trees & Controlled &
+300 trees for binary detection; 400 trees for anomaly-type classification and
+LODO; \texttt{class\_weight=balanced}, seed 42, all CPU cores \\
+Isolation Forest & UCR &
+200 trees, \texttt{contamination=0.02}, seed 42, all CPU cores; decision
+threshold is the 99th percentile of normal-training anomaly scores \\
+One-Class SVM & UCR &
+RBF kernel, \texttt{gamma=scale}, \(\nu=0.02\); decision threshold is the 99th
+percentile of normal-training anomaly scores \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 The main evaluation metrics are balanced accuracy, precision, recall, F1-score, ROC-AUC, and PR-AUC for binary anomaly detection. For anomaly-type classification, we report accuracy, balanced accuracy, macro-F1, and weighted-F1.
 
@@ -295,17 +429,17 @@ For this reason, we do not interpret the binary detection result as evidence of 
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Model} & \textbf{Accuracy} & \textbf{Balanced Acc.} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{PR-AUC} \\
+\textbf{Model} & \textbf{Balanced Acc.} & \textbf{Accuracy} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{PR-AUC} \\
 \midrule
 SciPy Features + Random Forest & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} \\
 Relative Signatures + Logistic Regression & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} & \textbf{1.0000} \\
 SciPy Features + Extra Trees & 0.9995 & 0.9995 & 0.9995 & 1.0000 & 1.0000 \\
-SciPy Features + SVM-RBF & 0.9190 & 0.8490 & 0.9568 & 0.9378 & 0.9761 \\
-SciPy Features + Logistic Regression & 0.7975 & 0.7825 & 0.8846 & 0.8729 & 0.9279 \\
-Raw Signal + Extra Trees & 0.7060 & 0.7060 & 0.6632 & 0.7993 & 0.8198 \\
+SciPy Features + SVM-RBF & 0.9087 & 0.9087 & 0.9053 & 0.9721 & 0.9761 \\
+SciPy Features + Logistic Regression & 0.8260 & 0.8260 & 0.8241 & 0.9167 & 0.9279 \\
 Raw Signal + Random Forest & 0.7073 & 0.7073 & 0.6650 & 0.7926 & 0.8166 \\
-Raw Signal + SVM-RBF & 0.9340 & 0.5411 & 0.9658 & 0.6177 & 0.8082 \\
-Raw Signal + Logistic Regression & 0.7109 & 0.4708 & 0.8298 & 0.4747 & 0.5295 \\
+Raw Signal + Extra Trees & 0.7060 & 0.7060 & 0.6632 & 0.7993 & 0.8198 \\
+Raw Signal + SVM-RBF & 0.7015 & 0.7015 & 0.6475 & 0.7914 & 0.8082 \\
+Raw Signal + Logistic Regression & 0.5039 & 0.5039 & 0.4973 & 0.5093 & 0.5295 \\
 \bottomrule
 \end{tabular}
 }
@@ -315,7 +449,7 @@ The raw-signal tree baselines performed substantially worse than the SciPy-featu
 
 \subsection{Anomaly Diagnosis Was Substantially Harder}
 
-The anomaly-type classification task was much harder than binary detection. The best model, Random Forest trained on the full SciPy feature set, achieved macro-F1 = 0.4578 across five anomaly mechanisms. This is well above the raw-signal Extra Trees baseline, which achieved macro-F1 = 0.2051, approximately chance for five classes. Because there are five anomaly mechanisms, chance-level macro-F1 is approximately 0.20 under balanced classes.
+The anomaly-type classification task was much harder than binary detection. The best model, Random Forest trained on the full SciPy feature set, achieved macro-F1 = 0.4578 across five anomaly mechanisms. Each mechanism contributes 3,360 traces to the full anomalous dataset and exactly 840 traces to the stratified test set (4,200 test traces total). The Random Forest result is well above both the raw-signal Extra Trees baseline (macro-F1 = 0.2051) and a most-frequent-class dummy baseline (macro-F1 = 0.0667). On these balanced classes, the dummy has accuracy and balanced accuracy of 0.20; its macro-F1 is lower because it assigns every trace to only one class.
 
 This result shows that SciPy features preserve some mechanism-level information, but not enough for robust diagnosis across all anomaly types and domains. In other words, SciPy features can detect that a signal has changed, but determining how it changed is a harder problem. Table~\ref{tab:type-classification} reports the anomaly diagnosis results.
 
@@ -323,15 +457,16 @@ This result shows that SciPy features preserve some mechanism-level information,
 \centering
 \caption{Anomaly-type classification results across five anomaly mechanisms.}
 \label{tab:type-classification}
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Model} & \textbf{Accuracy} & \textbf{Balanced Acc.} & \textbf{Macro-F1} \\
+\textbf{Model} & \textbf{Balanced Acc.} & \textbf{Accuracy} & \textbf{Macro-F1} & \textbf{Support} \\
 \midrule
-SciPy Features + Random Forest & \textbf{0.4705} & \textbf{0.4705} & \textbf{0.4578} \\
-SciPy Features + Extra Trees & 0.4090 & 0.4090 & 0.4122 \\
-Relative Signatures + Extra Trees & 0.2148 & 0.2148 & 0.2149 \\
-Relative Signatures + Logistic Regression & 0.2183 & 0.2183 & 0.2064 \\
-Raw Signal + Extra Trees & 0.2045 & 0.2045 & 0.2051 \\
+SciPy Features + Random Forest & \textbf{0.4660} & \textbf{0.4660} & \textbf{0.4578} & 840/class \\
+SciPy Features + Extra Trees & 0.3852 & 0.3852 & 0.3896 & 840/class \\
+Relative Signatures + Logistic Regression & 0.2160 & 0.2160 & 0.2070 & 840/class \\
+Relative Signatures + Extra Trees & 0.2057 & 0.2057 & 0.2051 & 840/class \\
+Raw Signal + Extra Trees & 0.2050 & 0.2050 & 0.2051 & 840/class \\
+Most-frequent dummy & 0.2000 & 0.2000 & 0.0667 & 840/class \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -388,9 +523,11 @@ Spike & 0.1046 & \textbf{0.5407} & 0.0738 & 0.0846 & 0.0566 & 0.0602 & 0.0796 \\
 
 The signature map does not support the simple hypothesis that each anomaly type maps cleanly to a different dominant feature group. Even after robust normalization, clipping, median aggregation, and relative normalization, amplitude-energy remained the dominant group for every anomaly type. This indicates that the controlled anomaly injections often changed global signal energy even when the intended anomaly mechanism was local, spectral, or structural.
 
+As a post-hoc no-energy control, we removed the amplitude-energy column from the mean signatures in Table~\ref{tab:signature-map} and renormalized the six remaining columns to sum to one. Statistical-distribution then became the largest mean group for all five mechanisms, with normalized shares between 0.227 and 0.231. Thus removing energy changes which group dominates but does not recover a distinct dominant group for each mechanism. This control is descriptive; we did not retrain the classifiers or recompute per-trace rule accuracy without the energy group.
+
 \subsection{Rule-Based Diagnosis}
 
-The rule-based diagnosis system achieved overall accuracy = 0.1993, approximately chance for five classes. Table~\ref{tab:rule-diagnosis} shows the accuracy by anomaly type.
+The rule-based diagnosis system achieved overall accuracy = 0.1993, essentially equal to the 0.2000 accuracy of a most-frequent-class baseline on the balanced five-class dataset. Table~\ref{tab:rule-diagnosis} shows the accuracy by anomaly type and makes clear that the aggregate result comes almost entirely from predicting distribution shift.
 
 \begin{table}[htbp]
 \centering
@@ -400,16 +537,16 @@ The rule-based diagnosis system achieved overall accuracy = 0.1993, approximatel
 \toprule
 \textbf{Anomaly Type} & \textbf{Rule Accuracy} \\
 \midrule
-Distribution shift & 0.9917 \\
+Distribution shift & 0.9881 \\
 Drift & 0.0006 \\
-Dropout & 0.0063 \\
-Oscillation disturbance & 0.0006 \\
+Dropout & 0.0077 \\
+Oscillation disturbance & 0.0000 \\
 Spike & 0.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The rule-based diagnosis result reveals the central failure mode of naive interpretability. Distribution shift achieved 0.9917 rule accuracy, while spike, drift, dropout, and oscillation disturbance were nearly always misdiagnosed. This pattern is not random. The rule system assigns distribution shift using statistical-distribution and amplitude-energy responses. Since amplitude-energy dominated the relative signature map for every anomaly type, the rule system was biased toward the distribution-shift rule. As a result, distribution shift was diagnosed correctly, not because the rule system learned a rich mechanism-specific signature, but because the confounding amplitude-energy response made other anomaly types resemble distribution-shift behavior.
+The rule-based diagnosis result reveals the central failure mode of naive interpretability. Distribution shift achieved 0.9881 rule accuracy, while spike, drift, dropout, and oscillation disturbance were nearly always misdiagnosed. This pattern is not random. The rule system assigns distribution shift using statistical-distribution and amplitude-energy responses. Since amplitude-energy dominated the relative signature map for every anomaly type, the rule system was biased toward the distribution-shift rule. As a result, distribution shift was diagnosed correctly, not because the rule system learned a rich mechanism-specific signature, but because the confounding amplitude-energy response made other anomaly types resemble distribution-shift behavior.
 
 This explains why the overall rule-based diagnosis accuracy was approximately chance. The rule system did not fail because the features were meaningless. It failed because a globally responsive feature group collapsed the signature space. This is a precise example of why named features alone are not sufficient for scientific interpretability.
 
@@ -439,11 +576,11 @@ The leave-one-domain-out results show partial but limited domain generalization.
 
 \subsection{Statistical Tests on Feature-Group Responses}
 
-Kruskal Wallis tests were used to test whether feature-group responses differed by anomaly type. Table~\ref{tab:kruskal} shows the results.
+Kruskal-Wallis tests were used to test whether feature-group responses differed by anomaly type. Table~\ref{tab:kruskal} shows the results.
 
 \begin{table}[htbp]
 \centering
-\caption{Kruskal Wallis tests for feature-group response differences by anomaly type.}
+\caption{Kruskal-Wallis tests for feature-group response differences by anomaly type.}
 \label{tab:kruskal}
 \begin{tabular}{lcc}
 \toprule
@@ -460,17 +597,36 @@ Peak transient & 5.4034 & 0.2484 \\
 \end{tabular}
 \end{table}
 
-The statistically significant differences appeared in statistical-distribution, dropout-flatness, amplitude-energy, and complexity groups. However, not all feature groups showed significant separation. Spectral-frequency, trend-residual, and peak-transient groups were not significant in this run. This again suggests that anomaly-type differences exist, but they are not captured by a simple one-group-per-anomaly interpretation.
+Each Kruskal-Wallis test used all 16,800 anomalous traces, with five equally sized mechanism groups of \(n=3{,}360\). Seven feature-group tests were performed. With an uncorrected \(\alpha=0.05\), statistical-distribution, dropout-flatness, amplitude-energy, and complexity differed across mechanisms. Under a Bonferroni correction, the threshold is \(0.05/7=0.00714\); only statistical-distribution, dropout-flatness, and amplitude-energy remain significant, while complexity (\(p=0.0412\)) does not. Spectral-frequency, trend-residual, and peak-transient are not significant under either threshold. Thus anomaly-type differences exist, but they are not captured by a simple one-group-per-anomaly interpretation.
 
-An important irony is that the peak-transient and trend-residual groups, which are the most intuitively matched to spike and drift anomalies, did not reach Kruskal Wallis significance in this run. This reinforces the central argument that intuitive feature names do not automatically translate into reliable diagnostic separation.
+An important irony is that the peak-transient and trend-residual groups, which are the most intuitively matched to spike and drift anomalies, did not reach Kruskal-Wallis significance in the 16,800-trace controlled analysis. This reinforces the central argument that intuitive feature names do not automatically translate into reliable diagnostic separation.
 
 \section{Real-Data Validation on the UCR Time Series Anomaly Archive}
 
 \subsection{Dataset and Setup}
 
-To evaluate whether the SciPy anomaly detection workflow transfers beyond controlled synthetic injection, we performed an external validation experiment on the UCR Time Series Anomaly Archive \citep{wu2021ucr}. Unlike the controlled benchmark, where anomaly type, severity, and noise level are generated by design, the UCR archive contains real time-series anomaly problems with labeled anomaly intervals encoded in the file metadata.
+To evaluate whether the SciPy anomaly detection workflow transfers beyond controlled synthetic injection, we performed an external validation experiment on the 2021 UCR Time Series Anomaly Archive \citep{wu2021ucr}, using \texttt{UCR\_TimeSeriesAnomalyDatasets2021.zip} from the archive URL recorded in the notebook. The notebook does not record a download date. Unlike the controlled benchmark, where anomaly type, severity, and noise level are generated by design, the UCR archive contains real time-series anomaly problems with labeled anomaly intervals encoded in the file metadata.
 
-We evaluated the first 60 archive files that could be parsed by the experiment script. Four files were skipped because the sliding-window labeling procedure produced no anomalous test windows, leaving 56 evaluated files. Each time series was converted into overlapping windows of length 128 with step size 16. Windows ending before the training boundary were used as normal training windows. Test windows were labeled anomalous if they overlapped the labeled anomaly interval by at least 10\% of the window length. Point-adjusted F1 treats an anomaly interval as detected if at least one overlapping window is flagged, which is common in time-series anomaly detection but can be more optimistic than raw point-level F1.
+We evaluated the first 60 archive files in lexicographic filename order. Four files were skipped because the sliding-window labeling procedure produced no anomalous test windows, leaving 56 evaluated files. Table~\ref{tab:ucr-file-selection} identifies both sets. Each time series was converted into overlapping windows of length 128 with step size 16. Windows ending before the training boundary were used as normal training windows. Test windows were labeled anomalous if they overlapped the labeled anomaly interval by at least 10\% of the window length. Point-adjusted F1 treats an anomaly interval as detected if at least one overlapping window is flagged, which is common in time-series anomaly detection but can be more optimistic than raw window-level F1.
+
+\begin{table*}[htbp]
+\centering
+\caption{UCR file selection. Numeric IDs are the filename prefixes in the 2021 archive.}
+\label{tab:ucr-file-selection}
+\small
+\begin{tabular}{p{0.16\textwidth}p{0.76\textwidth}}
+\toprule
+\textbf{Status} & \textbf{Archive file IDs or filenames} \\
+\midrule
+Evaluated (56) & 001--004, 006--026, 028--029, 031--050, and 052--060 \\
+Skipped (4) &
+\texttt{005\_UCR\_Anomaly\_DISTORTEDCIMIS44AirTemperature1\_4000\_5391\_5392.txt};
+\texttt{027\_UCR\_Anomaly\_DISTORTEDInternalBleeding16\_1200\_4187\_4199.txt};
+\texttt{030\_UCR\_Anomaly\_DISTORTEDInternalBleeding19\_3000\_4187\_4197.txt};
+\texttt{051\_UCR\_Anomaly\_DISTORTEDTkeepSecondMARS\_3500\_9330\_9340.txt} \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 For each window, we extracted the same SciPy-inspired statistical and signal-processing features used in the controlled experiment, including distributional statistics, peak features, residual features, rolling-window features, and spectral features. We evaluated four unsupervised methods: SciPy Features + Robust Distance, SciPy Features + Isolation Forest, SciPy Features + One-Class SVM, and Raw Windows + Isolation Forest. We do not claim state-of-the-art performance on the UCR archive. The purpose of the UCR experiment is external validation of the SciPy feature workflow under naturally labeled anomaly intervals, not benchmark optimization.
 
@@ -479,7 +635,7 @@ The controlled benchmark and UCR validation evaluate different learning settings
 
 \subsection{Results}
 
-Table~\ref{tab:ucr-results} summarizes the real-data validation results. The strongest method by mean point-adjusted F1 was SciPy Features + Isolation Forest, which achieved mean point-adjusted F1 = 0.2884, raw F1 = 0.1248, ROC-AUC = 0.7758, PR-AUC = 0.1801, and event recall = 0.4107 across 56 evaluated files. SciPy Features + One-Class SVM achieved the highest event recall at 0.6607, but had a lower mean point-adjusted F1 of 0.2646.
+Table~\ref{tab:ucr-results} summarizes the real-data validation results. The strongest method by mean point-adjusted F1 was SciPy Features + Isolation Forest, which achieved mean point-adjusted F1 = 0.2884, raw F1 = 0.1248, ROC-AUC = 0.7758, PR-AUC = 0.1801, and event detection rate = 0.4107 across 56 evaluated files. SciPy Features + One-Class SVM achieved the highest event detection rate at 0.6607, but had a lower mean point-adjusted F1 of 0.2646.
 
 \begin{table*}[htbp]
 \centering
@@ -487,7 +643,7 @@ Table~\ref{tab:ucr-results} summarizes the real-data validation results. The str
 \label{tab:ucr-results}
 \begin{tabular}{lcccccc}
 \toprule
-\textbf{Method} & \textbf{Raw Bal. Acc.} & \textbf{Raw F1} & \textbf{ROC-AUC} & \textbf{PR-AUC} & \textbf{Point-Adj. F1} & \textbf{Event Recall} \\
+\textbf{Method} & \textbf{Raw Bal. Acc.} & \textbf{Raw F1} & \textbf{ROC-AUC} & \textbf{PR-AUC} & \textbf{Point-Adj. F1} & \textbf{Event Detection} \\
 \midrule
 SciPy Features + Isolation Forest & 0.5588 & 0.1248 & \textbf{0.7758} & 0.1801 & \textbf{0.2884} & 0.4107 \\
 SciPy Features + One-Class SVM & \textbf{0.6374} & \textbf{0.1375} & 0.6561 & \textbf{0.2143} & 0.2646 & \textbf{0.6607} \\
@@ -497,13 +653,49 @@ SciPy Features + Robust Distance & 0.5340 & 0.0877 & 0.7225 & 0.1331 & 0.2328 & 
 \end{tabular}
 \end{table*}
 
+Each selected UCR file contains one labeled anomaly interval, and the notebook saved only whether that interval was hit by at least one positive window. It did not save the contiguous predicted event intervals needed to count false event-level alarms. Consequently, the reported event quantity is a detection rate (equivalently recall over the 56 labeled events), while event-level precision cannot be reconstructed from the saved run. Raw window-level precision, included in the notebook's per-file results, measures false positive windows but is not a substitute for event-level precision.
+
 The UCR results show a sharp contrast with the controlled synthetic benchmark. In the synthetic experiment, binary anomaly detection was nearly trivial, with SciPy-feature models reaching perfect performance. In the real-data validation experiment, performance was much lower. This confirms that perfect performance under controlled injection should not be interpreted as deployment-level anomaly detection ability. Real anomaly intervals are more heterogeneous, less aligned with fixed window boundaries, and often subtler than injected perturbations.
 
-The real-data results also show that different metrics emphasize different operational goals. SciPy Features + Isolation Forest achieved the best point-adjusted F1 and ROC-AUC, suggesting better ranking and localization performance. SciPy Features + One-Class SVM achieved the highest event recall, suggesting that it was more likely to flag at least one window inside the anomaly interval. Depending on the scientific workflow, event recall may be more important than point-level precision if the goal is to alert a researcher that a suspicious episode occurred.
+The real-data results also show that different metrics emphasize different operational goals. SciPy Features + Isolation Forest achieved the best point-adjusted F1 and ROC-AUC, suggesting better ranking and localization performance. SciPy Features + One-Class SVM achieved the highest event detection rate, suggesting that it was more likely to flag at least one window inside the anomaly interval. Depending on the scientific workflow, detecting an event may be more important than window-level precision if the goal is to alert a researcher that a suspicious episode occurred, but the missing event-level precision prevents a complete event-based comparison.
 
 \subsection{Best and Worst Cases}
 
-The SciPy Features + Isolation Forest method performed strongly on some UCR files. For example, it achieved point-adjusted F1 values above 0.90 on selected BIDMC, CIMIS air temperature, PowerDemand, and Lab2Cmac files. However, it failed completely on several PowerDemand, TkeepMARS, apnea ECG, and gait files, where point-adjusted F1 was 0.0 and the anomaly event was not detected.
+The SciPy Features + Isolation Forest method performed strongly on some UCR files but failed completely on others. Table~\ref{tab:ucr-best-worst} gives the exact per-file scores underlying those examples.
+
+\begin{table*}[htbp]
+\centering
+\caption{Selected best and worst per-file results for SciPy Features + Isolation Forest. All worst-case rows have point-adjusted F1 = 0, raw F1 = 0, and no detected event.}
+\label{tab:ucr-best-worst}
+\small
+\begin{tabular}{clccc}
+\toprule
+\textbf{ID} & \textbf{Series} & \textbf{Point-Adj. F1} & \textbf{Raw F1} & \textbf{Event Detected} \\
+\midrule
+004 & BIDMC1 & 0.9500 & 0.1739 & Yes \\
+010 & CIMIS44AirTemperature6 & 0.9474 & 0.1818 & Yes \\
+044 & PowerDemand1 & 0.9153 & 0.4000 & Yes \\
+042 & Lab2Cmac011215EPG6 & 0.9130 & 0.7805 & Yes \\
+008 & CIMIS44AirTemperature4 & 0.9091 & 0.4000 & Yes \\
+037 & Lab2Cmac011215EPG1 & 0.9000 & 0.3077 & Yes \\
+028 & InternalBleeding17 & 0.8485 & 0.5385 & Yes \\
+007 & CIMIS44AirTemperature3 & 0.8421 & 0.4286 & Yes \\
+045 & PowerDemand2 & 0.8169 & 0.3529 & Yes \\
+054 & WalkingAceleration5 & 0.7692 & 0.4762 & Yes \\
+\midrule
+046 & PowerDemand3 & 0.0000 & 0.0000 & No \\
+047 & PowerDemand4 & 0.0000 & 0.0000 & No \\
+049 & TkeepFirstMARS & 0.0000 & 0.0000 & No \\
+050 & TkeepForthMARS & 0.0000 & 0.0000 & No \\
+055 & apneaecg2 & 0.0000 & 0.0000 & No \\
+056 & apneaecg3 & 0.0000 & 0.0000 & No \\
+057 & apneaecg4 & 0.0000 & 0.0000 & No \\
+058 & apneaecg & 0.0000 & 0.0000 & No \\
+059 & gait1 & 0.0000 & 0.0000 & No \\
+060 & gait2 & 0.0000 & 0.0000 & No \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 This variation is important. It shows that SciPy feature-based anomaly detection is not universally reliable across real time-series domains. Some anomaly intervals produce feature deviations that are detectable by the current window-level feature representation, while others do not. This supports the paper's broader conclusion: SciPy features are useful and interpretable, but real scientific anomaly detection requires domain calibration, careful thresholding, and possibly local or task-specific feature design.
 
@@ -517,7 +709,7 @@ This distinction matters because many anomaly-detection systems report strong bi
 
 \subsection{Synthetic Performance Does Not Transfer Directly to Real Data}
 
-The real-data validation experiment clarifies the role of the controlled synthetic benchmark. In the synthetic experiment, binary detection was perfect, which indicates that the injected anomalies produced measurable feature deviations. However, on the UCR Time Series Anomaly Archive \citep{wu2021ucr}, the best method achieved only 0.2884 mean point-adjusted F1 and 0.4107 event recall. This gap shows that controlled injection experiments should be used to study mechanisms, not to claim deployment-level anomaly-detection performance.
+The real-data validation experiment clarifies the role of the controlled synthetic benchmark. In the synthetic experiment, binary detection was perfect, which indicates that the injected anomalies produced measurable feature deviations. However, on the UCR Time Series Anomaly Archive \citep{wu2021ucr}, the best method achieved only 0.2884 mean point-adjusted F1 and a 0.4107 event detection rate. This gap shows that controlled injection experiments should be used to study mechanisms, not to claim deployment-level anomaly-detection performance.
 
 The real-data results strengthen the central argument of this paper. Detection and diagnosis are different problems, and both become more difficult when anomaly structure is not controlled by the experimenter. The UCR archive introduces heterogeneous anomaly shapes, different baseline dynamics, and difficult thresholding conditions. Under these conditions, SciPy features remain useful, especially in ROC-AUC ranking, but they do not solve anomaly detection. This supports a cautious interpretation: SciPy provides a strong and transparent baseline for scientific anomaly workflows, but it should be paired with domain-specific validation.
 
@@ -592,7 +784,7 @@ Therefore, the paper's claim should not be that SciPy features produce universal
 
 \section{Reproducibility}
 
-All experiments were implemented in Python using NumPy, SciPy, scikit-learn, pandas, and Matplotlib. A fixed random seed of 42 was used for controlled signal generation, train-test splitting, and model initialization where supported. Each controlled signal contained 512 time points. The controlled experiment used six generated scientific signal domains, five injected anomaly mechanisms, seven severity levels, four noise levels, and 20 anomaly repeats per setting. Additional clean samples were generated to reduce class imbalance. The UCR validation used sliding windows of length 128 with step size 16, and test windows were labeled anomalous if at least 10\% of the window overlapped the labeled anomaly interval.
+All generation, feature extraction, model training, evaluation, and UCR windowing code is available in a public executable Colab notebook at \url{https://colab.research.google.com/drive/1dEcrG2ynX3k_dAHSWQmvjt42jhMRYc8S?usp=sharing}; the submitted local copy is \texttt{anamolydetection.ipynb}. The experiments used Python with NumPy \citep{numpy}, SciPy \citep{virtanen2020scipy}, scikit-learn \citep{pedregosa2011scikit}, pandas \citep{mckinney2010data}, and Matplotlib \citep{hunter2007matplotlib}. A fixed random seed of 42 was used for controlled signal generation, train-test splitting, and model initialization where supported. Each controlled signal contained 512 time points. The controlled experiment used six generated scientific signal domains, five injected anomaly mechanisms, seven severity levels, four noise levels, and 20 anomaly repeats per setting. It contained 16,800 anomalous and 16,800 independently generated clean traces. The UCR validation used sliding windows of length 128 with step size 16, and test windows were labeled anomalous if at least 10\% of the window overlapped the labeled anomaly interval.
 
 \section{Limitations}
 

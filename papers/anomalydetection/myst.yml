@@ -3,7 +3,6 @@ extends: ../papers.yml
 project:
   # Update this to match `scipy-2026-<folder>`
   id: scipy-2026-anomalydetection
-  # Ensure your title is the same as in `main.md`
   title:
     Detecting Anomalies in Scientific Data Using SciPy's Statistical and Signal
     Tools
@@ -15,12 +14,14 @@ project:
   # Authors should have affiliations, emails, and ORCIDs if available
   authors:
     - name: Aayush Gauba
+      email: gauba.aayush@gmail.com
+      orcid: 0009-0005-0521-0247
       affiliations:
         - id: SIUE
       corresponding: true
   affiliations:
     - id: SIUE
-      name: Student and Researcher
+      name: Southern Illinois University Edwardsville
   keywords:
     - anomaly detection
     - scipy
@@ -33,5 +34,5 @@ project:
     - id: pdf
       format: typst
       template: https://github.com/curvenote-templates/scipy.git
-      article: main.md
+      article: main.tex
       output: full_text.pdf
