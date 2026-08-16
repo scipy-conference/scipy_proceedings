@@ -137,7 +137,14 @@ We generate clean signals from six scientific signal domains:
     \item \textbf{Fluid-sensor signals}: quasi-periodic vortex-shedding-like signals with modulation and noise.
 \end{itemize}
 
-These are synthetic domain-inspired signals, not measurements from real instruments. They are used because controlled generation allows the true anomaly mechanism, severity, and noise level to be known. These domains were chosen because they differ in baseline structure, noise statistics, and signal dynamics. This allows the experiment to test whether anomaly behavior generalizes across heterogeneous scientific signals.
+These are synthetic domain-inspired signals, not measurements from real instruments. They are used because controlled generation allows the true anomaly mechanism, severity, and noise level to be known. These domains were chosen because they differ in baseline structure, noise statistics, and signal dynamics. This allows the experiment to test whether anomaly behavior generalizes across heterogeneous scientific signals. Figure~\ref{fig:domain-examples} shows one independently sampled clean trace and one drift-anomaly trace from each domain.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{image.png}
+\caption{Examples from the six synthetic scientific signal domains. The left column shows one clean trace per domain, and the right column shows an independently generated trace with an injected drift anomaly. The traces were selected deterministically with random seed 42. Because the clean and anomalous examples were sampled independently, each row illustrates domain morphology and the anomaly type rather than a pointwise before-and-after pair.}
+\label{fig:domain-examples}
+\end{figure*}
 
 \subsection{Controlled Anomaly Mechanisms}
 
