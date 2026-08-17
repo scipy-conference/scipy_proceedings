@@ -40,7 +40,6 @@ PUA characters are characters not properly recognized by the usual UTF character
 :label: fig:puatext
 :alt: Screenshot of article
 :align: center
-[JESSE: NEEDS FIGURE CAPTION]
 
 Screenshot of article located at [https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1627047812/Off-duty_McLeod_County_deputy__Norwood_Young_America_man_from_April_17_shooting_identified.pdf?1627047812] showcasing PUA characters used to stylize the numbers.
 ```
@@ -52,7 +51,7 @@ Some articles were scraped, but with extremely low character counts. These PDFs 
 :label: fig:screenshot
 :alt: Screenshot of article
 :align: center
-Screenshot of article located at [CUAPB archive](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626748591/Minneapolis_cop_says_he_threatened_Somali_over_flag__department_starts_internal_probe_–_Twin_Cities.pdf?1626748591) showcasing [JESSE: FILL IN].
+Screenshot of article located at [CUAPB archive](https://d3n8a8pro7vhmx.cloudfront.net/cuapb/pages/270/attachments/original/1626748591/Minneapolis_cop_says_he_threatened_Somali_over_flag__department_starts_internal_probe_–_Twin_Cities.pdf?1626748591) showcasing text embedded in an image, causing readers like PyMuPDF to fail to capture the text.
 ```
 
 To handle these two cases, we implemented optical character recognition (OCR). This workflow optimizes time, as an OCR scrape of all 2,700 articles would be too time exhaustive. The additional OCR procedure added around 100 news articles, increasing our test sample by a reasonable amount. With the assistance of OCR, our set has been enhanced enough for an LLM to read its documents and label locations.
