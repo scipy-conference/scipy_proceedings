@@ -18,14 +18,16 @@ project:
   authors:
     - name: Jesse Loi
       email: jesse.loi418@gmail.com
+      orcid: 0000-0002-0696-3882
       affiliations:
         - Seattle University
-      orchid: 0000-0002-0696-3882
+
     - name: Ariana Mendible
       email: mendible@seattleu.edu
+      orcid: 0000-0001-7820-3658
       affiliations:
         - Seattle University
-      orchid: 0000-0001-7820-3658
+
   keywords:
     - document extraction
     - LLMs
