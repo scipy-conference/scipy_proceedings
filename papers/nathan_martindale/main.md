@@ -239,16 +239,11 @@ does not support Bayesian inference. A comparison of these tools is listed in
 
 :::
 
-<!-- Reno exists because having these
-capabilities directly in Python allows for more effective integration into other
-frontends such as Jupyter Notebooks or custom CLIs, exploration tools such as
-experiment management software, and a Python API lends itself more effectively
-to comprehension and modification with LLMs. [bleh] -->
-
-<!-- table comparing these? -->
-
-
-<!-- possibly a paragraph on why not just pymc by itself -->
+Reno was developed in part because implementation of these capabilities directly in
+Python allows for more effective integration into other libraries, tools, and
+frontends, such as Jupyter Notebooks, custom CLIs, or experiment management
+software. A Python API further lends itself to easier comprehension and
+modification via LLMs.
 
 
 ## Using Reno
