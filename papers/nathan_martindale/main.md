@@ -329,7 +329,7 @@ has subtrees is an operation and leaf nodes are references to other equations
 evaluated by recursively evaluating through the tree down to the leaf nodes,
 and in turn returning produced values back up through the tree. Each operation (a set of classes included
 with Reno) has definitions for their evaluation based on its subtrees both
-in numpy as well as how to construct the equivalent subtree in PyMC ([Figure %s](#fig:reno_equations)).
+in numpy [@numpy] as well as how to construct the equivalent subtree in PyMC ([Figure %s](#fig:reno_equations)).
 Similar to PyTensor and numpy, all basic math operators are
 overloaded to simplify the resulting Python model code and contain the math to
 within Reno's symbolic math approach.
@@ -455,7 +455,7 @@ useful for diagnosing unexpected or incorrect equation results.
 (latex-debug)=
 ![Output of `predator_prey.latex(t=4, debug_ops=True, ref_list=[...])`](figures/latex_debug.png)
 
-Latex outputs for a model. These render interactively in Jupyter notebooks and
+Latex outputs for a model. These render interactively in Jupyter [@jupyter] notebooks and
 can be exported as raw strings for inclusion in latex documents.
 :::
 
@@ -474,7 +474,15 @@ simulation), a user-specified standard deviation to
 allow for uncertainty in the observations (`1.0` in the example in [Program
 %s](#code:pred_prey-pymc)), and the actual observed values for PyMC to target
 (`[100]` in the example). These likelihood functions are used by PyMC during its
-MCMC sampling process to approximate the posteriors.
+MCMC sampling process to approximate the posteriors. Passing an `n` to the
+`.pymc()` call configures the total number of samples produced by the sampler.
+By default, four chains are used, but this and all other PyMC sampler settings
+can be configured by passing a `sampling_kwargs` dictionary. The sampler used
+is the `Sequential Monte Carlo`[^smc] by default, but the standard samplers can
+be used as well by passing `smc=False`.
+
+
+[^smc]: https://www.pymc.io/projects/examples/en/latest/samplers/SMC2_gaussians.html
 
 
 ```{code-block} python
