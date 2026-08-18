@@ -201,7 +201,7 @@ and tools, such as the web-based/JavaScript community. Insight Maker
 create models and graphical front-end that intuitively supports
 creating and connecting the various SDM components and defining subsequent
 equations. Along with SDM, Insight Maker supports agent-based modeling, although
-it has no direct mechanisms for conducting Bayesian inference. StatSim, another
+it has no direct mechanisms for conducting Bayesian inference. StatSim[^statsim], another
 JavaScript front-end tool, also has direct support for both SDM and Bayesian
 inference applied to the system dynamics models.
 
@@ -211,15 +211,18 @@ inference applied to the system dynamics models.
 
 Tools for SDM within the scientific Python community are currently limited: at
 the time of writing, there are only two notable libraries that support it.
-PySD, the more established of the two, is designed to run and modify SD models
+PySD [@pysd], the more established of the two, is designed to run and modify SD models
 that have been written in other tools such as Vensim. However, it cannot
 build a model from scratch. PySD supports Bayesian
 inference through a manual integration with PyMC, whereby it treats the
 underlying system dynamics model as a black box function rather than
 translating the model into a PyMC equivalent. BPTK-Py (business prototyping
-toolkit) is an open-source framework for creating SDM and ABM models, but
+toolkit)[^bptk] is an open-source framework for creating SDM and ABM models, but
 does not support Bayesian inference. A comparison of these tools is listed in
 [Table %s](#table:comparison).
+
+[^bptk]: https://github.com/transentis/bptk_py
+[^statsim]: https://statsim.com/
 
 
 :::{table} Comparison of a small selection of SDM tools. "Usage" refers to whether its main functionality is through a graphical user interface or a particular programming language API.
@@ -478,7 +481,7 @@ MCMC sampling process to approximate the posteriors. Passing an `n` to the
 `.pymc()` call configures the total number of samples produced by the sampler.
 By default, four chains are used, but this and all other PyMC sampler settings
 can be configured by passing a `sampling_kwargs` dictionary. The sampler used
-is the `Sequential Monte Carlo`[^smc] by default, but the standard samplers can
+is the Sequential Monte Carlo[^smc] by default, but the standard samplers can
 be used as well by passing `smc=False`.
 
 
