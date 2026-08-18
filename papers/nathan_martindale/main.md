@@ -681,11 +681,37 @@ data structure class) has a `pt()` function which recursively calls throughout
 the entire tree, thus creating a PyTensor equation that mirrors the original. Much of
 the value that Reno provides is in the surrounding setup for the entire model,
 which can be complicated to achieve in PyMC because of the amount of
-boilerplate. Certain types of operations that need to index beyond $t-1$ values
-introduce additional challenges. Models simulate by running the various
+boilerplate.
+A full model is simulated by running the various
 equations at each timestep in sequence, so translating this into PyTensor
 requires setting up the difference equations in a separate function and using
 their `scan`[^fn-scan] operation.
+
+One example of a challenging ability to support in raw PyMC is dynamically indexing into historical timeseries values
+inside of a `scan` function. By default, this target function only has access to
+the most recent ($t-1$) timestep for each value.
+PyMC supports passing in a specified set of previous timesteps, referred to as
+"taps", but the possibility of arbitrarily indexing them based on other
+variables in the system requires passing every
+previous timestep and separate equations to correctly convert the requested index,
+increasing the complexity of the code.
+Reno thus handles this infrastructure
+necessary to convert the model into PyMC, and provides an abstraction where only the
+components and the equations themselves need to be defined.
+
+
+
+<!-- An example of a difficult ability to support is dynamically -->
+<!-- accessing historical timeseries values beyond only the most recent $t-1$ timestep while -->
+<!-- in PyMC's looping structure. PyMC supports passing in a specified set of previous timesteps, referred to as -->
+<!-- "taps", but the possibility of arbitrarily indexing them based on other -->
+<!-- variables in the system requires passing every -->
+<!-- previous timestep and separate equations to correctly convert the index, -->
+<!-- increasing the complexity of the code. -->
+<!-- Reno thus handles the infrastructure -->
+<!-- necessary to run the model in PyMC, and provides an abstraction where only the -->
+<!-- components and the equations themselves need to be defined. -->
+
 
 [^fn-scan]: https://pytensor.readthedocs.io/en/latest/library/scan.html
 
