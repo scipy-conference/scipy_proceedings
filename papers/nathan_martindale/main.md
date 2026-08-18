@@ -465,19 +465,20 @@ defined with a prior probability distribution. The model can be converted and
 simulated within a PyMC model by calling the `.pymc()` function, which has a
 signature that mirrors the base simulation call. This means that it can take
 parameter configurations and settings to control the MCMC sampling process. The
-`.pymc()` function also takes observed data values and uncertainties by supplying
-`Observation` objects to the `observations` parameter, shown in [Program %s](#code:pred_prey-pymc). Reno turns these observations into gaussian likelihood functions, with mean
-values centered around the observed equation (connecting it to the system
-simulation), a user-specified standard deviation to
-allow for uncertainty in the observations (`1.0` in the example in [Program
-%s](#code:pred_prey-pymc)), and the actual observed values for PyMC to target
+`.pymc()` function also takes observed data values and uncertainties by
+supplying `Observation` objects to the `observations` parameter, shown in
+[Program %s](#code:pred_prey-pymc). Reno turns these observations into gaussian
+likelihood functions, with mean values centered around the observed equation
+(connecting it to the system simulation), a user-specified standard deviation to
+allow for uncertainty in the observations (`1.0` in the example in [Program %s](#code:pred_prey-pymc)),
+and the actual observed values for PyMC to target
 (`[100]` in the example). These likelihood functions are used by PyMC during its
 MCMC sampling process to approximate the posteriors. Passing an `n` to the
 `.pymc()` call configures the total number of samples produced by the sampler.
 By default, four chains are used, but this and all other PyMC sampler settings
-can be configured by passing a `sampling_kwargs` dictionary. The sampler used
-is the Sequential Monte Carlo[^smc] by default, but the standard samplers can
-be used as well by passing `smc=False`.
+can be configured by passing a `sampling_kwargs` dictionary. The sampler used by
+default is the Sequential Monte Carlo[^smc], but the standard samplers can be
+used as well by passing `smc=False`.
 
 
 [^smc]: https://www.pymc.io/projects/examples/en/latest/samplers/SMC2_gaussians.html
@@ -751,10 +752,10 @@ PyMC-specific code is warranted and easier debugging.
 
 Reno is an open-source Python library introduced to support building system
 dynamics models and applying Bayesian inference to the simulation process. The
-Python API is intended to support the building of additional software tooling, such
-as front-end interactive visualization capabilities. This enables running
-complex models in HPC environments, integrating model context protocol (MCP)
-tools for language models, and web-based front-end tools.
+Python API is intended to support integration with additional software tooling, such
+as front-end interactive visualization capabilities. Future work will include the ability
+to directly integrate model context protocol (MCP) tools for language models,
+tooling to run within HPC environments, and improved web-based front-end tools.
 
 
 ## Acknowledgements

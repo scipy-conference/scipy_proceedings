@@ -32,6 +32,7 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     SDM: System Dynamics Modeling
+    ABM: Agent Based Modeling
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
