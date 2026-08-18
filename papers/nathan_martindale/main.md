@@ -126,7 +126,7 @@ that the Bayesian approach considers the uncertainty of hypotheses (the model
 and its parameters) rather than the uncertainty of the underlying data like in the
 frequentist approach. This aligns well with SDM, in which different structures
 and parameterizations function as different hypotheses. For models with
-two possible pathways or structures, applyingof Bayesian
+two possible pathways or structures, applying Bayesian
 inference can update probability distributions for whichever underlying model
 structure is more likely based on a set of observed data.
 
@@ -439,7 +439,7 @@ Graphviz output from `predator_prey.graph(stock_sparklines=True, flow_sparklines
 :::
 
 Reno can output a latex representation of all of the equations
-involved in the system, which can be viewed natively within Juptyer or exported
+involved in the system, which can be viewed natively within Jupyter or exported
 as a string for a latex paper. Additionally, an individual sample and timestep can
 be passed as parameters, which will then output the equations with the
 computed value from each section of each equation explicitly written out. This can be
