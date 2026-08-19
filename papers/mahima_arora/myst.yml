@@ -28,6 +28,7 @@ project:
     - large language models
     - information retrieval
   abbreviations:
+    RAGAS: Retrieval-Augmented Generation Assessment Suite
     RAG: Retrieval-Augmented Generation
     LLM: Large Language Model
     OCR: Optical Character Recognition

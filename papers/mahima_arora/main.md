@@ -22,7 +22,7 @@ The key contributions of this work are:
 4. A tool-augmented agent architecture that combines semantic retrieval with deterministic execution to enable faithful reasoning across modalities
 5. An open-source implementation facilitating reproducibility and community adoption
 
-Together, these contributions advance multimodal document understanding as an essential capability for RAG systems operating over real-world scientific, technical, and enterprise document collections.
+Together, these contributions advance multimodal document understanding as an essential capability for RAG systems operating over real-world scientific, technical, and enterprise document collections. This framework builds directly on Docling [@docling], which provides the layout-aware parsing backbone, including its `HybridChunker` and vision-language captioning. What Docling does not provide is the retrieval and reasoning layer built on top: a typed chunk schema unifying text, images, and tables in a single vector space; SQL-backed table querying for deterministic access; and a tool-augmented agent that selects the appropriate access pattern per modality at query time. The contribution is this end-to-end architecture, not any single component.
 
 ## Methodology
 
@@ -233,7 +233,22 @@ Visual reasoning: diagram retrieval using vision-language descriptions and inlin
 Structured precision: SQL-based table querying with semantic search and deterministic execution.
 :::
 
-These demonstrations validate that multimodal RAG requires modality-specific representations and heterogeneous access patterns. The bottleneck has shifted from LLM reasoning to data quality and modality preservation, text-only systems fail because they discard diagrams and flatten tables.
+To quantify the impact of modality preservation, the multimodal pipeline was evaluated against a text-only baseline using RAGAS metrics [@ragas] over the same document corpus and query set. The text-only baseline uses identical chunking and retrieval parameters but filters only text chunks during ingestion, discarding images and tables.
+
+:::{table} Multimodal vs. text-only RAG pipeline comparison.
+:label: tab:baseline
+
+| Metric | Multimodal | Text-Only |
+|:-------|:----------:|:---------:|
+| Context Recall | 86.2% | 78.9% |
+| Faithfulness | 93.6% | 90.0% |
+| Answer Correctness | 74.0% | 68.9% |
+
+:::
+
+The multimodal pipeline improves context recall by 7.3 percentage points, reflecting its ability to retrieve visual and tabular evidence that the text-only baseline discards entirely. Gains in faithfulness and answer correctness follow from grounding responses in structured data and original figures rather than flattened approximations.
+
+These results, together with the capability demonstrations above, validate that multimodal RAG requires modality-specific representations and heterogeneous access patterns. The bottleneck has shifted from LLM reasoning to data quality and modality preservation.
 
 ## Conclusion and Future Work
 
