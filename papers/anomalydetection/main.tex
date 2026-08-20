@@ -139,25 +139,14 @@ For each signal \(x = [x_1, x_2, \ldots, x_T]\), we extract statistical, signal-
 
 For the controlled 512-point signals, Savitzky-Golay smoothing used a 51-sample window, polynomial order 3, and \texttt{mode=interp}. Global Welch power spectral density estimates used \texttt{nperseg=128}; the local spectral features divided each signal into 128-sample windows with a 32-sample step and used \texttt{nperseg=64} within each window. The code left \texttt{noverlap} unspecified, so SciPy's default half-segment overlap gave 64 samples for the global estimates and 32 samples for the local estimates. For the 128-point windows in the UCR validation, the corresponding settings were a 31-sample Savitzky-Golay window with polynomial order 3 and \texttt{mode=interp}, and Welch \texttt{nperseg=64} with the default 32-sample overlap.
 
-Listing~\ref{lst:savgol-residual} shows the core residual calculation used for the controlled signals.
-
-\begin{lstlisting}[label=lst:savgol-residual,language=Python,caption=Savitzky-Golay residual features.]
-smooth = signal.savgol_filter(
-    x, window_length=51, polyorder=3, mode="interp"
-)
-residual = x - smooth
-residual_energy = np.mean(residual ** 2)
-residual_abs_mean = np.mean(np.abs(residual))
-residual_max = np.max(np.abs(residual))
-\end{lstlisting}
-
-Listing~\ref{lst:welch-bandpower} shows the global Welch bandpower calculation. The notebook uses the same power spectral density for the spectral entropy, dominant-frequency, and high-frequency-ratio features.
-
-\begin{lstlisting}[label=lst:welch-bandpower,language=Python,caption=Welch bandpower feature.]
-freqs, psd = signal.welch(x, fs=fs, nperseg=128)
-mask = (freqs >= low) & (freqs <= high)
-bandpower = simpson(psd[mask], x=freqs[mask])
-\end{lstlisting}
+The core implementation calls
+\texttt{signal.savgol\_filter(x, window\_length=51, polyorder=3,
+mode="interp")} and computes the residual as \texttt{x - smooth}. Its energy,
+absolute mean, and maximum magnitude are then computed with NumPy reductions.
+For spectral features, the implementation calls
+\texttt{signal.welch(x, fs=fs, nperseg=128)} and integrates each selected
+frequency band with \texttt{simpson}. The same power spectral density supplies
+spectral entropy, dominant frequency, and high-frequency ratios.
 
 \begin{table*}[htbp]
 \centering
