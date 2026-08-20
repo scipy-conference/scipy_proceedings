@@ -44,49 +44,18 @@ However, anomaly detection in scientific data is not only a prediction problem. 
 
 This paper studies anomaly detection using SciPy's statistical and signal-processing tools. SciPy is a foundational scientific computing library for Python that provides algorithms for statistics, signal processing, optimization, integration, interpolation, linear algebra, and other scientific computing tasks \citep{virtanen2020scipy}. The \texttt{scipy.stats} module provides probability distributions, summary statistics, and statistical tests. The \texttt{scipy.signal} module provides tools for filtering, peak detection, spectral analysis, and time-series signal processing. These tools make SciPy a practical foundation for anomaly detection workflows that need to be lightweight, reproducible, and interpretable.
 
-The original motivation for this work is that scientific datasets often contain subtle anomalies caused by sensor faults, experimental drift, or rare events. A common approach is to train a classifier or anomaly detector and report performance metrics. However, good performance on one dataset does not by itself establish a general scientific finding. A more useful question is: which anomaly mechanisms are detectable by which feature groups, under which conditions, and why?
+We test whether SciPy-derived features detect controlled anomalies and support diagnosis. Six domain-inspired signal generators, five anomaly mechanisms, and multiple severity and noise levels provide known ground truth. We then test transfer on the UCR archive. Our central claim is that detection performance does not imply diagnostic interpretability: global energy features respond to several mechanisms, so diagnosis requires localized or mechanism-specific information.
 
-To address this, we design a controlled multi-domain experiment. Clean scientific signals are generated from six different domains: EEG-like signals, environmental sensor signals, spectroscopy-like signals, vibration signals, astronomical photometry-like signals, and fluid-sensor signals. Five controlled anomaly mechanisms are injected into these signals: spike, drift, dropout, oscillation disturbance, and distribution shift. Each anomaly is tested across multiple severity and noise levels. This gives a known ground truth for domain, anomaly mechanism, severity, and noise level.
-
-The central claim tested in this paper is falsifiable:
-
-\begin{quote}
-This paper argues that SciPy-derived statistical and signal-processing features are effective for detecting controlled anomalies, but that detection performance alone does not imply diagnostic interpretability. In controlled multi-domain signals, binary detection was trivial, while anomaly-mechanism diagnosis remained difficult. We show that a major reason is structural: global energy features respond to many anomaly mechanisms, causing feature-group signatures to collapse toward amplitude-energy explanations. This demonstrates that scientific anomaly detection requires separating detection from diagnosis, and that mechanism diagnosis requires localized or mechanism-specific features rather than global summary statistics alone.
-\end{quote}
-
-The results support this claim in both controlled and external validation settings. SciPy-derived features make controlled anomalies easy to detect, but anomaly-mechanism classification is much harder, simple rule-based feature-group diagnosis performs at chance, and real-data validation shows that synthetic detection performance does not transfer directly to naturally occurring anomaly intervals.
-
-The main contributions of this paper are:
+The contributions are:
 
 \begin{itemize}
     \item a controlled multi-domain anomaly benchmark using six scientific signal domains and five anomaly mechanisms;
     \item a SciPy-based feature extraction workflow using statistical, signal-processing, spectral, residual, local-window, and complexity features;
     \item a comparison of SciPy-feature models, relative-signature models, and raw-signal baselines;
-    \item an empirical demonstration that SciPy features strongly detect anomalies and preserve partial anomaly-mechanism information;
-    \item a real-data validation experiment on the UCR Time Series Anomaly Archive;
-    \item a negative result showing that simple dominant-feature-group explanations are insufficient for reliable anomaly diagnosis.
+    \item comparisons of feature, signature, and raw-signal models for detection and diagnosis;
+    \item UCR external validation;
+    \item evidence that dominant-feature-group explanations are insufficient for diagnosis.
 \end{itemize}
-
-\section{Background and Motivation}
-
-\subsection{Scientific Anomaly Detection}
-
-An anomaly is an observation that differs from expected behavior. In scientific data, anomalies can represent measurement errors, sensor faults, experimental drift, unusual environmental conditions, or rare meaningful events. This makes anomaly detection scientifically delicate. Some anomalies should be removed as corrupted data, while others may be the most important observations in the dataset.
-
-For this reason, anomaly detection in scientific workflows requires more than high predictive accuracy. It also requires diagnostic information. A scientist may need to distinguish between a spike caused by a sensor glitch, a drift caused by calibration change, a dropout caused by missing data, or a spectral disturbance caused by external interference. These cases may all appear as anomalies, but they imply different corrective actions.
-
-\subsection{SciPy as an Anomaly Detection Toolkit}
-
-SciPy provides many tools that are directly useful for anomaly detection. Statistical features from \texttt{scipy.stats} can summarize distributional shape, spread, skewness, kurtosis, entropy, and deviations from normality. Signal-processing features from \texttt{scipy.signal} can detect peaks, estimate local trends, compute residuals, and analyze spectral content. For example, the Savitzky-Golay filter can be used to estimate a smooth local signal trend, while Welch's method estimates power spectral density by averaging periodograms over segments \citep{welch1967use}.
-
-These features are attractive for scientific workflows because they are named, reproducible, computationally lightweight, and connected to interpretable signal properties. However, this does not automatically make them scientifically interpretable. A feature is not useful merely because it has a name. Interpretability must be operationalized: the feature or feature group should support a diagnostic conclusion about the anomaly mechanism.
-
-\subsection{Detection Versus Diagnosis}
-
-A central distinction in this paper is the difference between anomaly detection and anomaly diagnosis. Detection asks whether a signal is abnormal. Diagnosis asks what type of abnormality occurred. A model may perform very well at detection while still failing to identify the mechanism. This distinction is important because many anomaly-detection papers report high binary classification scores but do not show whether the model can distinguish between different anomaly causes.
-
-This paper therefore evaluates both tasks. The binary task asks whether a signal is clean or anomalous. The multi-class task asks whether the anomaly mechanism is spike, drift, dropout, oscillation disturbance, or distribution shift. We also test a simple rule-based diagnosis system using relative feature-group signatures to evaluate whether intuitive feature groups can directly explain anomaly type.
-
 
 \section{Related Work}
 
@@ -94,17 +63,13 @@ Time-series anomaly detection has a long history in statistical process monitori
 
 Unsupervised machine-learning methods provide a more flexible alternative when labeled anomalies are rare. Isolation Forest is a widely used representative method that isolates anomalies through randomized partitioning rather than explicitly modeling normal density \citep{liu2008isolation}. One-class methods such as One-Class SVM similarly learn a boundary around normal data and are commonly used when only normal training samples are available \citep{scholkopf2001estimating}. These methods are relevant to the UCR validation setting in this paper, where training regions are treated as normal and anomaly labels are used only for evaluation.
 
-Deep learning methods have also been widely studied for time-series anomaly detection. LSTM encoder-decoder models learn to reconstruct normal temporal behavior and use reconstruction error as an anomaly score \citep{malhotra2016lstm}. More recent models such as THOC use temporal hierarchical one-class learning to capture multi-scale temporal structure \citep{shen2020thoc}, while transformer-based models such as TranAD use attention mechanisms for multivariate time-series anomaly detection and diagnosis \citep{tuli2022tranad}. These models can be powerful, but they are often more difficult to inspect and may require more data, tuning, and computational resources than classical feature-based methods.
+Deep learning methods include LSTM encoder-decoder reconstruction models \citep{malhotra2016lstm} and transformer-based models such as TranAD \citep{tuli2022tranad}. They can be powerful, but often require more data, tuning, and computation than classical feature-based methods.
 
 Benchmark design is also a central issue in anomaly detection. Wu and Keogh argue that many time-series anomaly detection benchmarks are flawed and can create an illusion of progress, motivating more careful evaluation protocols and realistic anomaly archives \citep{wu2021ucr}. This concern is directly relevant to the present work: perfect detection on a controlled synthetic benchmark should not be interpreted as deployment-level success. For this reason, the controlled benchmark in this paper is used for mechanism testing, while the UCR archive is used as an external validation setting.
 
 This paper differs from prior work by focusing on the distinction between anomaly detection and anomaly diagnosis. The goal is not to establish a new state-of-the-art detector. Instead, we test whether SciPy-derived statistical and signal-processing features provide a transparent representation that can detect anomalies, preserve partial mechanism-level information, and expose the limitations of simple feature-group interpretability.
 
 \section{Methods}
-
-\subsection{Overview}
-
-The experiment consists of four steps. First, clean time-series signals are generated from multiple scientific domains. Second, controlled anomaly mechanisms are injected into those signals at different severity and noise levels. Third, SciPy statistical and signal-processing features are extracted from every signal. Fourth, models are trained and evaluated for binary anomaly detection, anomaly-type classification, relative signature analysis, and rule-based diagnosis.
 
 Table~\ref{tab:learning-settings} summarizes the methodological difference between the controlled and UCR evaluations.
 
@@ -193,104 +158,6 @@ freqs, psd = signal.welch(x, fs=fs, nperseg=128)
 mask = (freqs >= low) & (freqs <= high)
 bandpower = simpson(psd[mask], x=freqs[mask])
 \end{lstlisting}
-
-\subsubsection{Statistical Features}
-
-The statistical feature group includes:
-
-\begin{itemize}
-    \item mean, standard deviation, variance;
-    \item minimum, maximum, and range;
-    \item median, interquartile range, and median absolute deviation;
-    \item skewness and kurtosis;
-    \item histogram entropy;
-    \item normality-test statistics.
-\end{itemize}
-
-These features measure distributional shape, spread, central tendency, and tail behavior.
-
-\subsubsection{Amplitude and Energy Features}
-
-The amplitude-energy group includes:
-
-\begin{itemize}
-    \item absolute mean;
-    \item root mean square amplitude;
-    \item total energy;
-    \item line length.
-\end{itemize}
-
-These features measure global signal magnitude and variation.
-
-\subsubsection{Peak and Transient Features}
-
-Peak and transient features include:
-
-\begin{itemize}
-    \item peak count;
-    \item peak density;
-    \item mean peak prominence;
-    \item maximum peak prominence;
-    \item mean peak width;
-    \item maximum first derivative;
-    \item maximum second derivative.
-\end{itemize}
-
-These features are intended to capture sharp transient events such as spikes.
-
-\subsubsection{Trend and Residual Features}
-
-Trend-residual features are computed using Savitzky-Golay smoothing. The signal is smoothed, and residuals are computed as the difference between the original signal and the smoothed trend. Features include:
-
-\begin{itemize}
-    \item residual energy;
-    \item residual absolute mean;
-    \item maximum residual;
-    \item maximum rolling mean change.
-\end{itemize}
-
-These features are intended to capture deviations from local trend and gradual drift.
-
-\subsubsection{Dropout and Flatness Features}
-
-Dropout-related features are computed from rolling variance:
-
-\begin{itemize}
-    \item minimum rolling variance;
-    \item rolling variance ratio;
-    \item flatness fraction.
-\end{itemize}
-
-These features are intended to capture flatline or attenuated regions.
-
-\subsubsection{Spectral Features}
-
-Spectral features are computed using Welch power spectral density estimates. They include:
-
-\begin{itemize}
-    \item bandpower values;
-    \item bandpower ratios;
-    \item spectral entropy;
-    \item dominant frequency;
-    \item high-frequency power ratio;
-    \item local high-frequency ratio;
-    \item local spectral entropy.
-\end{itemize}
-
-These features are intended to capture oscillation disturbances and changes in frequency structure.
-
-\subsubsection{Complexity Features}
-
-Complexity features include:
-
-\begin{itemize}
-    \item zero-crossing rate;
-    \item Hjorth activity;
-    \item Hjorth mobility;
-    \item Hjorth complexity.
-\end{itemize}
-
-These features summarize temporal variability and signal complexity.
 
 \begin{table*}[htbp]
 \centering
@@ -419,15 +286,9 @@ For each anomalous signal, the rule system computes the mean response of the exp
 
 \section{Results}
 
-\subsection{Dataset Summary}
-
-The final controlled experiment produced 33,600 signals with 512 time points each. The feature extraction pipeline produced 56 SciPy-derived features per signal. The experiment included six domains, five anomaly mechanisms, seven severity levels, four noise levels, and 20 anomaly repeats per setting.
-
 \subsection{Binary Detection Was Trivial Under Controlled Injection}
 
-Binary anomaly detection was nearly solved by the SciPy feature representation. Random Forest trained on SciPy features achieved balanced accuracy, F1-score, ROC-AUC, and PR-AUC of 1.0000. Relative Signatures + Logistic Regression also achieved perfect binary detection. Although this demonstrates that the injected anomalies are measurable in SciPy feature space, it also shows that binary detection is not the scientifically interesting part of the experiment. A perfect detection score indicates that the clean/anomalous boundary is too easily separable under the current synthetic design.
-
-For this reason, we do not interpret the binary detection result as evidence of a strong anomaly detector. Instead, we treat it as evidence that the controlled perturbations produced measurable feature deviations. The central question is whether those deviations preserve information about anomaly mechanism. Table~\ref{tab:binary-detection} reports the binary detection results.
+Perfect controlled binary scores show that the injected perturbations are measurable, but also that this synthetic boundary is too easy. Table~\ref{tab:binary-detection} therefore motivates the harder mechanism task rather than a claim of deployment performance.
 
 \begin{table*}[htbp]
 \centering
@@ -452,13 +313,11 @@ Raw Signal + Logistic Regression & 0.5039 & 0.5039 & 0.4973 & 0.5093 & 0.5295 \\
 }
 \end{table*}
 
-The raw-signal tree baselines performed substantially worse than the SciPy-feature models, with balanced accuracy around 0.71 and F1 around 0.66. This shows that raw time-domain samples contain some anomaly information, but the SciPy feature representation makes the clean/anomalous boundary much more separable.
+Raw-signal tree baselines reached balanced accuracy near 0.71, showing that the SciPy representation makes the controlled boundary more separable.
 
 \subsection{Anomaly Diagnosis Was Substantially Harder}
 
-The anomaly-type classification task was much harder than binary detection. The best model, Random Forest trained on the full SciPy feature set, achieved macro-F1 = 0.4578 across five anomaly mechanisms. Each mechanism contributes 3,360 traces to the full anomalous dataset and exactly 840 traces to the stratified test set (4,200 test traces total). The Random Forest result is well above both the raw-signal Extra Trees baseline (macro-F1 = 0.2051) and a most-frequent-class dummy baseline (macro-F1 = 0.0667). On these balanced classes, the dummy has accuracy and balanced accuracy of 0.20; its macro-F1 is lower because it assigns every trace to only one class.
-
-This result shows that SciPy features preserve some mechanism-level information, but not enough for robust diagnosis across all anomaly types and domains. In other words, SciPy features can detect that a signal has changed, but determining how it changed is a harder problem. Table~\ref{tab:type-classification} reports the anomaly diagnosis results.
+Each mechanism contributes 3,360 anomalous traces and 840 traces to the stratified test set (4,200 total). The best model reached macro-F1 0.4578, above the raw-signal baseline (0.2051) and most-frequent dummy (0.0667). The dummy's balanced accuracy is 0.20 but its macro-F1 is lower because it predicts only one class. Table~\ref{tab:type-classification} reports all results.
 
 \begin{table*}[htbp]
 \centering
@@ -708,85 +567,27 @@ This variation is important. It shows that SciPy feature-based anomaly detection
 
 \section{Discussion}
 
-\subsection{Detection Is Easier Than Diagnosis}
-
-The most important finding is the gap between anomaly detection and anomaly diagnosis. Detecting whether a signal is abnormal was easy for SciPy-derived features. Both full SciPy features and compact relative signatures achieved perfect binary detection. However, identifying the specific anomaly mechanism was much harder. The best SciPy-feature model achieved macro-F1 = 0.4578, while raw-signal features were near chance.
-
-This distinction matters because many anomaly-detection systems report strong binary detection scores but provide little information about the nature of the anomaly. In scientific workflows, a detection flag is often only the first step. The more useful question is whether the system can help the scientist understand what happened.
-
-\subsection{Synthetic Performance Does Not Transfer Directly to Real Data}
-
-The real-data validation experiment clarifies the role of the controlled synthetic benchmark. In the synthetic experiment, binary detection was perfect, which indicates that the injected anomalies produced measurable feature deviations. However, on the UCR Time Series Anomaly Archive \citep{wu2021ucr}, the best method achieved only 0.2884 mean point-adjusted F1 and a 0.4107 event detection rate. This gap shows that controlled injection experiments should be used to study mechanisms, not to claim deployment-level anomaly-detection performance.
-
-The real-data results strengthen the central argument of this paper. Detection and diagnosis are different problems, and both become more difficult when anomaly structure is not controlled by the experimenter. The UCR archive introduces heterogeneous anomaly shapes, different baseline dynamics, and difficult thresholding conditions. Under these conditions, SciPy features remain useful, especially in ROC-AUC ranking, but they do not solve anomaly detection. This supports a cautious interpretation: SciPy provides a strong and transparent baseline for scientific anomaly workflows, but it should be paired with domain-specific validation.
+Controlled binary detection was perfect, but mechanism diagnosis reached only macro-F1 0.4578 and the best UCR method reached 0.2884 mean point-adjusted F1. Controlled injection therefore tests whether mechanisms are measurable, not deployment readiness. Real anomalies add heterogeneous shapes, baselines, and thresholding conditions, so scientific use requires domain-specific validation.
 
 \subsection{Naive Interpretability Failed}
 
-The rule-based diagnosis system was intentionally simple. It tested whether intuitive feature groups could directly diagnose anomaly mechanism. For example, spikes were expected to activate peak-transient features, drift was expected to activate trend-residual features, dropout was expected to activate flatness features, and oscillation disturbance was expected to activate spectral features.
-
-The results did not support this simple interpretation. The rule-based system achieved chance-level accuracy. The average relative signature map was dominated by amplitude-energy for every anomaly type. This shows that named features alone are not enough for scientific interpretability. A feature can be interpretable in isolation but still fail to provide a reliable diagnostic explanation when used in a complex multi-domain setting.
+The rule-based system tested whether intuitive groups directly diagnose mechanisms, but achieved chance accuracy because amplitude-energy dominated every average signature. Named features can be understandable in isolation without providing reliable diagnosis.
 
 \subsection{Why Global Energy Features Confound Diagnosis}
 
-The dominance of amplitude-energy features can be understood directly from the structure of additive anomalies. Let \(x \in \mathbb{R}^T\) be a clean signal and let an anomaly be represented as a perturbation \(\delta \in \mathbb{R}^T\). The observed anomalous signal is
-
+For a clean signal \(x\) and perturbation \(\delta\),
 \[
-\tilde{x} = x + \delta .
+\|x+\delta\|_2^2-\|x\|_2^2=2\langle x,\delta\rangle+\|\delta\|_2^2.
 \]
-
-The squared energy of the anomalous signal is
-
-\[
-\|\tilde{x}\|_2^2 = \|x + \delta\|_2^2 .
-\]
-
-Expanding this expression gives
-
-\[
-\|\tilde{x}\|_2^2
-=
-\|x\|_2^2
-+
-2\langle x,\delta \rangle
-+
-\|\delta\|_2^2 .
-\]
-
-Therefore, the signed change in energy is
-
-\[
-\Delta E
-=
-\|\tilde{x}\|_2^2 - \|x\|_2^2
-=
-2\langle x,\delta \rangle + \|\delta\|_2^2 .
-\]
-
-For additive spikes, oscillatory disturbances, and many distribution shifts, this quantity often increases. However, not all anomalies increase energy. A dropout or attenuation event can be represented locally by \(\delta \approx -x\), which may reduce signal energy in the affected region. Therefore, the relevant diagnostic issue is not only the sign of \(\Delta E\), but the magnitude of the deviation from the clean-domain energy baseline:
-
-\[
-|\Delta E|
-=
-\left|
-\|\tilde{x}\|_2^2 - \|x\|_2^2
-\right|.
-\]
-
-Amplitude-energy features such as RMS amplitude, absolute mean, variance, and total energy can respond to both increases and decreases in signal magnitude. This makes them mechanism-agnostic responders: they can detect that the signal's magnitude structure changed without identifying whether the cause was a spike, dropout, drift, oscillation disturbance, or distribution shift.
-
-This explains why amplitude-energy dominated the relative feature-group signature map for all anomaly types. Spike, drift, dropout, oscillation disturbance, and distribution shift all modify signal magnitude structure in some way. As a result, global energy features act as a confounder for mechanism diagnosis. They are useful for detection but structurally insufficient for distinguishing anomaly type.
+Spikes, oscillations, and shifts often increase energy, while attenuation can decrease it. Absolute deviations in RMS, variance, and energy therefore respond to many mechanisms: they detect magnitude change without identifying its cause.
 
 \subsection{SciPy Features Still Preserve Mechanism Information}
 
-Although simple feature-group rules failed, full SciPy features did preserve partial mechanism information. The best SciPy-feature classifier achieved macro-F1 = 0.4578, compared with 0.2051 for the raw-signal baseline. This means SciPy features contain useful information about anomaly type, but the information is multivariate and overlapping.
-
-This result supports a more realistic interpretation of scientific anomaly diagnosis. Mechanisms may not correspond to one feature group. Instead, they may appear as distributed patterns across statistical, amplitude, residual, spectral, flatness, peak, and complexity features.
+Full SciPy features nevertheless outperformed the raw-signal baseline (macro-F1 0.4578 versus 0.2051), suggesting that mechanism information is multivariate and overlapping rather than confined to one group.
 
 \subsection{Domain Generalization Is Partial}
 
-The leave-one-domain-out experiment showed that anomaly-type classification generalizes only partially across domains. EEG-like and fluid-sensor domains were easier to generalize to than spectroscopy and vibration. This suggests that domain dynamics matter. Spectroscopy was especially difficult because the clean spectroscopy-like baseline already contains peak-like structures, making spike-like anomalies harder to separate from normal signal morphology. Vibration was also difficult because oscillatory behavior is already part of the normal baseline, so oscillation disturbance can look like ordinary signal variation.
-
-Therefore, the paper's claim should not be that SciPy features produce universal anomaly signatures. A more defensible claim is that SciPy features provide a useful representation for anomaly detection and partial mechanism classification, while domain-specific calibration remains necessary.
+LODO results confirm domain dependence: spectroscopy already contains peaks and vibration already contains oscillations, making corresponding anomalies ambiguous. SciPy features are a useful representation, not universal anomaly signatures.
 
 
 \section{Reproducibility}
@@ -795,30 +596,12 @@ All generation, feature extraction, model training, evaluation, and UCR windowin
 
 \section{Limitations}
 
-This study has several limitations. First, the main controlled benchmark uses synthetic anomaly injection rather than naturally labeled instrument failures. This is useful for mechanistic testing because the true anomaly type, severity, and noise level are known, but the UCR validation shows that synthetic performance does not directly imply real-data robustness.
-
-Second, the binary anomaly-detection task is still too easy in the current benchmark. Even at low severity and high noise, SciPy-feature models achieved perfect detection. Future work should use weaker anomalies, more realistic nuisance variation, and harder clean/anomaly overlap.
-
-Third, the relative feature-group signatures were computed from global signal summaries. This may be insufficient for local anomaly mechanisms. Future versions should first localize anomalous regions and then compute local diagnostic features.
-
-Fourth, the rule-based diagnosis system was simple. Its failure does not prove that interpretable diagnosis is impossible. It shows that naive dominant-feature-group explanations are insufficient.
-
-Fifth, the generated domains are synthetic approximations of scientific signals. They are useful for controlled testing, but real scientific datasets may contain more complex noise, artifacts, missingness, and domain-specific structure. The UCR archive provides one external validation setting, but it does not replace domain-specific validation on the scientific instruments and workflows where the detector would actually be used.
-
-Another threat to validity is that the synthetic anomaly mechanisms are simplified mathematical perturbations. Although they allow controlled mechanism testing, real faults may combine multiple mechanisms at once, such as drift plus dropout or oscillation plus amplitude scaling.
-
-Another limitation is that the controlled and UCR experiments use different learning settings: supervised classification is possible in the controlled benchmark because anomaly labels are generated by design, while the UCR validation uses unsupervised one-class methods because only normal training windows are available. Therefore, the numerical results from the two experiments should not be compared directly.
+The synthetic generators and single-mechanism perturbations do not reproduce all instrument faults, combined anomalies, missingness, or nuisance shifts. The controlled binary task is too easy, and the all-clean baseline used for relative signatures leaks test-distribution information. The controlled supervised and UCR one-class scores are complementary rather than directly comparable. The UCR archive does not replace instrument-specific validation, and the saved predictions cannot support event-level precision.
 
 \section{Future Work}
 
-Future work should extend this study in several directions. First, external validation should be expanded beyond the UCR archive to real fault-labeled datasets from environmental monitoring, spectroscopy, astronomical photometry, industrial vibration, and laboratory sensors. Second, anomaly localization should be added so that local features can be computed within the anomalous region rather than over the full signal.
-
-A concrete path forward is to compute diagnostic features after anomaly localization rather than over the entire \(T=512\) signal. For example, spike diagnosis should be based on a local window centered around the detected transient, where peak prominence, derivative magnitude, and residual deviation are not diluted by hundreds of normal time points. Similarly, drift diagnosis should use features computed over the affected interval, such as rolling-mean slope, cumulative deviation, and local low-frequency residual structure. This would turn the current global feature pipeline into a two-stage system: first detect and localize the anomalous region, then compute mechanism-specific SciPy features within that region for diagnosis.
-
-Third, more realistic anomaly injections should be developed, including overlapping anomalies and nuisance shifts that are not true anomalies. Fourth, interpretability should be evaluated not only by feature names but by whether the explanation helps a user identify the correct anomaly mechanism.
-
-Future work should also compare SciPy-feature models with deep-learning models under limited-data conditions. A key practical question is whether SciPy features can approach deep-learning performance while being cheaper, easier to inspect, and more data-efficient.
+Future work should fit every transformation on training data, use harder and overlapping perturbations, and validate on fault-labeled instruments. A two-stage system could localize a suspicious interval before computing mechanism-specific features, preventing short events from being diluted across 512 points. User studies should test whether explanations help identify mechanisms, and limited-data comparisons should include deep models.
 
 \section{Conclusion}
 
-The controlled and real-data experiments together support a cautious but useful conclusion. SciPy statistical and signal-processing features make controlled anomalies easy to detect, but high detection performance under synthetic injection does not imply real-world robustness or diagnostic interpretability. In the controlled benchmark, anomaly-mechanism classification remained difficult and simple rule-based feature-group diagnosis performed at chance. In the UCR real-data validation, the best SciPy method achieved only 0.2884 mean point-adjusted F1, showing that although SciPy features perfectly separate synthetic clean/anomalous signals, real anomaly intervals remain difficult. These findings suggest that SciPy features are best understood as a transparent baseline and diagnostic starting point, not as a complete anomaly-detection solution. Scientific anomaly detection should distinguish between detecting that a signal is abnormal, diagnosing why it is abnormal, and validating whether the method transfers to naturally occurring anomalies.
+SciPy features perfectly separated controlled clean and anomalous signals, but mechanism diagnosis remained difficult and rule-based explanations performed at chance. Mean point-adjusted F1 of 0.2884 on UCR further limits the claim. SciPy features are a transparent baseline, not a complete solution; scientific workflows must distinguish detection, diagnosis, and real-data transfer.

@@ -19,6 +19,17 @@ project:
       affiliations:
         - id: SIUE
       corresponding: true
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Formal analysis
+        - Investigation
+        - Data curation
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
   affiliations:
     - id: SIUE
       name: Southern Illinois University Edwardsville
