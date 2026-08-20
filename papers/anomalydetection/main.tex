@@ -575,9 +575,10 @@ The rule-based system tested whether intuitive groups directly diagnose mechanis
 
 \subsection{Why Global Energy Features Confound Diagnosis}
 
-For a clean signal \(x\) and perturbation \(\delta\),
+For a clean signal \(x\), perturbation \(\delta\), and squared-energy function
+\(E(x)=\sum_t x_t^2\), the energy change is
 \[
-\|x+\delta\|_2^2-\|x\|_2^2=2\langle x,\delta\rangle+\|\delta\|_2^2.
+E(x+\delta)-E(x)=2\sum_t x_t\delta_t+E(\delta).
 \]
 Spikes, oscillations, and shifts often increase energy, while attenuation can decrease it. Absolute deviations in RMS, variance, and energy therefore respond to many mechanisms: they detect magnitude change without identifying its cause.
 
