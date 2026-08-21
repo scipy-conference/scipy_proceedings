@@ -81,7 +81,7 @@ Marginal counts
 : _methods:_ `coocur_prob`, `ochiai` [@Measuresecologicalassociation_Janson1981], `mutual_information`, `yule_y`, `yule_q`, `odds_ratio` [@MethodsMeasuringAssociation_Yule1912]
   \
   This class of association measures are derived from marginal counts alone.
-  The do not use underlying structural information between features, but only *how* observations are able to be counted/combined for statistical aggregation. The majority rely on observational units being *additive*, such that we can apply an inner product $X^TX$ on them.
+  They do not use underlying structural information between features, but only *how* observations are able to be counted/combined for statistical aggregation. The majority rely on observational units being *additive*, such that we can apply an inner product $X^TX$ on them.
 
 Bipartite projection
 : _methods:_ `hyperbolic_project` [@Scientificcollaborationnetworks._Newman2001], `resource_project` [@Bipartitenetworkprojection_Zhou2007]
@@ -182,7 +182,7 @@ Size reflects normalized weight, while color can be used for the sign (positive 
 Unlike the commonly-used method for creating Hinton diagrams from the [Matplotlib documentation](https://matplotlib.org/stable/gallery/specialty_plots/hinton_demo.html), our custom implementation in `affinis.plots.hinton` uses a cached axis to automatically scale `matplotlib.pyplot.scatter` markers based on the user's current DPI and axis dimensions.
 This lets us take advantage of vectorized C/C++ routines, and subsequently plot Hinton diagrams for much _larger_ matrices.
 
-Finally, because the change in relative matrix weights over time is often important to observe, we have added a callback capability to `hinton` additionally provides an `update_from` convenience parameter to assist with animation.
+Finally, because the change in relative matrix weights over time is often important to observe, we have added a callback capability to `hinton`, via an `update_from` convenience parameter that can assist with animation workflows.
 It accepts an existing `matplotlib.collections.PathCollection` container (such as a previous frame's scatterplot markers), which it will then modify in-place, rather than creating a new plot.
 
 
@@ -436,7 +436,7 @@ While the `Contingent` class does not have a method to automatically plot its ow
 
 ### Techniques for Scalability
 
-`Contingent.from_scalar` handles the calculation of score trajectories this as a simple broadcasting operation, since all contingency counts and derived metrics have enabled a _batch dimension_.
+`Contingent.from_scalar` handles the calculation of score trajectories as a simple broadcasting operation, since all contingency counts and derived metrics have enabled a _batch dimension_.
 In this case, rather than looping over possible thresholds, we make use of `numpy.less_equal.outer`, a so-called [`ufunc`](https://numpy.org/doc/stable/reference/generated/numpy.ufunc.outer.html) that applies the thresholding operation to all pairs of edges and thresholds, and vectorized through its C-backend.
 In addition, once the contingency counts are found, all future metric requests are derived from the cached, batched-dimension (true/false)-(positive/negative) counts.
 Unlike other binary performance metrics libraries, `Contingent` objects can be instantiated once-per-dataset, and all derived metrics only require simple arithmetic operations through Numpy.
