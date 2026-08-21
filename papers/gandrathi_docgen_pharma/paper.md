@@ -30,7 +30,7 @@ Regulatory authoring presents four substantive challenges that single-pass langu
 
 - **Structural Inconsistency:** Without a governing blueprint, models are prone to generating contradictory or duplicated content across sections of large documents.
 - **Flat Retrieval Lacks Traceability:** Vector-based search surfaces relevant content but cannot establish which source section supports a specific claim, limiting auditability.
-- **Sequential Generation Does Not Scale:** Load testing of the platform recorded approximately 25 chat-completion calls and 20 embedding calls per section, at roughly 60 sections per document; executed sequentially rather than in parallel, this call volume imposes latency unacceptable for enterprise regulatory workflows. These figures are load-test measurements against the deployed system, not production telemetry averaged over completed documents, and not a pre-set design target.
+- **Sequential Generation Does Not Scale:** Load testing of the platform recorded approximately 25 chat-completion calls and 20 embedding calls per section, at roughly 60 sections per document; executed sequentially rather than in parallel, this call volume imposes latency unacceptable for enterprise regulatory workflows. These figures are load-test measurements against the deployed system, not production telemetry averaged over completed documents, and not a pre-set design target. The specific document sample, run count, and sampling procedure behind this load test are part of the client engagement and cannot be disclosed for confidentiality reasons; we report the resulting figures without the underlying dataset.
 - **Published Systems Are QA Tools, Not Authoring Systems:** The majority of published research addresses question answering or compliance monitoring rather than end-to-end, blueprint-driven document authoring.
 
 Taken together, these limitations underscore the gap between prototype LLM applications and production-grade regulatory authoring. The central challenge addressed in this work is how to advance from exploratory prototype systems to production-ready regulatory document generation.
@@ -54,11 +54,51 @@ The system architecture converts a regulatory authoring request into a governed,
 
 @fig-architecture illustrates the architecture across integrated layers spanning agentic orchestration, knowledge grounding, blueprint planning, and production execution.
 
-The system described here is a production deployment in a proprietary pharmaceutical environment. Implementation code is not publicly available, but the architectural patterns and design decisions are described in full for reproducibility.
+The system described here is a production deployment in a proprietary pharmaceutical environment, and neither the production implementation nor the underlying evaluation data can be released. In place of runnable production code, this paper provides representative source code and pseudocode for the mechanisms central to its claims — the governed tool contract (Section 4.4) and the dependency-aware orchestration loop (Section 4.1) — sufficient for a reader to inspect, reason about, and reimplement the pattern, though not a drop-in reference implementation of the deployed system.
 
 ### 4.1 Agentic Orchestration Layer
 
 The agentic orchestration layer manages section-level document generation end to end. A supervisor component within the orchestration framework decomposes the document goal into a dependency-aware task graph. Specialist agents handle retrieval, writing, critique, validation, replanning, and formatting — making the workflow more controllable and localizing failures for easier diagnosis and remediation.
+
+Each blueprint section declares its own dependencies, i.e. the other sections whose validated content it requires before it may be drafted. @code-blueprint-deps shows a representative, illustrative fragment of this shape — not the production blueprint schema, but the pattern it follows.
+
+```{code-block} yaml
+:label: code-blueprint-deps
+:caption: Illustrative blueprint fragment showing section-level dependency declarations. Representative of the pattern described in Section 4.1, not a reproduction of the production schema.
+sections:
+  - id: safety_summary
+    depends_on: []
+  - id: efficacy_summary
+    depends_on: []
+  - id: benefit_risk_conclusion
+    depends_on: [safety_summary, efficacy_summary]
+```
+
+@code-orchestrator-loop sketches how the supervisor turns this declaration into an execution graph. A section becomes eligible once every section named in its `depends_on` list has reached a `validated` state; the supervisor dispatches all currently eligible sections concurrently, and re-evaluates eligibility as each section completes. When critique rejects a section, only that section is requeued for regeneration — its `validated` state is never set, so any not-yet-started dependents simply continue waiting rather than being torn down, while dependents already dispatched against stale upstream content are flagged for re-validation once the corrected version lands. This eligibility computation and the blocking/re-validation behavior under simulated section failures are exercised by the automated test suite described in Section 4.6.
+
+```{code-block} python
+:label: code-orchestrator-loop
+:caption: Illustrative sketch of dependency-aware dispatch, in the style of a LangGraph supervisor node. Representative of the orchestration pattern, not the production implementation.
+def eligible_sections(blueprint, state):
+    return [
+        section.id for section in blueprint.sections
+        if state[section.id] == "pending"
+        and all(state[dep] == "validated" for dep in section.depends_on)
+    ]
+
+def run_document(blueprint):
+    state = {section.id: "pending" for section in blueprint.sections}
+    while not all(status == "validated" for status in state.values()):
+        ready = eligible_sections(blueprint, state)
+        for section_id in ready:
+            state[section_id] = "in_progress"
+        results = dispatch_concurrently(ready)  # writer -> critique per section
+        for section_id, outcome in results.items():
+            # Failed critique requeues only this section; dependents stay
+            # "pending" until it reaches "validated".
+            state[section_id] = "validated" if outcome.accepted else "pending"
+    return assemble(blueprint, state)
+```
 
 ### 4.2 Knowledge Layer with Graph-Grounded Retrieval
 
@@ -183,7 +223,7 @@ Results and impact metrics: target authoring-time reduction, sections per docume
 
 ## 7. Lessons Learnt
 
-Advancing from prototype to production required the system to generate structured, traceable, and review-ready content across many sections simultaneously, while rigorously controlling cost, latency, access, and failure modes — demands that far exceed what prototype viability entails. Several consequential lessons emerged from deployment. The quantitative figures below are drawn from the platform's load-testing evaluation and deployment monitoring telemetry; they are operational observations from the deployed system rather than measurements from a controlled study with a fixed, disclosed sample size, and are reported here as engineering guidance rather than statistically validated research findings.
+Advancing from prototype to production required the system to generate structured, traceable, and review-ready content across many sections simultaneously, while rigorously controlling cost, latency, access, and failure modes — demands that far exceed what prototype viability entails. Several consequential lessons emerged from deployment. The quantitative figures below are drawn from the platform's load-testing evaluation and deployment monitoring telemetry. As with the figures in Section 2 and Section 6, the specific document sample and measurement methodology behind them are part of the client engagement and cannot be disclosed for confidentiality reasons; they are reported here as engineering observations from a real deployment, not as statistically characterized research findings with a published sample size.
 
 - **Governed tool contracts make every interaction auditable.** All agent-to-data interactions pass through typed MCP tool contracts, which means that every tool call and retrieval is logged and auditable. In a regulated environment this governance proved as important as the generated text itself, because reviewers must be able to reconstruct exactly which evidence an agent accessed and how it was queried.
 - **Blueprint quality matters more than model selection.** Investing in rigorous blueprint design measurably reduced missing, duplicate, and mis-scoped content across documents exceeding 60 sections. Across functionally similar document types, careful blueprint engineering delivered a higher return on investment than switching between comparable language models.
