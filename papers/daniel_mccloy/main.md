@@ -20,6 +20,13 @@ abstract: |
 MNE-Python [@mne_python] is open-source software for analyzing electrophysiological data in human neuroscience.
 It was created in 2010 by [Alexandre Gramfort](https://alexandre.gramfort.net/) as a port of the original [MNE](https://mne.tools/stable/install/mne_c.html) software (written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
 The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels [@statsmodels], and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
+The 1.12.1 release (2026-04-20) contained
+130,089 lines of Python source code,
+72,042 lines of test code,
+68,597 lines of docstrings and comments,
+and 318 pages of documentation
+(of which 204 are example/tutorial notebooks),
+as computed by `cloc` [@adanial_cloc].
 
 MNE-Python's initial emphasis was MEG and EEG signals, but has since expanded to encompass ECoG, fNIRS, and eyetracking data as well.
 It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
