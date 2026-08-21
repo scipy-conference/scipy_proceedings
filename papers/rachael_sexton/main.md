@@ -152,8 +152,10 @@ $$
 P = \frac{\textrm{successes}+a}{\textrm{trials}+a+b}
 $$
 
-We also provide a convenience to enforce `a+b=1`, which ensures the prior expected value is `a`, and when used for sampling purposes can prefer values of 0 or 1 (i.e. a bathtub prior).
+We also provide a convenience to enforce `a+b=1`, which ensures the prior expected value is `a`, and when used for sampling purposes can prefer values of 0 or 1.[^bathtub]
 This is done with the `zero-sum` option, like so:
+
+[^bathtub]: i.e. a bathtub distribution, with the most likely values at the extremes instead of the middle)
 
 ```python
 affinis.associations.forest_pursuit(X, pseudocts=('zero-sum',0.1))
@@ -199,7 +201,7 @@ Those workflows motivate the following submodules, which can be extended in an o
 `proximity`
 : _methods:_ `bilinear_kern`, `forest`, `forest_correlation` [@Semisupervisedlearning_Avrachenkov2017], `sinkhorn` [@Sinkhorndistanceslightspeed_Cuturi2013]
   \
-  Includes the widely applicable (but under-represented) _forest accessibilities_ kernel. Also includes a tool for Sinkhorn-Knopp iterations, which performs iterated proportional fitting to project a square matrix to its nearest doubly stochastic counterpart (removing node-degree correlations), and an inverse of the bilinear distance operation recover a kernel.
+  Includes the widely applicable (but under-represented) _forest accessibilities_ kernel. Also includes a tool for Sinkhorn-Knopp iterations, which performs iterated proportional fitting to project a square matrix to its nearest doubly stochastic counterpart (i.e. symmetric with all rows/columns summing to 1, removing node-degree correlations), and an inverse of the bilinear distance operation recover a kernel.
 
 `filter`
 : _methods:_ `threshold_value`, `threshold_connected`
@@ -213,14 +215,14 @@ Those workflows motivate the following submodules, which can be extended in an o
 
 We will note that `affinis.proximity` is not an exhaustive catalog of existing kernels on graphs [@SimilaritiesgraphsKernels_Avrachenkov2019], but does provide an interface to a few versatile functions for estimating and modifying kernels.
 
-For instance, while not provided natively in more common graph theory libraries, the forest kernel (based on work by [Chebotarev & Shamis (2002)](https://doi.org/10.1016/S1571-0653(04)00058-7) and @Semisupervisedlearning_Avrachenkov2017) is a parameterized form of an inverse regularized Laplacian:
+For instance, while not provided natively in more common graph theory libraries, the forest kernel (based on the _Matrix Forest Theorem_ from [Chebotarev & Shamis (2002)](https://doi.org/10.1016/S1571-0653(04)00058-7) and @Semisupervisedlearning_Avrachenkov2017) is a parameterized form of an inverse regularized Laplacian:
 
 $$ Q_{\beta} = \left( I+\beta L \right)^{-1} $$
 
-Entries in this proximity matrix turn out to be the probability that a node ends up sharing a tree with another node, in a randomly sampled spanning forest of the graph (hence the name).
+The theorem states that entries in this proximity matrix turn out to be the probability that a node ends up sharing a tree with another node, in a randomly sampled spanning forest of the graph (hence the name).
 Since $I+\beta L$ is positive definite (non-singular), the inversion is guaranteed to exist, and will be provably _doubly stochastic_.
 These properties make it widely usable for many network analysis tasks.
-See the references above for numerous applications of this kernel, its derived distances, and the underlying _Matrix Forest Theorem_, which plays a key role in the inference performed by `forest_pursuit`.
+See the references above for numerous applications of this kernel, and its derived distances, which play a key role in the inference performed by `forest_pursuit`.
 Our implementation is slightly more efficient than using basic `np.linalg.inverse` and similar when inverting the regularized Laplacian: we directly interface with `dpotrf` and `dpotri` LAPACK routines via Scipy, for Cholesky inversion with cached indexing for positive definite matrices (like the regularized Laplacian).
 
 Alternatively, an analyst might approximate a matrix with similar stochastic properties while avoiding matrix inversion altogether, via the Sinkhorn-Knopp algorithm (`sinkhorn`).
