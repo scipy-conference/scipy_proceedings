@@ -72,11 +72,17 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
         - jupyter
         - sklearn1
         - sklearn2
+        - mne_microstates
+        - pactools
+        - openneuropy
+        - mne_hcp
+    - rule: link-resolves
+      severity: ignore
+      keys:
+        - https://book.the-turing-way.org/
   exports:
     - id: pdf
       format: typst
