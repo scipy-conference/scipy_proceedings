@@ -30,6 +30,8 @@ as computed by `cloc` [@adanial_cloc].
 
 MNE-Python's initial emphasis was MEG and EEG signals, but has since expanded to encompass ECoG, fNIRS, and eyetracking data as well.
 It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
+MNE-Python supports reading structural MR images for visualizing estimated neural activity in the context of individual subject's anatomy,
+but does *not* perform analysis of MRI, MRS, DTI, or other MR-based neuroimaging methods; these modalities are well-covered by other Python neuroimaging software (*e.g.*, `nibabel`, `nilearn`, `nipy`, `nipype`, `DIPY`, and many others).
 
 ### Ecosystem
 
