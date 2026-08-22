@@ -87,6 +87,7 @@ project:
       severity: ignore
       keys:
         - https://book.the-turing-way.org/
+        - https://data.crossref.org/fundingdata/funder/10.13039/100014989
   exports:
     - id: pdf
       format: typst
