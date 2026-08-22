@@ -3,12 +3,9 @@
 title: "PanelBox: A Comprehensive Python Library for Panel Data Econometrics"
 abstract: |
   Panel data econometrics is ubiquitous in economic and social-science
-  research, yet Python has lacked a comprehensive library for advanced panel
-  analysis: researchers have had to fall back on proprietary Stata or on R,
-  breaking otherwise Python-native, reproducible workflows. PanelBox grew out
-  of our model-validation practice in credit risk, where econometric models
-  running in production Python systems had to be exported to Stata or R for
-  estimation and validation. We introduce
+  research, yet Python lacks a comprehensive library for advanced panel
+  analysis: researchers have to fall back on proprietary Stata or on R,
+  breaking otherwise Python-native, reproducible workflows. We introduce
   PanelBox, the first all-in-one Python library for panel data econometrics,
   implementing more than 70 models across 11 families — static linear models,
   dynamic GMM estimators (Arellano–Bond, Blundell–Bond with the Windmeijer
@@ -38,7 +35,8 @@ reconciling discrepancies by hand — slow, error-prone, and impossible to
 automate end to end. What started as an internal toolkit for validating panel
 models in pure Python grew, model family by model family, into PanelBox.
 
-The data at the center of this workflow are *panel data* — repeated
+The data at the center of a production econometrics workflow like ours are
+*panel data* — repeated
 observations on the same entities over time, such as firms observed annually
 or countries tracked across decades. Panels are the empirical backbone of
 modern economics and the social sciences [@baltagi2021; @wooldridge2010], and
@@ -65,11 +63,11 @@ SciPy [@scipy] — has lagged conspicuously behind in panel econometrics.
 
 Existing Python libraries cover only fragments of the workflow.
 `linearmodels` [@linearmodels2019] provides static fixed- and random-effects
-models — the workhorse estimators that remove, or explicitly model, the
-stable entity traits discussed above — and some support for instrumental
+models, the workhorse estimators that remove, or explicitly model, the stable
+entity traits discussed above. It also offers some support for instrumental
 variables (proxy regressors used in place of a variable that is correlated
-with the error term), but no dynamic GMM, the estimator required when the
-outcome depends on its own past, introduced in detail below. `pyfixest`
+with the error term). It has no dynamic GMM, however, the estimator required
+when the outcome depends on its own past, which we introduce below. `pyfixest`
 excels at high-dimensional fixed effects but offers neither GMM nor dynamic
 panels; and `statsmodels` [@seabold2010statsmodels] has time-series tools but
 no panel-specific GMM. Critically, none of them implement panel unit-root or
@@ -96,12 +94,12 @@ library is used and extended in practice.
 
 ## Library design: one workflow from data to report
 
-PanelBox is organized around the estimation workflow rather than around a
-catalogue of methods. The user starts from a pandas `DataFrame` in long
+PanelBox is designed to model the standard estimation workflow of applied
+econometrics. The user starts from a pandas `DataFrame` in long
 format; a common data layer wraps it together with entity and time
 identifiers, and everything downstream consumes that layer. Estimators accept
-R-style formulas via `patsy` and return a result object following the
-`statsmodels` conventions — `summary()`, `conf_int()`, `to_latex()`,
+R-style formulas via `patsy` and return a result object that follows the
+conventional `statsmodels` API — `summary()`, `conf_int()`, `to_latex()`,
 `to_html()` — so that the same result flows into the shared inference layer
 (11 standard-error types, four bootstrap methods), the diagnostics layer (50+
 tests), and the reporting layer that renders self-contained HTML, LaTeX, or
@@ -109,8 +107,9 @@ Markdown. @fig:architecture summarizes this pipeline.
 
 :::{figure} figures/fig1_architecture.png
 :label: fig:architecture
-PanelBox as a dataflow. A long-format pandas `DataFrame` enters the shared
-data layer, flows through the 11 estimator families — with the inference
+PanelBox as a dataflow. Input data, represented as a long-format pandas
+`DataFrame`, enter the shared
+data layer, flow through the 11 estimator families — with the inference
 engine supplying standard errors and bootstraps at `fit()` time — and the
 resulting objects feed the diagnostics and reporting layers. Solid colored
 boxes are the user-facing API; dashed gray boxes are internal infrastructure.
@@ -147,8 +146,10 @@ $i$ that is constant over time, such as a firm's management quality — and
 $\lambda_t$ are time effects, absorbing shocks common to all entities in
 period $t$, such as a recession year. Fixed
 effects are computed by within-transformation using sparse matrix operations
-and pandas `groupby`, so the estimator scales to large $N$ and supports
-unbalanced panels with entity-specific $T_i$.
+and pandas `groupby`, so the estimator scales to panels with thousands of
+entities and tens of thousands of observations (the benchmarks in
+@fig:performance go up to $N = 2{,}500$) and supports unbalanced panels with
+entity-specific $T_i$.
 
 ## Estimating dynamics: panel GMM
 
@@ -167,7 +168,7 @@ section. The lagged outcome is itself driven by the entity effect $\eta_i$, so
 it is correlated with the composite error: pooled OLS is biased upward, and
 the within estimator downward (the Nickell bias, @nickell1981) — the true
 dynamics lie somewhere in between, and neither estimator can find them. The
-resolution, due to @arellano1991 and @blundell1998, is to transform away
+resolution, proposed by @arellano1991 and @blundell1998, is to transform away
 $\eta_i$ and instrument the problematic regressor with its own older lags:
 old enough to be uncorrelated with today's shock, recent enough to remain
 informative. This machinery — dynamic panel GMM — is PanelBox's flagship
@@ -214,10 +215,10 @@ the moment conditions.
 
 Missing observations are a recurring practical obstacle in dynamic GMM: because
 each instrument depends on a specific lag (e.g. $y_{i,t-2}$ instruments
-$\Delta y_{it}$), a single gap can invalidate instruments. Existing tools
-handle this bluntly — `xtabond2` silently discards observations with missing
-instruments, and many practitioners drop every entity with any missing value,
-causing severe sample loss.
+$\Delta y_{it}$), a single gap can invalidate instruments. The common
+practical response is blunt: many practitioners drop every entity that is
+not observed in every period (complete-case analysis), causing severe sample
+loss.
 
 PanelBox instead validates instruments observation-by-observation. For each
 entity $i$ and period $t$ it (1) identifies the required instrument lags, (2)
@@ -225,21 +226,27 @@ checks their availability, (3) builds an entity-specific instrument set from
 whatever lags exist, and (4) assembles the block-diagonal instrument matrix
 $\mathbf{Z}$ from variable-sized blocks (@fig:unbalanced). An observation is
 kept whenever valid instruments exist, rather than discarding the whole
-entity. On the Arellano–Bond employment data this retains 72% of observations,
-against roughly 40% for `xtabond2` and 0% for naive complete-case analysis,
-shrinking standard errors without compromising instrument validity.
+entity. The Arellano–Bond employment data illustrate the difference: 140
+firms are observed for 7 to 9 years each (1,031 observations), and only 14
+of them for all 9 years. Complete-case analysis keeps those 14 firms, 126
+observations or 12.2% of the panel. PanelBox keeps 751 observations (72.8%),
+which is every observation for which a valid instrument exists once one lag
+and one difference are consumed, shrinking standard errors without
+compromising instrument validity.
 
 :::{figure} figures/fig2_unbalanced_algorithm.png
 :label: fig:unbalanced
 The unbalanced-panel algorithm: instruments are validated per observation and
-entity-specific instrument sets are assembled into a block-diagonal matrix,
-retaining observations that fixed-template approaches discard.
+entity-specific instrument sets are assembled into a block-diagonal matrix.
+On the Arellano–Bond employment data this retains 72.8% of observations against
+12.2% for complete-case analysis.
 :::
 
 ## Testing assumptions: unit roots and cointegration
 
-Estimation is only the middle of the workflow; its validity rests on
-assumptions that must themselves be tested. For macroeconomic panels the
+A real-world econometrics workflow does not end when estimation is done: the
+validity of the estimates rests on assumptions that must themselves be
+tested. For macroeconomic panels the
 first question is whether each variable has a stable long-run level or
 wanders without one (a *unit root*): regressing one wandering series on
 another produces convincing-looking but spurious correlations, so testing for
@@ -249,8 +256,10 @@ estimating relationships among variables such as GDP, prices, or exchange
 rates. This capability is unique to PanelBox among Python panel libraries,
 despite being standard in macroeconomics and finance.
 
-Three panel unit-root tests build on the entity-specific augmented
-Dickey–Fuller regression, testing $H_0: \rho_i = 0$. The LLC test
+PanelBox implements the three standard panel unit-root tests and the two
+standard cointegration tests. The unit-root tests build on the
+entity-specific augmented Dickey–Fuller regression, testing
+$H_0: \rho_i = 0$. The LLC test
 [@levin2002] assumes a common $\rho$ and uses a pooled adjusted $t$-statistic;
 the IPS test [@improsan2003] allows heterogeneous $\rho_i$ and averages the
 individual $t$-statistics into an asymptotically normal $W$; and Fisher-type
@@ -280,7 +289,7 @@ efficiency frontiers. PanelBox covers these in the same interface;
 @tbl:families maps each family to its closest Stata and R equivalents, and we
 highlight below only the capabilities not available elsewhere in Python. The
 complete catalogue, with an executable example notebook per family, is in the
-official documentation.
+official documentation at <https://panelbox.readthedocs.io/>.
 
 ```{list-table} The 11 model families in PanelBox and their closest equivalents in Stata and R. A dash means no established equivalent.
 :label: tbl:families
@@ -402,21 +411,24 @@ GMM (`gmm_lags`, `collapse`), arbitrary variable transformations through
 `patsy` formulas, marginal-effects options for nonlinear models, and the
 output format of every report (HTML, LaTeX, Markdown).
 
-Two honest boundaries: there is currently no public API for user-defined
-moment conditions or custom estimators — internally all models subclass a
-common base model and results class, and a documented, stable extension
-interface is on the roadmap — and GMM is restricted to linear dynamic panels.
-The official documentation includes a gallery of executable Jupyter notebooks
-covering every model family end to end, which is the recommended starting
-point for adapting the library to a new use case.
+At the moment there are two limitations in PanelBox that we hope to overcome
+in the future. First, there is no public API for user-defined moment
+conditions or custom estimators: internally all models subclass a common
+base model and results class, and a documented, stable extension interface
+is on the roadmap. Second, GMM is restricted to linear dynamic panels. The
+official documentation (<https://panelbox.readthedocs.io/>) includes a
+gallery of executable Jupyter notebooks covering every model family end to
+end, which is the recommended starting point for adapting the library to a
+new use case.
 
 (sec:application)=
 ## Application: dynamic labor demand
 
 To illustrate the capabilities of the library, we use it to reproduce the
 canonical application of @arellano1991: a dynamic labor-demand
-equation on UK firm-level data, a balanced panel of $N = 140$ firms over
-$T = 9$ years (1979–1987). The model
+equation on UK firm-level data, an unbalanced panel of $N = 140$ firms
+observed for 7 to 9 years between 1976 and 1984 (1,031 observations). The
+model
 
 ```{math}
 :label: labor
@@ -520,8 +532,9 @@ floating-point rounding, below any reported digit.
   - 0.00
 ```
 
-PanelBox is implemented in pure Python on NumPy/SciPy yet remains within
-20–30% of Stata's compiled `Mata` for system-GMM estimation and runs roughly
+PanelBox is implemented in pure Python on NumPy/SciPy, yet its execution time
+for system-GMM estimation is within
+20–30% of Stata's compiled `Mata`, and it runs roughly
 3–4× faster than R's `plm` (@fig:performance). For typical panels
 ($N \approx 500$, $T \approx 10$) estimation completes in 1–2 seconds; memory
 scales linearly in $NT$ thanks to sparse matrices, and bootstrap inference
@@ -540,8 +553,8 @@ across 11 families, 50+ diagnostic tests, 11 standard-error estimators, an
 interactive visualization and reporting system, and 103 bundled datasets, in a
 single MIT-licensed package built on the scientific Python stack. Its dynamic
 GMM is validated against `xtabond2` to within 0.01% and adds an unbalanced-panel
-algorithm that retains 72% of observations where existing tools retain far
-fewer, and it offers capabilities — panel unit-root and cointegration tests,
+algorithm that retains 72.8% of observations where complete-case analysis
+retains 12.2%, and it offers capabilities — panel unit-root and cointegration tests,
 four-component stochastic frontiers, non-crossing quantile regression, panel
 VAR/VECM — previously unavailable in Python. The unusual emphasis on numerical
 validation throughout this paper is not incidental: it reflects the library's
