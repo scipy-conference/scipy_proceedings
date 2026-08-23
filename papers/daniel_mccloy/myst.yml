@@ -71,6 +71,7 @@ project:
     DTI: diffusion tensor imaging
     MRS: magnetic resonance spectroscopy
     MR: magnetic resonance
+    MNE: minimum norm estimation
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
