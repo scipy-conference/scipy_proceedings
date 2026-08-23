@@ -16,9 +16,10 @@ abstract: |
   11 standard-error estimators, four bootstrap methods, an integrated
   HTML/LaTeX/Markdown reporting system with interactive Plotly visualizations,
   and 103 bundled datasets, all on top of the scientific Python stack
-  (NumPy, pandas, SciPy, statsmodels). We validate PanelBox against Stata's
-  `xtabond2` and R's `plm`, obtaining coefficient differences below 0.01%, and
-  illustrate it with a canonical dynamic labor-demand application. With 3,900+
+  (NumPy, pandas, SciPy, statsmodels). We validate PanelBox against R's `plm`,
+  reproducing its difference-GMM, fixed-effects and panel unit-root results
+  to three or more decimals on the Arellano–Bond data, and illustrate it with
+  a canonical dynamic labor-demand application. With 3,900+
   tests and an MIT license, PanelBox lets researchers run sophisticated panel
   analysis entirely in Python.
 ---
@@ -122,12 +123,12 @@ construct-then-fit pattern — a minimal estimation holds no surprises:
 ```python
 import panelbox as pb
 
-data = pb.load_dataset("arellano_bond_employment")
+data = pb.load_dataset("abdata")
 fe = pb.FixedEffects(
-    data, formula="n ~ w + k",
-    entity_var="firm_id", time_var="year",
+    "n ~ w + k", data,
+    entity_col="id", time_col="year",
 )
-result = fe.fit(cov_type="clustered", cluster="entity")
+result = fe.fit(cov_type="clustered")
 print(result.summary())
 ```
 
@@ -189,9 +190,10 @@ and generates the instrument sets automatically:
 ```python
 gmm = pb.SystemGMM(
     data, dep_var="n", lags=1,
-    id_var="firm_id", time_var="year",
+    id_var="id", time_var="year",
     exog_vars=["w", "k"],
     collapse=True, two_step=True,
+    time_dummies=False,
 )
 res = gmm.fit()
 print(f"Hansen J p-value: {res.hansen_j.pvalue:.3f}")
@@ -228,18 +230,17 @@ $\mathbf{Z}$ from variable-sized blocks (@fig:unbalanced). An observation is
 kept whenever valid instruments exist, rather than discarding the whole
 entity. The Arellano–Bond employment data illustrate the difference: 140
 firms are observed for 7 to 9 years each (1,031 observations), and only 14
-of them for all 9 years. Complete-case analysis keeps those 14 firms, 126
-observations or 12.2% of the panel. PanelBox keeps 751 observations (72.8%),
-which is every observation for which a valid instrument exists once one lag
-and one difference are consumed, shrinking standard errors without
-compromising instrument validity.
+of them for all 9 years. Complete-case analysis keeps those 14 firms and
+estimates the differenced equation on 98 observations, 9.5% of the panel.
+PanelBox estimates it on 751 observations (72.8%), every observation for
+which a valid instrument exists once one lag and one difference are consumed.
 
 :::{figure} figures/fig2_unbalanced_algorithm.png
 :label: fig:unbalanced
 The unbalanced-panel algorithm: instruments are validated per observation and
 entity-specific instrument sets are assembled into a block-diagonal matrix.
 On the Arellano–Bond employment data this retains 72.8% of observations against
-12.2% for complete-case analysis.
+9.5% for complete-case analysis.
 :::
 
 ## Testing assumptions: unit roots and cointegration
@@ -272,8 +273,8 @@ vote.
 from panelbox.validation.unit_root import LLCTest, IPSTest
 
 llc = LLCTest(data, variable="log_gdp",
-              entity_var="country", time_var="year", trend="ct")
-print(llc.test().pvalue)
+              entity_col="country", time_col="year", trend="ct")
+print(llc.run().pvalue)
 ```
 
 Together these enable a complete workflow — test for unit roots, test for
@@ -378,17 +379,18 @@ of overidentifying restrictions [@hansen1982], and the Arellano–Bond AR(1) and
 AR(2) tests for serial correlation, where AR(1) is expected to reject and AR(2)
 to not reject.
 
-Result objects render publication-ready output. `comparison_table` aligns
+Result objects render publication-ready output. `ComparisonResult` aligns
 several models side by side, and the reporting layer produces self-contained
 HTML with embedded interactive Plotly charts (28+ chart types across residual
 diagnostics, model comparison, and econometric tests) [@plotly], or static
 LaTeX/Markdown:
 
 ```python
-pb.comparison_table(
-    [ols_result, fe_result, diffgmm_result, sysgmm_result],
-    labels=["Pooled OLS", "FE", "Diff-GMM", "Sys-GMM"],
-)
+comparison = pb.ComparisonResult({
+    "Pooled OLS": ols_result, "FE": fe_result,
+    "Diff-GMM": diffgmm_result, "Sys-GMM": sysgmm_result,
+})
+print(comparison.summary())
 ```
 
 (sec:using)=
@@ -404,10 +406,10 @@ benchmarking, and replication, not a requirement.
 All estimators share one contract: construct with the data and a
 specification, call `fit()`, receive a results object with the same methods
 everywhere. Comparing a fixed-effects model with a system-GMM model is a
-one-line change of class, and `comparison_table` aligns any set of results.
+one-line change of class, and `ComparisonResult` aligns any set of results.
 Within this contract, the supported customization points are the covariance
 estimator and bootstrap scheme (per `fit()` call), the instrument design for
-GMM (`gmm_lags`, `collapse`), arbitrary variable transformations through
+GMM (`gmm_max_lag`, `collapse`), arbitrary variable transformations through
 `patsy` formulas, marginal-effects options for nonlinear models, and the
 output format of every report (HTML, LaTeX, Markdown).
 
@@ -441,109 +443,160 @@ $k_{it}$; $\alpha$ captures employment adjustment costs. We estimate it four
 ways to expose the bias–consistency trade-off:
 
 ```python
-ols = pb.PooledOLS(data, formula="n ~ L(n,1) + w + k").fit()
+data = pb.load_dataset("abdata")
+static = data.dropna(subset=["nL1"])  # nL1: lagged employment
+ols = pb.PooledOLS(
+    "n ~ nL1 + w + k", static, entity_col="id", time_col="year",
+).fit()
 fe = pb.FixedEffects(
-    data, formula="n ~ L(n,1) + w + k",
-    entity_var="firm_id", time_var="year",
-).fit(cov_type="clustered", cluster="entity")
-diffgmm = pb.DifferenceGMM(
-    data, dep_var="n", lags=1, id_var="firm_id", time_var="year",
-    exog_vars=["w", "k"], gmm_lags=[2, 9], two_step=True,
-).fit()
-sysgmm = pb.SystemGMM(
-    data, dep_var="n", lags=1, id_var="firm_id", time_var="year",
-    exog_vars=["w", "k"], collapse=True, two_step=True,
-).fit()
+    "n ~ nL1 + w + k", static, entity_col="id", time_col="year",
+).fit(cov_type="clustered")
+gmm_spec = dict(
+    dep_var="n", lags=1, id_var="id", time_var="year",
+    exog_vars=["w", "k"], gmm_max_lag=9, collapse=True,
+    two_step=True, time_dummies=True,
+)
+diffgmm = pb.DifferenceGMM(data, **gmm_spec).fit()
+sysgmm = pb.SystemGMM(data, **gmm_spec).fit()
 ```
 
-The estimates trace the textbook pattern (@fig:coefficients). Pooled OLS yields
-$\hat{\alpha} = 0.937$, biased upward; fixed effects gives $\hat{\alpha} =
-0.548$, biased downward by the Nickell bias; the GMM estimators fall in between,
-with system GMM at $\hat{\alpha} = 0.694$ (standard error 0.137) versus
-difference GMM at $0.686$ (0.152), confirming the efficiency gain from the
-additional moment conditions. The wage elasticity is consistently negative
-($\hat{\beta}_w \approx -0.57$) and capital enters positively
-($\hat{\beta}_k \approx 0.38$). Diagnostics validate the specification: the
-Hansen $J$ test does not reject ($p = 0.172$), AR(1) rejects as expected
-($p = 0.003$), AR(2) does not ($p = 0.671$), and the 91 instruments stay well
-below the 140 entities. The results match @arellano1991 to within 0.01%.
+The estimates follow the bracketing argument of @bond2002
+(@fig:coefficients). Pooled OLS yields $\hat{\alpha} = 0.931$, biased upward
+by the correlation between $n_{i,t-1}$ and $\eta_i$; fixed effects gives
+$\hat{\alpha} = 0.528$, biased downward by the Nickell bias. A consistent
+estimate should lie between the two, and both GMM estimators do: difference
+GMM at $\hat{\alpha} = 0.877$ (standard error 0.234) and system GMM at
+$0.563$ (0.194). The wide confidence intervals are the price of instrumenting
+a persistent regressor with its own lags; the system estimator's additional
+level moment conditions reduce the standard error but, with only 140 firms
+and collapsed instruments, do not eliminate it. The wage elasticity is
+negative in every specification ($\hat{\beta}_w$ between $-0.25$ and $-0.50$
+outside OLS) and capital enters positively. The diagnostics do not reject
+either GMM specification: the Hansen $J$ test gives $p = 0.244$ (difference)
+and $p = 0.230$ (system), AR(1) rejects as expected ($p < 0.01$) while AR(2)
+does not ($p = 0.57$ and $0.87$), and the instrument counts (16 and 18) stay
+far below the 140 entities.
 
 :::{figure} figures/fig5_coefficient_comparison.png
 :label: fig:coefficients
-Coefficient estimates across pooled OLS, fixed effects, difference GMM, and
-system GMM for the labor-demand model, illustrating the dynamic-panel bias
-pattern: OLS biased up, FE biased down, GMM in between.
+Coefficient on lagged employment across pooled OLS, fixed effects, difference
+GMM, and system GMM, with 95% confidence intervals. The shaded band is the
+OLS–FE bracket of @bond2002: OLS is biased upward and fixed effects downward,
+so a consistent estimate is expected to fall between them, as both GMM
+estimates do.
 :::
 
 The same building blocks support a full nonstationary-panel workflow on the
-Penn World Table: LLC and IPS tests fail to reject a unit root in log GDP
-(both $I(1)$), Pedroni's test then rejects no-cointegration on six of seven
-statistics, and a system-GMM growth regression returns a significantly negative
-coefficient on lagged log GDP ($\hat{\beta}_1 = -0.034$, SE $0.008$),
-confirming conditional convergence at about 3.4% per year — consistent with the
-growth literature [@mankiw1992].
+Penn World Table 10.01 [@feenstra2015], using the 129 countries with complete
+data for 1970–2019. The IPS test does not reject a unit root in log GDP per
+capita ($p = 1.00$) while rejecting it in first differences ($p < 0.001$), so
+the series is treated as $I(1)$; the LLC test rejects in levels, a known
+consequence of its common-root assumption under cross-sectional dependence,
+and the disagreement itself is informative. Pedroni's test then rejects
+no-cointegration between log GDP per capita, the investment share and human
+capital on five of seven statistics. A conditional-convergence regression on
+non-overlapping five-year panels gives an autoregressive coefficient of
+$0.944$ (0.006) by pooled OLS and $0.791$ (0.027) by fixed effects; system
+GMM returns $0.808$ (0.050), inside the bracket and implying convergence at
+roughly 4% per year, in line with panel estimates in the growth literature
+[@mankiw1992]. The Hansen test rejects ($p = 0.002$), however, flagging the
+instrument validity problems that are well known for this specification and
+that the library's diagnostics are designed to expose.
 
 ## Validation and performance
 
-We validate PanelBox against Stata 18's `xtabond2` [@roodman2009stata] and R's
-`plm` [@croissant2008plm], estimating identical specifications and computing
+We validate PanelBox against R's `plm` [@croissant2008plm], estimating
+identical specifications on the Arellano–Bond employment data and computing
 relative differences $\Delta = |\text{PanelBox} - \text{reference}| /
-|\text{reference}|$. For the Arellano–Bond system-GMM specification, every
-coefficient and standard error matches `xtabond2` to four decimal places, and
-the Hansen $J$, AR(1), and AR(2) statistics are identical (@tbl:validation).
-Across 25 specifications on 10 datasets — difference and system GMM, one- and
-two-step, with and without collapse, balanced and unbalanced — the mean
-coefficient difference is 0.0003% and the maximum 0.008%. Against `plm`, fixed-
-and random-effects coefficients, the Hausman statistic, and LLC/IPS unit-root
-statistics agree to machine precision: these estimators are closed-form,
-deterministic linear algebra, so two correct implementations differ only in
-floating-point rounding, below any reported digit.
+|\text{reference}|$ (@tbl:validation). For difference GMM — two-step,
+collapsed instruments, year dummies, Windmeijer-corrected standard errors —
+every coefficient, standard error, and the Hansen $J$ statistic match
+`plm::pgmm` to at least three decimals, and the instrument count is
+identical. Fixed-effects estimates match to six decimals. The panel unit-root
+tests were compared with `plm::purtest` on log GDP per capita from the Penn
+World Table: the IPS $W$ statistic is identical, and the LLC statistic agrees
+within 2%, the residual difference coming from the long-run variance kernel.
 
-```{list-table} Numerical validation against Stata xtabond2, system GMM on the Arellano–Bond employment data. Standard errors and p-values in parentheses.
+System GMM requires a different reference. `plm` and Stata's `xtabond2`
+[@roodman2009stata] weight the level equations differently and do not agree
+with each other on this estimator; PanelBox follows the `xtabond2` convention
+(its default $H$ matrix, which links the differenced and level equations). We
+therefore compare system GMM with `pydynpd` [@wu2023pydynpd], a Python
+implementation of the `xtabond2` algorithm validated against Stata by its
+author: coefficients agree within 1–2% and the Hansen $J$ test is identical,
+the remaining gap being one level-equation observation per entity that
+`xtabond2` retains and PanelBox currently drops. A direct comparison with
+Stata is planned.
+
+```{list-table} Numerical validation on the Arellano–Bond employment data (two-step GMM, collapsed instruments, year dummies; standard errors in parentheses). Difference GMM and fixed effects are compared with R plm; system GMM with pydynpd, a Python replica of Stata's xtabond2; unit-root tests with plm on Penn World Table log GDP per capita.
 :label: tbl:validation
 :header-rows: 1
 * - Quantity
-  - Stata
+  - Reference
   - PanelBox
   - $\Delta$ (%)
-* - `L.n` coef. (s.e.)
-  - 0.6861 (0.1366)
-  - 0.6861 (0.1366)
+* - Diff-GMM `L.n` (s.e.)
+  - 0.8766 (0.2342)
+  - 0.8766 (0.2342)
   - 0.00
-* - `w` coef. (s.e.)
-  - −0.5685 (0.1398)
-  - −0.5685 (0.1398)
+* - Diff-GMM `w` (s.e.)
+  - −0.4587 (0.1698)
+  - −0.4587 (0.1698)
   - 0.00
-* - `k` coef. (s.e.)
-  - 0.3838 (0.0619)
-  - 0.3838 (0.0619)
+* - Diff-GMM `k` (s.e.)
+  - 0.1907 (0.0649)
+  - 0.1907 (0.0649)
   - 0.00
-* - Hansen J
-  - 93.56 (0.172)
-  - 93.56 (0.172)
+* - Diff-GMM Hansen $J$ ($p$) / instruments
+  - 7.91 (0.244) / 16
+  - 7.91 (0.244) / 16
   - 0.00
-* - AR(1)
-  - −2.93 (0.003)
-  - −2.93 (0.003)
+* - Sys-GMM `L.n` (s.e.)
+  - 0.5622 (0.1871)
+  - 0.5634 (0.1938)
+  - 0.21
+* - Sys-GMM `w` (s.e.)
+  - −0.2414 (0.1116)
+  - −0.2467 (0.1107)
+  - 2.2
+* - Sys-GMM `k` (s.e.)
+  - 0.3547 (0.1462)
+  - 0.3534 (0.1503)
+  - 0.37
+* - Sys-GMM Hansen $J$ ($p$) / instruments
+  - 9.33 (0.230) / 18
+  - 9.33 (0.230) / 18
   - 0.00
-* - AR(2)
-  - −0.42 (0.671)
-  - −0.42 (0.671)
+* - FE `w` (s.e.)
+  - −0.367774 (0.052323)
+  - −0.367774 (0.052323)
   - 0.00
+* - FE `k` (s.e.)
+  - 0.640367 (0.020142)
+  - 0.640367 (0.020142)
+  - 0.00
+* - IPS $W$ (lags 1)
+  - 6.392
+  - 6.392
+  - 0.00
+* - LLC $t^*$ (lags 1)
+  - −3.547
+  - −3.518
+  - 0.82
 ```
 
-PanelBox is implemented in pure Python on NumPy/SciPy, yet its execution time
-for system-GMM estimation is within
-20–30% of Stata's compiled `Mata`, and it runs roughly
-3–4× faster than R's `plm` (@fig:performance). For typical panels
-($N \approx 500$, $T \approx 10$) estimation completes in 1–2 seconds; memory
-scales linearly in $NT$ thanks to sparse matrices, and bootstrap inference
-parallelizes with near-linear speedup.
+PanelBox is implemented in pure Python on NumPy/SciPy. On simulated dynamic
+panels with $T = 10$, two-step system GMM takes 1.1 s for $N = 500$ and
+4.6 s for $N = 2{,}500$, against 0.5 s and 3.1 s for `plm::pgmm`
+(@fig:performance): within a factor of 1.5–2 of the compiled R
+implementation for $N \ge 500$, with a fixed overhead of about 0.6 s that
+dominates on small panels. Memory scales linearly in $NT$, and bootstrap
+inference parallelizes with near-linear speedup.
 
 :::{figure} figures/fig8_performance.png
 :label: fig:performance
-System-GMM execution time across panel sizes. PanelBox tracks Stata closely and
-substantially outperforms R's `plm`.
+Execution time of two-step system GMM as a function of the number of entities
+($T = 10$, median of three runs): PanelBox versus R `plm::pgmm`.
 :::
 
 ## Conclusion
@@ -551,10 +604,11 @@ substantially outperforms R's `plm`.
 PanelBox brings comprehensive panel data econometrics to Python: 70+ models
 across 11 families, 50+ diagnostic tests, 11 standard-error estimators, an
 interactive visualization and reporting system, and 103 bundled datasets, in a
-single MIT-licensed package built on the scientific Python stack. Its dynamic
-GMM is validated against `xtabond2` to within 0.01% and adds an unbalanced-panel
-algorithm that retains 72.8% of observations where complete-case analysis
-retains 12.2%, and it offers capabilities — panel unit-root and cointegration tests,
+single MIT-licensed package built on the scientific Python stack. Its
+difference GMM reproduces R's `plm` to three decimals and its system GMM
+follows the `xtabond2` conventions, it adds an unbalanced-panel algorithm
+that estimates on 72.8% of the Arellano–Bond observations where complete-case
+analysis uses 9.5%, and it offers capabilities — panel unit-root and cointegration tests,
 four-component stochastic frontiers, non-crossing quantile regression, panel
 VAR/VECM — previously unavailable in Python. The unusual emphasis on numerical
 validation throughout this paper is not incidental: it reflects the library's
