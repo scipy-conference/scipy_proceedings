@@ -146,11 +146,17 @@ A record-run is one record processed once under one configuration and repeat. A 
 
 Comparisons within a sweep used the same selected record cohort. Most single-agent worker and API sweep points, and each token-pressure stress configuration, were observed once; experiments with repeated runs are identified explicitly. The single-agent and multi-agent campaigns used different source cohorts, execution hosts, code paths, and service-call graphs, so their absolute throughput and agreement values should not be interpreted as a head-to-head architecture benchmark. The later verifier-cap and token-pressure results should likewise be compared within their revised multi-agent runtime rather than against absolute agreement levels from the earlier multi-agent implementation.
 
+We use *reference agreement*, *stability*, and *regression* for different questions. Reference agreement compares predictions with labels on the 200-record reference-labeled sample; it is not a comprehensive estimate of downstream accuracy. Stability asks whether repeated runs on the same records produce the same label sets. Regression probes ask whether configurations preserve behavior on records selected from prior successes. The 12-record guardrail and 100-record known-solvable cohorts therefore do not estimate population accuracy.
+
+The repeated configurations are reported as pooled record-run counts, mean runtime, and repeat consistency. Reprocessing the same fixed cohort does not create independent samples from a broader population, so these repeats are not used to claim statistical equivalence or a population-level confidence interval. Configurations observed once provide no run-to-run variance estimate; small differences between operating points should therefore be treated as descriptive.
+
 We report aggregate operational measurements only: configuration settings, record counts, completion status, wall-clock runtime, timeout and error counts, token totals, estimated cost, checkpoint recovery behavior, and verifier or routing summaries. Source narratives, prompts, retrieved evidence, raw logs, per-record outputs, and checkpoint files are not published because they may contain sensitive regulated information.
 
 Token pressure means the rate at which prompt, completion, reasoning, and embedding tokens are consumed by hosted model services. We summarize this as peak tokens per minute (TPM) over a 60-second window. Reasoning effort is a model configuration that changes the internal reasoning budget available to the model when the provider exposes such a setting. It is distinct from workflow confidence tiers, severity labels, or human review categories.
 
 Cost estimates are market approximations based on a June 12, 2026 snapshot of public list prices: GPT-5 input tokens at USD 1.25 per 1M tokens, GPT-5 output tokens at USD 10.00 per 1M tokens, and text-embedding-3-small at USD 0.02 per 1M tokens [@openai2025gpt5; @openai2024embeddings]. These estimates do not reflect negotiated enterprise pricing, Azure-specific billing, cached-input discounts, reserved capacity, or confidential commercial terms.
+
+Three related controls were held outside the experimental sweeps. The API concurrency gate bounded simultaneous in-flight calls, while the runner separately classified rate-limit responses; the reported single-agent sweeps recorded no rate-limit errors, so they do not characterize behavior beyond quota saturation. Temperature remained at each workflow's configured provider-compatible setting and was not varied. Prompt caching was not instrumented as a separate treatment or cost category, and the cost estimates do not assume cached-input discounts.
 
 In the multi-agent structured-prediction experiments, we evaluate two representations of each predicted label: its identifier and its normalized three-component tuple. We refer to strict set comparison of those representations as exact label-ID match and exact label-triplet match, respectively.
 
@@ -375,13 +381,13 @@ We also computed an observed Pareto set from the revised-runtime multi-agent run
 
 | Operating point | Role | Prediction yield | Exact label-triplet | Records/min | Peak TPM | Est. cost/100 usable |
 |---|---|---:|---:|---:|---:|---:|
-| Verifier concurrency cap 3 | Recommended balanced point | 89.0% | 84.0% | 10.30 | 393k | USD 5.63 |
+| Verifier concurrency cap 3 | Illustrative balanced point | 89.0% | 84.0% | 10.30 | 393k | USD 5.63 |
 | Verifier concurrency cap 10 | Cost/throughput edge | 88.0% | 84.3% | 10.51 | 428k | USD 5.59 |
 | High concurrency | Latency-biased point | 86.0% | 79.0% | 16.69 | 707k | USD 5.63 |
 | Maximum pressure | Stress-bound point | 89.0% | 84.0% | 13.71 | 576k | USD 6.95 |
 ```
 
-The recommended operating point is the verifier concurrency cap of 3 because it preserved the highest prediction yield and repeat consistency in the concurrency cap sweep while bounding verifier fan-out. The verifier concurrency cap of 10 was slightly cheaper and faster in aggregate, but with lower repeat consistency and higher peak token pressure. The high-concurrency and maximum-pressure rows are useful frontier points for latency- or stress-oriented deployments, but they are less attractive as default operating points.
+Within the observed rows, we use the verifier concurrency cap of 3 as an illustrative balanced point because it preserved the highest prediction yield and repeat consistency in the concurrency cap sweep while bounding verifier fan-out. The verifier concurrency cap of 10 was slightly cheaper and faster in aggregate, but with lower repeat consistency and higher peak token pressure. This descriptive comparison does not establish that cap 3 is statistically superior or a universal default. The high-concurrency and maximum-pressure rows remain useful frontier points for latency- or stress-oriented deployments.
 
 Taken together, these operating points motivate the framework below: choose configurations by constraints and observed tradeoffs, rather than by maximizing any single knob.
 
@@ -389,28 +395,23 @@ Taken together, these operating points motivate the framework below: choose conf
 
 The experiments suggest that production agent design should be treated as a constrained optimization problem. Organizations usually want lower cost, higher throughput, reliable completion, and auditability, but these goals can conflict. Increasing parallelism can improve runtime while increasing external-service pressure. Reducing timeout budgets can make a batch appear faster while converting slow-but-recoverable records into failures. Adding verifier or fan-out stages can improve review metadata while increasing model calls, latency, and possible failure points. This makes the framework more than a tuning checklist: each configuration maps to an observed operating point with measurable benefits and constraint violations.
 
-The objective is not to maximize the number of agents, workers, retries, or reasoning steps. The goal is to maximize usable completed records per unit time while minimizing cost, rework, failure rate, and review burden under reliability and auditability constraints.
+The objective is not to maximize the number of agents, workers, retries, or reasoning steps. Let $x=(W,A,T,R,K,V,C_v,F,E)$ denote a configuration from the candidate set $\mathcal{X}$ for workload $D$. We define a feasible set using completion yield $y_D$, strict agreement $g_D$, cost per usable record $c_D$, peak token pressure $p_D$, final failure rate $f_D$, and an indicator $a$ for required auditability controls:
 
-```text
-choose configuration x = (W, A, T, R, K, V, C_v, F, E, P)
-
-maximize:
-  throughput(x) = usable_completed_records(x) / wall_clock_time(x)
-
-subject to:
-  completion_yield(x) >= Y_min
-  strict_agreement(x) >= G_min
-  cost_per_usable_record(x) <= C_max
-  peak_TPM(x) <= P_max
-  final_failure_rate(x) <= F_max
-  auditability_controls(x) are enabled
-
-secondary objectives:
-  minimize cost_per_usable_record(x)
-  minimize recovered_internal_error_rate(x)
-  minimize reprocessing_cost(x)
-  minimize review_burden(x)
+```{math}
+:label: eq-feasible-configurations
+\mathcal{F}(D)=\left\{x\in\mathcal{X}: y_D(x)\geq Y_{\min},\; g_D(x)\geq G_{\min},\; c_D(x)\leq C_{\max},\; p_D(x)\leq P_{\max},\; f_D(x)\leq F_{\max},\; a(x)=1\right\}.
 ```
+
+The agreement constraint $g_D$ must be estimated on an appropriate reference-labeled calibration set. Agreement measured on the selected known-solvable cohort is a regression signal and must not be substituted for a population-level quality threshold. When representative labels are unavailable, the framework cannot claim that constraint has been validated.
+
+Among feasible configurations, the primary objective is usable throughput $q_D$, where $u_D$ is the number of usable completed records and $t_D$ is wall-clock time:
+
+```{math}
+:label: eq-operating-point
+x^\star\in\underset{x\in\mathcal{F}(D)}{\arg\max}\;q_D(x),\qquad q_D(x)=\frac{u_D(x)}{t_D(x)}.
+```
+
+When several configurations are feasible, we compare them in the Pareto sense over $(-q_D,c_D,e_D,r_D,b_D)$, where $e_D$ is recovered-internal-error rate, $r_D$ is reprocessing cost, and $b_D$ is review burden. This formulation avoids inventing universal weights: local policy sets the hard thresholds and chooses among non-dominated operating points.
 
 ```{table} Agent configuration variables.
 :label: tab-configuration-variables
@@ -426,7 +427,6 @@ secondary objectives:
 | `C_v` | Verifier concurrency cap | 1, 3, 6, 10, 20 |
 | `F` | Fan-out across evidence sources | on, off |
 | `E` | Model or reasoning-effort setting | low, medium, high |
-| `P` | Token-per-minute pressure budget | observed peak TPM below provider quota |
 ```
 
 A practical calibration loop has eight steps: select a representative workload; run a conservative baseline; sweep one control at a time; record run manifests; estimate the observed response surface; reject configurations that violate hard constraints; identify approximate Pareto-efficient configurations; and choose an operating point that matches the organization's goal. In this study, we use observed sweeps to illustrate the tradeoff structure rather than claiming a complete global Pareto frontier over all possible configurations.
@@ -447,6 +447,8 @@ Static decision-support widget for exploring aggregate calibration results. The 
 ## Reliability Patterns
 
 The experiments point to several production patterns.
+
+Standard distributed-systems controls need stage-aware semantics in an agent workflow. Retrying a deterministic service operation is intended to reproduce the same result; retrying an LLM call can produce a different candidate. A verifier then evaluates that new candidate, so replay can change both the verifier input and its verdict. Evidence fan-out multiplies stochastic calls and makes record latency depend on the slowest branch, while a failed branch may be hidden by a successful fallback or synthesis path. For this reason, the workflow must bound and log record attempts, evidence branches, and verifier calls separately, and must distinguish recovered stage failures from final record failures.
 
 First, separate compute parallelism from API concurrency. Local worker count should not directly determine simultaneous hosted API calls. A bounded semaphore or equivalent limiter should protect each shared dependency, including hosted LLM APIs, managed search, object storage, and secret stores.
 
@@ -474,7 +476,7 @@ This study has several limitations:
 - **Provider drift.** The systems used hosted LLM APIs and managed cloud services whose behavior can change over time as providers update models, infrastructure, and content policies.
 - **Replay nondeterminism.** Replaying historical agent-internal failures did not reproduce the same final failures. This is an important reliability result, but it also means some historical failure modes could not be deterministically recreated under current conditions.
 - **Disclosure limits.** Some sensitive examples cannot be disclosed.
-- **Uncertainty treatment.** Some experiments include repeated runs and consistency metrics, but we do not report confidence intervals for every measurement. Small differences between nearby operating points should be interpreted cautiously.
+- **Uncertainty treatment.** Repeated configurations report pooled counts, mean runtime, and consistency, but not run-level standard deviations or confidence intervals. Repeats on the same fixed cohort are clustered observations rather than independent population samples, and configurations observed once provide no variance estimate. Small differences between nearby operating points should be interpreted cautiously; a confirmatory study should pre-specify repeated runs and an uncertainty model.
 - **Limited labeled calibration.** The single-agent labeled calibration used only 12 records and should not be interpreted as a definitive accuracy benchmark.
 - **Reference-label interpretation.** The 200-record multi-agent structured-prediction probe evaluates agreement with internal reference labels, not broader downstream correctness. The exact-match metrics are intentionally strict: a record counts as correct only when the full predicted label set matches the reference label set. They do not give partial credit for predictions that are close or partly correct.
 - **Known-solvable selection.** The 100-record concurrency stability, verifier concurrency cap, and token-pressure probes were selected from prior successes. They are regression and pressure tests, not unbiased accuracy samples. The verifier concurrency cap sweep used three repeats, while the token-pressure stress matrix used one completed run per stress configuration. One high-reasoning stress attempt ended as a partial operational run and was replaced with a successful confirmation run in the reported table.
