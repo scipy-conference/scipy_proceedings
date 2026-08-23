@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent Optimization Widget</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SciPy 2026 aggregate calibration artifact</p>
+          <h1>Agent Optimization Widget</h1>
+        </div>
+        <div class="privacy-note">
+          Aggregate runs only. No record-level source data, prompts, retrieved
+          evidence, logs, or checkpoints.
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Agent optimization workspace">
+        <aside class="controls" aria-label="Configuration controls">
+          <div class="segmented" role="tablist" aria-label="Architecture">
+            <button
+              type="button"
+              class="segment"
+              data-view-button="single"
+              aria-selected="false"
+            >
+              Single Agent
+            </button>
+            <button
+              type="button"
+              class="segment active"
+              data-view-button="multi"
+              aria-selected="true"
+            >
+              Multi-Agent
+            </button>
+          </div>
+
+          <section class="control-group hidden" data-control-panel="single">
+            <h2>Configuration</h2>
+            <label for="singleWorker">Local workers</label>
+            <select id="singleWorker"></select>
+
+            <label for="singleApi">Hosted API concurrency</label>
+            <select id="singleApi"></select>
+
+            <label for="singleRecords">Projected records</label>
+            <input
+              id="singleRecords"
+              type="number"
+              min="1"
+              step="1"
+              value="200"
+            />
+
+            <h2>Constraints</h2>
+            <label for="singleMinYield">Minimum completion yield</label>
+            <div class="range-row">
+              <input
+                id="singleMinYield"
+                type="range"
+                min="95"
+                max="100"
+                step="0.1"
+                value="99"
+              />
+              <output id="singleMinYieldOut"></output>
+            </div>
+
+            <label for="singleMinThroughput">Minimum usable records/min</label>
+            <div class="range-row">
+              <input
+                id="singleMinThroughput"
+                type="range"
+                min="1"
+                max="12"
+                step="0.1"
+                value="5"
+              />
+              <output id="singleMinThroughputOut"></output>
+            </div>
+
+            <label for="singleMaxCost">Maximum cost/record, USD</label>
+            <input
+              id="singleMaxCost"
+              type="number"
+              min="0"
+              step="0.001"
+              value="0.125"
+            />
+          </section>
+
+          <section class="control-group" data-control-panel="multi">
+            <h2>Configuration</h2>
+            <label for="multiFamily">Experiment family</label>
+            <select id="multiFamily">
+              <option value="known_solvable_concurrency">
+                Known-solvable concurrency
+              </option>
+              <option value="verifier_cap_sweep">Verifier cap sweep</option>
+              <option value="token_pressure_stress">
+                Token-pressure stress
+              </option>
+            </select>
+
+            <label for="multiRun">Operating point</label>
+            <select id="multiRun"></select>
+
+            <h2>Constraints</h2>
+            <label for="multiMinYield">Minimum prediction yield</label>
+            <div class="range-row">
+              <input
+                id="multiMinYield"
+                type="range"
+                min="80"
+                max="100"
+                step="0.5"
+                value="86"
+              />
+              <output id="multiMinYieldOut"></output>
+            </div>
+
+            <label for="multiMinAgreement">Minimum strict agreement</label>
+            <div class="range-row">
+              <input
+                id="multiMinAgreement"
+                type="range"
+                min="75"
+                max="100"
+                step="0.5"
+                value="82"
+              />
+              <output id="multiMinAgreementOut"></output>
+            </div>
+
+            <label for="multiMinThroughput">Minimum records/min</label>
+            <div class="range-row">
+              <input
+                id="multiMinThroughput"
+                type="range"
+                min="1"
+                max="18"
+                step="0.1"
+                value="8"
+              />
+              <output id="multiMinThroughputOut"></output>
+            </div>
+
+            <label for="multiMaxCost">Maximum cost/100 records, USD</label>
+            <input
+              id="multiMaxCost"
+              type="number"
+              min="0"
+              step="0.01"
+              value="7.00"
+            />
+          </section>
+
+          <section class="how-to" aria-label="How to use the widget">
+            <h2>Use In 4 Steps</h2>
+            <ol>
+              <li>Choose an architecture and experiment family.</li>
+              <li>Select an observed operating point.</li>
+              <li>
+                Move the constraint sliders to set minimum acceptable yield,
+                agreement, throughput, and cost.
+              </li>
+              <li>
+                Use the feasible count, best-feasible badge, threshold lines,
+                and table to compare tradeoffs.
+              </li>
+            </ol>
+          </section>
+
+          <section class="definitions" aria-label="Term definitions">
+            <h2>Definitions</h2>
+            <dl>
+              <dt>Local workers</dt>
+              <dd>Parallel local tasks processing independent records.</dd>
+              <dt>Hosted API concurrency</dt>
+              <dd>Maximum simultaneous hosted model or retrieval calls.</dd>
+              <dt>Batch concurrency</dt>
+              <dd>
+                Records processed at the same time in the multi-agent workflow.
+              </dd>
+              <dt>Verifier concurrency cap</dt>
+              <dd>Maximum simultaneous verifier-stage model calls.</dd>
+              <dt>Prediction yield</dt>
+              <dd>
+                Share of records that produce a usable predicted label set.
+              </dd>
+              <dt>Strict agreement</dt>
+              <dd>Exact match between predicted and reference label sets.</dd>
+              <dt>Peak tokens/min</dt>
+              <dd>
+                Peak tokens per minute (TPM), used as a token-pressure proxy.
+              </dd>
+              <dt>Pareto-relevant</dt>
+              <dd>
+                Not clearly dominated across cost, throughput, yield, and
+                agreement.
+              </dd>
+            </dl>
+          </section>
+        </aside>
+
+        <section class="results" aria-live="polite">
+          <div class="status-strip" id="statusStrip"></div>
+
+          <section
+            class="metrics"
+            id="metrics"
+            aria-label="Selected operating point metrics"
+          ></section>
+
+          <section class="charts" aria-label="Charts">
+            <div class="chart-panel">
+              <div class="chart-head">
+                <h2>Throughput</h2>
+                <span id="throughputCaption"></span>
+              </div>
+              <svg
+                id="throughputChart"
+                viewBox="0 0 520 240"
+                role="img"
+                aria-label="Throughput comparison chart"
+              ></svg>
+            </div>
+
+            <div class="chart-panel">
+              <div class="chart-head">
+                <h2>Operating Points</h2>
+                <span id="scatterCaption"></span>
+              </div>
+              <svg
+                id="scatterChart"
+                viewBox="0 0 520 240"
+                role="img"
+                aria-label="Operating point scatter chart"
+              ></svg>
+            </div>
+          </section>
+
+          <section class="table-section">
+            <div class="chart-head">
+              <h2>Observed Runs</h2>
+              <span>Rows are aggregate calibration measurements.</span>
+            </div>
+            <div class="table-wrap">
+              <table id="runTable"></table>
+            </div>
+          </section>
+
+          <section class="notes" id="notes"></section>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

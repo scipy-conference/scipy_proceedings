@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-agent record-level concurrency stability</title>
+  <desc id="desc">Two-panel chart. Usable throughput increases from 2.05 to 8.92 predictions per minute as concurrency rises from 2 to 12, while prediction yield, exact label-ID agreement, and repeat consistency remain near or above 93 percent.</desc>
+  <rect width="900" height="620" fill="#ffffff"/>
+  <text x="450" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#202124">Record-level concurrency improves speed without observed stability loss</text>
+  <text x="450" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#5f6368">Known-solvable 100-record cohort; three repeats per setting</text>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
+    <text x="90" y="103" font-size="15" font-weight="700" fill="#202124">Throughput</text>
+    <line x1="90" y1="285" x2="790" y2="285" stroke="#202124" stroke-width="1.5"/>
+    <line x1="90" y1="115" x2="90" y2="285" stroke="#202124" stroke-width="1.5"/>
+    <g stroke="#e8eaed">
+      <line x1="90" y1="285" x2="790" y2="285"/>
+      <line x1="90" y1="251" x2="790" y2="251"/>
+      <line x1="90" y1="217" x2="790" y2="217"/>
+      <line x1="90" y1="183" x2="790" y2="183"/>
+      <line x1="90" y1="149" x2="790" y2="149"/>
+      <line x1="90" y1="115" x2="790" y2="115"/>
+    </g>
+    <g text-anchor="end">
+      <text x="78" y="289">0</text>
+      <text x="78" y="255">2</text>
+      <text x="78" y="221">4</text>
+      <text x="78" y="187">6</text>
+      <text x="78" y="153">8</text>
+      <text x="78" y="119">10</text>
+    </g>
+    <text transform="translate(28 200) rotate(-90)" text-anchor="middle" font-size="14" fill="#202124">Usable predictions per minute</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="174" y="250" width="96" height="35" fill="#1a73e8"/>
+    <rect x="394" y="182" width="96" height="103" fill="#1a73e8"/>
+    <rect x="614" y="133" width="96" height="152" fill="#1a73e8"/>
+    <text x="222" y="242" font-size="13" fill="#1a73e8">2.05</text>
+    <text x="442" y="174" font-size="13" fill="#1a73e8">6.09</text>
+    <text x="662" y="125" font-size="13" fill="#1a73e8">8.92</text>
+    <text x="222" y="308" font-size="13" fill="#5f6368">2</text>
+    <text x="442" y="308" font-size="13" fill="#5f6368">6</text>
+    <text x="662" y="308" font-size="13" fill="#5f6368">12</text>
+    <text x="442" y="334" font-size="15" fill="#202124">Record-level concurrency</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="12" fill="#5f6368">
+    <text x="90" y="373" font-size="15" font-weight="700" fill="#202124">Agreement and stability guardrails</text>
+    <line x1="90" y1="560" x2="790" y2="560" stroke="#202124" stroke-width="1.5"/>
+    <line x1="90" y1="390" x2="90" y2="560" stroke="#202124" stroke-width="1.5"/>
+    <g stroke="#e8eaed">
+      <line x1="90" y1="560" x2="790" y2="560"/>
+      <line x1="90" y1="526" x2="790" y2="526"/>
+      <line x1="90" y1="492" x2="790" y2="492"/>
+      <line x1="90" y1="458" x2="790" y2="458"/>
+      <line x1="90" y1="424" x2="790" y2="424"/>
+      <line x1="90" y1="390" x2="790" y2="390"/>
+    </g>
+    <g text-anchor="end">
+      <text x="78" y="564">90%</text>
+      <text x="78" y="530">92%</text>
+      <text x="78" y="496">94%</text>
+      <text x="78" y="462">96%</text>
+      <text x="78" y="428">98%</text>
+      <text x="78" y="394">100%</text>
+    </g>
+    <text transform="translate(28 475) rotate(-90)" text-anchor="middle" font-size="14" fill="#202124">Rate</text>
+  </g>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="222,458 442,425 662,458" stroke="#1a73e8" stroke-width="3"/>
+    <polyline points="222,509 442,515 662,498" stroke="#188038" stroke-width="3"/>
+    <polyline points="222,509 442,509 662,458" stroke="#f29900" stroke-width="3"/>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle">
+    <circle cx="222" cy="458" r="5" fill="#1a73e8"/>
+    <circle cx="442" cy="425" r="5" fill="#1a73e8"/>
+    <circle cx="662" cy="458" r="5" fill="#1a73e8"/>
+    <circle cx="222" cy="509" r="5" fill="#188038"/>
+    <circle cx="442" cy="515" r="5" fill="#188038"/>
+    <circle cx="662" cy="498" r="5" fill="#188038"/>
+    <circle cx="222" cy="509" r="5" fill="#f29900"/>
+    <circle cx="442" cy="509" r="5" fill="#f29900"/>
+    <circle cx="662" cy="458" r="5" fill="#f29900"/>
+    <text x="222" y="583" fill="#5f6368">2</text>
+    <text x="442" y="583" fill="#5f6368">6</text>
+    <text x="662" y="583" fill="#5f6368">12</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="13" fill="#202124">
+    <rect x="602" y="366" width="250" height="74" rx="4" fill="#f8fafd" stroke="#dadce0"/>
+    <circle cx="620" cy="388" r="5" fill="#1a73e8"/>
+    <text x="634" y="392">Prediction yield</text>
+    <circle cx="620" cy="411" r="5" fill="#188038"/>
+    <text x="634" y="415">Exact label-ID match</text>
+    <circle cx="620" cy="434" r="5" fill="#f29900"/>
+    <text x="634" y="438">Repeat consistency</text>
+  </g>
+</svg>

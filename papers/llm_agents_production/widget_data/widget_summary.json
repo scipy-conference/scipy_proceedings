@@ -1,0 +1,84 @@
+{
+  "architecture": "single_agent",
+  "status": "ready_for_widget_mvp",
+  "pricing_assumption": {
+    "basis": "public OpenAI API pricing market approximation",
+    "gpt5_input_usd_per_1m_tokens": 1.25,
+    "gpt5_output_usd_per_1m_tokens": 10.0,
+    "text_embedding_3_small_usd_per_1m_tokens": 0.02,
+    "disclaimer": "Actual Azure OpenAI or enterprise pricing may differ due to negotiated rates, cached-input discounts, reserved capacity, data residency adjustments, or commercial terms."
+  },
+  "baseline": {
+    "run": "baseline_limit200_w8_a3_t300_k50",
+    "workers": 8,
+    "api_concurrency": 3,
+    "records": 200,
+    "successful": 199,
+    "completion_yield": 0.995,
+    "usable_records_per_minute": 2.125,
+    "runtime_minutes": 93.65,
+    "estimated_public_cost_usd": 24.4563,
+    "cost_per_usable_record_usd": 0.1229
+  },
+  "best_observed": {
+    "run": "api_limit200_w12_a12_t300_k50",
+    "workers": 12,
+    "api_concurrency": 12,
+    "records": 200,
+    "successful": 200,
+    "completion_yield": 1.0,
+    "usable_records_per_minute": 10.517,
+    "runtime_minutes": 19.02,
+    "estimated_public_cost_usd": 24.0321,
+    "cost_per_usable_record_usd": 0.1202,
+    "throughput_lift_vs_baseline": 4.95
+  },
+  "quality_probe": {
+    "records": 12,
+    "repeats": 3,
+    "reference_config": {
+      "config": "w12_a3",
+      "exact_matches": 33,
+      "record_runs": 36,
+      "exact_match_rate": 0.9167,
+      "consistency_rate": 1.0,
+      "missing_codes": 0,
+      "extra_codes": 3
+    },
+    "best_throughput_config": {
+      "config": "w12_a12",
+      "exact_matches": 34,
+      "record_runs": 36,
+      "exact_match_rate": 0.9444,
+      "consistency_rate": 0.9167,
+      "missing_codes": 0,
+      "extra_codes": 2
+    },
+    "interpretation": "No observed quality degradation for the highest-throughput configuration on the 12-record labeled calibration probe; sample is too small for a definitive accuracy benchmark."
+  },
+  "widget_recommendation": {
+    "default_workers": 12,
+    "default_api_concurrency": 12,
+    "task_timeout_seconds": 300,
+    "checkpoint_every": 50,
+    "recommendation_label": "Fastest observed single-agent setting"
+  },
+  "multi_agent_recommendation": {
+    "config": "verifier_cap_3",
+    "batch_concurrency": 10,
+    "verifier_concurrency": 3,
+    "reasoning_effort": "medium",
+    "prediction_yield": 0.89,
+    "exact_label_triplet_match": 0.84,
+    "repeat_consistency": 0.91,
+    "usable_records_per_minute": 10.303,
+    "peak_total_tpm": 392915,
+    "estimated_public_cost_usd_per_100_usable": 5.6326,
+    "recommendation_label": "Balanced multi-agent verifier-cap operating point"
+  },
+  "data_files": {
+    "optimization_results_csv": "single_agent_optimization_results.csv",
+    "quality_probe_csv": "single_agent_quality_probe.csv",
+    "multi_agent_operating_points_csv": "multi_agent_operating_points.csv"
+  }
+}
