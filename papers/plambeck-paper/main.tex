@@ -1,12 +1,12 @@
 \title{Optimising HCP Sample Allocation in Pharma: Combining Nonlinear Ensemble Learning, Spatial Lags, and Integer Programming}
 
 \begin{abstract}
-Pharmaceutical companies distribute free drug samples to physicians, yet these samples frequently go to healthcare providers (HCPs) whose prescribing is unlikely to change, wasting a large share of industry-wide promotional spending. We present a framework that combines machine learning with mathematical optimisation to decide how many free samples of the anticoagulant Eliquis each HCP should receive, using historical prescribing and promotional data. We collect the prescribing behaviour of HCPs at weekly intervals; the resulting dataset comprises 2.1 years of history (109 weekly observations per HCP), totalling roughly 1.2 million provider-week records for 11,006 U.S. HCPs, together with more than 80 engineered features describing promotional activity, prescription outcomes, market share of competing and complementary therapies, patient demographics, and treatment ratios. A sparsity filter removes weak or noisy variables to improve interpretability and reduce overfitting. We then train CatBoost models, grouped into bands by prescriber value and augmented with spatial lag features that summarise how nearby providers behave, to predict the incremental gain in Total Prescriptions (TRx) and New-to-Brand prescriptions (NBRx) from additional samples; TRx measures the overall volume of prescriptions for a medication, while NBRx counts a patient's first prescription for that drug. These predictions feed a 0--1 mixed-integer programme that selects one sample quantity per HCP subject to HCP-level and territory-level pill-budget limits and operational business rules on feasibility, historical consistency, and sample availability. In a model-implied counterfactual evaluation, the spatially informed allocation increases aggregate TRx by approximately 6\%, concentrating samples on high-value providers and reducing oversupply to low-impact segments. This 6\% is a model-implied projection: realized field impact after deployment is expected to be lower, on the order of 1 to 3\%, because operational frictions, representative discretion, sample availability, and market-response uncertainty attenuate optimised recommendations. For scale, apixaban (the molecule marketed as Eliquis) accounted for roughly 19.8 million U.S. prescriptions in 2023, about 5 million per quarter \cite{ClinCalcApixaban2023}, so even single-digit efficiency gains are operationally meaningful; we report prescription-volume rather than revenue impact, as product-specific financial assumptions are outside this paper's scope. The study illustrates how spatial econometrics, machine learning, and constrained optimisation can be combined to support pharmaceutical sample-allocation planning.
+Pharmaceutical companies distribute free drug samples to physicians, yet these samples frequently go to healthcare providers (HCPs) whose prescribing is unlikely to change, wasting a large share of industry-wide promotional spending. We present a framework that combines machine learning with mathematical optimisation to decide how many free samples of the anticoagulant Eliquis each HCP should receive, using historical prescribing and promotional data. We collect the prescribing behaviour of HCPs at weekly intervals; the resulting dataset comprises 2.1 years of history (109 weekly observations per HCP), totalling roughly 1.2 million provider-week records for 11,006 U.S. HCPs, together with more than 80 engineered features describing promotional activity, prescription outcomes, market share of competing and complementary therapies, patient demographics, and treatment ratios. A sparsity filter removes weak or noisy variables to improve interpretability and reduce overfitting. We then train CatBoost models, grouped into bands by prescriber value and augmented with spatial lag features that summarise how nearby providers behave, to predict the incremental gain in Total Prescriptions (TRx) and New-to-Brand prescriptions (NBRx) from additional samples; TRx measures the overall volume of prescriptions for a medication, while NBRx counts a patient's first prescription for that drug. These predictions feed a 0--1 mixed-integer programme that selects one sample quantity per HCP subject to HCP-level and territory-level pill-budget limits and operational business rules on feasibility, historical consistency, and sample availability. In a model-implied counterfactual evaluation, the spatially informed allocation increases aggregate TRx by approximately 6\%, concentrating samples on high-value providers and reducing oversupply to low-impact segments. This 6\% is a model-implied projection: realised field impact after deployment is expected to be lower, on the order of 1 to 3\%, because operational frictions, representative discretion, sample availability, and market-response uncertainty attenuate optimised recommendations. For scale, apixaban (the molecule marketed as Eliquis) accounted for roughly 19.8 million U.S. prescriptions in 2023, about 5 million per quarter \cite{ClinCalcApixaban2023}, so even single-digit efficiency gains are operationally meaningful; we report prescription-volume rather than revenue impact, as product-specific financial assumptions are outside this paper's scope. The study illustrates how spatial econometrics, machine learning, and constrained optimisation can be combined to support pharmaceutical sample-allocation planning.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-The U.S. pharmaceutical and medical-device industry spent roughly \$30 billion on medical marketing in 2016, of which an estimated \$13--15 billion was free drug samples \cite{Schwartz2019}; this refers to industry-wide U.S. spending, not a Pfizer-specific budget. The prevailing assumption is that samples stimulate trial and loyalty, and rigorous evidence confirms they can raise new prescription starts and reshape brand choice when paired with detailing (sales representative visits to clinicians) \cite{Gonul2001,MizikJacobson2004,DonohueCevascoRosenthal2018}. Yet decades of scholarship also highlight ethical tension: grounded-theory interviews with physicians show that aggressive sampling can erode prescriber autonomy and blur professional boundaries \cite{Malik2020}, while policy debates question whether oversupply merely displaces paid prescriptions without creating genuine therapeutic value \cite{JosephMantrala2009}. These concerns motivate a shift from blanket distribution toward data-driven, patient-centric allocation.
+The U.S. pharmaceutical and medical-device industry spent roughly \$30 billion on medical marketing in 2016, of which an estimated \$13--15 billion was free drug samples \cite{Schwartz2019}; this refers to industry-wide U.S. spending, not a Pfizer-specific budget. The prevailing assumption is that samples stimulate trial and loyalty, and rigorous evidence confirms they can raise new prescription starts and reshape brand choice when paired with detailing (sales representative visits to clinicians) \cite{Gonul2001,MizikJacobson2004,DonohueCevascoRosenthal2018}. Yet decades of scholarship also highlights ethical tension: grounded-theory interviews with physicians show that aggressive sampling can erode prescriber autonomy and blur professional boundaries \cite{Malik2020}, while policy debates question whether oversupply merely displaces paid prescriptions without creating genuine therapeutic value \cite{JosephMantrala2009}. These concerns motivate a shift from blanket distribution toward data-driven, patient-centric allocation.
 
 A second motivation is economic. Even modest percentage-point gains in efficiency translate into hundreds of millions of dollars in freed-up resources \cite{Schwartz2019}. Literature reviews across nine countries consistently find that samples and face-to-face detailing dominate promotion budgets regardless of geography \cite{RajputPandey2022}, underscoring the global relevance of optimisation. Research on pandemic-era field activity further shows that pharmaceutical promotion shifted rapidly toward digital and remote channels \cite{Chiplunkar2020,KhanBasak2021}. To remain competitive, commercial teams must decide not only how many samples to drop, but where, when, and to whom: decisions that require predictive accuracy at scale.
 
@@ -15,6 +15,10 @@ Traditional marketing mix and nonlinear mixed-effects models impose fixed functi
 From an optimisation standpoint, free samples deliver diminishing marginal returns and sometimes negative returns at high volumes \cite{JosephMantrala2009}, while dynamic allocation policies can raise long-run profit and cut field calls by 20\% \cite{MontoyaNetzerJedidi2010}. Industry case studies echo these academic findings: IQVIA reports a 15\% reduction in oversampling after implementing breakeven analysis guided by machine learning \cite{IQVIA2025}, and an Axtria engagement found that machine learning-driven value scores re-ordered half of all targeted physicians while improving patient coverage to 95\% \cite{Awadhwal2023}. More than 70\% of life sciences firms now pilot Next Best Action engines for budget-constrained field forces \cite{MulinariOzieranski2022}.
 
 Despite these advances, two practical gaps persist. First, most published models ignore the territorial quotas and pill-inventory caps that govern real commercial operations. Second, few studies integrate predictive modelling with a mathematically rigorous optimisation layer capable of selecting one counterfactual scenario per HCP under hard constraints. We address both gaps by leveraging 1.2 million rolling HCP--week observations for 11,006 prescribers in the eligible Pfizer call-plan universe, where each HCP--week represents a repeated weekly aggregation of prescribing and promotional activity for a given HCP across all field representatives. We construct 80+ rolling-window features and a quarterly forward indicator representing the planned sample-drop decision window used for quarterly field allocation, then train decile-banded CatBoost ensembles enriched with inverse-distance spatial lags of the optimand. Out-of-fold uplift predictions then feed a 0--1 mixed-integer programme (CBC solver with DP fallback) that enforces both HCP-level and territory-level pill bounds and operational business rules.
+
+This paper extends an earlier OSF preprint version of this work \cite{PlambeckPuleriGonzalez2025}. Relative to that preprint, the present version incorporates revisions made during the SciPy review process: it distinguishes explicitly between the model-implied projected uplift (\(\sim\)6\%) and the more conservative realised field-impact expectation (1--3\%) in both the abstract and Results rather than only in the Discussion, de-jargons terminology for a general computational audience, and defines TRx, NBRx, and detailing on first use.
+
+The remainder of the paper is organised as follows. Section~\ref{sec:data} describes the HCP--week panel, data sources, and engineered feature categories. Section~\ref{sec:methods} details the modelling pipeline, including sparsity filtering, the log-plus-one response transformation, spatial-lag feature construction, and the territorial constraints that bound the optimisation. Section~\ref{sec:mip_overview} formalises the mixed-integer programme that selects a sample-drop scenario per HCP, along with the top-off heuristic used to spend residual territory capacity. Section~\ref{sec:stats_eval} defines the statistical evaluation methodology, including the expected-uplift metric and the Kruskal--Wallis significance test. Section~\ref{sec:results} reports model fit and partial-dependence results, followed by growth-score distribution and response-curve analyses, feature importance, and the optimisation and lift-assessment results. We close with a discussion of limitations and directions for future work.
 
 From a managerial standpoint, the system is intended to support quarterly sample-planning decisions about which HCPs should receive how many sample units within each territory. Recommendations are delivered at the territory level to district managers, who apportion inventory across field representatives; representatives then use those guidance values when planning office visits. Because the recommended quantities are anchored to historically observed HCP-specific ranges and territory ceilings, the outputs remain operationally defensible, easier to review, and less likely to trigger exception handling by field leadership.
 
@@ -33,8 +37,6 @@ Prescription-claims variables come from IQVIA Xponent and Symphony IDV feeds: ne
 Geographic and peer-context features are computed as inverse-distance spatial lags of the optimand from U.S. ZIP-code centroids, following demonstrations that spatial lag and eigenvector predictors reduce model error by up to one third \cite{Liuetal2022}.
 
 \begin{table}[ht]
-  \caption{Model Feature Categories and Abstracted Variables. \textit{(Actual feature names have been anonymized for proprietary reasons.)}}
-  \label{tab:variables}
   \centering
   \begin{tabular}{@{}p{0.45\linewidth} p{0.45\linewidth}@{}}
     \toprule
@@ -44,7 +46,7 @@ Geographic and peer-context features are computed as inverse-distance spatial la
     FTR\_VAR\_001 & Action variable (e.g., promotional input forecasted over 13 weeks) \\
     \midrule
     \multicolumn{2}{@{}l@{}}{\textbf{Target Optimands}} \\
-    FTR\_VAR\_002 & Target outcome variable A (e.g., predicted behavior over 13 weeks) \\
+    FTR\_VAR\_002 & Target outcome variable A (e.g., predicted behaviour over 13 weeks) \\
     FTR\_VAR\_003 & Target outcome variable B (alternative target of interest) \\
     \midrule
     \multicolumn{2}{@{}l@{}}{\textbf{Historical Inputs}} \\
@@ -72,6 +74,8 @@ Geographic and peer-context features are computed as inverse-distance spatial la
     FTR\_VAR\_041 to FTR\_VAR\_043 & Specialty exclusion, global exclusion, override flags \\
     \bottomrule
   \end{tabular}
+  \caption{Model Feature Categories and Abstracted Variables. \textit{(Actual feature names have been anonymised for proprietary reasons.)}}
+  \label{tab:variables}
 \end{table}
 
 \section{Methods}\label{sec:methods}
@@ -81,15 +85,15 @@ Figure~\ref{fig:pipeline_schematic} summarises the end-to-end pipeline from roll
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\linewidth]{figures/figure_pipeline_schematic.png}
-  \caption{Pipeline schematic for the proposed framework. Data engineering constructs rolling-window HCP-level predictors and look-forward outcomes; machine learning models estimate band-specific response surfaces; scenario generation creates feasible HCP-level sample choices subject to historical and operational bounds; the mixed-integer program selects one scenario per HCP under HCP-level and territory-level constraints; a top-off heuristic spends residual inventory; and the final field pack reports HCP ID, territory ID, prior allocation, optimized allocation, and projected response.}
+  \caption{Pipeline schematic for the proposed framework. Data engineering constructs rolling-window HCP-level predictors and look-forward outcomes; machine learning models estimate band-specific response surfaces; scenario generation creates feasible HCP-level sample choices subject to historical and operational bounds; the mixed-integer programme selects one scenario per HCP under HCP-level and territory-level constraints; a top-off heuristic spends residual inventory; and the final field pack reports HCP ID, territory ID, prior allocation, optimised allocation, and projected response.}
   \label{fig:pipeline_schematic}
 \end{figure}
 
 \subsection{Training Data Preparation}
 
-We extract the raw observational panels for each HCP from Pfizer's North American commercial data environment and perform upstream filtering, joins, and aggregation before modeling. The resulting analysis tables are then transferred into Python for feature engineering and estimation \cite{RahmanMueller2021,Chamberlain2022}.
+We extract the raw observational panels for each HCP from Pfizer's North American commercial data environment and perform upstream filtering, joins, and aggregation before modelling. The resulting analysis tables are then transferred into Python for feature engineering and estimation \cite{RahmanMueller2021,Chamberlain2022}.
 
-Two binary indicators, \texttt{IS\_TRX\_ZERO} and \texttt{IS\_SAMPLES\_ZERO}, are created in-database. For every healthcare provider \(i\) observed over \(T_i\) weeks we compute
+Two binary indicators, \texttt{IS\_TRX\_ZERO} and \texttt{IS\_SAMPLES\_ZERO}, are created in-database. For every healthcare provider \(i\) observed over \(T_i\) weeks we compute panel sparsity as
 \begin{equation}\label{eq:sparsity}
 \bar r_i
 = \frac{1}{3T_i}
@@ -99,7 +103,7 @@ Two binary indicators, \texttt{IS\_TRX\_ZERO} and \texttt{IS\_SAMPLES\_ZERO}, ar
     + \mathbf{1}\{\text{both}=1\}
   \Bigr],
 \end{equation}
-and retain only those panels whose average sparsity \(\bar r_i\) does not exceed \(r^* = 0.30\). Panels shorter than the minimum length \(T_{\min}=100\) are dropped, and no more than \(R_{\max}=1.2\) million unique provider-week records are processed in a single run. Randomised batching (500 IDs per chunk) prevents memory spikes while the global row limit guarantees that downstream feature engineering remains in-core.
+and retain only those panels whose average sparsity \(\bar r_i\) does not exceed \(r^* = 0.30\). Panels shorter than the minimum length \(T_{\min}=100\) weeks are dropped, and no more than \(R_{\max}=1.2\) million unique provider-week records are processed in a single run. Randomised batching (500 IDs per chunk) prevents memory spikes while the global row limit guarantees that downstream feature engineering remains in-core.
 
 \begin{figure}[ht]
   \centering
@@ -172,7 +176,7 @@ Feature engineering proceeds in three passes:
 
 \subsection{Spatial Geometry \& Lagging}\label{sec:spatial}
 
-We integrate territory call-list data by issuing a lightweight Snowflake SQL session that runs a multi-CTE query to filter on reference dates, deduplicate HCP rows, and compute per-territory quarterly and annual call totals, percentages, and pill quotas. The resulting table, containing \texttt{PFZ\_CUST\_ID}, \texttt{TERR\_CD}, \texttt{GEOGRAPHY}, \texttt{TERR\_OD}, \texttt{PRCT\_OD}, \texttt{TERR\_MAX}, and \texttt{TERR\_MIN}, is merged into our cleaned panel on \texttt{PFZ\_CUST\_ID}, and any missing territory codes are logged and removed. We then enrich this merged panel with dissolved territory geometries and attach standardized GEOGRAPHY names and polygon shapes to each HCP row. Finally, inverse-distance spatial lags of the optimand are computed at each timestamp by taking the dot product \( W_t y_t \), where \( W_t \) denotes the spatial weights matrix and \( y_t \) the panel of optimand values. This transforms geographic context into continuous predictors that mitigate residual autocorrelation and enhance model performance \cite{DellaVignaGentzkow2019}.
+We integrate territory call-list data by issuing a lightweight Snowflake SQL session that runs a multi-CTE query to filter on reference dates, deduplicate HCP rows, and compute per-territory quarterly and annual call totals, percentages, and pill quotas. The resulting table, containing \texttt{PFZ\_CUST\_ID}, \texttt{TERR\_CD}, \texttt{GEOGRAPHY}, \texttt{TERR\_OD}, \texttt{PRCT\_OD}, \texttt{TERR\_MAX}, and \texttt{TERR\_MIN}, is merged into our cleaned panel on \texttt{PFZ\_CUST\_ID}, and any missing territory codes are logged and removed. We then enrich this merged panel with dissolved territory geometries and attach a standardised \texttt{GEOGRAPHY} field (the territory-name column carried over from the TCL) and polygon shapes to each HCP row. Finally, inverse-distance spatial lags of the optimand are computed at each timestamp by taking the dot product \( W_t y_t \), where \( W_t \) denotes the spatial weights matrix and \( y_t \) the panel of optimand values. This transforms geographic context into continuous predictors that mitigate residual autocorrelation and enhance model performance \cite{DellaVignaGentzkow2019}.
 
 Hence, to model spatial spillover effects, we introduce a lagged version of the optimand, computed weekly for each provider:
 \[
@@ -182,7 +186,7 @@ Hence, to model spatial spillover effects, we introduce a lagged version of the 
   \quad
   \sum_{j} w_{ij} = 1,
 \]
-where \(\mathcal{N}(i)\) is the set of spatial neighbors of provider \(i\) and \(w_{ij}\) are the row-standardised inverse-distance weights, normalized to sum to one. This lag term captures externalities in treatment behavior: providers in adjacent regions may respond similarly to market dynamics, competitive pressure, or institutional norms. Including the lagged optimand improves generalisation by accounting for spatial autocorrelation, a known confounder in healthcare outcomes research \cite{Wangetal2023}. The resulting predictor sharpens model accuracy and aligns with econometric best practices for spatially referenced data, while also enabling GIS-based review of territory-level recommendation clusters during operational planning.
+where \(\mathcal{N}(i)\) is the set of spatial neighbors of provider \(i\) and \(w_{ij}\) are the row-standardised inverse-distance weights, normalised to sum to one. This lag term captures externalities in treatment behaviour: providers in adjacent regions may respond similarly to market dynamics, competitive pressure, or institutional norms. Including the lagged optimand improves generalisation by accounting for spatial autocorrelation, a known confounder in healthcare outcomes research \cite{Wangetal2023}. The resulting predictor sharpens model accuracy and aligns with econometric best practices for spatially referenced data, while also enabling GIS-based review of territory-level recommendation clusters during operational planning.
 
 \begin{figure}[ht]
   \centering
@@ -193,16 +197,14 @@ where \(\mathcal{N}(i)\) is the set of spatial neighbors of provider \(i\) and \
 
 \subsection{Spatial Autocorrelation Analysis}
 
-Each provider is linked to a geographic unit, typically a sales territory, by joining their \texttt{PFZ\_CUST\_ID} to the Territory Call List (TCL), a canonical mapping produced by the field planning team. We then overlay this mapping with a precomputed spatial weights matrix, based on geospatial contiguity or centroid distance, to calculate spatial lags of the optimand for each week. These lagged values represent the average behavior of geographically proximate peers and are included as continuous predictors in the final model.
+Each provider is linked to a geographic unit, typically a sales territory, by joining their \texttt{PFZ\_CUST\_ID} to the Territory Call List (TCL), a canonical mapping produced by the field planning team. We then overlay this mapping with a precomputed spatial weights matrix, based on geospatial contiguity or centroid distance, to calculate spatial lags of the optimand for each week. These lagged values represent the average behaviour of geographically proximate peers and are included as continuous predictors in the final model.
 
-Spatial lags are motivated by empirical evidence in regional science and marketing analytics showing that nearby agents often respond similarly to interventions or market forces. In our use case, healthcare providers in adjacent territories may be influenced by shared sales representatives, institutional affiliations, or regional policy shifts. Including the lagged optimand thus allows the model to adjust for correlated behavior and unobserved spatial shocks, reducing residual autocorrelation and improving predictive accuracy.
+Spatial lags are motivated by empirical evidence in regional science and marketing analytics showing that nearby agents often respond similarly to interventions or market forces. In our use case, healthcare providers in adjacent territories may be influenced by shared sales representatives, institutional affiliations, or regional policy shifts. Including the lagged optimand thus allows the model to adjust for correlated behaviour and unobserved spatial shocks, reducing residual autocorrelation and improving predictive accuracy.
 
 Table~\ref{tab:spatial_nbrx} presents the results of Moran's I and Getis-Ord G* statistics for the NBRx optimand and the Pfizer sample-drop forecast. Table~\ref{tab:spatial_trx} does the same for the TRx optimand.
 
 \begin{table}[ht]
   \centering
-  \caption{Spatial Autocorrelation for NBRx Variables}
-  \label{tab:spatial_nbrx}
   \small
   \begin{tabular}{@{}lrrrrrrrrrr@{}}
     \toprule
@@ -216,12 +218,12 @@ Table~\ref{tab:spatial_nbrx} presents the results of Moran's I and Getis-Ord G* 
       & $0.01739$ & $0.01751$ & $-1.2279$ & $0.2195$ & No \\
     \bottomrule
   \end{tabular}
+  \caption{Spatial Autocorrelation for NBRx Variables}
+  \label{tab:spatial_nbrx}
 \end{table}
 
 \begin{table}[ht]
   \centering
-  \caption{Spatial Autocorrelation for TRx Variables}
-  \label{tab:spatial_trx}
   \small
   \begin{tabular}{@{}lrrrrrrrrrr@{}}
     \toprule
@@ -235,9 +237,11 @@ Table~\ref{tab:spatial_nbrx} presents the results of Moran's I and Getis-Ord G* 
       & $0.01757$ & $0.01747$ & $0.8159$ & $0.4146$ & No \\
     \bottomrule
   \end{tabular}
+  \caption{Spatial Autocorrelation for TRx Variables}
+  \label{tab:spatial_trx}
 \end{table}
 
-For NBRx, the Moran's I statistic for the target variable is significant (\(p=0.028\)), suggesting weak but statistically relevant spatial autocorrelation and justifying the inclusion of spatial lags in predictive modeling. By contrast, the TRx optimand did not exhibit significant spatial autocorrelation (\(p=0.39\)), indicating a more diffuse or independent pattern. Neither case showed significant Getis-Ord G* clustering for the sample-drop variable, implying no current geographic bias in sampling.
+For NBRx, the Moran's I statistic for the target variable is significant (\(p=0.028\)), suggesting weak but statistically relevant spatial autocorrelation and justifying the inclusion of spatial lags in predictive modelling. By contrast, the TRx optimand did not exhibit significant spatial autocorrelation (\(p=0.39\)), indicating a more diffuse or independent pattern. Neither case showed significant Getis-Ord G* clustering for the sample-drop variable, implying no current geographic bias in sampling.
 
 \begin{figure}[ht]
   \centering
@@ -276,7 +280,7 @@ where \(\mathcal H_t\) denotes the set of distinct HCPs assigned to territory \(
 
 The variance of Smart Targeting's optimal detailing recommendations is empirically observed to lie within a 1 to 3\% band (a property of the upstream benchmark, unrelated to the projected uplift reported later). This tight variance range acts as a de facto regularisation mechanism, constraining the optimisation's feasible region and ensuring that pill allocations remain congruent with the original intent of Smart Targeting. The effect is to preserve geographic equity while still allowing for localised optimisation, and to guarantee that no territory's sample drop count diverges materially from historically validated expectations \cite{Awadhwal2023}.
 
-These form the territorial constraints for our mixed-integer programme that will be formalized in a later section:
+These form the territorial constraints for our mixed-integer programme that will be formalised in a later section:
 
 \paragraph{Territory constraints}
 \[
@@ -421,7 +425,7 @@ We now specify the mixed-integer programming framework which consumes the counte
 \end{align}
 
 \paragraph{Solver Strategy}
-We solve the 0--1 MIP with the open-source CBC solver. If CBC returns a non-optimal status, each territory is repaired via a vectorised knapsack dynamic programme, guaranteeing a feasible near-optimal solution. In practice, 85--95\% of each \( U_t \) is typically used; a final top-off heuristic allocates any remainder proportionally to \( v_i \).
+We solve the 0--1 MIP (mixed-integer programme, a discrete optimisation problem with binary decision variables) with the open-source CBC solver (COIN-OR Branch and Cut). If CBC returns a non-optimal status, each territory is repaired via a vectorised knapsack dynamic programme, guaranteeing a feasible near-optimal solution. In practice, 85--95\% of each \( U_t \) is typically used; a final top-off heuristic allocates any remainder proportionally to \( v_i \).
 
 \paragraph{Dual Insights}
 Let \(\lambda_t^{\max}\) be the multiplier for a territory's upper bound. Then the marginal change in the Lagrangian \(\mathcal L\) with respect to the national pill budget \(P_{\mathrm{adj}}\),
@@ -456,9 +460,9 @@ where \(x_{ij}^{\star}\) is the post-solver decision. The residual pills are dis
     \;=\;
     s_i^{\star} + \operatorname{round}\!\bigl(\Delta_i\bigr).
 \]
-Any rounding imbalance is corrected by a simple greedy \(\pm1\) adjustment, prioritizing HCPs with higher \(v_i\) when adding pills and those with lower \(v_i\) when subtracting. The result is a final vector of integer sample-drop recommendations that exactly match each territory's upper bound.
+Any rounding imbalance is corrected by a simple greedy \(\pm1\) adjustment, prioritising HCPs with higher \(v_i\) when adding pills and those with lower \(v_i\) when subtracting. The result is a final vector of integer sample-drop recommendations that exactly match each territory's upper bound.
 
-Because some HCPs have no valid territory mapping in the Smart Targeting call plan (or were filtered out by our date cutoff), they would otherwise be omitted from the allocation. We therefore construct ``refuse'' tables for both missing-territory and out-of-date HCPs, conformance-casting them to our schema and assigning each a minimal default sample drop (e.g. one pill), with all other fields left null or default. These rows are appended to the optimized output, and each is tagged via a DROP\_REASON flag (``terr-dropped'' or ``date-dropped''), ensuring that every HCP originally under consideration, whether or not they could be territory-matched, appears in the final field deployment package.
+Because some HCPs have no valid territory mapping in the Smart Targeting call plan (or were filtered out by our date cutoff), they would otherwise be omitted from the allocation. We therefore construct ``refuse'' tables for both missing-territory and out-of-date HCPs, conformance-casting them to our schema and assigning each a minimal default sample drop (e.g. one pill), with all other fields left null or default. These rows are appended to the optimised output, and each is tagged via a DROP\_REASON flag (``terr-dropped'' or ``date-dropped''), ensuring that every HCP originally under consideration, whether or not they could be territory-matched, appears in the final field deployment package.
 
 \subsection{Deployment and Implementation Considerations}
 
@@ -467,7 +471,7 @@ In operational use, the allocation is refreshed quarterly and delivered as guida
 \section{Statistical Analysis Methodology and Evaluation Criteria}
 \label{sec:stats_eval}
 
-After the optimiser (plus top-off) has produced a revised sample-allocation plan, we score both the latest observed status-quo regimen (up to a fixed reference date) and the counterfactual (\emph{optimised}) allocations on the \emph{post}--reference-date scenarios using the same three-band CatBoost ensemble. In other words, we apply our trained model once to the unadjusted drops to obtain \emph{empirical} predictions and again to the optimiser's chosen scenarios to obtain \emph{optimised} predictions. These should be interpreted as model-implied counterfactual forecasts rather than realized causal outcomes. Denote these paired forecasts by
+After the optimiser (plus top-off) has produced a revised sample-allocation plan, we score both the latest observed status-quo regimen (up to a fixed reference date) and the counterfactual (\emph{optimised}) allocations on the \emph{post}--reference-date scenarios using the same three-band CatBoost ensemble. In other words, we apply our trained model once to the unadjusted drops to obtain \emph{empirical} predictions and again to the optimiser's chosen scenarios to obtain \emph{optimised} predictions. These should be interpreted as model-implied counterfactual forecasts rather than realised causal outcomes. Denote these paired forecasts by
 \[
   e_i = \widehat y_i^{(\mathrm{emp})},
   \qquad
@@ -520,8 +524,6 @@ We fit a CatBoost regressor separately on three bands of historic \texttt{growth
 
 \begin{table}[ht]
 \centering
-\caption{Model fit statistics by HCP-value band}
-\label{tab:fit_stats}
 \small
 \begin{tabular}{@{}llcc@{}}
 \toprule
@@ -533,6 +535,8 @@ TRx  & 0 (\(0\)--\(0.2\)) & \(0.2119\) & \(0.8226\) \\
      & 1 (\(0.2\)--\(0.6\)) & \(0.3658\) & \(0.6280\) \\
      & 2 (\(0.6\)--\(1.0\)) & \(0.8215\) & \(0.1680\) \\ \bottomrule
 \end{tabular}
+\caption{Model fit statistics by HCP-value band}
+\label{tab:fit_stats}
 \end{table}
 
 \paragraph{Interpretation.}
@@ -585,7 +589,7 @@ For the most recent reference date, we generate counterfactual scenarios over th
   \item \textbf{Band 2 (\(>60\)th percentile):} distinctly shifted right, with a substantially higher median and upper quartile.
 \end{itemize}
 
-\noindent\textit{Note:} in the current figure the legend labels the bands as ``1--3'' rather than ``0--2.'' Specifically, Legend Band 1 corresponds to our Band 0, Legend Band 2 to Band 1, and Legend Band 3 to Band 2. We apologize for any confusion and will correct the legend in future versions.
+\noindent\textit{Note:} in the current figure the legend labels the bands as ``1--3'' rather than ``0--2.'' Specifically, Legend Band 1 corresponds to our Band 0, Legend Band 2 to Band 1, and Legend Band 3 to Band 2. We apologise for any confusion and will correct the legend in future versions.
 
 \begin{figure}[ht]
   \centering
@@ -637,9 +641,9 @@ Figure~\ref{fig:response_counterfactuals} displays the individual response curve
 
 We use SHAP values to rank predictors from our three decile-band CatBoost models and combine them into one beeswarm plot (Figure~\ref{fig:shap_beeswarm}). Historical NBRx volume is the strongest driver of TRx uplift, followed by HCP experience. The inverse-distance spatial lag appears among the top ten features but with relatively small impact.
 
-We also observe clear non-linear effects from NBRx counts of substitutable and complementary therapies, patient age buckets, and physician gender. Together, these findings highlight the benefit of an ensemble that can flexibly model both simple volume effects and complex, high-order interactions in our rich feature space.
+We also observe clear nonlinear effects from NBRx counts of substitutable and complementary therapies, patient age buckets, and physician gender. Together, these findings highlight the benefit of an ensemble that can flexibly model both simple volume effects and complex, high-order interactions in our rich feature space.
 
-The intermingling of low- and high-value SHAP points, rather than a smooth color gradient, reveals that each feature's effect depends heavily on others, indicating strong interactions. This motivates more granular modeling: for example, grouping HCPs into latent clusters (via unsupervised embeddings or mixture models) and then fitting specialized submodels or introducing targeted feature crosses within each cluster to better capture those interactions.
+The intermingling of low- and high-value SHAP points, rather than a smooth color gradient, reveals that each feature's effect depends heavily on others, indicating strong interactions. This motivates more granular modelling: for example, grouping HCPs into latent clusters (via unsupervised embeddings or mixture models) and then fitting specialised submodels or introducing targeted feature crosses within each cluster to better capture those interactions.
 
 \begin{figure}[ht]
   \centering
@@ -648,10 +652,10 @@ The intermingling of low- and high-value SHAP points, rather than a smooth color
   \label{fig:shap_beeswarm}
 \end{figure}
 
-\subsection{Optimization}
-\label{sec:optimization}
+\subsection{Optimisation}
+\label{sec:optimisation}
 
-Our optimizer constructs, for each HCP, a discrete grid of counterfactual sample-drop scenarios bounded by modest extensions of their historic six-month minima and maxima. Specifically, if an HCP's observed drops ranged from \(\mathrm{HCP\_MIN}_{\rm historic}\) to \(\mathrm{HCP\_MAX}_{\rm historic}\), we ``pad'' this interval by five pills on each side:
+Our optimiser constructs, for each HCP, a discrete grid of counterfactual sample-drop scenarios bounded by modest extensions of their historic six-month minima and maxima. Specifically, if an HCP's observed drops ranged from \(\mathrm{HCP\_MIN}_{\rm historic}\) to \(\mathrm{HCP\_MAX}_{\rm historic}\), we ``pad'' this interval by five pills on each side:
 \[
   \mathrm{HCP\_MIN}_{\rm scenario}
     = \max\bigl\{1,\;\mathrm{HCP\_MIN}_{\rm historic} - 5\bigr\},
@@ -678,7 +682,7 @@ Figure~\ref{fig:prescribing_history} shows these adjusted bounds.
   \label{fig:prescribing_history}
 \end{figure}
 
-Next, we merge in the Territory Call List (TCL), which records each territory's opportunity density and active-HCP headcount. From these we derive per-territory pill-budget floors \(\mathrm{TERR\_MIN}_t\) and ceilings \(\mathrm{TERR\_MAX}_t\). The CVXPY modeling layer then solves the following 0--1 mixed-integer program using CBC:
+Next, we merge in the Territory Call List (TCL), which records each territory's opportunity density and active-HCP headcount. From these we derive per-territory pill-budget floors \(\mathrm{TERR\_MIN}_t\) and ceilings \(\mathrm{TERR\_MAX}_t\). The CVXPY modelling layer then solves the following 0--1 mixed-integer programme using CBC:
 \[
 \begin{aligned}
 \max_{x}\quad & \sum_{i,j} v_{ij}\,x_{ij} \\
@@ -693,10 +697,10 @@ where \(v_{ij}=\widehat y_i(s_{ij})\) and \(s_{ij}\) is the pill count for HCP \
 
 If \(\sum_{i\in t}\mathrm{HCP\_MIN}_i > \mathrm{TERR\_MAX}_t\), we proportionally clamp all \(\mathrm{HCP\_MIN}_i,\mathrm{HCP\_MAX}_i\) to satisfy \(\sum\mathrm{HCP\_MIN}_i=\mathrm{TERR\_MAX}_t\), and then greedily trim the largest minima until feasibility is restored. This ensures every territory stays within its mandated bounds.
 
-Solving (via CBC or DP fallback) produces a binary selection \(x_{ij}^\star\) for each HCP's scenario, yielding an ``optimized'' fitted value \(\widehat y_i^{(\rm opt)}\). Comparing \(\widehat y_i^{(\rm opt)}\) against the baseline \(\widehat y_i^{(\rm emp)}=\widehat y_i(s_{i0})\) (status-quo drops) quantifies the incremental gain of our allocation strategy.
+Solving (via CBC or DP fallback) produces a binary selection \(x_{ij}^\star\) for each HCP's scenario, yielding an ``optimised'' fitted value \(\widehat y_i^{(\rm opt)}\). Comparing \(\widehat y_i^{(\rm opt)}\) against the baseline \(\widehat y_i^{(\rm emp)}=\widehat y_i(s_{i0})\) (status-quo drops) quantifies the incremental gain of our allocation strategy.
 
-\section{Optimizer Territory Utilization}
-Figure~\ref{fig:territory_capacity} shows, for each territory \(t\), the maximum pill capacity \(\mathrm{TERR\_MAX}_t\) (blue bars) alongside the pills allocated by the CVXPY solver before top-off (orange bars). The absence of any large orange under-fills demonstrates that the MIP solver alone achieves virtually complete utilization of each territory's budget. Across all 92 territories, the solver fills 97.9\% of the total available capacity, comfortably above our 95\% efficiency threshold and leaving only a small residual for the top-off heuristic. Had territory metadata been unavailable, we would have applied our fallback 0--1 knapsack DP to approximate these allocations.
+\section{Optimiser Territory Utilisation}
+Figure~\ref{fig:territory_capacity} shows, for each territory \(t\), the maximum pill capacity \(\mathrm{TERR\_MAX}_t\) (blue bars) alongside the pills allocated by the CVXPY solver before top-off (orange bars). The absence of any large orange under-fills demonstrates that the MIP solver alone achieves virtually complete utilisation of each territory's budget. Across all 92 territories, the solver fills 97.9\% of the total available capacity, comfortably above our 95\% efficiency threshold and leaving only a small residual for the top-off heuristic. Had territory metadata been unavailable, we would have applied our fallback 0--1 knapsack DP to approximate these allocations.
 
 \begin{figure}[ht]
   \centering
@@ -707,30 +711,30 @@ Figure~\ref{fig:territory_capacity} shows, for each territory \(t\), the maximum
 
 \begin{table}[ht]
   \centering
-  \caption{Optimizer Territory Efficiency Summary}
-  \label{tab:territory_efficiency}
   \begin{tabular}{@{}lr@{}}
     \toprule
     Metric                                           & Value          \\
     \midrule
     Territories processed                             & 92             \\
-    Rows optimized                                    & 95,278         \\
+    Rows optimised                                    & 95,278         \\
     Total recommended pills dropped (blue)            & 452,001        \\
     Total maximum capacity (orange)                   & 451,992        \\
-    Utilization ratio (blue/orange)                   & 1.000          \\
+    Utilisation ratio (blue/orange)                   & 1.000          \\
     Capacity efficiency (pre--top-off)                & 97.9\%         \\
     Top-off threshold                                 & 95\%           \\
     Threshold reached                                 & Yes            \\
     \bottomrule
   \end{tabular}
+  \caption{Optimiser Territory Efficiency Summary}
+  \label{tab:territory_efficiency}
 \end{table}
 
 \section{Lift Assessment}
-We measure uplift by comparing each HCP's optimized allocation against their historical ``status-quo'' level. Let
+We measure uplift by comparing each HCP's optimised allocation against their historical ``status-quo'' level. Let
 \[
   m_i = \mathrm{median}\bigl\{s_{i,t}\bigr\}
 \]
-be the median sample-drop count for HCP \(i\) over the six-month history, and let \(x_i^*\) be the optimizer's recommendation. We then compute
+be the median sample-drop count for HCP \(i\) over the six-month history, and let \(x_i^*\) be the optimiser's recommendation. We then compute
 \[
   \hat y_i(m_i)
   \quad\text{and}\quad
@@ -749,14 +753,12 @@ Summing \(\Delta_i\) over all \(i\) yields the total incremental TRx above the s
   \label{fig:baseline_median_drops}
 \end{figure}
 
-Table~\ref{tab:uplift_diagnostics} summarizes the model-implied expected uplift and the results of the Kruskal--Wallis test comparing the empirical versus optimized fitted TRx distributions. Table~\ref{tab:descriptive_stats} reports side-by-side descriptive statistics for those two distributions.
+Table~\ref{tab:uplift_diagnostics} summarises the model-implied expected uplift and the results of the Kruskal--Wallis test comparing the empirical versus optimised fitted TRx distributions. Table~\ref{tab:descriptive_stats} reports side-by-side descriptive statistics for those two distributions.
 
-Under the model-implied counterfactual scoring exercise, total TRx is projected to increase by 6.4\%, highlighting the practical significance of the optimization framework. This 6.4\% should be read as a model-implied upper reference rather than a forecast of realized field impact: after deployment we expect the realized gain to be lower, on the order of 1 to 3\%, because operational frictions, representative discretion, sample availability, and market-response uncertainty attenuate optimized recommendations. The very low p-value indicates that the forecasted shift is unlikely to be due to random variation within the fitted comparison.
+Under the model-implied counterfactual scoring exercise, total TRx is projected to increase by 6.4\%, highlighting the practical significance of the optimisation framework. This 6.4\% should be read as a model-implied upper reference rather than a forecast of realised field impact: after deployment we expect the realised gain to be lower, on the order of 1 to 3\%, because operational frictions, representative discretion, sample availability, and market-response uncertainty attenuate optimised recommendations. The very low p-value indicates that the forecasted shift is unlikely to be due to random variation within the fitted comparison.
 
 \begin{table}[ht]
   \centering
-  \caption{Uplift \& Distribution Diagnostics}
-  \label{tab:uplift_diagnostics}
   \begin{tabular}{@{}l r@{}}
     \toprule
     Metric                                     & Value             \\
@@ -766,21 +768,21 @@ Under the model-implied counterfactual scoring exercise, total TRx is projected 
     Kruskal--Wallis p-value                    & \(8.413\times10^{-31}\) \\
     \bottomrule
   \end{tabular}
+  \caption{Uplift \& Distribution Diagnostics}
+  \label{tab:uplift_diagnostics}
 \end{table}
 
-The empirical TRx distribution has a mean of 0.2476 and a large standard deviation of 0.9625, reflecting high variability and many low-activity physicians. In contrast, the optimized TRx distribution shifts right to a mean of 0.2914 with similar spread, indicating the optimization effectively reallocates samples towards higher expected returns without unduly increasing variance.
+The empirical TRx distribution has a mean of 0.2476 and a large standard deviation of 0.9625, reflecting high variability and many low-activity physicians. In contrast, the optimised TRx distribution shifts right to a mean of 0.2634 with similar spread, consistent with the 6.4\% expected uplift reported above, indicating the optimisation effectively reallocates samples towards higher expected returns without unduly increasing variance.
 
 \begin{table}[ht]
   \centering
-  \caption{Descriptive Statistics of Fitted TRx Scores}
-  \label{tab:descriptive_stats}
   \small
   \begin{tabular}{@{}l r r@{}}
     \toprule
-    Statistic      & Empirical TRx & Optimized TRx \\
+    Statistic      & Empirical TRx & Optimised TRx \\
     \midrule
     Count          & 94,912        & 94,912        \\
-    Mean           & 0.2476        & 0.2914        \\
+    Mean           & 0.2476        & 0.2634        \\
     Std Dev        & 0.9625        & 0.9496        \\
     Min            & \(-2.6144\)   & \(-2.1720\)   \\
     25\%           & \(-0.4427\)   & \(-0.3798\)   \\
@@ -789,14 +791,16 @@ The empirical TRx distribution has a mean of 0.2476 and a large standard deviati
     Max            & 5.1217        & 9.9732        \\
     \bottomrule
   \end{tabular}
+  \caption{Descriptive Statistics of Fitted TRx Scores}
+  \label{tab:descriptive_stats}
 \end{table}
 
-Figure~\ref{fig:diff_means} displays the difference in means between the optimized and empirical fitted responses for each HCP, highlighting the shift of the entire distribution toward higher expected TRx under the optimized allocation.
+Figure~\ref{fig:diff_means} displays the difference in means between the optimised and empirical fitted responses for each HCP, highlighting the shift of the entire distribution toward higher expected TRx under the optimised allocation.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/figure22.png}
-  \caption{Difference of Means -- Fitted vs. Optimized-Fitted Response}
+  \caption{Difference of Means -- Fitted vs. Optimised-Fitted Response}
   \label{fig:diff_means}
 \end{figure}
 
@@ -810,7 +814,7 @@ Counterfactual scoring of the optimiser's recommendations yields a model-implied
 
 From an operational standpoint, the pipeline's strict adherence to HCP-level and territory-level bounds mitigates two perennial risks: oversupply to low-value prescribers and budget overshoot in high-density metropolitan areas. The proportional clamp ensures that even when historic minimum drops would violate a territory ceiling, the scaled-down ranges remain internally consistent, while greedy trimming preserves integer feasibility at the pill level. These safeguards, embedded directly in the codebase, obviate the need for ad-hoc manual adjustments that often undermine deployment timelines.
 
-Several limitations warrant emphasis. First, all reported gains are model-implied counterfactual projections rather than experimentally identified causal effects; any misspecification in the predictive ensemble or scenario-response surface will propagate into the optimization layer. Second, real-world realized uplift is likely to be materially smaller than the projected \(\sim 6\%\) counterfactual gain, and in practice may lie closer to the 1 to 3\% range absent stronger compliance, measurement, and experimental validation. Third, the present framework is static within quarter and does not model inter-quarter spillovers, inventory carryover, or longer-run behavioral adaptation by field teams. Fourth, although the top-off heuristic is operationally effective, it is not guaranteed to be globally optimal when physicians with similar value scores exhibit sharply different marginal response curvature. These limitations motivate prospective randomized nudges, improved adherence measurement, and future multi-period optimization extensions.
+Several limitations warrant emphasis. First, all reported gains are model-implied counterfactual projections rather than experimentally identified causal effects; any misspecification in the predictive ensemble or scenario-response surface will propagate into the optimisation layer. Second, real-world realised uplift is likely to be materially smaller than the projected \(\sim 6\%\) counterfactual gain, and in practice may lie closer to the 1 to 3\% range absent stronger compliance, measurement, and experimental validation. Third, the present framework is static within quarter and does not model inter-quarter spillovers, inventory carryover, or longer-run behavioural adaptation by field teams. Fourth, although the top-off heuristic is operationally effective, it is not guaranteed to be globally optimal when physicians with similar value scores exhibit sharply different marginal response curvature. These limitations motivate prospective randomised nudges, improved adherence measurement, and future multi-period optimisation extensions.
 
 Future work will address these gaps by embedding randomised ``nudge'' perturbations into the final allocation to enable Difference-in-Differences causal lift measurement, extending the optimisation horizon to incorporate multi-period inventory rollover, and exploring graph-based regularisation that explicitly models peer influence rather than proxying it via spatial adjacency. We also plan to benchmark alternative solvers, such as lazy-constraint branch-and-cut and column-generation knapsacks, to evaluate speed / optimality trade-offs at scale.
 
@@ -829,14 +833,14 @@ we achieved three key outcomes:
 
 \textbf{Operational efficiency:} The optimiser fills 97.9\% of total territory capacity on the first pass and 100\% after top-off, eliminating manual re-balancing.
 
-\textbf{Projected economic impact:} Counterfactual scoring indicates a model-implied 6.4\% lift in total TRx relative to status-quo allocation (\(p<10^{-30}\)), suggesting meaningful upside at constant inventory rather than realized causal revenue lift.
+\textbf{Projected economic impact:} Counterfactual scoring indicates a model-implied 6.4\% lift in total TRx relative to status-quo allocation (\(p<10^{-30}\)), suggesting meaningful upside at constant inventory rather than realised causal revenue lift.
 
 While encouraging, these gains remain model-dependent; forthcoming work will embed randomised ``nudge'' perturbations to enable causal Difference-in-Differences validation and extend the solver to a rolling-horizon setting that accounts for inventory carry-over. Nevertheless, the present results show that a tightly coupled learning-and-optimisation stack can respect complex operational constraints and support materially improved projected allocation plans across therapeutic areas and markets.
 
 \section*{Appendix}
 
 \subsection*{Ethics, Data Governance, and Reproducibility Note}
-This study uses de-identified, HCP-level commercial and operational data for internal planning analysis and does not involve patient-level intervention or clinical randomization in its present form. Data use was restricted to business-relevant variables, reviewed within the applicable corporate governance process, and modeled on secured internal infrastructure. Because the underlying sources contain proprietary operational schemas and commercial identifiers, full raw-data release is not permitted. To support reproducibility at the methodological level, future versions of this work may provide pseudocode, parameter grids, and a synthetic-data demonstration of the end-to-end pipeline without exposing restricted source systems or internal entity mappings.
+This study uses de-identified, HCP-level commercial and operational data for internal planning analysis and does not involve patient-level intervention or clinical randomisation in its present form. Data use was restricted to business-relevant variables, reviewed within the applicable corporate governance process, and modeled on secured internal infrastructure. Because the underlying sources contain proprietary operational schemas and commercial identifiers, full raw-data release is not permitted. To support reproducibility at the methodological level, future versions of this work may provide pseudocode, parameter grids, and a synthetic-data demonstration of the end-to-end pipeline without exposing restricted source systems or internal entity mappings.
 
 \begin{figure}[ht]
   \centering
