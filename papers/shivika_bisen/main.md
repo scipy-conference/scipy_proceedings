@@ -93,10 +93,10 @@ contamination at once: **choose tasks where the model fails without the ingested
 context, and where correctness can be checked independently of the judge.** Two consequences
 follow.
 
-- **Prefer verifiable correctness over judge opinion.** Where output can be *executed* (does the
-  program produce the expected artifact?) or *grounded* (is the figure supported by cited
-  evidence?), correctness is decided by the world, not the model; the judge is reserved for the
-  open-ended residue.
+- **Prefer verifiable correctness over judge opinion.** Where output can be *executed* (does
+  the program produce the expected artifact?) or *grounded* (is the answer supported by cited
+  evidence? — a claim of "capital expenditure was \$1,577 million" either matches the cited
+  cash-flow statement or it does not), correctness is decided by the world, not the model.
 - **Prefer domains the model could not have memorized.** Generic code generation (HumanEval-style)
   is saturated and largely in pretraining, so a high score measures recall, not domain-aware
   evaluation; the contribution is meaningful only on tasks needing context — a specific dataset or
@@ -156,12 +156,16 @@ the extraction sees the domain's breadth, not only its most common cases.
 ### Step 2 — Domain Compliance Runbook (Living)
 
 From the `DomainContext`, the framework assembles a single content-addressed
-`domain_compliance_runbook.json` — the **Domain Compliance Runbook** — with three sections:
+`domain_compliance_runbook.json` — the **Domain Compliance Runbook**. The name borrows from
+operations, where a *runbook* is the reference document an on-call engineer follows during an
+incident; here it is the domain reference the golden-set generator consults on every run. It has
+three sections:
 **domain facts** (definitions, conventions, units), **compliance criteria** (five *fixed,
 universal* agentic-compliance anchors — domain scope, evidence grounding,
 privacy/confidentiality, no-advice, human escalation — instantiated per domain with severity:
-finance's {abbr}`MNPI (material non-public information)` rule is the privacy anchor's finance
-instance), and **common failure modes**. The first two are seeded now,
+finance's {abbr}`MNPI (material non-public information)` rule — MNPI being undisclosed
+information that could move a company's stock price, which securities law restricts trading on or
+selectively revealing — is the privacy anchor's finance instance), and **common failure modes**. The first two are seeded now,
 at ingestion; the third is *living* — it accumulates as the eval (Step 4) surfaces failures, which
 the framework clusters deterministically by `(category, failure_type)` and turns into a
 `recommended_check` (the golden-set addition that would catch each one). The anchor taxonomy is therefore *declared* — fixed by design, so all
@@ -253,11 +257,11 @@ structured, execution-verified coder and an open-ended, grounding-verified QA ag
 (sec:results)=
 ## Results
 
-The experimental variable throughout is the **domain context supplied to the golden-set generator
-(Step 3)**. On each dataset the generator runs twice — once **with** the ingested domain data and
-`DomainContext` (and, on FinanceBench, the domain-compliance runbook) and once **blind**, given
-neither the data nor the runbook — and we compare the two golden sets it
-produces. The evaluation is of the **generated questions, not the agent's answers**: what a
+The experimental variable is the **domain context supplied to the golden-set generator
+(Step 3)**, and the A/B comparison is run on FinanceBench (Use Case 2): the generator runs
+twice — once **with** the ingested domain data, `DomainContext`, and the domain-compliance
+runbook, and once **blind**, given neither the data nor the runbook — and we compare the two
+golden sets it produces. The evaluation is of the **generated questions, not the agent's answers**: what a
 framework can *test for* is decided at generation time, so that is what we measure. Every number
 below is reproducible from the committed configuration and the two saved golden sets. Generation
 and the LLM-as-judge both ran on Claude Opus 4.8 (`claude-opus-4-8`) via Claude Code
@@ -326,11 +330,21 @@ topics (grey) collapse into a generic, less-grounded region.
 
 Without context, the same generator produces **only generic disclosure topics** — 25 of the 50
 are template "summarize Item 1A / {abbr}`MD&A (Management's Discussion and Analysis)` / the
-auditor's opinion" prompts — and the
-**agent-compliance category is empty (0 probes)**, confirmed by reading every question. This is
-the decisive result, and it is a *coverage* gap rather than a score swing: the generic golden set
-cannot test a single compliance rule, so an agent can breach all of them and the evaluation never
-knows. @fig:qa-flow traces both sets from root to NMF topic, and @tbl:fb-coverage summarizes what
+auditor's opinion" prompts. (Item 1A is the 10-K's risk-factor section and the MD&A the section
+where management narrates results and risks — boilerplate every filing contains, so such
+questions verify against no *specific* filing.) The
+**agent-compliance category is empty (0 probes)**, confirmed by reading every question. To be
+precise about why: the shared generation prompt asks for varied normal, ambiguous, and
+out-of-scope cases but does not itself request compliance probes — those are synthesized from the
+runbook's anchors ([](#sec:availability) links both arms' exact prompts). The blind arm has no
+anchors to draw on, so 0/50 is *coverage by construction*, an architectural property of running
+the pipeline without extraction rather than a discovered behavior of the generator. The design is
+symmetric — both arms run under the identical instruction, so the baseline is not selectively
+restricted — and the headline domain-accuracy result rests only on the questions both arms *did*
+generate, so it does not depend on this design choice. That is
+still the operative point, and it is a *coverage* gap rather than a score swing: an evaluation
+built without the extracted anchors cannot test a single compliance rule, so an agent can breach
+all of them and the evaluation never knows. @fig:qa-flow traces both sets from root to NMF topic, and @tbl:fb-coverage summarizes what
 each golden set can — and cannot — test for.
 
 :::{figure} qa_topic_flow.png
@@ -432,17 +446,41 @@ from a pluggable domain context it generates the golden set and eval script, sco
 verifiable checks where possible, and accumulates a living Domain Compliance Runbook — a
 reusable, domain-aware path to tracking agent behavior as a first-class OKR.
 
+(sec:availability)=
 ## Availability
 
 Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; the golden sets, judge
-outputs, and analysis scripts behind [](#sec:results) are under `results/ab_experiment/` there.
-The public API mirrors the paper's steps:
+outputs, analysis scripts, and both arms' generation prompts behind [](#sec:results) are under
+`results/ab_experiment/` there (every model-facing prompt is also printable offline via
+`ai-eval-engine generate --show-prompt`). The public API mirrors the paper's steps:
 
 ```python
 from ai_eval_engine import extract_domain_context, generate_golden_set
 ctx = extract_domain_context("configs/financebench.yaml")  # Step 1 -> DomainContext
 gs = generate_golden_set("configs/financebench.yaml", "out/context.json",
     target_cases=50, runbook_path="out/domain_compliance_runbook.json")  # Step 3
+```
+
+Every artifact is plain JSON. Two verbatim (abridged) excerpts from the committed FinanceBench
+run show what the pipeline actually produces — a seeded *domain fact* from Step 2's
+`domain_compliance_runbook.json`:
+
+```json
+{"group": "Definitions", "label": "Free cash flow",
+ "detail": "Operating cash flow minus capital expenditures (purchases of property,
+            plant & equipment). Both terms must come from the cited cash-flow statement."}
+```
+
+and one Step-3 `GoldenCase` from `golden_set_with_domain_context.json`:
+
+```json
+{"id": "wdc-001",
+ "input": "Using 3M's FY2018 consolidated statement of cash flows, what was 3M's
+           capital expenditure (purchases of property, plant and equipment) in USD millions?",
+ "expected": "$1,577 million. Source: 3M_2018_10K, Consolidated Statement of Cash Flows,
+              'Purchases of property, plant and equipment (PP&E)'.",
+ "question_type": "metrics-generated",
+ "probes_criteria": ["Citation & non-misleading disclosure"]}
 ```
 
 ## Disclosures
