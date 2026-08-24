@@ -1,0 +1,92 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-plambeck-paper
+  # Ensure your title is the same as in your `main.tex`
+  title:
+    'Optimising HCP Sample Allocation in Pharma: Combining Nonlinear Ensemble
+    Learning, Spatial Lags, and Integer Programming'
+  description:
+    A learning–optimisation framework that combines decile-banded CatBoost
+    ensembles, inverse-distance spatial lags, and 0–1 mixed-integer programming
+    to allocate pharmaceutical samples across U.S. healthcare providers under
+    territory and inventory constraints.
+  # The original Springer-formatted source is kept for reference but not rendered.
+  exclude:
+    - paper-springer-formatted-v7-full.tex
+    - main_original_backup.tex
+  thumbnail: figures/figure_pipeline_schematic.png
+  authors:
+    - name: Johannes Plambeck
+      email: johannes.plambeck@pfizer.com
+      corresponding: true
+      affiliations:
+        - Pfizer, North America, New York, USA
+    - name: Santosh Ajabrao Bothe
+      affiliations:
+        - Pfizer, North America, New York, USA
+    - name: Dorian Puleri
+      affiliations:
+        - Pfizer, North America, New York, USA
+    - name: Victor Gonzales
+      affiliations:
+        - Pfizer, North America, New York, USA
+  keywords:
+    - pharmaceutical sample allocation
+    - healthcare provider targeting
+    - spatial machine learning
+    - mixed-integer optimization
+    - pharmaceutical marketing
+  # Most references are books, blogs, case studies, or proceedings without a
+  # registered DOI; ignore the doi-exists check for these citation keys.
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Malik2020
+        - Schwartz2019
+        - RajputPandey2022
+        - Khazzaka2019
+        - JosephMantrala2009
+        - Gupta2023
+        - Zhang2020
+        - Ke2017
+        - Kruse2016
+        - Chiplunkar2020
+        - KhanBasak2021
+        - Gonul2001
+        - MizikJacobson2004
+        - MontoyaNetzerJedidi2010
+        - DonohueCevascoRosenthal2018
+        - IyengarVanDenBulteValente2011
+        - Awadhwal2023
+        - Alladi2022
+        - Cai2017
+        - Wangetal2023
+        - Hallettetal2024
+        - Liuetal2022
+        - Tan2022
+        - Marques2020
+        - IQVIA2025
+        - MedPath2023
+        - Antonazzoetal2022
+        - MulinariOzieranski2022
+        - Chamberlain2022
+        - RahmanMueller2021
+        - Pedregosa2011
+        - OsborneWatkins2019
+        - Griffith2009
+        - DellaVignaGentzkow2019
+        - Pfizer2023
+        - Prokhorenkova2018
+        - BergstraYaminsCox2013
+        - AkibaSanoYanaseOhtaKoyama2019
+        - LeSagePace2009
+        - Biau2012
+        - ClinCalcApixaban2023
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.tex
+      output: full_text.pdf
