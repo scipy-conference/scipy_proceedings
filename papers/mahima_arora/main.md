@@ -1,7 +1,7 @@
 ---
 title: Docling for Multimodal Retrieval
 abstract: |
-    Retrieval-Augmented Generation (RAG) has become a widely adopted approach for grounding large language models in external knowledge sources. However, most RAG pipelines remain text-centric, overlooking diagrams, figures, tables, and layout structures that contain critical information in scientific, technical, and enterprise documents. This paper presents a multimodal document parsing framework built on Docling, a layout-aware and format-agnostic document understanding library, that preserves document structure by extracting text, tables, and images as distinct retrieval units. The framework employs modality-specific representations: hierarchy-aware text chunks, image chunks enriched with vision-language descriptions, and table chunks that retain relational structure while supporting deterministic SQL querying. These representations are indexed in a unified vector database and served to a tool-augmented agent capable of retrieving and reasoning over textual, tabular, and visual information. Demonstrations on scientific and technical documents validate the framework's ability to handle multimodal queries that are unsolvable by text-only RAG systems.
+    Retrieval-Augmented Generation (RAG) has become a widely adopted approach for grounding large language models in external knowledge sources. However, most RAG pipelines remain text-centric, overlooking diagrams, figures, tables, and layout structures that contain critical information in scientific, technical, and enterprise documents. This paper presents a multimodal document parsing framework built on Docling, a layout-aware and format-agnostic document understanding library, that preserves document structure by extracting text, tables, and images as distinct retrieval units. The framework employs modality-specific representations: hierarchy-aware text chunks, image chunks enriched with vision-language descriptions, and table chunks that retain relational structure while supporting deterministic SQL querying. These representations are indexed in a unified vector database and served to a tool-augmented agent capable of retrieving and reasoning over textual, tabular, and visual information. Evaluation on scientific and technical documents shows improvements over a text-only baseline in context recall, faithfulness, and answer correctness, with the largest gains on image and table queries.
 ---
 
 ## Introduction
@@ -22,7 +22,13 @@ The key contributions of this work are:
 4. A tool-augmented agent architecture that combines semantic retrieval with deterministic execution to enable faithful reasoning across modalities
 5. An open-source implementation facilitating reproducibility and community adoption
 
-Together, these contributions advance multimodal document understanding as an essential capability for RAG systems operating over real-world scientific, technical, and enterprise document collections. This framework builds directly on Docling [@docling], which provides the layout-aware parsing backbone, including its `HybridChunker` and vision-language captioning. What Docling does not provide is the retrieval and reasoning layer built on top: a typed chunk schema unifying text, images, and tables in a single vector space; SQL-backed table querying for deterministic access; and a tool-augmented agent that selects the appropriate access pattern per modality at query time. The contribution is this end-to-end architecture, not any single component.
+Together, these contributions advance multimodal document understanding as an essential capability for RAG systems operating over real-world scientific, technical, and enterprise document collections.
+
+## Related Work
+
+Several frameworks address multimodal content in RAG pipelines using patterns related to those in this work. LangChain's multi-vector retriever [@langchain_multivector] embeds generated text summaries of tables and images for semantic search while storing original content in a separate document store for downstream synthesis. This caption-and-embed pattern makes non-text elements discoverable but does not prescribe modality-specific access patterns at query time; retrieved tables are passed as raw content to the LLM rather than queried deterministically. LlamaIndex [@llamaindex] provides query engines that translate natural language into executable code against structured data, including `NLSQLTableQueryEngine` for SQL-based access and `SQLAutoVectorQueryEngine` for combining vector retrieval with SQL execution. These enable deterministic tabular querying but focus on text and structured data without incorporating visual content.
+
+This framework builds directly on Docling [@docling], which provides the layout-aware parsing backbone, including its `HybridChunker` for hierarchy-aware text segmentation and vision-language captioning for image description. What Docling does not provide is the retrieval and reasoning layer: a typed chunk schema unifying text, images, and tables in a single vector space; SQL-backed table querying for deterministic access; and a tool-augmented agent that selects the appropriate access pattern per modality at query time. Like the multi-vector retriever, the framework uses generated descriptions for cross-modal semantic search; like LlamaIndex's query engines, it supports deterministic SQL execution. The contribution is this end-to-end architecture integrating parsing, modality-specific enrichment, unified retrieval, and agent-based reasoning.
 
 ## Methodology
 
@@ -46,7 +52,7 @@ Three design principles guide this architecture: (1) modality preservation (main
 
 The chunking stage addresses a fundamental question: how should multimodal document elements be represented for semantic retrieval? Text-only systems flatten everything into character sequences, destroying the structural properties that make tables queryable and visual elements interpretable. The proposed approach defines a typed chunk architecture where each modality receives a representation suited to its information characteristics.
 
-All chunks share a common base schema that enables unified retrieval while preserving modality-specific structure. The key design constraint is that text, images, and tables must be embeddable into the same vector space for cross-modal search. This is achieved through a `content` field containing a natural language representation, narrative prose for text chunks, vision-language descriptions for images, and schema-aware descriptions for tables. The base schema tracks provenance and provides this unified embedding interface:
+All chunks share a common base schema that enables unified retrieval while preserving modality-specific structure. The key design constraint is that text, images, and tables must be searchable in the same vector space. Rather than joint pixel-text or table-text embeddings, this is achieved by applying standard text embeddings to a `content` field that stores a natural language representation for every modality: narrative prose for text chunks, vision-language generated descriptions for images, and schema-aware descriptions for tables. The base schema tracks provenance and provides this unified embedding interface:
 
 ```python
 class BaseChunk(BaseModel):
@@ -89,7 +95,7 @@ The chunker merges text blocks within the same section when semantic similarity 
 Image chunk schema with vision-language description for embedding and type classification.
 :::
 
-Image chunks address the context gap failure mode: when documents reference "see Figure 3" but Figure 3 is discarded during parsing, retrieval cannot answer visual questions. The solution pairs every extracted image with a vision-language generated description that makes visual content semantically searchable. The description populates the `content` field, allowing queries like "what is the system architecture" to match against diagram descriptions even though the query contains no visual information.
+Image chunks address the context gap failure mode: when figures are discarded during parsing, retrieval cannot answer visual questions. The solution pairs every extracted image with a vision-language generated description that makes visual content semantically searchable. When a document caption is available (e.g., "Figure 3: Performance comparison"), it is appended to the generated description in the `content` field, preserving figure labels for retrieval. This allows both semantic queries like "what is the system architecture" and label-based references like "Figure 3" to match against image chunks.
 
 Images are classified by semantic type (diagram, chart, screenshot, photo, logo) to support targeted retrieval and filtering:
 
@@ -129,8 +135,10 @@ class TableChunk(BaseChunk):
 Tables require a two-stage strategy. First, semantic retrieval using generated descriptions that emphasize schema, sample data patterns, and query-answering capability (e.g., "performance metrics across five benchmark datasets"). Second, SQL execution for deterministic data access, once retrieved, the agent generates and executes queries against the DataFrame:
 
 ```python
-def query_table(sql: str, dataframe: pd.DataFrame) -> pd.DataFrame:
-    return ps.sqldf(sql, {"df": dataframe})
+def query_table(table_index: int, sql: str) -> str:
+    chunk = table_chunks[table_index]
+    result_df = ps.sqldf(sql, {"df": chunk.dataframe})
+    return result_df.to_string(index=False)
 ```
 
 For example, a query like "Which model achieved the highest accuracy on the SQuAD benchmark?" retrieves a benchmark results table via description matching, then executes `SELECT model, accuracy FROM df WHERE dataset='SQuAD' ORDER BY accuracy DESC LIMIT 1` to extract the exact answer. This hybrid approach, semantic discovery plus deterministic execution, provides both flexibility and precision.
@@ -199,6 +207,8 @@ The agent workflow is:
 5. For table chunks, generate SQL query, execute for exact data
 6. Return answer with placeholders plus image/table metadata for rendering
 
+When retrieval returns multiple chunks of the same type, all chunks are presented to the agent in a single context, grouped by modality with numerical indices. The agent selects which chunks to act on, querying multiple tables or displaying multiple images, within a single reasoning pass. For table querying, SQL execution errors such as syntax mistakes or invalid column references are caught and returned to the agent as descriptive error messages, enabling it to revise the query and retry within the same turn.
+
 This architecture demonstrates that multimodal RAG requires heterogeneous access patterns, text generation for prose, tool calls for structure, inline placeholders for visual elements, rather than forcing all modalities through a single generation interface.
 
 ## Results
@@ -233,23 +243,35 @@ Visual reasoning: diagram retrieval using vision-language descriptions and inlin
 Structured precision: SQL-based table querying with semantic search and deterministic execution.
 :::
 
-To quantify the impact of modality preservation, the multimodal pipeline was evaluated against a text-only baseline using RAGAS metrics [@ragas] over the same document corpus and query set. The text-only baseline uses identical chunking and retrieval parameters but filters only text chunks during ingestion, discarding images and tables.
+To quantify the impact of modality preservation, the multimodal pipeline was evaluated against a text-only baseline using RAGAS metrics [@ragas]. The evaluation uses a corpus of 110 research papers [@eval_dataset] with 300 queries constructed across four categories: text-only (28%), table (28%), image (24%), and cross-modal (20%) queries requiring synthesis across modalities. The text-only baseline uses identical chunking and retrieval parameters but converts tables to inline Markdown text and discards images during ingestion. Results are averaged over three independent runs; 95% confidence intervals are reported.
 
-:::{table} Multimodal vs. text-only RAG pipeline comparison.
+:::{table} Multimodal (MM) vs. text-only (TO) pipeline comparison by query type. CR = Context Recall, F = Faithfulness, AC = Answer Correctness. Overall values show mean ± 95% CI over three runs.
 :label: tab:baseline
 
-| Metric | Multimodal | Text-Only |
-|:-------|:----------:|:---------:|
-| Context Recall | 86.2% | 78.9% |
-| Faithfulness | 93.6% | 90.0% |
-| Answer Correctness | 74.0% | 68.9% |
+| Query Type | CR (MM) | CR (TO) | F (MM) | F (TO) | AC (MM) | AC (TO) |
+|:-----------|:-------:|:-------:|:------:|:------:|:-------:|:-------:|
+| Text | 91.8% | 91.0% | 95.2% | 94.5% | 79.6% | 78.8% |
+| Table | 89.2% | 82.3% | 94.8% | 90.3% | 76.5% | 69.2% |
+| Image | 83.5% | 64.7% | 92.5% | 84.8% | 70.3% | 60.5% |
+| Cross-modal | 77.4% | 74.2% | 90.7% | 89.5% | 66.8% | 64.7% |
+| **Overall** | **86.2 ± 2.3%** | **78.9 ± 1.3%** | **93.6 ± 1.4%** | **90.0 ± 0.9%** | **74.0 ± 2.4%** | **68.9 ± 1.7%** |
 
 :::
 
-The multimodal pipeline improves context recall by 7.3 percentage points, reflecting its ability to retrieve visual and tabular evidence that the text-only baseline discards entirely. Gains in faithfulness and answer correctness follow from grounding responses in structured data and original figures rather than flattened approximations.
+The per-modality breakdown reveals that gains concentrate on image queries, where the baseline discards the primary evidence source, context recall improves by 18.8 percentage points. Table queries show a moderate gap (6.9 pp in context recall) since the baseline retains table content as inline text but lacks deterministic SQL access for precise lookups. Text queries show minimal difference (0.8 pp), confirming that the multimodal pipeline preserves text handling quality.
 
-These results, together with the capability demonstrations above, validate that multimodal RAG requires modality-specific representations and heterogeneous access patterns. The bottleneck has shifted from LLM reasoning to data quality and modality preservation.
+These results validate that multimodal RAG requires both modality-specific representations and heterogeneous access patterns. The bottleneck has shifted from LLM reasoning to data quality and modality preservation.
+
+## Discussion
+
+### Runtime Feasibility
+
+The SQL execution pathway requires materializing each retrieved table as an in-memory DataFrame at query time. For individual document tables, typically tens to hundreds of rows, this overhead is negligible, and the execution engine (pandasql over SQLite) operates in-process without external infrastructure. At larger corpus scales, tables and images can be stored in external storage (e.g., S3 or cloud drives) as CSV and image files respectively, rather than serialized inline in vector payloads. The vector store retains only metadata paths, and content is loaded on demand when the agent invokes a tool, with caching for frequently accessed tables to avoid repeated retrieval. The primary computational cost lies in ingestion rather than retrieval: vision-language captioning and table description generation require LLM inference per element, making ingestion time proportional to the number of non-text elements in the corpus.
+
+### Limitations
+
+The framework's retrieval quality for images and tables depends on the fidelity of their generated descriptions. These descriptions are produced once during ingestion and stored as static text, if the vision-language model omits details present in the original image or table, those details become unretrievable through semantic search. Re-ingestion with an improved captioning model is required to recover missed information. Additionally, the agent's ability to answer table queries depends on correct SQL generation; while the framework supports error-driven retry, persistent failures on tables with ambiguous or non-standard schemas cause the agent to fall back to the natural language description, sacrificing deterministic precision. Complex table structures such as merged cells or nested headers remain challenging for the underlying structure recognition model.
 
 ## Conclusion and Future Work
 
-This paper presents a multimodal document parsing framework for RAG systems that addresses the fundamental limitations of text-only approaches. By preserving document structure through specialized chunking strategies for text, images, and tables, the system enables retrieval of visual and structured information that traditional pipelines discard. The results demonstrate that the bottleneck in RAG performance has shifted from LLM reasoning capabilities to data quality and modality preservation, modality-specific chunking enables retrieval relevance that pure text embeddings cannot achieve, while tool-calling architectures prove essential for handling heterogeneous access patterns across text generation, image display, and SQL execution. Current limitations include dependence on vision-language model quality for image descriptions and challenges with complex table structures, while future work should develop comprehensive multimodal RAG benchmarks, extend the framework to video and equations, and explore domain-specific adaptations for scientific literature and technical documentation. The open-source implementation [@multimodal_parser] facilitates community adoption and experimentation, encouraging researchers to develop evaluation benchmarks and adapt the approach for specialized domains.
+This paper presents a multimodal document parsing framework for RAG systems that addresses the fundamental limitations of text-only approaches. By preserving document structure through specialized chunking strategies for text, images, and tables, the system enables retrieval of visual and structured information that traditional pipelines discard. The results demonstrate that the bottleneck in RAG performance has shifted from LLM reasoning capabilities to data quality and modality preservation, modality-specific chunking enables retrieval relevance that pure text embeddings cannot achieve, while tool-calling architectures prove essential for handling heterogeneous access patterns across text generation, image display, and SQL execution. Future work should develop comprehensive multimodal RAG benchmarks, extend the framework to video and equations, and explore domain-specific adaptations for scientific literature and technical documentation. The open-source implementation [@multimodal_parser] facilitates community adoption and experimentation.

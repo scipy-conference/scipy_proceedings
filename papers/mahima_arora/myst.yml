@@ -35,6 +35,7 @@ project:
     PDF: Portable Document Format
     SQL: Structured Query Language
     API: Application Programming Interface
+    pp: percentage points
   error_rules:
     - rule: doi-exists
       severity: ignore
