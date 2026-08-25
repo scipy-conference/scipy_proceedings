@@ -150,7 +150,7 @@ Let $W_1(F_1, F_2)$ stand for the 1st Wasserstein distance, as opposed to other 
 After running both datathons, we compiled two datasets and managed to double-verify 120 articles. We have very promising data from our Baserow dataset. What we have so far is 123 LLM-human pairs and 85 human-human pairs, where human-human matches are those where we had two separate volunteers identify a location for an article. However, the data from the Zooniverse dataset is not as promising, with only 13 human-human pairs with 123 LLM-human pairs. This is likely due to the fact that Zooniverse has no native way to capture news articles only, leading to more entries for legal documents and other types of documents. We recognize the limitations of only 13 data points for the Zooniverse comparison and leave it in the following discussions section. For transparency purposes we make the Zooniverse comparison, but rely more on our usage of the Baserow dataset.
 
 
-We compare the distributions here where first table @fig:butterfly displays the data and at @fig:kde displays the data as if they were .
+We compare the distributions here where first table @fig:butterfly displays the data and at @fig:kde displays the data as if they were converted to probability density functions.
 
 
 
