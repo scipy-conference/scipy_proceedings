@@ -94,7 +94,7 @@ Baserow’s issues led us to use Zooniverse, an online platform designed specifi
 
 ### Evaluation Metrics
 
-Our evaluation metric is designed to capture similarity between responses. While a semantic matching metric would be ideal, shorter responses make encoding and comparison difficult, due to the general lack of context. Instead, we are interested in text similarity. In particular, when the location is present, we want to ensure that both the human and LLM return the same chunk of text. To account for natural variance in writing and potential misspelling, we use the Levenshtein distance, as implemented in the `TheFuzz` library, as our measure of success. Fuzzy matching assigns a score from 0 to 100 based on how closely the characters in one chunk of text match the characters in the other chunk of text. We additionally use subset fuzzy matching, which avoids assigning a penalty if one chunk has more text than another chunk, but both texts have overlapping text.
+Recall our goal is to evaluate whether an LLM's location identification is comparable or equally as effective as a human's location identification from the same text. Consequently, our evaluation metric is designed to capture similarity between responses, as in the ideal case, both the human and the model should produce outputs that are very similar. While a semantic matching metric would be ideal, shorter responses make encoding and comparison difficult, due to the general lack of context. Instead, we are interested in text similarity. In particular, when the location is present, we want to ensure that both the human and LLM return the same chunk of text. To account for natural variance in writing and potential misspelling, we use the Levenshtein distance, as implemented in the `TheFuzz` library, as our measure of success. Fuzzy matching assigns a score from 0 to 100 based on how closely the characters in one chunk of text match the characters in the other chunk of text. We additionally use subset fuzzy matching, which avoids assigning a penalty if one chunk has more text than another chunk, but both texts have overlapping text.
 
 [@dev2026] have previously used fuzzy matching as an evaluation metric. The main competitor as an evaluation metric would be to use an LLM-as-judge. However, to produce as deterministic a response as we can, we use fuzzy matching primarily. Dev et al. remark that fuzzy matching remains strong so long as nuance does not need to be captured. The problem of location extraction at hand is simple enough to the point where an LLM-as-judge is likely unnecessary and not computationally worth it, especially given current problems with its use as an evaluation tool [@li2025]. But we cannot use fuzzy score pairs for an LLM and human by itself, however. Such a comparison would suggest that a single human response is enough to produce ground truth, which is not necessarily true. We give more context about fuzzy matching by discussing the Levenshtein distance. The Levenshtein distance $\text{lev}_{a,b}(i, j)$ is a measure between two strings $a$ and $b$ and is formulated with the recursive definition given in @eq-levdist.
 
@@ -191,9 +191,9 @@ Finally, answers on the low end, around 0-10 on the fuzzy scale, indicate almost
 
 | Dataset | News Articles Compared | Mean Fuzzy Score | Median Fuzzy Score |
 | :--- | :---: | :---: | :---: |
-| **Baserow R1** | 69 | 72 | 93 |
-| **Baserow R2** | 42 | 69 | 91 |
-| **Zooniverse** | 79 | 70.8 | 88 |
+| Baserow R1 | 69 | 72 | 93 |
+| Baserow R2 | 42 | 69 | 91 |
+| Zooniverse | 79 | 70.8 | 88 |
 
 
 At an initial glance, the data looks promising. With a median of at least 88, we can suspect at least half the data is a reasonable match. That being said, this still entails that half the data is below, with a mass of points clustering around a fuzzy score of 0.
@@ -223,10 +223,10 @@ However, fuzzy score matches by themselves are not enough.
 Employing both the Kolmogorov-Smirnov (K-S) test and the Wasserstein difference gives us a different result. We display the results for both datathons.
 | Dataset | K-S Statistic | p-value | Wasserstein Distance |
 | :--- | :---: | :---: | :---: |
-| **Baserow R1 and R2** | 0.1027 | 0.6158 | 3.3351 |
-| **Zooniverse** | 0.2245 | 0.5192 | 9.0125 |
+| Baserow R1 and R2 | 0.1027 | 0.6158 | 3.3351 |
+| Zooniverse | 0.2245 | 0.5192 | 9.0125 |
 
-For the Baserow dataset, we see that the K-S statistic shows that there is not yet enough evidence that the distributions are different. More importantly, the Wasserstein distance shows that only a small shift in the data is necessary to match one distribution to the other.
+For the Baserow dataset, we see that the K-S statistic shows that there is not yet enough evidence that the distributions are different. Namely, the high p-values of of 0.615 and 0.5192 are far higher than the recommended 0.05. More importantly, the Wasserstein distance shows that only a small shift in the data is necessary to match one distribution to the other.
 
 For our much smaller Zooniverse dataset, the results are not as conclusive and show a larger difference, but still have a high p value, indicating that they do not have sufficient evidence to claim that the distributions are different. Additionally, we see that the Wasserstein distance is larger than the one in the Baserow dataset, but is still low.
 
@@ -241,7 +241,7 @@ For our much smaller Zooniverse dataset, the results are not as conclusive and s
 
 ## Discussion
 
-We consider our results. The initial view of the data is not promising, offering only modest success. We noticed that overall fuzzy comparisons between the model and a human to be unpromising, but such comparisons are not apt for a proper evaluation of a model. We therefore opt for [@han2025]'s evaluation methodology. They handle the problem from the paradigm of "one-to-many" questions in the literature. In other words, they discuss questions for which the text generated answer is open-ended, hence "many answers" to "one question". The question of location extraction might seem at first to be a closed-ended question. After all, a police incident can only occur at a single location. However, recall that several terms can refer to a single address. Consequently, answers differing by a word or two should not be heavily penalized.
+The initial view of the data offers some modest success. We noticed that overall fuzzy comparisons between the model and a human to be unpromising, but such comparisons are not apt for a proper evaluation of a model. We therefore opt for [@han2025]'s evaluation methodology. They handle the problem from the paradigm of "one-to-many" questions in the literature. In other words, they discuss questions for which the text generated answer is open-ended, hence "many answers" to "one question". The question of location extraction might seem at first to be a closed-ended question. After all, a police incident can only occur at a single location. However, recall that several terms can refer to a single address. Consequently, answers differing by a word or two should not be heavily penalized.
 
 
 ### Limitations
@@ -268,7 +268,7 @@ Aside from further data exploration, comparison and exploration of different lar
 
 ## Conclusion
 
-We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing precious manpower as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield. This strategy allows community organizations to better allocate their efforts.
+We present a generalized outline for how to use LLMs in data extraction, especially for mass-quantity document analysis. We discuss data scraping and cleaning as well as the effectiveness of LLMs in searching through source documents. Our initial results are promising, showing that LLMs provide similar to that of a human, sparing valuable volunteer time as well avoiding unnecessary psychological stress from having to read details about brutal events, serving as a cognitive shield. This strategy allows community organizations to better allocate their efforts.
 
 ## Acknowledgements
 
