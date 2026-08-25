@@ -182,7 +182,7 @@ We compare the distribution for the Baserow dataset here the first table display
 
 
 
-```{figure} ./Dataset1.png
+```{figure} ./fuzzy_match_score_comparison.pdf
 :name: human-human-comparison-baserow
 :alt: Human-to-Human fuzzy comparison distribution plot
 :align: center
@@ -190,7 +190,7 @@ We compare the distribution for the Baserow dataset here the first table display
 Distribution of fuzzy match scores for double-verified human-to-human annotations for the Baserow dataset.
 ```
 
-```{figure} ./Table2.png
+```{figure} ./fuzzy_match_score_kde.pdf
 :name: human-human-comparison-zooniverse
 :alt: Human-to-Human fuzzy comparison distribution plot
 :align: center
