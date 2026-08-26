@@ -478,6 +478,7 @@ and the actual observed values for PyMC to target
 MCMC sampling process to approximate the posteriors. Passing an `n` to the
 `.pymc()` call configures the total number of samples produced by the sampler.
 By default, four chains are used, but this and all other PyMC sampler settings
+(such as the random seed)
 can be configured by passing a `sampling_kwargs` dictionary. The sampler used by
 default is the Sequential Monte Carlo[^smc], but the standard samplers can be
 used as well by passing `smc=False`.
@@ -591,7 +592,8 @@ compartment.pymc(
 	start=r.DiscreteUniform(0, 1),
 	interval=r.DiscreteUniform(7, 9),
 	absorption_fraction=r.Normal(.15, .025),
-	compute_prior_only=True
+	compute_prior_only=True,
+    sampling_kwargs=dict(random_seed=13)
 )
 ```
 
@@ -621,6 +623,7 @@ compartment.pymc(
 	observations=[
 		r.Observation(compartment.concentration.timeseries[100], 1, [15.5]),
 	],
+    sampling_kwargs=dict(random_seed=13)
 )
 ```
 
@@ -649,6 +652,7 @@ compartment.pymc(
 		r.Observation(compartment.concentration.timeseries[150], 1, [15.0]),
 		r.Observation(compartment.concentration.timeseries[30], 1, [9.5]),
 	],
+    sampling_kwargs=dict(random_seed=13)
 )
 ```
 
