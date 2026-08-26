@@ -45,6 +45,9 @@ project:
         - pandasql
         - multimodal_parser
         - langgraph
+        - langchain_multivector
+        - llamaindex
+        - eval_dataset
   exports:
     - id: pdf
       format: typst
