@@ -32,7 +32,7 @@ Although future AlphaGenome releases may incorporate more species and biological
 
 ## AlphaGenome
 
-AlphaGenome is a hybrid convolutional-transformer architecture that balances long-context with computational feasibility while maintaining single base-pair resolution in its predictions. At a high level, AlphaGenome can be viewed as a U-Net-like encoder-decoder model [@UNet-MICCAI-2015] with transformer layers [@Transformers-NeurIPS-2017] in the middle.
+AlphaGenome is a hybrid convolutional-transformer architecture that balances long-context with computational feasibility while supporting single-base-pair resolution in its predictions. At a high level, AlphaGenome can be viewed as a U-Net-like encoder-decoder model [@UNet-MICCAI-2015] with transformer layers [@Transformers-NeurIPS-2017] in the middle.
 
 :::{figure} images/AG_Total.png
 :label: fig:alphagenome-architecture
