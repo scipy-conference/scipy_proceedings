@@ -218,8 +218,10 @@ load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
     fold="all_folds",
-    heads=True,       # keep released output heads
-    organisms=True,	  # keep released human/mouse organism parameters
+    repo_id="RylieWeaver/alphagenome-pytorch",
+    repo_dir="v0.3.0",
+    heads=True,         # keep released output heads
+    organisms=True,     # keep released human/mouse organism parameters
     map_location="cpu",
 )
 
@@ -249,6 +251,8 @@ load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
     fold="fold_1",
+    repo_id="RylieWeaver/alphagenome-pytorch",
+    repo_dir="v0.3.0",
     heads=False,       	# skip released heads; keep your custom heads
     organisms=True,     # keep human/mouse organism embeddings
     map_location="cpu",
@@ -276,8 +280,10 @@ load_result = load_alphagenome_checkpoint(
     model,
     checkpoint_path,
     fold="fold_2",
-    heads=False,       	# skip released heads; keep your custom heads
-    organisms=False,	  # skip human/mouse organism embeddings
+    repo_id="RylieWeaver/alphagenome-pytorch",
+    repo_dir="v0.3.0",
+    heads=False,       	    # skip released heads; keep your custom heads
+    organisms=False,        # skip human/mouse organism embeddings
     map_location="cpu",
 )
 ```
