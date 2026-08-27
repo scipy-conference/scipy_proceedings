@@ -18,7 +18,7 @@ Functional measurements are useful in downstream biological workflows. Consequen
 
 The goal of `alphagenome-pt` is to make the AlphaGenome model easily trainable in PyTorch, with users only needing to know minimal details about the architecture.
 
-Fine-tuning is a well-established and common method to adapt and/or specialize deep learning models to specific domains or tasks. Fine-tuning is useful for language models generally [@TransferLearning-IEEE-2010; @TransferLearning-arxiv-2014; @ULM-Finetuning-arxiv-2018; @BERT-arxiv-2018; @DNABert-Bioinformatics-2021; @HyenaDNA-NeurIPS-2023; @DNABERT-2-arxiv-2024], but is especially relevant for the AlphaGenome architecture because the model allocates a significant amount of parameters that are specific to organisms and output tracks. These include organism embedding parameters of shape `[num_organisms, num_channels]` and multiorganism linear layers of shape `[num_organisms, num_in_channels, num_out_channels]` used in the output heads [^footnote-1]. In the case of the multiorganism linear layers for some output heads (e.g. RNA-Seq gene expression), different output channels may correspond to different biological contexts. This architectural choice is grounded in the biological reality, where the same DNA sequence can produce different measured values (e.g. expression, chromatin accessibility, splicing, contact-maps) depending on biological context (e.g. tissue, cell type, developmental stage, environment, and organism).
+Fine-tuning is a well-established and common method to adapt and/or specialize deep learning models to specific domains or tasks. Fine-tuning is useful for language models generally [@TransferLearning-IEEE-2010; @TransferLearning-arxiv-2014; @ULM-Finetuning-arxiv-2018; @BERT-arxiv-2018; @DNABert-Bioinformatics-2021; @HyenaDNA-NeurIPS-2023; @DNABERT-2-arxiv-2024], but is especially relevant for the AlphaGenome architecture because the model allocates a significant amount of parameters that are specific to organisms and output tracks. These include organism embedding parameters of shape `[num_organisms, num_channels]` and multiorganism linear layers of shape `[num_organisms, num_in_channels, num_out_channels]` used in the output heads [^footnote-1]. In the case of the multiorganism linear layers for some output heads (e.g. RNA-Seq gene expression), different output channels may correspond to different biological contexts. This architectural choice is grounded in the biological reality, where the same DNA sequence can produce different measured values (e.g. expression, chromatin accessibility, splicing, contact maps) depending on biological context (e.g. tissue, cell type, developmental stage, environment, and organism).
 
 [^footnote-1]: Parameter shapes are expressed up to permutation.
 
@@ -34,14 +34,31 @@ Although future AlphaGenome releases may incorporate more species and biological
 
 AlphaGenome is a hybrid convolutional-transformer architecture that balances long-context with computational feasibility while supporting single-base-pair resolution in its predictions. At a high level, AlphaGenome can be viewed as a U-Net-like encoder-decoder model [@UNet-MICCAI-2015] with transformer layers [@Transformers-NeurIPS-2017] in the middle.
 
-:::{figure} images/AG_Total.png
+:::{figure} images/AG_architecture.svg
 :label: fig:alphagenome-architecture
-Architecture of the AlphaGenome model, including its overall encoder-transformer-decoder structure and its row attention mechanism.
+Overall encoder-transformer-decoder architecture of the AlphaGenome model.
 :::
 
-The model begins with an encoder that consists of seven convolutional downsampling blocks, which capture short-range dependencies and coarsen the sequence from 1bp to $2^7=128$bp resolution. The resulting 128bp embeddings are then input to transformer layers [@Transformers-NeurIPS-2017], which capture long-range dependencies over the full context at reduced sequence length. The transformer attention logits are adjusted by an attention bias computed from pairwise sequence representations at a coarser $(2048 \times 2048)$ bp resolution. These pairwise representations are updated with a pair-to-pair attention mechanism (called row attention in AlphaGenome) where each pair representation attends across its row, which improves the model's capability to capture higher-order relationships. Finally, AlphaGenome applies a decoder that consists of seven convolutional upsampling blocks, which capture short-range dependencies and restores the sequence 1 bp resolution. U-Net-style skip connections [@UNet-MICCAI-2015] with the fine-grained encoder representations are used to prevent information loss.
+:::{figure} images/AG_Row-Attention.svg
+:label: fig:alphagenome-row-attention
+Row attention mechanism used to update AlphaGenome's pairwise sequence representations.
+:::
 
-The resulting 1bp, 128bp, and $(2048 \times 2048)$ bp representations are then passed to task-specific output heads. In total, the encoder-transformer-decoder structure allows AlphaGenome to retain fine-grained information while also incorporating long-range context.
+| Symbol | Meaning | Derivation | Published Value |
+| --- | --- | --- | ---: |
+| $B$ | Batch size | User selected | — |
+| $S_1$ | Number of 1-bp positions | $S_1 = S$ | 1,048,576 |
+| $S_{128}$ | Number of 128-bp positions | $S_{128} = S/128$ | 8,192 |
+| $S_{\mathrm{pair}}$ | Number of 2,048-bp bins along each pairwise axis | $S_{\mathrm{pair}} = S/2048$ | 512 |
+| $C_1$ | Width of the 1-bp embedding | $M'C$ | 1,536 |
+| $C_{128}$ | Width of the 128-bp embedding | $M'(C + 6I)$ | 3,072 |
+| $C_{\mathrm{pair}}$ | Width of the pairwise embedding | `pair_channels` | 128 |
+
+Here, $S$ is `max_seq_len`, $C$ is `num_channels`, $I$ is `channel_increment`, and $M'$ is `embedder_mlp_ratio`.
+
+The model begins with an encoder that consists of seven convolutional downsampling blocks, which capture short-range dependencies and coarsen the sequence from 1-bp to 128-bp resolution. The resulting 128-bp embeddings are then input to transformer layers [@Transformers-NeurIPS-2017], which capture long-range dependencies over the full context at reduced sequence length. The transformer attention logits are adjusted by an attention bias computed from pairwise sequence representations at a coarser $(2048 \times 2048)$ bp resolution. These pairwise representations are updated with a pair-to-pair attention mechanism (called row attention in AlphaGenome), which improves the model's capability to capture higher-order relationships. Finally, AlphaGenome applies a decoder that consists of seven convolutional upsampling blocks, which capture short-range dependencies and restore a 1-bp resolution representation. U-Net-style skip connections [@UNet-MICCAI-2015] with the fine-grained encoder representations are used to prevent information loss.
+
+The resulting 1-bp, 128-bp, and $(2048 \times 2048)$ bp representations are then passed to task-specific output heads. In total, the encoder-transformer-decoder structure allows AlphaGenome to utilize long-range context while retaining single-base-pair resolution for applicable tasks.
 
 
 ## Use Cases and Design Philosophy
@@ -282,8 +299,8 @@ load_result = load_alphagenome_checkpoint(
     fold="fold_2",
     repo_id="RylieWeaver/alphagenome-pytorch",
     repo_dir="v0.3.0",
-    heads=False,       	    # skip released heads; keep your custom heads
-    organisms=False,        # skip human/mouse organism embeddings
+    heads=False,       	# skip released heads; keep your custom heads
+    organisms=False,	  # skip human/mouse organism embeddings
     map_location="cpu",
 )
 ```
@@ -297,7 +314,7 @@ The first main area of limitation in `alphagenome-pt` is checkpoint loading. The
 
 The second main area of limitation in `alphagenome-pt` is that it does not provide any preprocessing pipeline for functional genomics data. However, this is an intentional scope choice. AlphaGenome supports many target types, each of which may be stored in multiple common file formats, and large-scale HPC training may require different storage formats than smaller experiments. Rather than assuming a particular file format or data-loading strategy, `alphagenome-pt` assumes that users yield tensorized data to the model, however that is done. The package focuses on the model rather than prescribing a universal data-processing workflow.
 
-The most closely related software is the official AlphaGenome release from Google DeepMind ([Link1](https://github.com/google-deepmind/alphagenome_research), [Link2](https://github.com/google-deepmind/alphagenome)). That implementation remains the reference implementation for the model and released checkpoints, but it is written in JAX, whereas `alphagenome-pt` is motivated by the complementary goal of making the model trainable in PyTorch. There are also other unofficial PyTorch implementations of AlphaGenome. The [`genomicsxai/alphagenome-pytorch`](https://github.com/genomicsxai/alphagenome-pytorch) package is a strong and polished PyTorch port, with pretrained checkpoint loading, named outputs, example notebooks, fine-tuning utilities, and reported numerical parity with the original JAX model. In contrast, `alphagenome-pt` is focused on flexible model training. In particular, `alphagenome-pt` includes a masked-language-modeling pretraining head, exposes more architecture hyperparameters for modification, and implements RMS batch normalization using current-batch statistics during training. This differs from the `genomicsxai` implementation, where RMS batch normalization uses stored running variance in the training forward passes. As a result, `alphagenome-pt` allows training gradients to flow through the normalization statistics induced by the current batch, which may be important when training AlphaGenome models from scratch or substantially changing their training distribution. A previous PyTorch implementation by Phil Wang (also known as lucidrains on GitHub), Miquel Anglada-Girotto, and Xinming Tu is also available at [lucidrains/alphagenome](https://github.com/lucidrains/alphagenome).
+The most closely related software is the official AlphaGenome release from Google DeepMind ([Link1](https://github.com/google-deepmind/alphagenome_research), [Link2](https://github.com/google-deepmind/alphagenome)). That implementation remains the reference implementation for the model and released checkpoints, but it is written in JAX, whereas `alphagenome-pt` is motivated by the complementary goal of making the model trainable in PyTorch. There are also other unofficial PyTorch implementations of AlphaGenome. The [`genomicsxai/alphagenome-pytorch`](https://github.com/genomicsxai/alphagenome-pytorch) package is a strong and polished PyTorch port, with pretrained checkpoint loading, named outputs, example notebooks, fine-tuning utilities, and reported numerical parity with the original JAX model. In contrast, `alphagenome-pt` is focused on flexible model training. In particular, `alphagenome-pt` includes a masked language modeling pretraining head, exposes more architecture hyperparameters for modification, and implements RMS batch normalization using current-batch statistics during training. This differs from the `genomicsxai` implementation, where RMS batch normalization uses stored running variance in the training forward passes. As a result, `alphagenome-pt` allows training gradients to flow through the normalization statistics induced by the current batch, which may be important when training AlphaGenome models from scratch or substantially changing their training distribution. A previous PyTorch implementation by Phil Wang (also known as lucidrains on GitHub), Miquel Anglada-Girotto, and Xinming Tu is also available at [lucidrains/alphagenome](https://github.com/lucidrains/alphagenome).
 
 Relative to these related projects, the goal of `alphagenome-pt` is not to replace the official implementation or provide the most complete inference interface. Instead, the goal is to provide a clear and maximally flexible PyTorch training implementation for users who want to adapt AlphaGenome to new datasets, species, and biological contexts while still remaining faithful to the original architecture.
 
