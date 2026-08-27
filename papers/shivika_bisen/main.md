@@ -163,9 +163,9 @@ three sections:
 **domain facts** (definitions, conventions, units), **compliance criteria** (five *fixed,
 universal* agentic-compliance anchors — domain scope, evidence grounding,
 privacy/confidentiality, no-advice, human escalation — instantiated per domain with severity:
-finance's {abbr}`MNPI (material non-public information)` rule — MNPI being undisclosed
-information that could move a company's stock price, which securities law restricts trading on or
-selectively revealing — is the privacy anchor's finance instance), and **common failure modes**. The first two are seeded now,
+finance's {abbr}`MNPI (material non-public information)` rule — undisclosed information that
+could move a stock price, which securities law bars trading on or selectively revealing — is the
+privacy anchor's finance instance), and **common failure modes**. The first two are seeded now,
 at ingestion; the third is *living* — it accumulates as the eval (Step 4) surfaces failures, which
 the framework clusters deterministically by `(category, failure_type)` and turns into a
 `recommended_check` (the golden-set addition that would catch each one). The anchor taxonomy is therefore *declared* — fixed by design, so all
@@ -330,21 +330,18 @@ topics (grey) collapse into a generic, less-grounded region.
 
 Without context, the same generator produces **only generic disclosure topics** — 25 of the 50
 are template "summarize Item 1A / {abbr}`MD&A (Management's Discussion and Analysis)` / the
-auditor's opinion" prompts. (Item 1A is the 10-K's risk-factor section and the MD&A the section
-where management narrates results and risks — boilerplate every filing contains, so such
-questions verify against no *specific* filing.) The
-**agent-compliance category is empty (0 probes)**, confirmed by reading every question. To be
-precise about why: the shared generation prompt asks for varied normal, ambiguous, and
-out-of-scope cases but does not itself request compliance probes — those are synthesized from the
-runbook's anchors ([](#sec:availability) links both arms' exact prompts). The blind arm has no
-anchors to draw on, so 0/50 is *coverage by construction*, an architectural property of running
-the pipeline without extraction rather than a discovered behavior of the generator. The design is
-symmetric — both arms run under the identical instruction, so the baseline is not selectively
-restricted — and the headline domain-accuracy result rests only on the questions both arms *did*
-generate, so it does not depend on this design choice. That is
-still the operative point, and it is a *coverage* gap rather than a score swing: an evaluation
-built without the extracted anchors cannot test a single compliance rule, so an agent can breach
-all of them and the evaluation never knows. @fig:qa-flow traces both sets from root to NMF topic, and @tbl:fb-coverage summarizes what
+auditor's opinion" prompts. (Item 1A is the 10-K's risk-factor section and the MD&A management's
+narrative of results and risks — boilerplate every filing contains, so such questions verify
+against no *specific* filing.) The
+**agent-compliance category is empty (0 probes)**, confirmed by reading every question. This is
+*coverage by construction*: the generation prompt — identical in both arms, so the baseline is not
+selectively restricted ([](#sec:availability) links both) — never requests compliance probes; they
+are synthesized from the runbook's anchors, which the blind arm lacks. 0/50 is thus an
+architectural property of running the pipeline without extraction, not a discovered behavior of
+the generator, and the headline domain-accuracy result, resting only on questions both arms *did*
+generate, does not depend on it. The operative point is a *coverage* gap rather than a score
+swing: an evaluation built without the extracted anchors cannot test a single compliance rule, so
+an agent can breach all of them and the evaluation never knows. @fig:qa-flow traces both sets from root to NMF topic, and @tbl:fb-coverage summarizes what
 each golden set can — and cannot — test for.
 
 :::{figure} qa_topic_flow.png
@@ -409,85 +406,64 @@ very same agent, has no way to surface it.
 
 ## Implementation Notes
 
-The framework is implemented in Python (3.11+); [](#sec:results) exercises Steps 1–3, while the
-Step-4 scorers and Step-5 metrics are implemented and unit-tested but not evaluated there.
+The framework is Python (3.11+). [](#sec:results) exercises Steps 1–3; the Step-4 scorers and
+Step-5 metrics are implemented and unit-tested but not evaluated there.
 Only Step 1 needs a model call; Steps 2–5 run offline and deterministically, so the artifacts
-reproduce without an API key. Both demos use public data with independent checks, and Use Case 2 retrieves with Chroma
-[@chroma]. Configuration is YAML; artifacts are plain-text and Git-friendly. The repository is
-MIT-licensed; a live demonstration will accompany the SciPy 2026 talk.
+reproduce without an API key. Use Case 2 retrieves with Chroma [@chroma].
 
 ## Discussion
 
-**Reviewer, not author.** A human stays in the loop at every generation step — an *accepted*
-artifact carries different organizational weight — so the framework optimizes for *acceptance
-latency*, not full autonomy. **Fixed anchors, discovered instances.** The five compliance
-anchors are a fixed taxonomy — guaranteeing coverage by construction — while their domain
-instantiations and the runbook's failure modes grow from observed behavior — teams learn each
-constraint's *content* by watching the agent fail. **Verifiability as a design constraint.** Choosing
-datasets by *checkability* underwrites the self-bias defense; judged scores read weaker than
-verified ones.
+**Reviewer, not author.** A human stays in the loop at every generation step, so the framework
+optimizes for *acceptance latency*, not full autonomy. **Fixed anchors, discovered instances.** The five compliance
+anchors are a fixed taxonomy, guaranteeing coverage by construction, while their domain
+instantiations and the runbook's failure modes grow from observed behavior: teams learn each
+constraint's *content* by watching the agent fail.
 
 (sec:limitations)=
 ## Limitations and Future Work
 
 The current scope targets text- and code-producing agents; multimodal, long-horizon tool-using
-agents are future work, though Step 1's extractor is designed to generalize. The Domain
-Compliance Runbook is a single JSON artifact (`domain_compliance_runbook.json`) that will need
-splitting at scale, the Step 5 dashboard is read-only, and an execution-verifiable text-to-SQL
-slice (e.g., a small BIRD subset) is a natural third demonstration. Two experimental limits: the blind arm lacks both the
-raw data and the extracted context, so the measured gap bounds their *combined* contribution (an
-intermediate raw-data-only arm isolating Step 1 is planned), and each arm is a single unseeded
-generation run, so the numbers carry no variance estimate.
+agents are future work. The runbook is a
+single JSON artifact that will need splitting at scale, and the Step 5 dashboard is read-only.
+Two experimental limits: the blind arm lacks both the raw data and the extracted
+context, so the measured gap bounds their *combined* contribution (a raw-data-only arm isolating
+Step 1 is planned), and each arm is a single unseeded generation run, so the numbers carry no
+variance estimate.
 
 ## Conclusion
 
 AI Eval Engine treats evaluation as a *pipeline to be generated*, not an artifact to be authored:
-from a pluggable domain context it generates the golden set and eval script, scores with
-verifiable checks where possible, and accumulates a living Domain Compliance Runbook — a
-reusable, domain-aware path to tracking agent behavior as a first-class OKR.
+from a pluggable domain context it generates the golden set, the eval script, and a living Domain
+Compliance Runbook — a domain-aware path to tracking agent behavior as a first-class OKR.
 
 (sec:availability)=
 ## Availability
 
-Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; the golden sets, judge
+Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; golden sets, judge
 outputs, analysis scripts, and both arms' generation prompts behind [](#sec:results) are under
-`results/ab_experiment/` there (every model-facing prompt is also printable offline via
-`ai-eval-engine generate --show-prompt`). The public API mirrors the paper's steps:
+`results/ab_experiment/`. The public API mirrors the paper's steps:
 
 ```python
 from ai_eval_engine import extract_domain_context, generate_golden_set
 ctx = extract_domain_context("configs/financebench.yaml")  # Step 1 -> DomainContext
-gs = generate_golden_set("configs/financebench.yaml", "out/context.json",
-    target_cases=50, runbook_path="out/domain_compliance_runbook.json")  # Step 3
+gs = generate_golden_set("configs/financebench.yaml", "out/context.json", runbook_path="out/runbook.json")  # Step 3
 ```
 
-Every artifact is plain JSON. Two verbatim (abridged) excerpts from the committed FinanceBench
-run show what the pipeline actually produces — a seeded *domain fact* from Step 2's
-`domain_compliance_runbook.json`:
+All artifacts are plain JSON. From the committed FinanceBench run, a Step-2 runbook *domain
+fact* reads `{"group": "Definitions", "label": "Free cash flow", "detail": "Operating cash flow
+minus capex, from the cited cash-flow statement."}`; one Step-3 `GoldenCase` (abridged):
 
 ```json
-{"group": "Definitions", "label": "Free cash flow",
- "detail": "Operating cash flow minus capital expenditures (purchases of property,
-            plant & equipment). Both terms must come from the cited cash-flow statement."}
-```
-
-and one Step-3 `GoldenCase` from `golden_set_with_domain_context.json`:
-
-```json
-{"id": "wdc-001",
+{"id": "wdc-001", "question_type": "metrics-generated",
  "input": "Using 3M's FY2018 consolidated statement of cash flows, what was 3M's
-           capital expenditure (purchases of property, plant and equipment) in USD millions?",
- "expected": "$1,577 million. Source: 3M_2018_10K, Consolidated Statement of Cash Flows,
-              'Purchases of property, plant and equipment (PP&E)'.",
- "question_type": "metrics-generated",
+           capital expenditure (purchases of PP&E) in USD millions?",
+ "expected": "$1,577 million. Source: 3M_2018_10K, Consolidated Statement of Cash Flows.",
  "probes_criteria": ["Citation & non-misleading disclosure"]}
 ```
 
 ## Disclosures
 
-**Generative AI.** Per the SciPy generative AI policy: generative AI (Anthropic Claude, via the
-Claude API and Claude Code) was used both as the *subject* of this work — the framework invokes
-Claude for extraction, generation, and judge scoring — and as a *writing aid*. All outputs were
-reviewed, verified, and revised by the author, who takes full responsibility for the final
-content. **Affiliation.** This work is an independent open-source contribution, separate from
-the author's employer affiliation.
+**Generative AI.** Anthropic Claude (API and Claude Code) was both this work's *subject* — the
+framework calls it for extraction, generation, and judge scoring — and a *writing aid*; the
+author reviewed and revised all outputs and takes full responsibility for the content.
+**Affiliation.** Independent open-source work, separate from the author's employer.
