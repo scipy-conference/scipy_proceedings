@@ -166,12 +166,12 @@ predictions, embeddings = model(data)
 total_loss, scalars, predictions = model.loss(data)
 
 # Genome-track heads:
-# rna_seq, cage, procap, atac, dnase use 1 bp and 128 bp outputs.
+# rna_seq, cage, procap, atac, dnase use 1-bp and 128-bp outputs.
 predictions["rna_seq"]["predictions_1bp"]
 predictions["rna_seq"]["predictions_128bp"]
 scalars["rna_seq_loss"]
 
-# chip_tf and chip_histone use 128 bp outputs.
+# chip_tf and chip_histone use 128-bp outputs.
 predictions["chip_tf"]["predictions_128bp"]
 scalars["chip_tf_loss"]
 
