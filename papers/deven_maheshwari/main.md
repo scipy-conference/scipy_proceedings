@@ -29,8 +29,9 @@ analysis tools capable of transforming noisy and complex datasets into insights 
 requiring the user to have advanced expertise in statistics and programming.
 
 We present a Python-based trend fitting framework targeted at non-technical wildlife
-conservation practitioners. Building on the Scikit-Learn [@sklearn1; @sklearn2] and StatsModels
-libraries, our pipeline modularizes model fitting, hyperparameter selection, and evaluation. We then
+conservation practitioners. Building on the SciPy [@scipy], Scikit-Learn [@sklearn1; @sklearn2],
+and StatsModels [@statsmodels] libraries, our pipeline modularizes model fitting, hyperparameter
+selection, and evaluation. We then
 present interpretable results through an interactive and reproducible dashboard. At its core, our
 framework utilizes Generalized Additive Mixed Models (GAMMs), a powerful statistical approach
 for modeling complex, random effect relationships. We introduce a robust GAM/GAMM Regressor
@@ -277,7 +278,8 @@ reported due to its frequent usage by field rangers.
 ### Rolling Origin Evaluation
 
 Standard cross-validation strategies such as $k$-fold are inappropriate for time series data
-because they allow test observations to occur before their corresponding training observations.
+because they allow test observations to occur before their corresponding training observations
+[@bergmeir2012].
 Rolling origin evaluation addresses this by enforcing chronological ordering throughout the
 evaluation pipeline.
 
@@ -324,7 +326,7 @@ Forest survival area in acres is extracted from the Hansen Global Forest Change 
 60%. Annual loss within each site is accumulated and subtracted from the baseline forested area to
 give a survival curve. OLS, GLM, and GAM are fit independently per site, and the GAMM is fit jointly
 across all nine sites as a shared cubic B-spline trend with a per-site random intercept, estimated
-by Markov chain Monte Carlo through Bambi and PyMC.
+by Markov chain Monte Carlo through Bambi [@bambi] and PyMC [@pymc].
 
 :::{figure} figure1.png
 :label: fig:dashboard
@@ -481,7 +483,7 @@ deployments. The research question: can an LLM propose a credible and narrower s
 constructed describing quantitative characteristics computed from the data: site name, year range,
 total forest loss, mean annual loss, variance of annual loss, and the presence and timing of a
 regime change. Claude Sonnet was selected as the model of choice due to its widespread use in
-industry. Rounds of full grid search, LLM-guided search, and a random control
+industry [@anthropic2024]. Rounds of full grid search, LLM-guided search, and a random control
 group of 20 $\alpha$ values in a random range of equal log-width to the LLM suggestion were used
 to generate a comparison table.
 
