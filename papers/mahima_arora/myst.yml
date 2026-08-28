@@ -1,0 +1,56 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-mahima_arora
+  title: Docling for Multimodal Retrieval
+  description:
+    A framework for preserving document structure and multimodal elements in RAG
+    systems through specialized chunking strategies for text, images, and
+    tables.
+  authors:
+    - name: Mahima Arora
+      email: maharoroa@redhat.com
+      orcid: 0000-0001-6299-5750
+      affiliations:
+        - Red Hat India Pvt. Ltd.
+      corresponding: true
+    - name: Aarti Jha
+      email: aajha@redhat.com
+      orcid: 0009-0000-2791-2067
+      affiliations:
+        - Red Hat India Pvt. Ltd.
+      corresponding: true
+  keywords:
+    - retrieval-augmented generation
+    - multimodal document understanding
+    - document parsing
+    - vector databases
+    - large language models
+    - information retrieval
+  abbreviations:
+    RAGAS: Retrieval-Augmented Generation Assessment Suite
+    RAG: Retrieval-Augmented Generation
+    LLM: Large Language Model
+    OCR: Optical Character Recognition
+    PDF: Portable Document Format
+    SQL: Structured Query Language
+    API: Application Programming Interface
+    pp: percentage points
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - docling
+        - qdrant
+        - pandasql
+        - multimodal_parser
+        - langgraph
+        - langchain_multivector
+        - llamaindex
+        - eval_dataset
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
