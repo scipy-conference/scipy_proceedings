@@ -2,12 +2,12 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "alphagenome-pt: Flexible Training of AlphaGenome Models in PyTorch"
 abstract: |
-  We present `alphagenome-pt`, an open-source PyTorch implementation of Google DeepMind’s AlphaGenome model for training and fine-tuning. AlphaGenome predicts functional genomic outputs directly from DNA sequence, but the released models are trained on human and mouse genomes, motivating dataset-specific training for other species and biological contexts. Because the released implementation is written in JAX, `alphagenome-pt` lowers the software barrier to adapting AlphaGenome by porting the model to PyTorch and exposing relevant model hyperparameters to custom configuration.
+  We present `alphagenome-pt`, an open-source PyTorch implementation of Google DeepMind’s AlphaGenome model for training and fine-tuning. AlphaGenome predicts functional genomic outputs directly from DNA sequence, but the released models are trained on human and mouse genomes, motivating dataset-specific training for other species and biological contexts. `alphagenome-pt` lowers the software barrier to adapting AlphaGenome by porting the JAX model to PyTorch and exposing relevant model hyperparameters to custom configuration.
 ---
 
 ## Introduction
 
-We present `alphagenome-pt` ([PyPI](https://pypi.org/project/alphagenome-pt/), [GitHub](https://github.com/RylieWeaver/AlphaGenome_PyTorch)), an open-source PyTorch implementation of Google DeepMind’s AlphaGenome model architecture for training and fine-tuning. DNA language models such as AlphaGenome learn representations of DNA sequence and can be broadly grouped into two categories based on their prediction objectives: (1) masked language modeling (MLM), which tasks the model with recovering the original DNA sequence given a corrupted input [@EVO2-Nature-2026; @EVO-nguyen-2024; @HyenaDNA-NeurIPS-2023; @DNABERT-2-arxiv-2024; @DNABert-Bioinformatics-2021; @NucleotideTransformer-Nature-2025; @NucleotideTransformer-biorxiv-2023; @PlantCAD2-2025], and (2) sequence-to-function modeling, which tasks the model with predicting experimental measurements of biological quantities [@AlphaGenome-Nature-2026; @Enformer-Nature-2021; @DeepSEA-Nature-2015; @Basenji-Nature-2018; @Borzoi-Nature-2025; @SpliceAI-Nature-2019; @Pangolin-PubMed-2022].[^model-categories] Example functional prediction tasks include gene expression, chromatin accessibility, splicing, and chromatin contact maps, each of which captures a different aspect of genome function. By serving as computational surrogates for physical experiments, these models provide fast estimates for quantities that would otherwise be relatively expensive and time-consuming to measure. Moreover, DNA sequence inputs can be precisely specified and systematically modified in silico, enabling controlled perturbations that are difficult or impossible to perform experimentally.
+We present `alphagenome-pt` ([PyPI](https://pypi.org/project/alphagenome-pt/), [GitHub](https://github.com/RylieWeaver/AlphaGenome_PyTorch)), an open-source PyTorch implementation of Google DeepMind’s AlphaGenome model architecture for training and fine-tuning. DNA language models such as AlphaGenome learn representations of DNA sequence and can be broadly grouped into two categories based on their prediction objectives: (1) masked language modeling (MLM), which tasks the model with predicting the original DNA sequence given a corrupted input [@EVO2-Nature-2026; @EVO-nguyen-2024; @HyenaDNA-NeurIPS-2023; @DNABERT-2-arxiv-2024; @DNABert-Bioinformatics-2021; @NucleotideTransformer-Nature-2025; @NucleotideTransformer-biorxiv-2023; @PlantCAD2-2025], and (2) sequence-to-function modeling, which tasks the model with predicting experimental measurements of biological quantities [@AlphaGenome-Nature-2026; @Enformer-Nature-2021; @DeepSEA-Nature-2015; @Basenji-Nature-2018; @Borzoi-Nature-2025; @SpliceAI-Nature-2019; @Pangolin-PubMed-2022] [^model-categories]. Example functional prediction tasks include gene expression, chromatin accessibility, splicing, and chromatin contact maps, each of which captures a different aspect of genome function. By serving as computational surrogates for physical experiments, these models provide fast estimates for quantities that would otherwise be relatively expensive and time-consuming to measure. Moreover, DNA sequence inputs can be precisely specified and systematically modified in silico, enabling controlled perturbations that are difficult or impossible to perform experimentally.
 
 [^model-categories]: The two DNA language model categories are not mutually exclusive since prediction tasks can be swapped while keeping the majority of the model the same. In particular, it's common and often useful to pretrain DNA language models with the MLM task before fine-tuning on sequence-to-function tasks. However, the separation is a useful framework for understanding the differences between DNA language models at a high level.
 
@@ -34,12 +34,12 @@ Although future AlphaGenome releases may incorporate more species and biological
 
 AlphaGenome is a hybrid convolutional-transformer architecture that balances long-context with computational feasibility while supporting single-base-pair resolution in its predictions. At a high level, AlphaGenome can be viewed as a U-Net-like encoder-decoder model [@UNet-MICCAI-2015] with transformer layers [@Transformers-NeurIPS-2017] in the middle.
 
-:::{figure} images/AG_architecture.svg
+:::{figure} images/AG_architecture.*
 :label: fig:alphagenome-architecture
 Overall encoder-transformer-decoder architecture of the AlphaGenome model.
 :::
 
-:::{figure} images/AG_Row-Attention.svg
+:::{figure} images/AG_Row-Attention.*
 :label: fig:alphagenome-row-attention
 Row attention mechanism used to update AlphaGenome's pairwise sequence representations.
 :::
