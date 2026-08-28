@@ -73,10 +73,8 @@ screenshot.
 This shift matters now for two converging reasons. First, computational science
 increasingly produces evidence (interactive figures, multi-gigabyte datasets,
 executable notebooks) that simply cannot be expressed in a PDF. Second,
-machine-assisted discovery and AI systems perform far more reliably when they can
-operate over structured, interoperable components rather than scraping
-unstructured prose. AI can read anything, but without shared standards it
-reinforces PDF-era incentives and lowest common denominator tools.
+machine-assisted discovery and AI systems are well complemented when they can also
+operate over structured, interoperable components, and relational metadata [e.g. @doi:10.48550/arXiv.2605.28787; @doi:10.48550/arXiv.2510.27119].
 A modular, structured substrate is the precondition for both human and machine
 reuse, and it is the principle at the core of OXA.
 
@@ -193,7 +191,7 @@ computational notebook into the version of record [@notebooksinpublishing]:
 1. **Executable content has no native home.** JATS can hold code as text, but it
    has no first-class model for an executable cell, its kernel/language, its
    outputs, and the linkage between them.
-2. **Outputs are flattened.** Interactive figures (e.g. Plotly, Bokeh, Altair), 3D
+2. **Outputs are flattened.** Interactive figures (e.g. Plotly [@plotly], Bokeh [@bokeh], Altair [@altair]), 3D
    visualizations, and large-scale data views are reduced to static images. A
    one-and-a-half-terabyte microscopy image becomes a screenshot.
 3. **Provenance and dependency are lost.** The relationship between a result, the
@@ -216,7 +214,7 @@ OXA emerged at an in-person working meeting held in San Diego in November 2025, 
 Twenty-five open-science leaders — developers of the leading modular publishing tools,
 alongside licensing and metadata experts — gathered to build a working,
 federated reference architecture using real bioRxiv content and connected
-authoring tools. The convened tool developers spanned Stencila, MyST [@doi:10.25080/hwcj9957], Quarto [@quarto], Curvenote [@doi:10.25080/NKVC9349], OpenAlex, and eLife. The explicit philosophy was implementation-first: prioritizing
+authoring tools. The convened tool developers spanned Stencila [@stencila], MyST [@doi:10.25080/hwcj9957], Quarto [@quarto], Curvenote [@doi:10.25080/NKVC9349], OpenAlex, and eLife. The explicit philosophy was implementation-first: prioritizing
 working software and demonstrable interoperability over abstract standardization.
 
 In this meeting, a 'bedrock, soil, flowers' framework was put forth.
@@ -249,7 +247,7 @@ standards and open-source values rather than on any single vendor's platform.
 
 OXA is a specification for representing scientific documents and their components
 as structured JSON objects. The format follows a typed node model with `children`
-arrays that form a tree, inspired by unified.js and the Pandoc AST.
+arrays that form a tree, inspired by UnifiedJS [@unifiedjs] and the Pandoc AST.
 
 Every OXA node shares a common shape with a small set of well-defined properties:
 
@@ -263,9 +261,6 @@ Every OXA node shares a common shape with a small set of well-defined properties
 - - `id`
   - string
   - Unique identifier for referencing and linking nodes.
-- - `classes`
-  - array\[string]
-  - Optional styling or semantic classes.
 - - `data`
   - object
   - Arbitrary metadata (attributes, provenance, DOI).
@@ -277,7 +272,25 @@ Every OXA node shares a common shape with a small set of well-defined properties
 Node types divide into inline nodes (`Text`, `Emphasis`, `Strong`, `InlineMath`,
 `Link`, `Image`, `Cite`, `CiteGroup`, and others) and block nodes (`Paragraph`,
 `Heading`, `CodeBlock`, `BlockQuote`, `Section`, `Div`). A document is rooted in
-an `OXA` node carrying version and metadata (license, authors, title).
+an `OXA` node carrying version and metadata (license, authors, title). A simple example of a paragraph OXA node is shown in @prg-node to demonstrate the nested structure of the node model. For more complex examples, see the [OXA documentation](https://oxa.dev/articles/documentation) and existing node schemas.
+
+```{code #prg-node} yaml
+:caption: A very simple example of a paragraph OXA node in a document with some inline elements for bold, italic, and text. The markdown equivalent is: `This is **bold and _italic_** text.`. The JSON is shown in YAML format for readability.
+type: Paragraph
+children:
+  - type: Text
+    value: "This is "
+  - type: Strong
+    children:
+      - type: Text
+        value: "bold and "
+      - type: Emphasis
+        children:
+          - type: Text
+            value: "italic"
+  - type: Text
+    value: " text."
+```
 
 The design principles are:
 
@@ -300,16 +313,40 @@ conceptual ancestor for computational typing, and Quarto, MyST Markdown and Curv
 integrations to computational ecosystems.
 The architecture also includes packages for validation, rendering, and transformation that allow lightweight, independent
 implementations, and a conversion path to the AT Protocol (ATProto) `pub.oxa.*`
-lexicon namespace — letting documents live in any Personal Data Server so that
+lexicon namespace (see the [ATProto OXA documentation](https://oxa.dev/articles/documentation/atproto-lexicon) for more details) — letting documents live in any Personal Data Server so that
 scientific content can become user-owned, portable, and discoverable alongside
-social feeds and moderation infrastructure.
+social feeds and moderation infrastructure. For example, @atproto-oxa shows the ATProto representation of the same example as @prg-node in AT Protocol format.
+
+```{code #atproto-oxa} json
+:caption: The AT Protocol representation of OXA uses "facets" instead of a tree. The text is stored as a single plain string, and formatting is described by byte-range annotations. The conversion tools `oxa convert --to atproto examples/document.json` will convert an OXA document to this format and include other common facet annotations used by the community such as Leaflet (<https://leaflet.pub>). The code shows the same example as @prg-node in AT Protocol format.
+{
+  "$type": "pub.oxa.blocks.defs#paragraph",
+  "text": "This is bold and italic text.",
+  "facets": [
+    {
+      "index": { "byteStart": 8, "byteEnd": 23 },
+      "features": [
+        { "$type": "pub.oxa.richtext.facet#strong" },
+        { "$type": "pub.leaflet.richtext.facet#bold" }
+      ]
+    },
+    {
+      "index": { "byteStart": 17, "byteEnd": 23 },
+      "features": [
+        { "$type": "pub.oxa.richtext.facet#emphasis" },
+        { "$type": "pub.leaflet.richtext.facet#italic" }
+      ]
+    }
+  ]
+}
+```
 
 ## Provenance and lineage of OXA
 
 OXA's design synthesizes lessons from several lines
 of prior work: JATS as the structural ancestor of a standardized scholarly record;
 the Stencila schema for typed, executable documents; Curvenote's work in scholarly
-publishing and interactive articles; and the document-transformation pipelines of Pandoc, MyST Markdown, UnifiedJS, and Quarto.
+publishing and interactive articles; and the document-transformation pipelines of Pandoc, MyST Markdown, UnifiedJS [@unifiedjs], and Quarto.
 
 JATS is the structural starting point. From it, OXA borrows the core idea of a
 single, standardized, machine-readable vocabulary for scholarly content, and
@@ -360,7 +397,7 @@ and Quarto are deployed across thousands of projects [c.f. @doi:10.25080/hwcj995
 AST-driven, computational narratives can work across many domains and output
 formats at scale.
 
-[^number-myst]: There are 18,152 dependencies of JupyterBook (an implementation of MyST) based on GitHub dependency graph: <https://github.com/jupyter-book/jupyter-book/network/dependents>.
+[^number-myst]: There are over 18,000 dependencies of Jupyter Book, an implementation of MyST, based on GitHub dependency graph: <https://github.com/jupyter-book/jupyter-book/network/dependents>.
 
 OXA generalizes these efforts into a shared _exchange_ format. Where MyST and Quarto
 are authoring syntaxes and document pipelines, OXA is a neutral, web-native format onto which all of them — along with JATS — can map.
@@ -372,7 +409,7 @@ machine-readable and reusable. We review the most relevant active community
 projects, emphasizing community-led work.
 
 **JATS and JATS4R.** JATS remains the substrate of the published scientific record, and
-JATS4R (JATS for Reuse) provides community recommendations to make JATS tagging
+JATS4R [@jats4r] provides community recommendations to make JATS tagging
 more consistent and reusable. OXA does not seek to replace JATS as an archival
 format so much as to provide a web-native, computation-aware layer that can
 interoperate with it — as demonstrated by the bioRxiv translation described below.
@@ -413,7 +450,7 @@ an interactive reading experience layered over the entire bioRxiv corpus [@openr
 
 The enabling work was a translation of openRxiv's JATS-format XML archive into an
 early version of OXA.
-The Reader lets readers explore references, terminology, expanded figures, and related works while staying in the context of the original preprint, with the same URL structure as bioRxiv. The translation covered 41.7TB and over 500,000 preprint versions in the bioRxiv and medRxiv corpus. The JATS-to-OXA translation is completed using the `jats` project (<https://github.com/continuous-foundation/jats>), which has been tailored by Curvenote to the specific needs of the openRxiv corpus.
+The Reader lets readers explore references, terminology, expanded figures, and related works while staying in the context of the original preprint, with the same URL structure as bioRxiv. The translation covered 41.7TB and over 500,000 preprint versions in the bioRxiv and medRxiv corpus. The translation pipeline is supported using the `jats` project (<https://github.com/continuous-foundation/jats>), which has been tailored by Curvenote to the specific needs of the openRxiv corpus.
 
 This implementation is significant for three reasons. First, it demonstrates that
 a large, real-world JATS archive can be translated into OXA at scale.
@@ -439,17 +476,60 @@ A small ecosystem of tooling is beginning to form around the specification,
 spanning both validation and conversion.
 
 The canonical reference tool is the `oxa` command-line utility, developed in the
-[oxa-dev](https://github.com/oxa-dev) organization. Its remit is deliberately narrow: it validates OXA
-documents against the published schemas. It can check a single file or a whole
+[oxa-dev](https://github.com/oxa-dev) organization. The scope of the CLI is deliberately narrow: it validates OXA documents against the published schemas.
+It can check a single file or a whole
 glob, read from standard input for use in pipes, validate a fragment against a
 specific node type (for example, `oxa validate --type Heading`), and report
 results through conventional exit codes so that it slots cleanly into
 continuous-integration and pre-commit checks. It fronts a small package family
 that includes `@oxa/core` for programmatic validation and `oxa-types` for
 TypeScript definitions and `@oxa/react` for a minimal demonstration of rendering.
-The narrow scope is by design: a lightweight, MIT-licensed validator lowers the barrier
-for other tools to emit OXA with confidence, in keeping with the architecture's
-aim of enabling many independent implementations.
+
+```{code #oxa-cli} bash
+:caption: The OXA CLI tool allows you to validate OXA documents from the command line:
+# Install the OXA CLI tool
+pip install oxa
+
+# Validate a JSON file
+oxa validate document.json
+
+# Validate multiple files
+oxa validate *.json
+
+# Validate from stdin
+cat document.json | oxa validate -
+
+# Validate YAML files
+oxa validate document.yaml
+
+# Validate against a specific node type
+oxa validate --type Heading heading.json
+```
+
+The OXA CLI tool is a wrapper around the OXA programmatic APIs, which allow you to validate OXA documents from Python, JavaScript, or Rust. For example, @oxa-api shows how to validate an OXA document from JavaScript. The `oxa-types` library is available on `pip`, `npm`, and `cargo` and the JSON Schema is available at <https://oxa.dev/v0.2.1/schema.json>.
+
+```{code #oxa-api} javascript
+:caption: The OXA programmatic APIs allow you to validate OXA documents from JavaScript.
+import { validate } from "@oxa/core";
+import type { Document } from "oxa-types";
+
+const document: Document = {
+  type: "Document",
+  children: [
+    {
+      type: "Paragraph",
+      children: [{ type: "Text", value: "Hello, world!" }],
+    },
+  ],
+};
+
+const result = validate(document);
+if (result.valid) {
+  console.log("Document is valid!");
+} else {
+  console.error("Validation errors:", result.errors);
+}
+```
 
 Conversion is the second strand, and the most developed and accessible work to date comes from
 Stencila. Building on its canonical, strongly typed schema, Stencila has implemented
@@ -469,7 +549,7 @@ structured, OXA-native content.
 The open standards stack we view as load-bearing for modular science is, in our
 reading: a structured document format with executable extensions; persistent,
 component-level identifiers for figures, datasets, code
-artefacts, and computational environments — not a DOI for every sentence, but a
+artifacts, and computational environments — not a DOI for every sentence, but a
 high-fidelity _linking system_ inside the bundle that carries licensing,
 attribution, and other metadata; an open preprint foundation (e.g. the broader openRxiv
 ecosystem) that accepts and serves modular outputs as first-class; machine-legible trust
@@ -508,7 +588,7 @@ the RFC process; the licensing-and-attribution framework for modular components 
 under active development; and the 2026 roadmap includes further large-scale pilots
 and deeper integration of the Reader experience into bioRxiv and medRxiv. The
 broader test will be adoption: whether tool builders, publishers, and repositories
-converge on OXA as a shared soil layer. We invite the SciPy community — long a leader
+converge on OXA as a shared layer. We invite the SciPy community — long a leader
 in computational, open, and reproducible science, and the originators of much of
 the composable software ecosystem this paper takes as its model — to engage with
 the specification, contribute RFCs, and build on the architecture to ensure it's fit for

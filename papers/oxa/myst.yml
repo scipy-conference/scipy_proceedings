@@ -198,6 +198,13 @@ project:
         - pandoc
         - quarto
         - openrxivlabsreader
+        - unifiedjs
+        - elife-era
+        - stencila
+        - plotly
+        - bokeh
+        - altair
+        - jats4r
   exports:
     - id: pdf
       format: typst
