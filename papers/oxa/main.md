@@ -1,6 +1,7 @@
 ---
-# Ensure that this title is the same as the one in `myst.yml`
-title: 'OXA: An Open Exchange Architecture for Modular and Composable Scientific Content'
+title: >-
+  OXA: An Open Exchange Architecture for Modular and Composable Scientific
+  Content
 abstract: |
   Scientific communication remains trapped in a paper-shaped container. The
   dominant unit of exchange — a static, narrative PDF backed by Journal Article
@@ -12,37 +13,39 @@ abstract: |
   community-driven specification that represents scientific documents and their
   components as structured, typed, and uniquely addressable JSON objects. OXA is
   designed to enable exchange, interoperability, and long-term preservation
-  while remaining compatible with modern web and data standards.
-  We describe the technical architecture of OXA — a typed
-  node model with `children` arrays inspired by unified.js and the Pandoc
-  abstract syntax tree (AST) — and trace its provenance through JATS, the Stencila
-  schema for executable documents, Curvenote's connected publishing model, and the
-  document pipelines of Pandoc, MyST Markdown, and Quarto.
-  We report on the first large-scale implementation of OXA: a
-  Curvenote–openRxiv partnership that translated the bioRxiv JATS archive into
-  an early version of OXA to power the openRxiv Labs "Curvenote Reader"
-  experience. OXA is stewarded by the Continuous Science Foundation and governed
-  through an open Request for Comments (RFC) process.
+  while remaining compatible with modern web and data standards. We describe the
+  technical architecture of OXA — a typed node model with `children` arrays
+  inspired by `unified.js` and the Pandoc abstract syntax tree (AST) — and trace
+  its provenance through JATS, the Stencila schema for executable documents,
+  Curvenote's connected publishing model, and the document pipelines of Pandoc,
+  MyST Markdown, and Quarto. We report on the first large-scale implementation
+  of OXA: a Curvenote–openRxiv partnership that translated the bioRxiv JATS
+  archive into an early version of OXA to power the openRxiv Labs "Curvenote
+  Reader" experience. OXA is stewarded by the Continuous Science Foundation and
+  governed through an open Request for Comments (RFC) process.
 acknowledgments: |
-  OXA is stewarded by the Continuous Science Foundation. The authors gratefully
-  acknowledge funding and in-kind support from the Navigation Fund, Curvenote, Stencila, and
+  OXA is stewarded by the Continuous Science Foundation
+  (<https://continuousfoundation.org>). The authors gratefully acknowledge
+  funding and in-kind support from the Navigation Fund, Curvenote, Stencila, and
   openRxiv. The first large-scale implementation of OXA — the Curvenote–openRxiv
-  partnership translating the bioRxiv archive into OXA to power the openRxiv Labs
-  Curvenote Reader — was funded in part by Alberta Innovates. We also acknowledge
-  the lineage of supporting work: the development of MyST Markdown and the Notebooks
-  Now! workflow was supported by the Alfred P. Sloan Foundation through the American
-  Geophysical Union, and the Curvenote CLI that became `mystmd` was
-  supported in part by Alberta Innovates. We thank the participants of the November
-  2025 San Diego standards meeting and the wider community of contributors to
-  Stencila, MyST, Quarto, and Project Jupyter who make interoperability in science
-  possible.
+  partnership translating the bioRxiv archive into OXA to power the openRxiv
+  Labs Curvenote Reader — was funded in part by Alberta Innovates. We also
+  acknowledge the lineage of supporting work: the development of MyST Markdown
+  and the Notebooks Now! workflow was supported by the Alfred P. Sloan
+  Foundation through the American Geophysical Union, and the Curvenote CLI that
+  became `mystmd` was supported in part by Alberta Innovates. We thank the
+  participants of the November 2025 San Diego standards meeting, funded by The
+  Navigation Fund, and the wider community of contributors to Stencila, MyST,
+  Quarto, and Project Jupyter who make interoperability in science possible. The
+  eLife Pathways support, including the implementation of OXA, is supported in
+  part by Wellcome.
 
   **AI Disclosure Statement**
 
-  We disclose that language editing, proofreading and coding were supported by
-  AI-based tools (Claude Opus 4.8); these were not used for conceptual development
-  or primary manuscript writing. The authors take full responsibility for the contents
-  of this manuscript.
+  We disclose that language editing, proofreading, and coding were supported by
+  AI-based tools (Claude Opus 4.8); these were not used for conceptual
+  development or primary manuscript writing. The authors take full
+  responsibility for the contents of this manuscript.
 ---
 
 ## Introduction: Toward Modular Science
@@ -54,7 +57,7 @@ canonical output is still a static document modeled on the printed page. Science
 is, in effect, trapped in a paper-shaped box, where content is static and
 narrative-driven, and the assets around the research — the data, code, protocols,
 and notebooks — are relegated to supplementary ZIP files that are hard to access.
-Crucially, the reviews and credit attached to research accrue to
+The reviews and credit attached to research accrue to
 the container itself rather than to the components beneath it.
 
 The Open Exchange Architecture (OXA) is a response to this mismatch. It reconceives
@@ -68,8 +71,8 @@ licensed as a first-class object rather than copy-pasted as a flattened
 screenshot.
 
 This shift matters now for two converging reasons. First, computational science
-increasingly produces evidence — interactive figures, multi-gigabyte datasets,
-executable notebooks — that simply cannot be expressed in a PDF. Second,
+increasingly produces evidence (interactive figures, multi-gigabyte datasets,
+executable notebooks) that simply cannot be expressed in a PDF. Second,
 machine-assisted discovery and AI systems perform far more reliably when they can
 operate over structured, interoperable components rather than scraping
 unstructured prose. AI can read anything, but without shared standards it
@@ -82,29 +85,28 @@ to where we want to go, science communicated through the modular elements of
 science, without first requiring that scientists share their work in completely
 new ways or changed incentive structures. This has consistently been a sticking
 point during shifts towards open science practices. The burden is placed on already
-over-busy researchers who don't necessarily the skills or time to do this additional
+over-busy researchers who don't necessarily have the skills or time to do this additional
 work. OXA addresses this through its positioning as an exchange format.
 Existing articles can be decomposed into modular elements and what's
 then possible with these elements can be demonstrated immediately, both not
 requiring new work from researchers, but showing what's possible when we can
-communicate science in new ways, and can motivate why a researcher would want
+communicate science in new ways, and can motivate why a researcher may want
 to work differently. Examples such as the openRxiv and Curvenote Reader partnership
-described below demonstrate this 'show, don't tell' approach.
-Additionally OXA provides a pathway to sharing science in new ways.
+described below demonstrate this approach.
+Additionally, OXA provides a pathway to sharing science in new ways.
 A researcher can begin to layer in sharing notebooks, interactive figures,
 data and code through the process of publishing an article.
-Crucially, OXA helps us build the bridge from where we are to where we want to go.
+OXA helps us build the _bridge_ from where we are to where we want to go.
 
-This paper is itself written in MyST Markdown and submitted through the SciPy
-proceedings toolchain, which since 2024 has been built on Curvenote
+This paper is itself written in MyST Markdown [@doi:10.25080/hwcj9957] and submitted through the SciPy
+Proceedings toolchain, which since 2024 has been built on Curvenote
 [@doi:10.25080/nkvc9349]. That toolchain is part of the same lineage we describe
-below, and OXA can be understood as a generalization and community standardization of the structured
-document model that already underlies these tools.
+below, and OXA can be understood as a generalization and community standardization of the structured document model that already underlies these tools.
 
 ## From modular software to modular science
 
 The SciPy community already lives in a world that is not how most of the rest of science yet
-operates. SciPy [@scipy], NumPy [@numpy], pandas [@pandas1;@pandas2],
+operates. SciPy [@scipy], NumPy [@numpy], pandas [@pandas1; @pandas2],
 Matplotlib [@matplotlib], and the libraries built on them are modular _and_
 composable. A user can `import` what they need, build something new, and the
 result inherits the trustworthiness of its constituents. Progress is
@@ -119,32 +121,30 @@ same thing. The push, over the past two decades, to unbundle the scientific pape
 (separating preprints from peer review, peer review from venue, venue from data
 hosting, data hosting from code) has been important and largely correct. But
 disaggregation is not, on its own, the goal.
-The goal is _ecosystem composability_: research products whose components can be found, reused,
+The goal is **ecosystem composability**: research products whose components can be found, reused,
 recombined, and extended without losing their integrity or provenance
-[@tbl:waves].
+[@tbl-waves].
 
-```{list-table} Two waves of modular science.
-:label: tbl:waves
-:header-rows: 1
-* - Dimension
+:::{list-table #tbl-waves header-rows=1} Two waves of modular science.
+- - Dimension
   - First wave
   - Second wave
-* - Core philosophy
+- - Core philosophy
   - Break apart to share
   - Package and compose
-* - Researcher action
+- - Researcher action
   - File separate deposits
   - Work natively, modularity emerges
-* - Output state
+- - Output state
   - Disconnected pieces
   - Connected, navigable graphs
-* - Provenance
+- - Provenance
   - Lost or manually added
   - Inherited and travels with object
-* - System result
+- - System result
   - Sprawl of scientific components, loosely connected
   - Integrated system with provenance
-```
+:::
 
 Modular science is the principle that scientific outputs can become as composable as
 scientific software, given the right standards, identifiers, tooling, and
@@ -167,7 +167,7 @@ over 96 million works with a full-text/text-mining link (96,294,821 of
 134,048,223 total works, queried from the Crossref dataset via Alexandria3k
 [@doi:10.1371/journal.pone.0294946]), the large majority of which are XML.
 
-But JATS carries the assumptions of the medium it was built for. It describes
+However, JATS carries the assumptions of the medium it was built for. It describes
 static, finished documents. Several well-documented friction points recur:
 
 - **Cost and tooling.** Producing high-quality JATS requires either
@@ -186,14 +186,14 @@ static, finished documents. Several well-documented friction points recur:
 ### The computational sticking points
 
 The deeper problem for computational science is structural. The work of the
-_Notebooks Now!_ project and the companion "Science Communication with Notebooks"
+_Notebooks Now!_ project [@doi:10.1029/2023EA003458] and the companion "Science Communication with Notebooks"
 recommendations identified, concretely, what breaks when one tries to bring a
-computational notebook into the version of record [@doi:10.1029/2023EA003458]:
+computational notebook into the version of record [@notebooksinpublishing]:
 
 1. **Executable content has no native home.** JATS can hold code as text, but it
    has no first-class model for an executable cell, its kernel/language, its
    outputs, and the linkage between them.
-2. **Outputs are flattened.** Interactive figures (Plotly, Bokeh, Altair), 3D
+2. **Outputs are flattened.** Interactive figures (e.g. Plotly, Bokeh, Altair), 3D
    visualizations, and large-scale data views are reduced to static images. A
    one-and-a-half-terabyte microscopy image becomes a screenshot.
 3. **Provenance and dependency are lost.** The relationship between a result, the
@@ -216,7 +216,7 @@ OXA emerged at an in-person working meeting held in San Diego in November 2025, 
 Twenty-five open-science leaders — developers of the leading modular publishing tools,
 alongside licensing and metadata experts — gathered to build a working,
 federated reference architecture using real bioRxiv content and connected
-authoring tools. The convened tool developers spanned Stencila, MyST, Quarto, Curvenote, OpenAlex, and eLife. The explicit philosophy was implementation-first: prioritizing
+authoring tools. The convened tool developers spanned Stencila, MyST [@doi:10.25080/hwcj9957], Quarto [@quarto], Curvenote [@doi:10.25080/NKVC9349], OpenAlex, and eLife. The explicit philosophy was implementation-first: prioritizing
 working software and demonstrable interoperability over abstract standardization.
 
 In this meeting, a 'bedrock, soil, flowers' framework was put forth.
@@ -253,28 +253,26 @@ arrays that form a tree, inspired by unified.js and the Pandoc AST.
 
 Every OXA node shares a common shape with a small set of well-defined properties:
 
-```{list-table} The common shape of an OXA node.
-:label: tbl:node
-:header-rows: 1
-* - Property
+:::{list-table #tbl-node header-rows=1} The common shape of an OXA node.
+- - Property
   - Type
   - Description
-* - `type`
+- - `type`
   - string (capitalized)
   - The node type, e.g. `Paragraph`, `Text`, `Heading`.
-* - `id`
+- - `id`
   - string
   - Unique identifier for referencing and linking nodes.
-* - `classes`
-  - array[string]
+- - `classes`
+  - array\[string]
   - Optional styling or semantic classes.
-* - `data`
+- - `data`
   - object
   - Arbitrary metadata (attributes, provenance, DOI).
-* - `children`
+- - `children`
   - array
   - Nested content nodes — block or inline types.
-```
+:::
 
 Node types divide into inline nodes (`Text`, `Emphasis`, `Strong`, `InlineMath`,
 `Link`, `Image`, `Cite`, `CiteGroup`, and others) and block nodes (`Paragraph`,
@@ -333,7 +331,7 @@ this paper and a member of the OXA steering council.
 
 A parallel thread runs through Curvenote's work in interactive scholarly
 publishing, which fed directly into the broader MyST ecosystem described below. In
-the AGU-led Notebooks Now! project — an effort to develop an end-to-end workflow
+the American Geophysical Union (AGU) Notebooks Now! project — an effort to develop an end-to-end workflow
 for submitting, peer-reviewing, and publishing computational notebooks as a
 primary element of the scientific record [@doi:10.1029/2023EA003458] — Curvenote
 and Posit (the makers of Quarto) collaborated within the working groups,
@@ -345,7 +343,7 @@ Both the Stencila schema and the Notebooks Now! working groups arrived at the sa
 conclusion: JATS cannot accommodate computational content shoehorned in after the
 fact, and its print-shaped model is a functional blocker to interactive or more
 modular ways of working with scientific content. The integrations that modern
-research demands — executable cells, live/interactive outputs, component-level provenance, modularity —
+research demands, including executable cells, live/interactive outputs, component-level provenance, and modularity,
 have no native home in a format designed to describe static, print documents.
 
 The way past that blocker is a structured intermediate representation that accommodates computational content and supports modularity and composability. There
@@ -354,14 +352,15 @@ pattern: parse documents into a typed abstract syntax tree and transform that tr
 into many standardized outputs [@pandoc]. Quarto [@quarto] and MyST Markdown build
 on the same idea for computational narratives. MyST (Markedly Structured Text) is
 a community-driven superset of CommonMark with first-class support for citations,
-cross-references, executable directives, and scholarly metadata (ORCIDs, funding,
-CRediT roles) [@doi:10.25080/hwcj9957]; its command-line tooling began at Curvenote
+cross-references, executable directives, and scholarly metadata (researcher identifiers (e.g. <https://orcid.org>), funding information, or contributor roles (e.g. <https://credit.niso.org/>)) [@doi:10.25080/hwcj9957]; its command-line tooling began at Curvenote
 as the `curvenote` CLI, became `mystmd` in 2023, and is now part of Project Jupyter
 [@jupyter]. The MyST Document Engine produces a MyST AST that preserves narrative
-content, computational blocks, outputs, citations, figures, and metadata. Both MyST
-and Quarto are deployed across thousands of projects, demonstrating that
+content, computational blocks, outputs, citations, figures, and metadata. Both MyST[^number-myst]
+and Quarto are deployed across thousands of projects [c.f. @doi:10.25080/hwcj9957], demonstrating that
 AST-driven, computational narratives can work across many domains and output
 formats at scale.
+
+[^number-myst]: There are 18,152 dependencies of JupyterBook (an implementation of MyST) based on GitHub dependency graph: <https://github.com/jupyter-book/jupyter-book/network/dependents>.
 
 OXA generalizes these efforts into a shared _exchange_ format. Where MyST and Quarto
 are authoring syntaxes and document pipelines, OXA is a neutral, web-native format onto which all of them — along with JATS — can map.
@@ -379,12 +378,11 @@ format so much as to provide a web-native, computation-aware layer that can
 interoperate with it — as demonstrated by the bioRxiv translation described below.
 
 **MECA.** The Manuscript Exchange Common Approach (MECA), a NISO Recommended
-Practice (RP-30), defines a packaging format for moving manuscripts between
+Practice, defines a packaging format for moving manuscripts between
 submission systems, preprint servers, and production services [@meca]. MECA is the
-closest existing analogue to OXA's exchange goal, but it inherits JATS's
-static-document assumptions: it packages finished manuscripts rather than modeling
-living, computational, component-level content. OXA can be read as a "modern MECA"
-oriented toward iterative, modular, machine-actionable content.
+closest existing analogue to OXA's exchange goal, however, it inherits JATS's
+static-document assumptions: it packages finished manuscripts in a ZIP file rather than modeling
+living, computational, component-level content. OXA can be read as a "modern MECA+JATS" alternative that replaces the static-document assumptions embedded in JATS with a more modern, computational-aware approach that can be accessed in a web-native way.
 
 **RO-Crate and Research Objects.** RO-Crate is an open, community-driven,
 lightweight approach to packaging research artifacts with their metadata, based on
@@ -394,36 +392,46 @@ artifacts and their metadata, while OXA models the _internal structure_ of the
 document and its components as a typed tree. An OXA document could be packaged
 within an RO-Crate.
 
-**Reproducible packaging: Whole Tale, Binder.** Whole Tale captures the whole
+**Reproducible packaging: Whole Tale, Binder.** Whole Tale [@doi:10.1016/j.future.2017.12.029] captures the whole
 computational environment ("tale") needed to reproduce an analysis, and
-Binder/BinderHub turn a code repository into an executable, interactive
+Binder/BinderHub [@doi:10.25080/Majora-4af1f417-011] turn a code repository into an executable, interactive
 environment in the browser. These projects solve the _execution and environment_
 problem that complements OXA's _representation_ problem.
 
 A web of overlapping collaborations connects these efforts: eLife and Stencila on
-Executable Research Articles; AGU and Curvenote on Notebooks Now!; and openRxiv with Curvenote on the Reader implementation described next.
+Executable Research Articles [@elife-era]; AGU and Curvenote on Notebooks Now! [@doi:10.1029/2023EA003458]; and openRxiv with Curvenote on the Reader implementation described next [@openrxivlabsreader].
 OXA is best understood as the point where these threads converge, coordinated through CSF's working groups and the RFC process.
 
-## The first large-scale implementation: Curvenote × openRxiv
+## First large-scale implementations
 
-The first large-scale implementation of OXA is a partnership between Curvenote and
-openRxiv, the independent non-profit that stewards bioRxiv and medRxiv. On June 11,
-2026, openRxiv launched its first openRxiv Labs experiment: the Curvenote Reader,
-an interactive reading experience layered over the entire bioRxiv corpus. [@openrxivlabsreader]
+### Curvenote × openRxiv
+
+The first large-scale implementation of OXA is a partnership between Curvenote (<https://curvenote.com>) and
+openRxiv (<https://openrxiv.org>), the independent non-profit that stewards bioRxiv and medRxiv.
+On June 11, 2026, openRxiv launched its first openRxiv Labs experiment: the Curvenote Reader,
+an interactive reading experience layered over the entire bioRxiv corpus [@openrxivlabsreader].
 
 The enabling work was a translation of openRxiv's JATS-format XML archive into an
 early version of OXA.
-The Reader lets readers explore references, terminology, expanded figures, and related works while staying in the context of the original preprint, with the same URL structure as bioRxiv. The translation covered 26TB and over 500,000 preprint versions in the bioRxiv and medRxiv corpus.
+The Reader lets readers explore references, terminology, expanded figures, and related works while staying in the context of the original preprint, with the same URL structure as bioRxiv. The translation covered 41.7TB and over 500,000 preprint versions in the bioRxiv and medRxiv corpus. The JATS-to-OXA translation is completed using the `jats` project (<https://github.com/continuous-foundation/jats>), which has been tailored by Curvenote to the specific needs of the openRxiv corpus.
 
 This implementation is significant for three reasons. First, it demonstrates that
 a large, real-world JATS archive can be translated into OXA at scale.
 Second, it validates OXA's "soil" thesis:
 once content is structured, new "flower" experiences (interactive reading,
 querying, future tool development) can be built on top. Third, it embodies the
-constellation model of research that openRxiv has articulated — in which a preprint
+constellation model of research that openRxiv has articulated: where a preprint
 is one node connected to data repositories, reviews, replications, and trust
 signals across multiple organizations rather than a self-contained PDF. OXA is the
-structural substrate that makes such a constellation addressable.
+structural substrate that makes such a constellation addressable. For example, @fig-citations shows a hover-citation that uses the OXA schema to display a citation with accompanying metadata as well as figure previews. The figure content is pulled directly from a selection of nodes in the OXA document. These content previews could be extended to AI-chat interfaces and other interactive reading experiences.
+
+:::{figure #fig-citations .framed} citations
+A hover-citation using Curvenote Reader that uses the OXA schema and translated documents to display a citation with accompanying metadata as well as figure previews. The figure content is pulled directly from a selection of nodes in the OXA document.
+:::
+
+### eLife Pathways × Stencila
+
+eLife Pathways (<https://elifepathways.org>) is another organizational implementation of OXA through an expanding collaboration with Stencila (<https://stencila.io>) and adapting eLife Pathways open-source Enhanced Preprint Platform to natively support OXA. There are also plans to build OXA support with Kotahi (<https://github.com/elifepathways/kotahi>). These integrations create new opportunities for collaboration between technology and publishing projects within the broader, interoperable scholarly communications ecosystem.
 
 ## Emerging tooling
 
@@ -443,7 +451,7 @@ The narrow scope is by design: a lightweight, MIT-licensed validator lowers the 
 for other tools to emit OXA with confidence, in keeping with the architecture's
 aim of enabling many independent implementations.
 
-Conversion is the second strand, and the most developed work to date comes from
+Conversion is the second strand, and the most developed and accessible work to date comes from
 Stencila. Building on its canonical, strongly typed schema, Stencila has implemented
 a bidirectional OXA codec that both decodes OXA JSON into the Stencila document model
 and encodes that model back out to OXA, tracking any information lost in either
@@ -481,7 +489,7 @@ Funder and publisher policies and changing incentive structures are still crucia
 
 OXA is stewarded by the Continuous Science Foundation. Day-to-day technical
 direction rests with a steering council whose current members are:
-Rowan Cockett (Curvenote), Tracy Teal (openRxiv), and Nokome Bentley (Stencila).
+Nokome Bentley (Stencila), Rowan Cockett (Curvenote), and Tracy Teal (openRxiv).
 The steering council operates within CSF's broader governance, and changes to the specification proceed through the open RFC process, ensuring a diversity of perspectives and that no single organization controls the direction of the standard.
 
 ## Conclusion and future work
@@ -491,9 +499,9 @@ computational, modular science a native exchange format. By representing documen
 and their components as typed, addressable, CC0-licensed JSON objects, it aims to
 unbundle research from its paper-shaped legacy and expose the evidence
 underneath — making figures, notebooks, data, and methods first-class, reusable,
-attributable, and machine-actionable. Its provenance in the Stencila schema and
+attributable, and machine-actionable. Its provenance in the Stencila schema, Curvenote, and
 MyST Markdown gives it a running start, and its first large-scale deployment over
-the bioRxiv corpus demonstrates feasibility at scale.
+the bioRxiv and medRxiv corpus demonstrates feasibility at scale.
 
 Much remains to be done. The schema is at an early version and will evolve through
 the RFC process; the licensing-and-attribution framework for modular components is
