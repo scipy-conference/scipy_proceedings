@@ -1,0 +1,57 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-rylie_weaver
+  # Ensure your title is the same as in your `main.md`
+  title: 'alphagenome-pt: Flexible Training of AlphaGenome Models in PyTorch'
+  # subtitle:
+  description: "This article describes `alphagenome-pt`, an open-source PyTorch
+    implementation \
+    of Google DeepMind's AlphaGenome model, which predicts functional genomic
+    outputs \
+    directly from DNA sequence. The core use case is training and fine-tuning
+    models \
+    on new species or biological contexts."
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Rylie Weaver
+      email: rweave15@vols.utk.edu
+      orcid: 0000-0002-5205-7602
+      affiliations:
+        - University of Tennessee, Knoxville; Oak Ridge National Laboratory
+      corresponding: true
+    - name: Gomathi Lakshmanan
+      email: gomathi.l@hotmail.com
+      orcid: 0009-0007-4155-7234
+      affiliations:
+        - University of Tennessee, Knoxville; Oak Ridge National Laboratory
+    - name: John Lagergren
+      email: lagergrenjh@ornl.gov
+      orcid: 0000-0002-8092-7433
+      affiliations:
+        - Oak Ridge National Laboratory
+      corresponding: true
+  keywords:
+    - genomics
+    - DNA language modeling
+    - deep learning
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
