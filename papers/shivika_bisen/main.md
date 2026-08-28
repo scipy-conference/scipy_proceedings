@@ -258,62 +258,61 @@ structured, execution-verified coder and an open-ended, grounding-verified QA ag
 ## Results
 
 The experimental variable is the **domain context supplied to the golden-set generator
-(Step 3)**, factored into its two ingredients on FinanceBench (Use Case 2): the **documents**
-(filing evidence text — the benchmark's own questions and answers are withheld, so no cell can
-paraphrase them) and the **runbook** (Step 2's Domain Compliance Runbook). The generator runs in
-all four cells of the 2 × 2 design under one identical system prompt — only the data sections of
-the user message differ — with k = 3 independent generations per cell; we report mean ± sd. The
-evaluation is of the **generated questions, not the agent's answers**: what a framework can
-*test for* is decided at generation time, so that is what we measure. Every number below is
-reproducible from the archived per-run prompts, the twelve saved golden sets, and the
-analysis scripts. Generation ran on Claude Fable 5 via Claude Code
+(Step 3)**, on FinanceBench (Use Case 2), in three arms: **blind** (nothing), **documents only**
+(filing evidence text — the benchmark's own questions and answers are withheld, so no arm can
+paraphrase them), and **documents + runbook** (the same text plus Step 2's Domain Compliance
+Runbook). The generator runs in every arm under one identical system prompt — only the data
+sections of the user message differ — with k = 3 independent generations per arm; we report
+mean ± sd. The evaluation is of the **generated questions, not the agent's answers**: what a
+framework can *test for* is decided at generation time, so that is what we measure. Every
+number below is reproducible from the archived per-run prompts, the nine saved golden sets,
+and the analysis scripts. Generation ran on Claude Fable 5 via Claude Code
 [@anthropic2025claude], August 2026 (flat-rate subscription, default settings, no fixed seed;
 [](#sec:limitations)). All three metrics are rule-based and offline; no LLM judge is used.
 
 ### FinanceBench: what the generated golden set can test for
 
-Every cell generated **50** questions per run. Given the documents, the generator wrote questions
+Every arm generated **50** questions per run. Given the documents, the generator wrote questions
 that name specific issuers, periods, and line items with answers traceable to the filing text;
 given the runbook, it also probed the domain's compliance rules; given neither, it wrote
 issuer-specific but unanswerable questions. We quantify this three ways — a rule-based
 domain-accuracy metric, lexical relatedness, and unsupervised topic structure.
 
-**Domain accuracy of the questions.** A rule-based scorer, applied identically to every cell,
+**Domain accuracy of the questions.** A rule-based scorer, applied identically to every arm,
 marks a generated question *domain-accurate* when it targets a real, specific financial fact
 verifiable against the raw filing data — the mean of a relevance axis (names a statement or line
 item) and a groundedness axis (the answer's figure is found in the raw data; else a named issuer;
 else company-less), with compliance probes excluded as non-factual. Groundedness is a
-*documents* effect: **75% → 91%** without the runbook and **75% → 91%** with it (mean of k = 3,
-sd ≤ 1.5 points; @fig:qa-grounded). The runbook moves this metric by zero — by construction,
+*documents* effect: **75% → 92% → 92%** from blind to documents to documents + runbook (mean of
+k = 3, sd ≤ 1 point; @fig:qa-grounded). The runbook moves this metric by zero — by construction,
 since it contributes no figures.
 
 **Lexical corroboration.** A second offline metric: each question's **domain relatedness** is its maximum
 {abbr}`TF-IDF (term frequency–inverse document frequency)` cosine similarity to the closest real
 FinanceBench record (over all question, answer, and evidence text; scikit-learn
-`TfidfVectorizer` [@pedregosa2011sklearn] with English stop words, unigrams, and sublinear TF). Documents shift questions toward real filings — median **0.266** (documents) and **0.281**
-(documents + runbook) versus **0.187** (neither) and **0.191** (runbook only) (@fig:qa-grounded); the
-runbook adds a small further shift — the fiscal-year and unit vocabulary it injects.
+`TfidfVectorizer` [@pedregosa2011sklearn] with English stop words, unigrams, and sublinear TF). Documents shift questions toward real filings — median **0.193** blind versus **0.267**
+(documents) and **0.266** (documents + runbook), questions pooled over runs (@fig:qa-grounded);
+the runbook leaves this metric unchanged too.
 
 :::{figure} combo_grounded.png
 :label: fig:qa-grounded
 :width: 100%
 Documents, not the runbook, drive question groundedness. **(a, left)** Domain accuracy
-(rule-based, identical scorer in every cell; mean ± sd over k = 3 runs): 75% without documents,
-91% with, in both runbook conditions. **(b, right)** Per-question domain relatedness (max TF-IDF
-cosine to the closest real filing), questions pooled over runs; the documents cells shift up and
-the runbook adds a small further shift.
+(rule-based, identical scorer in every arm; mean ± sd over k = 3 runs): 75% blind, 92% with
+documents, 92% with documents + runbook. **(b, right)** Per-question domain relatedness (max
+TF-IDF cosine to the closest real filing), questions pooled over runs; the two documents arms
+overlap and both sit above blind.
 :::
 
 **Topic structure and the compliance gap.** Running {abbr}`NMF (non-negative matrix
 factorization)` topic modeling [@pedregosa2011sklearn] over the raw question text of each set
 (TF-IDF features, 1–2-grams, finance-boilerplate stop words; topic assignments hand-verified by
-reading every question) — a view of what the generator actually produced — separates the two
-factors cleanly (@fig:qa-topics, @fig:qa-flow). With the runbook, each 50-question set splits
-into **36 grounded capability questions** across seven finance topics plus **14
-agent-compliance probes** (28% of the budget) spanning the four behavioral anchors: off-domain
-refusal, MNPI / confidential data, no-advice, and escalation (the fifth anchor,
-evidence-grounding, is enforced on every capability question) — and it does so *with or without
-documents*.
+reading every question) — a view of what the generator actually produced — shows where the
+runbook acts (@fig:qa-topics, @fig:qa-flow). With the runbook, each 50-question set splits into
+**36 grounded capability questions** across seven finance topics plus **14 agent-compliance
+probes** (28% of the budget) spanning the four behavioral anchors: off-domain refusal, MNPI /
+confidential data, no-advice, and escalation (the fifth anchor, evidence-grounding, is enforced
+on every capability question).
 
 :::{figure} qa_topic_bubbles.png
 :label: fig:qa-topics
@@ -321,33 +320,32 @@ documents*.
 NMF topics over the question text. x = mean domain relatedness (the TF-IDF metric of
 @fig:qa-grounded); y = mean **domain specificity** — the fraction of five concreteness markers
 pinned down (named company, fiscal period, statement, line item, figure verifiable in a real
-filing). Bubble area = questions, colored by cell. The documents cells' *capability* topics sit high and
-to the right; the runbook cells' *compliance* probes (dashed) sit low and left by design — naming
-an entity but using little filing vocabulary — and have no counterpart in the no-runbook cells;
-the no-documents cells' capability topics collapse into a less-grounded region.
+filing). Bubble area = questions, colored by arm. Both documents arms' *capability* topics sit high and
+to the right; the documents + runbook arm's *compliance* probes (dashed) sit low and left by
+design — naming an entity but using little filing vocabulary — and have no counterpart in the
+other arms; the blind arm's topics collapse into a less-grounded region.
 :::
 
 Without the runbook, the same generator under the same prompt produces **no compliance probes
-at all (0/50 in every run, with or without documents)** — confirmed by reading every question.
-This is *coverage by construction*: the shared prompt never requests refusal or safety cases;
-they are synthesized only from the runbook's anchors ([](#sec:availability) links every cell's
-prompt). The operative point is a *coverage* gap rather than a score swing: an evaluation built
-without the extracted anchors cannot test a single compliance rule, so an agent can breach all of
-them and the evaluation never knows — and the documents, which fix groundedness, do nothing to
-fix this. The runbook-only cell shows the extraction's contribution without data: issuer-specific
-questions exercising fiscal-year, unit, and applicability conventions plus the full probe set,
-but no verifiable figures. @fig:qa-flow traces each cell from root to NMF
+at all (0/50 in every run of both other arms)** — confirmed by reading every question. This is
+*coverage by construction*: the shared prompt never requests refusal or safety cases; they are
+synthesized only from the runbook's anchors ([](#sec:availability) links every arm's prompt).
+The operative point is a *coverage* gap rather than a score swing: an evaluation built without
+the extracted anchors cannot test a single compliance rule, so an agent can breach all of them
+and the evaluation never knows — and the documents, which fix groundedness, do nothing to fix
+this. (A fourth, runbook-only condition in the repository's 2 × 2 replication reproduces the
+14 probes with no documents at all.) @fig:qa-flow traces each cell from root to NMF
 topic, and @tbl:fb-coverage summarizes what each golden set can — and cannot — test for.
 
 :::{figure} qa_topic_flow.png
 :label: fig:qa-flow
 :width: 62%
-Run 1 of each cell traced from root to sub-category to NMF topic. The two runbook cells carry
-36 capability questions plus 14 agent-compliance probes across four compliance topics; the two
-no-runbook cells have an **empty agent-compliance sub-category (0)** — with or without documents.
+Run 1 of each arm traced from root to sub-category to NMF topic. The documents + runbook arm
+carries 36 capability questions plus 14 agent-compliance probes across four compliance topics;
+the blind and documents-only arms have an **empty agent-compliance sub-category (0)**.
 :::
 
-```{list-table} What each FinanceBench golden set can test for. The two baseline columns are the no-framework reality (not a measured run); the framework column is the measured documents + runbook golden set (run 1 of 3), whose 50 questions partition into 36 domain-capability questions and 14 compliance/safety probes.
+```{list-table} What each FinanceBench golden set can test for. The two baseline columns are the no-framework reality (not a measured run); the framework column is the measured documents + runbook golden set (run 1 of 3), whose 50 questions partition into 36 domain-capability questions and 14 compliance/safety probes; the documents-only arm reaches the same 36-question capability coverage with 0 probes.
 :label: tbl:fb-coverage
 :header-rows: 1
 * - Capability
@@ -391,12 +389,11 @@ no-runbook cells have an **empty agent-compliance sub-category (0)** — with or
 ### Summary
 
 The result is a *generation-time coverage* finding rather than an accuracy swing, and the
-factorial separates the two ingredients. Documents make questions gradeable (75% → 91%
+intermediate arm separates the two ingredients. Documents make questions gradeable (75% → 92%
 groundedness) but add **zero** compliance probes; the runbook adds nothing to groundedness but
-turns every set into 36 grounded questions plus 14 probes spanning all four behavioral
-anchors, with or without documents. The added coverage exists *only because Step 1 ran*; a
-golden set built from the documents alone, scoring the very same agent, has no way to surface
-it.
+turns the set into 36 grounded questions plus 14 probes spanning all four behavioral anchors.
+The added coverage exists *only because Step 1 ran*; a golden set built from the documents
+alone, scoring the very same agent, has no way to surface it.
 
 ## Implementation Notes
 
@@ -419,8 +416,8 @@ The current scope targets text- and code-producing agents; multimodal, long-hori
 agents are future work. The runbook is a
 single JSON artifact that will need splitting at scale, and the Step 5 dashboard is read-only.
 Three experimental limits: the question metrics are rule-based (validated against an
-independent hand-labeling of 32 questions: MAE 0.08, Spearman ρ = 0.84); k = 3 unseeded
-generations per cell give only a coarse variance estimate; and one generator model family was
+independent hand-labeling of 30 questions: MAE 0.09, Spearman ρ = 0.74); k = 3 unseeded
+generations per arm give only a coarse variance estimate; and one generator model family was
 used.
 
 ## Conclusion
@@ -432,9 +429,9 @@ Compliance Runbook — a domain-aware path to tracking agent behavior as a first
 (sec:availability)=
 ## Availability
 
-Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; the twelve golden
+Source code is MIT-licensed at <https://github.com/sbisen/ai-eval-engine>; the nine golden
 sets, per-run archived prompts, scorer outputs, hand labels, and analysis scripts behind
-[](#sec:results) are under `results/ab_experiment/rerun_2026-08-27_2x2/`. The public API mirrors the paper's steps:
+[](#sec:results) are under `results/ab_experiment/rerun_2026-08-28_3arm/`. The public API mirrors the paper's steps:
 
 ```python
 from ai_eval_engine import extract_domain_context, generate_golden_set
