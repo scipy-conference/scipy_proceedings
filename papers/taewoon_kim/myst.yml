@@ -6,9 +6,9 @@ project:
   # Keep this title identical to the one in `main.md`
   title: 'ArcadeDB in Python: An In-Process Multi-Model Database'
   description:
-    An embedded, multi-model database for scientific Python that unifies
-    documents, graphs, and vectors in one in-process runtime, with Python
-    bindings over a Java engine.
+    Python bindings that run the ArcadeDB multi-model database (documents,
+    graph, vectors) inside the Python process, with a bundled Java runtime and
+    no server.
   # Site card (square) + page header banner (wide 2.35:1), both Python + ArcadeDB branded
   thumbnail: figures/thumbnail.png
   banner: figures/banner.png
@@ -24,18 +24,17 @@ project:
     - embedded database
     - graph database
     - vector search
-    - HNSW
+    - Python bindings
+    - JPype
   # Add abbreviations used in the paper here (expanded on first use automatically)
   abbreviations:
     OLTP: Online Transaction Processing
     OLAP: Online Analytical Processing
     HNSW: Hierarchical Navigable Small World
-    ANN: Approximate Nearest Neighbor
     JRE: Java Runtime Environment
     JVM: Java Virtual Machine
     ACID: Atomicity, Consistency, Isolation, Durability
     GAV: Graph Analytical View
-    ETL: Extract, Transform, Load
     GIL: Global Interpreter Lock
   # Ignore the doi-exists check for citation keys that legitimately have no DOI
   error_rules:
@@ -47,6 +46,7 @@ project:
         - sklearn1
         - sklearn2
         # embedded-DB landscape entries without DOIs (official repos/sites)
+        - duckdb
         - sqlite
         - hnswlib
         - chroma
@@ -54,8 +54,6 @@ project:
         - sqlitevec
         - qdrant
         - pgvector
-        - kuzu2023
-        - networkx2008
         - neo4j
         - tinydb
         - lmdb
@@ -63,8 +61,7 @@ project:
         - leveldb
         - zodb
         - arcadedb
-        - arcadedbpython
-        - jpype
+        - jep282
         # SciPy 2023 papers — no DOI in the source tree (cited by article URL)
         - li2023aphylogeo
         - alted2023blosc2

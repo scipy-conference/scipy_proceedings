@@ -122,11 +122,18 @@
 	doi          = {10.1145/3299869.3320212},
 	isbn         = {978-1-4503-5643-5}
 }
+@misc{duckdb,
+	title        = {{DuckDB}},
+	author       = {Raasveldt, Mark and M{\"u}hleisen, Hannes},
+	year         = 2026,
+	note         = {Version 1.5.4, released 2026-06-17, the version measured here. Accessed: 2026-08-29},
+	howpublished = {\url{https://github.com/duckdb/duckdb}}
+}
 @misc{sqlite,
 	title        = {{SQLite}},
 	author       = {{SQLite Development Team}},
 	year         = 2024,
-	note         = {Accessed: 2026-06-17},
+	note         = {Version 3.46.1, released 2024-08-13, the version measured here. Accessed: 2026-08-29},
 	howpublished = {\url{https://www.sqlite.org/}}
 }
 % --- Vector: ANN algorithm + embedded libraries ---
@@ -152,27 +159,29 @@
 	doi          = {10.1109/TBDATA.2019.2921572},
 	note         = {arXiv:1702.08734}
 }
-@misc{faisslib2024,
+@article{faisslib,
 	title        = {The {Faiss} Library},
 	author       = {Douze, Matthijs and Guzhva, Alexandr and Deng, Chengqi and Johnson, Jeff and Szilvasy, Gergely and Mazar{\'e}, Pierre-Emmanuel and Lomeli, Maria and Hosseini, Lucas and J{\'e}gou, Herv{\'e}},
-	year         = 2024,
-	doi          = {10.48550/arXiv.2401.08281},
-	eprint       = {2401.08281},
-	archiveprefix = {arXiv},
-	primaryclass = {cs.LG}
+	year         = 2026,
+	journal      = {IEEE Transactions on Big Data},
+	volume       = 12,
+	number       = 2,
+	pages        = {346--361},
+	doi          = {10.1109/TBDATA.2025.3618474},
+	note         = {arXiv:2401.08281}
 }
 @misc{hnswlib,
 	title        = {hnswlib: Header-only {C++}/{Python} library for fast approximate nearest neighbors},
-	author       = {Malkov, Yury and Boytsov, Leonid and {hnswlib contributors}},
-	year         = 2016,
-	note         = {Accessed: 2026-06-17},
+	author       = {Malkov, Yury and {hnswlib contributors}},
+	year         = 2023,
+	note         = {Version 0.8.0, released 2023-12-03. Accessed: 2026-08-29},
 	howpublished = {\url{https://github.com/nmslib/hnswlib}}
 }
 @misc{chroma,
-	title        = {Chroma: the open-source search and retrieval database for {AI} applications},
+	title        = {Chroma: the open-source data infrastructure for {AI}},
 	author       = {{Chroma}},
-	year         = 2024,
-	note         = {Accessed: 2026-06-17},
+	year         = 2026,
+	note         = {Version 1.5.9, released 2026-05-05, the version measured here. Accessed: 2026-08-29},
 	howpublished = {\url{https://github.com/chroma-core/chroma}}
 }
 @misc{lancedb,
@@ -219,20 +228,12 @@
 }
 @misc{pgvector,
 	title        = {pgvector: Open-source vector similarity search for {P}ostgres},
-	author       = {{pgvector contributors}},
-	year         = 2024,
-	note         = {Accessed: 2026-06-17},
+	author       = {Kane, Andrew},
+	year         = 2026,
+	note         = {Version 0.8.6. Accessed: 2026-08-29},
 	howpublished = {\url{https://github.com/pgvector/pgvector}}
 }
 % --- Graph ---
-@inproceedings{kuzu2023,
-	title        = {{K{\`u}zu Graph Database Management System}},
-	author       = {Feng, Xiyang and Jin, Guodong and Chen, Ziyi and Liu, Chang and Saliho{\u{g}}lu, Semih},
-	year         = 2023,
-	booktitle    = {Proceedings of the 13th Annual Conference on Innovative Data Systems Research (CIDR 2023)},
-	address      = {Amsterdam, The Netherlands},
-	url          = {https://www.vldb.org/cidrdb/2023/kuzu-graph-database-management-system.html}
-}
 @inproceedings{networkx2008,
 	title        = {Exploring Network Structure, Dynamics, and Function using {NetworkX}},
 	author       = {Hagberg, Aric A. and Schult, Daniel A. and Swart, Pieter J.},
@@ -240,13 +241,14 @@
 	booktitle    = {Proceedings of the 7th Python in Science Conference (SciPy 2008)},
 	address      = {Pasadena, CA, USA},
 	pages        = {11--15},
-	editor       = {Varoquaux, Ga{\"e}l and Vaught, Travis and Millman, Jarrod}
+	editor       = {Varoquaux, Ga{\"e}l and Vaught, Travis and Millman, Jarrod},
+	doi          = {10.25080/TCWV9851}
 }
 @misc{neo4j,
-	title        = {Neo4j: The World's Leading Graph Database},
+	title        = {Neo4j Graph Database},
 	author       = {{Neo4j, Inc.}},
-	year         = 2024,
-	note         = {Accessed: 2026-06-17},
+	year         = 2026,
+	note         = {Accessed: 2026-08-29},
 	howpublished = {\url{https://neo4j.com/}}
 }
 % --- Document / key-value embedded ---
@@ -287,26 +289,38 @@
 }
 % --- Our system ---
 @misc{arcadedb,
-	title        = {{ArcadeDB}: Multi-Model Database},
-	author       = {{Arcade Data Ltd}},
-	year         = 2024,
-	note         = {Source: \url{https://github.com/ArcadeData/arcadedb}. Accessed: 2026-06-17},
+	title        = {{ArcadeDB}},
+	author       = {Garulli, Luca},
+	year         = 2026,
+	note         = {Version 26.8.1, released 2026-08-03, the version measured here. Source: \url{https://github.com/ArcadeData/arcadedb}. Accessed: 2026-08-29},
 	howpublished = {\url{https://arcadedb.com}}
 }
-@misc{arcadedbpython,
-	title        = {{ArcadeDB} Embedded {Python}: Native Python Bindings for ArcadeDB},
-	author       = {{HumemAI}},
-	year         = 2024,
-	note         = {PyPI: \texttt{arcadedb-embedded}. Accessed: 2026-06-17},
-	howpublished = {\url{https://github.com/humemai/arcadedb-embedded-python}}
+@software{arcadedbpython,
+	title        = {{ArcadeDB} Embedded for {Python}},
+	author       = {Kim, Taewoon and {The ArcadeDB contributors}},
+	year         = 2026,
+	version      = {26.8.1},
+	publisher    = {Zenodo},
+	doi          = {10.5281/zenodo.21781540},
+	note         = {Version 26.8.1, the release measured here; concept DOI for all versions 10.5281/zenodo.18399208. Archived from \url{https://github.com/humemai/arcadedb-embedded-python}}
 }
 % --- Java bridge ---
 @misc{jpype,
-	title        = {{JPype}: Python to {Java} bridge},
-	author       = {{JPype contributors}},
-	year         = 2024,
-	note         = {Accessed: 2026-06-17},
-	howpublished = {\url{https://github.com/jpype-project/jpype}}
+	title        = {{JPype}},
+	author       = {Nelson, Karl E. and Scherer, Martin K.},
+	year         = 2020,
+	publisher    = {Lawrence Livermore National Laboratory (LLNL), Livermore, CA (United States)},
+	doi          = {10.11578/dc.20201021.3},
+	note         = {DOE CODE ID 46107. Source: \url{https://github.com/jpype-project/jpype}},
+	howpublished = {\url{https://www.osti.gov/doecode/biblio/46107}}
+}
+@misc{jep282,
+	title        = {{JEP} 282: jlink: The {Java} Linker},
+	author       = {Laskey, Jim},
+	year         = 2017,
+	organization = {OpenJDK},
+	note         = {Delivered in JDK 9. Accessed: 2026-08-28},
+	howpublished = {\url{https://openjdk.org/jeps/282}}
 }
 @inproceedings{datta2025composable,
 	title        = {Python is all you need: an overview of the composable, Python-native data stack},
@@ -339,25 +353,26 @@
 	url          = {https://proceedings.scipy.org/articles/gerudo-f2bc6f59-005}
 }
 @inproceedings{schreiner2024skbuild,
-	title        = {scikit-build-core: A Modern Python Build Backend for C/C++ Extensions},
-	author       = {Henry Schreiner and Jean-Christophe Fillion-Robin and Matt McCormick},
+	title        = {{Scikit-build-core}: A modern build-backend for {CPython} {C}/{C}++/{Fortran}/{Cython} extensions},
+	author       = {Schreiner, Henry and Fillion-Robin, Jean-Christophe and McCormick, Matt},
 	year         = 2024,
-	booktitle    = {Proc. 23rd Python in Science Conf. (SciPy 2024)},
+	booktitle    = {Proceedings of the 23rd Python in Science Conference (SciPy 2024)},
+	pages        = {225--235},
 	doi          = {10.25080/FMKR8387}
 }
 @misc{crossvalidated,
 	title        = {Cross Validated (stats.stackexchange.com) data dump},
 	author       = {{Stack Exchange Inc.}},
 	year         = 2024,
-	note         = {Community Q\&A on statistics and machine learning; licensed CC BY-SA 4.0},
+	note         = {Community Q\&A on statistics and machine learning. File \texttt{stats.stackexchange.com.7z} of 2024-04-06. User contributions are CC BY-SA; the licence version follows the contribution date (2.5, 3.0 or 4.0)},
 	howpublished = {Internet Archive, \url{https://archive.org/details/stackexchange}}
 }
 @misc{ladybugdb,
-	title        = {{LadybugDB}: an embedded graph database (Python package \texttt{real\_ladybug})},
+	title        = {{LadybugDB}: an embedded graph database (Python package \texttt{ladybug})},
 	author       = {{LadybugDB contributors}},
 	year         = 2026,
-	note         = {Maintained continuation of the Kùzu project},
-	howpublished = {\url{https://pypi.org/project/real-ladybug/}}
+	note         = {Version 0.18.1, released 2026-07-10, the version measured here. Accessed: 2026-08-29},
+	howpublished = {\url{https://github.com/LadybugDB/ladybug}}
 }
 @inproceedings{raasveldt2018fair,
 	title        = {Fair Benchmarking Considered Difficult: Common Pitfalls In Database Performance Testing},
