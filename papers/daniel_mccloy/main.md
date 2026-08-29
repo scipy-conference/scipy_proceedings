@@ -61,7 +61,7 @@ While those contributors usually had a better-than-average set of relevant skill
 This approach is also reliant on social ties that may atrophy when key network members experience career or life changes, making the approach somewhat brittle.
 Accordingly, we sought to mitigate the risk posed by low maintainer numbers by striving to remove some of the barriers to MNE-Python contribution — especially those related to (lack of) open-source contribution skills.
 Therefore, our task became finding interested neuroscientists and teaching them how to develop and maintain scientific software.[^domaindev]
-Our efforts to achieve this are the topic of the rest of this paper.
+Our efforts to achieve this are the topic of the rest of this paper; in brief, we sought funding for and carried out a multi-year series of progressive training events culminating in the onboarding of four new maintainers.
 
 [^domaindev]: Theoretically, another option would be engaging a competent developer and teaching them how to think like a neuroscientist, but anecdotally the consensus among leaders of other scientific software projects seems to be that it is much easier to train scientists to develop software than *vice-versa*.
 
