@@ -7,12 +7,11 @@ project:
   title: Avoiding Zero-Trade Policies in RL with a Decoupled MLOps Architecture
   # subtitle:
   description: >
-    Common reward designs in financial RL collapse into buy-and-hold or
-    zero-trade policies. We present a decoupled architecture that separates
-    signal generation (RL confidence scores) from a deterministic execution
-    engine handling position sizing, risk rules, and exits. The talk covers
-    failure-mode detection, production Python patterns (Position, Order,
-    RiskManager, ExitPolicy), and lessons learned deploying this system.
+    A direct Stable-Baselines3 DQN trading USD/JPY 5-minute bars completed
+    zero trades on the held-out period. We describe a decoupled architecture
+    in which the RL model emits a directional score and a deterministic
+    Python execution engine owns position management. On the same data and
+    split, the decoupled system completed 2,625 fully risk-managed trades.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Sho Tanaka
@@ -28,10 +27,10 @@ project:
     RL: Reinforcement Learning
     MDP: Markov Decision Process
     PnL: Profit and Loss
-    SAC: Soft Actor-Critic
-    TD3: Twin Delayed Deep Deterministic Policy Gradient
+    DQN: Deep Q-Network
     PPO: Proximal Policy Optimization
     ATR: Average True Range
+    OHLC: Open, High, Low, Close
     RSI: Relative Strength Index
     MACD: Moving Average Convergence Divergence
     MLOps: Machine Learning Operations
@@ -39,9 +38,9 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - schulman2017
         - stable_baselines3
         - gymnasium
+        - sutton2018
   exports:
     - id: pdf
       format: typst

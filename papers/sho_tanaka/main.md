@@ -1,515 +1,434 @@
 ---
 title: Avoiding Zero-Trade Policies in RL with a Decoupled MLOps Architecture
 abstract: |
-  Reinforcement learning (RL) agents applied to financial time-series frequently
-  converge to degenerate policies that either never trade or collapse into
-  passive buy-and-hold behavior. We show that this failure mode arises from
-  a fundamental mismatch between discrete action spaces and common reward
-  formulations such as Sharpe ratio or raw profit-and-loss. Rather than
-  proposing yet another reward shaping technique, we present an architectural
-  solution: a two-layer system that decouples signal generation from trade
-  execution.
-
-  The Signal Generator layer uses an RL model to output a continuous confidence
-  score, while a deterministic Execution Engine handles position sizing, risk
-  management, trailing stops, and time-based exits. We describe concrete Python
-  implementation patterns---Position, Order, RiskManager, and ExitPolicy
-  classes---that make the execution logic fully testable and independent of the
-  ML model. We demonstrate how to detect policy collapse early through action
-  entropy monitoring and episode trade-count tracking, and show that the
-  decoupled architecture eliminates zero-trade convergence while maintaining
-  the ability to learn meaningful market signals.
+  Reinforcement learning (RL) agents trained on financial time series
+  frequently end up with degenerate policies that never complete a trade.
+  We report on a series of experiments with a Deep Q-Network (DQN) trading
+  USD/JPY 5-minute bars, built with Stable-Baselines3 and Gymnasium, in which
+  the direct end-to-end baseline produced 0 completed trades and 0.00%
+  realized return on the held-out period. We then describe the architectural
+  response presented at the SciPy 2026 virtual poster session: the RL model
+  acts as a *signal generator* that emits a directional score in
+  $[-1, +1]$, and a deterministic, unit-testable Python *execution engine*
+  owns position management---ATR stop-loss, risk-reward take-profit, trailing
+  stop, time-based exit and a risk manager. On the same data and split, the
+  decoupled system completed 2,625 fully risk-managed trades, with a 48.4%
+  win rate and a realized return of $-0.64\%$. `EvalCallback` retained the
+  best evaluated checkpoint rather than relying on the final training state.
+  The result demonstrates the operational value of separating signal
+  generation from deterministic execution; it is a behavioural backtest on
+  one currency pair, not a claim of profitability.
 ---
 
 ## Introduction
 
-Reinforcement learning has attracted significant interest as a framework for
-automated trading, offering the promise of policies that adapt to changing market
-regimes without explicit programming of entry and exit rules. A typical
-formulation models the trading problem as a Markov Decision Process (MDP) where
-the agent observes market features---prices, volumes, technical indicators---and
-selects discrete actions such as *buy*, *sell*, or *hold* at each timestep
-[@moody1998; @deng2017].
+Reinforcement learning is an attractive framing for automated trading: an
+agent observes market features and chooses among *buy*, *sell* and *hold*
+actions, and a reward signal derived from profit-and-loss (PnL) is supposed to
+shape a policy that adapts to market regimes without hand-written entry and
+exit rules [@sutton2018; @moody1998; @deng2017]. The open-source Python stack makes this
+easy to try---Gymnasium [@gymnasium] for the environment interface,
+Stable-Baselines3 [@stable_baselines3] for the algorithms, NumPy [@numpy] and
+pandas [@pandas] for feature engineering, and TA-Lib [@talib] for a subset
+of standard technical indicators.
 
-In practice, however, many RL trading agents converge to degenerate policies.
-The most common failure mode is a **zero-trade policy**: the agent learns that
-the safest action is to never enter a position, thereby avoiding transaction
-costs and the variance penalty inherent in risk-adjusted reward functions. A
-closely related failure is **buy-and-hold collapse**, where the agent enters a
-single long position early in training and never exits, exploiting an upward
-drift in the training data.
+In practice, it is easy to build an agent that *appears* to train for hours
+and then does nothing at all. Over roughly 75 experiments on USD/JPY 5-minute
+data, our DQN and PPO runs repeatedly ended with policies that completed zero
+trades on the held-out period. The poster framed this as a reward-design trap:
+every completed trade pays a transaction cost, holding costs nothing, and
+"never trade" can therefore become an attractive policy.
 
-These failures are not bugs in the implementation---they are rational responses
-to poorly structured optimization landscapes. When a Sharpe ratio reward is used,
-doing nothing produces zero variance in the denominator's estimate. When raw
-profit-and-loss (PnL) is the reward, buying and holding dominates in any
-trending market. Transaction cost penalties further suppress trading activity.
+This paper expands the content presented as a virtual poster at SciPy 2026:
+the zero-trade baseline and a decoupled
+architecture in which the RL model only emits a directional score while a
+deterministic Python execution engine owns all position management. On
+the same data and split, the decoupled system trades (2,625 completed
+trades) where the direct agent does not (0 trades).
 
-The common response in the literature is to engineer more sophisticated reward
-functions: adding trade frequency bonuses, clipping rewards, or using
-curriculum learning schedules. While these can work, they introduce fragile
-hyperparameters that require constant re-tuning as market conditions shift.
+```{figure} fig1_standalone.png
+:label: fig-decoupled-architecture
+:width: 95%
 
-In this paper, we propose a different approach: **restructure the system
-architecture** rather than the reward function. Our key insight is that an RL
-model should not be responsible for the mechanics of position management. Instead,
-we decompose the trading system into two layers:
-
-1. **Signal Generator**: an RL model that outputs a continuous confidence score
-   in $[-1, +1]$, representing the strength and direction of a trading signal.
-2. **Execution Engine**: a deterministic, fully-testable Python module that
-   translates signals into orders, manages positions, enforces risk limits, and
-   handles exits (stop-loss, take-profit, trailing stops, time-based).
-
-This separation eliminates zero-trade convergence because the execution engine
-*guarantees* that sufficiently strong signals produce trades, while the RL model
-is free to focus on the statistical quality of its predictions without being
-penalized for execution mechanics.
+Poster Fig. 1: the decoupled architecture. Market features are passed to the
+DQN signal generator, and only its directional score crosses the boundary to
+the deterministic execution engine, which owns exits and risk controls.
+```
 
 Our contributions are:
 
-- An analysis of why standard reward designs cause policy collapse in financial
-  RL, with practical detection methods (Section 2).
-- A production-ready two-layer architecture that decouples ML signal generation
-  from trade execution (Section 3).
-- Concrete Python implementation patterns for Position, Order, RiskManager, and
-  ExitPolicy classes suitable for both backtesting and live deployment (Section 4).
-- Experimental evidence comparing monolithic RL agents against the decoupled
-  architecture on historical equity data (Section 5).
+- A reproducible zero-trade baseline on public-format FX data with a
+  Stable-Baselines3 DQN, and the reward variants we tried before abandoning
+  reward shaping (Section {ref}`sec-baseline`).
+- A decoupled signal/execution architecture with concrete Python patterns,
+  deterministic risk controls and checkpoint selection with `EvalCallback`
+  (Sections {ref}`sec-arch` and {ref}`sec-results`).
+- A same-data comparison showing 0 completed trades for the direct baseline
+  and 2,625 fully managed trades for the decoupled system.
 
+We make no claim of profitability. All PnL figures are backtests on a single
+currency pair and are reported to characterise *behaviour*, not returns.
 
-## Problem Analysis: Why RL Policies Collapse
+(sec-baseline)=
+## Experimental Setup and the Zero-Trade Baseline
 
-### The Reward Design Trap
+### Data and features
 
-Consider the standard RL trading setup. At each timestep $t$, the agent
-observes state $s_t$ (market features) and selects action $a_t \in \{buy, sell, hold\}$.
-The environment returns a reward $r_t$ based on the portfolio's performance.
-Three common reward formulations and their failure modes are:
+All experiments use USD/JPY 5-minute OHLC bars. The poster experiments use
+the period 2025-01-10 through the last available bar on 2025-12-19 (70,555
+bars after feature warm-up). The poster reports the calendar endpoint as
+2025-12-20. We use a
+chronological 70/30 train/test split (49,388 / 21,167 bars). The 21,167 test
+bars yield 21,116 evaluable steps after constructing 50-bar observations and
+next-bar transitions. A `FeatureEngineer` computes 155 technical features per
+bar (moving averages, RSI, MACD, ATR, Bollinger bands, returns at several
+horizons, and so on). TA-Lib provides a subset of the standard technical
+indicators; the remaining custom and return-based features are implemented
+with NumPy and pandas. The observation comprises a 50-bar window, flattened
+to a $50 \times 155 = 7{,}750$-dimensional vector.
 
-**Sharpe Ratio Reward.** The differential Sharpe ratio [@moody1998] is defined as:
+### Environment and agent
 
-```{math}
-:label: sharpe_reward
-
-D_t = \frac{B_{t-1} \Delta A_t - A_{t-1} \Delta B_t}{(B_{t-1} - A_{t-1}^2)^{3/2}}
-```
-
-where $A_t$ and $B_t$ are exponential moving averages of returns and squared
-returns respectively. The problem: an agent that never trades has $\Delta A_t = 0$
-and $\Delta B_t = 0$, producing a stable reward of zero. This is often
-*better* than the negative rewards incurred during early exploration when the
-agent makes random, poorly-timed trades.
-
-**Raw PnL Reward.** Setting $r_t = \text{portfolio\_value}_t - \text{portfolio\_value}_{t-1}$
-rewards any increase in portfolio value. In trending markets (which dominate
-most equity training sets), a single early buy followed by permanent hold
-maximizes cumulative reward. The agent learns that selling is strictly dominated.
-
-**Transaction Cost Penalty.** Adding a penalty $-c \cdot |a_t \neq a_{t-1}|$
-for each trade change further suppresses action diversity. Even small values of
-$c$ can tip the balance toward inaction when combined with the above rewards.
-
-### Detecting Collapse Early
-
-We identify two practical metrics for detecting policy collapse during training:
-
-**Action Entropy.** For a stochastic policy $\pi(a|s)$, we monitor:
+The environment is a Gymnasium `Env` with a discrete action space
+$\{\text{HOLD}, \text{BUY}, \text{SELL}\}$. BUY opens or holds a long
+position, SELL opens or holds a short position, and switching direction
+closes the existing position first. Each completed round-trip pays a
+transaction cost of 1 pip (0.0001 in price units). Episodes are 1,000 bars
+long with random start points. The reward at each step is
 
 ```{math}
-:label: action_entropy
+:label: eq-reward
 
-H(\pi) = -\sum_{a} \pi(a|s) \log \pi(a|s)
+r_t = 100 \cdot \big( w_u \, \Delta \mathrm{PnL}^{\text{unrealized}}_t
+      + \Delta \mathrm{PnL}^{\text{realized}}_t
+      + b_{\text{complete}} \, \mathbb{1}[\text{trade closed}]
+      + b_{\text{profit}} \, \mathbb{1}[\text{trade closed with profit}] \big)
 ```
 
-A healthy policy maintains entropy above a threshold; collapse manifests as
-entropy approaching zero as the policy becomes deterministic toward a single
-action.
+where $w_u$, $b_{\text{complete}}$ and $b_{\text{profit}}$ are the reward
+design knobs we varied. The agent is a Stable-Baselines3 `DQN` [@mnih2015] with an MLP
+policy (`net_arch=[512, 512, 512, 256]`), learning rate $10^{-4}$, replay
+buffer 200k, batch size 512, $\gamma = 0.99$, $\epsilon$-greedy exploration
+annealed over the first 15% of training to a floor of 0.05, 100k training
+steps, CPU only. Evaluation is deterministic (greedy argmax) over the full
+test period.
 
-**Episode Trade Count.** We track the number of position changes per episode.
-A monotonically decreasing trade count across training epochs is a strong
-leading indicator of imminent zero-trade convergence, often detectable 50-100
-episodes before the policy fully collapses.
+### Reward variants tried before the poster
+
+@tbl-reward-variants summarises the reward designs explored during
+development, labelled as on the poster, and @fig-reward-designs visualises
+their trade counts. The counts are from the original development runs
+(single seed each) and are indicative only.
+
+```{list-table} Reward designs explored during development and their test-set trade counts (single development runs).
+:label: tbl-reward-variants
+:header-rows: 1
+* - Label
+  - Reward configuration
+  - Completed trades
+  - Observed behaviour
+* - Buy & Hold
+  - unrealized PnL rewarded ($w_u = 1$)
+  - 24
+  - Enters long early, rarely exits
+* - Penalty Hell
+  - hold penalty added
+  - 58
+  - Trades, but erratically
+* - **Zero-Trade Collapse**
+  - $w_u = 0$, no bonuses, 1 pip cost
+  - **0**
+  - Single constant action
+* - Trade Bonus
+  - $b_{\text{complete}} > 0$, $b_{\text{profit}} > 0$
+  - 84
+  - Trades, unstable across runs
+```
+
+```{figure} fig2_standalone.png
+:label: fig-reward-designs
+:width: 90%
+
+Poster Fig. 2: completed test-set trades for the four reward designs in
+@tbl-reward-variants. These counts come from single development runs and show
+that some reward variants induced trading, but not that they were stable or
+profitable.
+```
+
+The "Zero-Trade Collapse" configuration ($w_u = 0$, $b_{\text{complete}} =
+b_{\text{profit}} = 0$) is the baseline used throughout the rest of the paper.
+Reproduced on the 2025 period with the settings above, it emitted BUY on all
+21,116 test steps and completed 0 trades, for a realized return of 0.00%. A
+policy that emits BUY forever opens one position on the first bar and never
+closes it, so it registers as zero *completed* trades and zero *realized*
+PnL.
+
+### Why reward shaping was abandoned
+
+Each reward variant that produced trades did so at the price of a new
+hyperparameter ($b_{\text{complete}}$, $b_{\text{profit}}$, the hold penalty)
+whose value was tuned to the training period and did not transfer. The reward
+was being asked to simultaneously encourage *good* trades, discourage *bad*
+ones, and define what "good" means, and every adjustment moved the
+equilibrium rather than removing the degenerate one. After roughly 75 such
+runs, we stopped editing the reward and changed the system boundary instead.
+
+(sec-arch)=
+## Architecture: Decoupled Signal Generation and Execution
+
+### Design
+
+The monolithic agent combines directional prediction and position management
+in a single discrete action. The decoupled system assigns these responsibilities
+to separate components:
+
+- **Directional scoring** is handled by the RL model, which emits a
+  continuous score $s_t \in [-1, +1]$.
+- **Position management** is handled by a deterministic Python execution
+  engine with no learned parameters.
+
+The high-level data flow is shown in @fig-decoupled-architecture.
+
+The model is trained in a *market-only* variant of the environment whose
+observation excludes the agent's own position state and whose reward
+(`direction_reward_weight = 1.0`, with small completion and profit bonuses of
+$5 \times 10^{-4}$ and $3 \times 10^{-4}$) rewards calling the next bar's
+direction correctly. At inference the model is never asked to act; its
+Q-values are read off and converted to a score by a `DQNScoreSignalGenerator`:
 
 ```python
-def detect_collapse(trade_counts, window=20, threshold=0.1):
-    """Flag potential policy collapse from trade count history."""
-    if len(trade_counts) < window:
-        return False
-    recent = trade_counts[-window:]
-    mean_trades = sum(recent) / len(recent)
-    return mean_trades < threshold * max(trade_counts)
+class DQNScoreSignalGenerator(SignalGenerator):
+    HOLD, BUY, SELL = 0, 1, 2
+
+    def generate(self, observation, **_):
+        obs = torch.as_tensor(observation[None], device=self.model.device)
+        with torch.no_grad():
+            q = self.model.q_net(obs)[0].cpu().numpy()
+        score = float(np.tanh((q[self.BUY] - q[self.SELL]) / self.temperature))
+        return TradingSignal(score=score, confidence=abs(score))
 ```
 
-### Why Reward Engineering Is Insufficient
-
-Reward shaping approaches attempt to fix collapse by adding bonuses for trading
-activity or penalizing inaction. While these can work for specific datasets, they
-introduce a fundamental tension: the reward must simultaneously encourage
-*good* trades and discourage *bad* ones, without specifying what "good" means
-a priori. This leads to a proliferation of hyperparameters (trade frequency
-targets, exploration bonuses, curriculum schedules) that require dataset-specific
-tuning and often fail to transfer across market regimes.
-
-Our architectural approach sidesteps this problem entirely: the RL model is only
-responsible for estimating signal quality, not for executing trades.
-
-
-## Architecture: Decoupled Signal-Execution Design
-
-### Design Philosophy
-
-The core insight is a separation of concerns:
-
-- **The ML model answers "what"**: how confident are we in a directional move?
-- **The execution engine answers "how"**: given a confidence level, what position
-  size, risk limits, and exit conditions should apply?
-
-This mirrors production systems in quantitative finance, where alpha models
-(signal generators) are developed independently from execution algorithms. The
-key difference is that we structure the RL training loop itself around this
-separation, rather than applying it as a post-hoc overlay.
-
-### Signal Generator Layer
-
-The RL agent's action space is reformulated from discrete $\{buy, sell, hold\}$
-to a continuous scalar $c_t \in [-1, +1]$:
-
-- $c_t > 0$: bullish signal (magnitude indicates confidence)
-- $c_t < 0$: bearish signal
-- $c_t \approx 0$: no signal / uncertainty
-
-This eliminates the combinatorial complexity of encoding position management
-into the action space. The agent uses any continuous-action RL algorithm
-(SAC [@haarnoja2018], TD3 [@fujimoto2018], or PPO with continuous actions
-[@schulman2017]) and is rewarded based on the *quality* of its signal relative
-to subsequent price movements, not on the profitability of specific trades.
-
-The reward becomes:
-
-```{math}
-:label: signal_reward
-
-r_t = c_t \cdot r_{t+1}^{market} - \lambda \cdot |c_t - c_{t-1}|
-```
-
-where $r_{t+1}^{market}$ is the next-period market return and $\lambda$ is a
-small regularization penalizing signal instability. Crucially, this reward
-*cannot* be maximized by outputting zero: a model that always outputs $c_t = 0$
-receives zero reward, while any model with non-zero predictive power receives
-positive expected reward.
-
-### Execution Engine Layer
-
-The Execution Engine is a purely deterministic Python module with no learned
-parameters. It receives the confidence score $c_t$ and current portfolio state,
-then applies a rule-based pipeline:
-
-1. **Signal Filtering**: ignore signals below a minimum confidence threshold
-   $|c_t| < \theta_{min}$
-2. **Position Sizing**: map confidence to position size via a configurable
-   function (e.g., linear, Kelly criterion-based)
-3. **Risk Check**: verify that the proposed position respects portfolio-level
-   constraints (max position size, sector concentration, correlation limits)
-4. **Order Generation**: create the appropriate market/limit order
-5. **Exit Management**: attach stop-loss, take-profit, and trailing stop
-   parameters based on current volatility estimates
+The execution engine consumes the score through a configuration object that
+states every rule explicitly. The configuration used for all decoupled runs
+in this paper is:
 
 ```python
-class ExecutionEngine:
-    def __init__(self, risk_manager, exit_policy, min_confidence=0.3):
-        self.risk_manager = risk_manager
-        self.exit_policy = exit_policy
-        self.min_confidence = min_confidence
-
-    def process_signal(self, confidence, market_state, portfolio):
-        if abs(confidence) < self.min_confidence:
-            return None
-
-        direction = 1 if confidence > 0 else -1
-        size = self.compute_position_size(confidence, market_state)
-
-        if not self.risk_manager.approve(size, direction, portfolio):
-            return None
-
-        order = Order(
-            direction=direction,
-            size=size,
-            stop_loss=self.exit_policy.stop_loss(market_state),
-            take_profit=self.exit_policy.take_profit(market_state),
-            trailing_stop=self.exit_policy.trailing_stop(market_state),
-        )
-        return order
+ExecutionConfig(
+    signal=SignalThresholdConfig(entry_threshold=0.2, exit_threshold=0.1,
+                                 reversal_threshold=0.5),
+    stop_loss=StopLossConfig(type=StopLossType.ATR_BASED, atr_multiplier=1.0),
+    take_profit=TakeProfitConfig(type=TakeProfitType.RISK_REWARD,
+                                 risk_reward_ratio=2.5),
+    trailing_stop=TrailingStopConfig(type=TrailingStopType.ATR_BASED,
+                                     activation_profit_pips=5.0,
+                                     atr_multiplier=0.5),
+    time_exit=TimeExitConfig(enabled=True, max_bars_in_trade=48),
+)
 ```
 
-### Why This Eliminates Zero-Trade Collapse
+A score with $|s_t| \geq 0.2$ opens a position in the direction of the sign;
+the engine then attaches a stop-loss one ATR away, a take-profit at 2.5 times
+the stop distance, a trailing stop that activates after 5 pips of profit,
+and a hard time exit after 48 bars (four hours). A `RiskManager` enforces
+daily loss and drawdown caps, and open positions are closed before the
+weekend.
 
-The decoupled architecture prevents zero-trade convergence through two
-mechanisms:
+### Core classes
 
-1. **Reward structure**: the signal reward (Equation {ref}`signal_reward`) is
-   maximized by outputting non-zero predictions that correlate with future
-   returns. Zero output yields zero reward, which is strictly dominated by any
-   model with positive predictive power.
-
-2. **Guaranteed execution**: the execution engine ensures that signals above
-   the confidence threshold *always* produce trades. The RL model cannot suppress
-   trading by learning to output "hold"---that action no longer exists.
-
-
-## Implementation Patterns in Python
-
-This section presents the core classes that implement the execution engine. These
-patterns are designed for both backtesting and live deployment, with clear
-interfaces that enable unit testing independent of any ML model.
-
-### Position and Order Data Classes
+The execution layer is organised around a small number of plain dataclasses
+and one stateful manager. The pattern is the one named in the original
+poster abstract (`Position` / `Order` / `RiskManager` / `ExitPolicy`); in
+the code that produced the results, the exit policy is split into
+per-rule `*Config` objects applied by a `PositionManager`, and the
+`RiskManager` enforces `max_position_size`, `max_daily_loss` (2%) and
+`max_drawdown` (10%) of balance.
 
 ```python
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime
-
-class Direction(Enum):
+class PositionSide(Enum):
     LONG = 1
     SHORT = -1
 
-@dataclass
-class Order:
-    direction: Direction
-    size: float
-    stop_loss: float
-    take_profit: float
-    trailing_stop: float | None = None
-    time_limit: int | None = None  # max bars to hold
-    created_at: datetime = field(default_factory=datetime.utcnow)
+class ExitReason(Enum):
+    SIGNAL = "signal"              # score reversed or weakened
+    STOP_LOSS = "stop_loss"
+    TAKE_PROFIT = "take_profit"
+    TRAILING_STOP = "trailing_stop"
+    TIME_EXIT = "time_exit"
+    WEEKEND_CLOSE = "weekend_close"
 
 @dataclass
 class Position:
-    order: Order
+    side: PositionSide
     entry_price: float
-    entry_time: datetime
-    highest_price: float = 0.0  # for trailing stop
-    bars_held: int = 0
+    entry_time: datetime | None = None
+    entry_bar: int = 0
+    size: float = 1.0
+    stop_loss: float | None = None
+    take_profit: float | None = None
+    trailing_stop_active: bool = False
+    trailing_stop_level: float | None = None
+    highest_price: float | None = None   # for long trailing stops
+    lowest_price: float | None = None    # for short trailing stops
+    entry_atr: float | None = None
+    entry_score: float = 0.0
 
-    def unrealized_pnl(self, current_price: float) -> float:
-        delta = current_price - self.entry_price
-        return delta * self.order.size * self.order.direction.value
+    def get_unrealized_pnl(self, price: float) -> float:
+        return (price - self.entry_price) * self.side.value * self.size
 
-    def update(self, current_price: float):
-        self.bars_held += 1
-        self.highest_price = max(self.highest_price, current_price)
-```
+    def check_stop_loss_hit(self, low: float, high: float) -> bool: ...
+    def check_take_profit_hit(self, low: float, high: float) -> bool: ...
+    def check_trailing_stop_hit(self, low: float, high: float) -> bool: ...
 
-### Risk Manager
-
-```python
 @dataclass
-class RiskConfig:
-    max_position_size: float = 0.1      # fraction of portfolio
-    max_drawdown: float = 0.05          # max acceptable drawdown
-    max_correlation: float = 0.7        # between concurrent positions
-    max_concurrent_positions: int = 5
-
-class RiskManager:
-    def __init__(self, config: RiskConfig):
-        self.config = config
-
-    def approve(self, size: float, direction: Direction,
-                portfolio) -> bool:
-        if size > self.config.max_position_size * portfolio.equity:
-            return False
-        if portfolio.current_drawdown > self.config.max_drawdown:
-            return False
-        if len(portfolio.open_positions) >= self.config.max_concurrent_positions:
-            return False
-        return True
+class ClosedTrade:
+    side: PositionSide
+    entry_time: datetime
+    exit_time: datetime
+    entry_price: float
+    exit_price: float
+    pnl: float
+    exit_reason: ExitReason
 ```
 
-### Exit Policy
+Because none of these objects know anything about the model, each rule can be
+unit-tested against a synthetic price path: feed a `Position` a sequence of
+bar highs and lows and assert which `check_*_hit` method fires and on which
+bar. The
+`ExecutionEngine.run_backtest()` loop is the only place the two layers meet:
 
 ```python
-class ExitPolicy:
-    def __init__(self, atr_multiplier_sl=2.0, atr_multiplier_tp=3.0,
-                 trailing_atr=1.5, max_holding_bars=20):
-        self.atr_multiplier_sl = atr_multiplier_sl
-        self.atr_multiplier_tp = atr_multiplier_tp
-        self.trailing_atr = trailing_atr
-        self.max_holding_bars = max_holding_bars
-
-    def stop_loss(self, market_state) -> float:
-        return market_state.atr * self.atr_multiplier_sl
-
-    def take_profit(self, market_state) -> float:
-        return market_state.atr * self.atr_multiplier_tp
-
-    def trailing_stop(self, market_state) -> float:
-        return market_state.atr * self.trailing_atr
-
-    def should_exit(self, position: Position,
-                    current_price: float) -> bool:
-        pnl = position.unrealized_pnl(current_price)
-        # Stop loss
-        if pnl < -position.order.stop_loss * position.order.size:
-            return True
-        # Take profit
-        if pnl > position.order.take_profit * position.order.size:
-            return True
-        # Trailing stop
-        if position.order.trailing_stop is not None:
-            drawdown_from_peak = position.highest_price - current_price
-            if drawdown_from_peak > position.order.trailing_stop:
-                return True
-        # Time-based exit
-        if (position.order.time_limit is not None
-                and position.bars_held >= position.order.time_limit):
-            return True
-        return False
+for obs, bar in zip(observations, bars):
+    signal = self.signal_generator.generate(obs)        # model → score
+    self.position_manager.update(bar)                   # exits: SL/TP/trail/time
+    if self.position_manager.flat and self.risk.allows(bar.time):
+        if abs(signal.score) >= cfg.signal.entry_threshold:
+            self.position_manager.open(signal, bar)     # entry
 ```
 
-### Signal Executor: Putting It Together
+### Checkpoint selection with `EvalCallback`
+
+Saving only the final training state can discard an earlier, better
+checkpoint. The poster pipeline therefore used an `EvalCallback` with a
+separate evaluation environment and loaded the best saved checkpoint for the
+decoupled backtest:
 
 ```python
-class SignalExecutor:
-    def __init__(self, execution_engine: ExecutionEngine):
-        self.engine = execution_engine
-        self.positions: list[Position] = []
+from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 
-    def step(self, confidence: float, market_state, portfolio):
-        # Check exits on existing positions
-        for pos in self.positions[:]:
-            pos.update(market_state.current_price)
-            if self.engine.exit_policy.should_exit(
-                    pos, market_state.current_price):
-                self.close_position(pos, market_state)
-
-        # Process new signal
-        order = self.engine.process_signal(
-            confidence, market_state, portfolio)
-        if order is not None:
-            self.open_position(order, market_state)
+train_env = SubprocVecEnv([make_env() for _ in range(8)])
+eval_env  = DummyVecEnv([make_env()])           # separate, single env
+callback  = EvalCallback(eval_env, best_model_save_path="best_model",
+                         eval_freq=5_000,
+                         n_eval_episodes=5, deterministic=True)
+model = DQN("MlpPolicy", train_env, **DQN_KWARGS)
+model.learn(100_000, callback=callback)
+best = DQN.load("best_model/best_model")         # not `model`
 ```
 
-These classes are intentionally simple and composable. Each can be tested in
-isolation: `ExitPolicy` can be verified with synthetic price paths,
-`RiskManager` with mock portfolio states, and the full `SignalExecutor`
-with recorded market data replays.
+The 2,625-trade result reported on the poster uses this selected checkpoint.
 
+(sec-results)=
+## Results Presented at the Poster
 
-## Experimental Results
+@fig-poster reproduces the poster as presented at the SciPy 2026 virtual
+poster session on 2026-07-15. The systems share the 2025 data, chronological
+70/30 split, 155 features and 100k training budget. The decoupled system also
+uses the market-only observation and direction-oriented reward described
+above, `EvalCallback` checkpoint selection, and the deterministic execution
+configuration. The results compare these two complete implementations on the
+same held-out period.
 
-We evaluate the decoupled architecture against a monolithic RL baseline on
-daily equity data from the S&P 500 universe (2015--2023).
+```{figure} fig_poster.png
+:label: fig-poster
+:width: 100%
 
-### Experimental Setup
+The SciPy 2026 virtual poster as presented. Panel 3 and Fig. 3 report the
+2,625-trade decoupled result; Fig. 2 shows the trade counts of the reward
+variants in @tbl-reward-variants.
+```
 
-**Baseline (Monolithic RL):** A PPO agent with discrete action space
-$\{buy, sell, hold\}$ and differential Sharpe ratio reward. The agent directly
-manages position entry and exit through its actions.
-
-**Proposed (Decoupled):** A SAC agent with continuous action space $[-1, +1]$
-outputting confidence scores, paired with the Execution Engine described above.
-The signal reward from Equation {ref}`signal_reward` is used with $\lambda = 0.01$.
-
-Both models use identical feature sets: 20-day rolling statistics (returns,
-volatility, momentum), RSI, MACD, and volume indicators. Training uses 2015--2020
-data; evaluation on 2021--2023 (out-of-sample).
-
-### Results
-
-<!-- TODO: Add quantitative results table and figures -->
-
-Preliminary results show:
-
-- The monolithic baseline converges to a zero-trade policy in 4 out of 10
-  random seeds within 500 training episodes.
-- The decoupled architecture produces active trading policies across all seeds.
-- Out-of-sample Sharpe ratios for the decoupled architecture are consistently
-  positive, while the monolithic baseline's Sharpe is undefined (zero trades)
-  or negative (buy-and-hold in down markets).
-
-```{list-table} Comparison of policy behavior across 10 random seeds.
-:label: tbl:results
+```{list-table} Test-set behaviour on USD/JPY 5-min, 2025-09-08 to 2025-12-19 (21,167 bars; 21,116 evaluable steps).
+:label: tbl-main
 :header-rows: 1
-* - Metric
-  - Monolithic RL
-  - Decoupled Architecture
-* - Seeds with zero-trade collapse
-  - 4 / 10
-  - 0 / 10
-* - Mean trades per episode
-  - 3.2 (excluding collapsed)
-  - 18.7
-* - Action entropy (final)
-  - 0.12
-  - 0.89
-* - Out-of-sample Sharpe
-  - -0.15 (excl. collapsed)
-  - 0.42
+* - System
+  - Trades
+  - Win rate
+  - Realized PnL
+* - Direct RL (baseline DQN)
+  - 0
+  - —
+  - 0.00%
+* - **Decoupled + `EvalCallback`**
+  - **2,625**
+  - **48.4%**
+  - **−0.64%**
 ```
 
-These results confirm that the architectural change fundamentally prevents the
-zero-trade failure mode while producing more diverse and profitable trading
-behavior.
+The decoupled system with `EvalCallback` completed 2,625 trades, with each
+position governed by the stop-loss, take-profit, trailing-stop, time-exit and
+risk rules in the execution layer. @fig-cumpnl
+shows the cumulative realized PnL over the test period: the baseline is a
+flat line at zero, while the decoupled system rose to $+9.9\%$ in late
+October before giving it back to finish at $-0.64\%$.
 
+```{figure} fig3_standalone.png
+:label: fig-cumpnl
+:width: 100%
 
-## MLOps Considerations
+Cumulative realized PnL on the 2025 test period. The direct-RL baseline
+completes no trades and is a flat line at 0%. The decoupled system with
+`EvalCallback` completes 2,625 trades, peaks near +10% and finishes at
+−0.6%. The curve characterises behaviour, not a return expectation.
+```
 
-### Independent Deployment and Testing
+## Future Work
 
-A key operational advantage of the decoupled architecture is that the Signal
-Generator and Execution Engine can be developed, tested, and deployed
-independently:
+The poster identified three directions for extending the system:
 
-- **Execution Engine changes** (adjusting risk limits, adding new exit
-  conditions) require no model retraining. They can be unit-tested with
-  synthetic data and deployed with confidence.
-- **Model updates** (retraining on new data, experimenting with architectures)
-  do not affect execution logic. A new model can be validated by checking signal
-  quality metrics before connecting it to the live execution engine.
+1. **Stronger signal models.** Evaluate Transformer-based models with
+   self-attention and gradient-boosted models such as LightGBM.
+2. **Risk and position sizing.** Add volatility-scaled position sizing and a
+   portfolio-level drawdown cap.
+3. **Deployment.** Validate the complete pipeline through live paper trading
+   and publish the reference execution engine.
 
-### Retraining Pipeline
+## Limitations
 
-The signal generator is retrained on a regular schedule (e.g., weekly) using
-the most recent market data. The training pipeline:
-
-1. Fetches features from a feature store
-2. Trains the SAC model with the signal reward
-3. Evaluates signal quality on a holdout period
-4. Registers the model in an ML registry if quality metrics pass
-5. Promotes to production via a canary deployment
-
-This pipeline integrates naturally with cloud-native ML platforms. For
-instance, Snowflake's Feature Store provides point-in-time correct feature
-retrieval for training, while the Model Registry handles versioning and
-deployment lifecycle management.
-
-### Monitoring
-
-In production, we monitor:
-
-- **Signal quality**: rolling correlation between confidence scores and realized
-  returns (a drop indicates model staleness)
-- **Action entropy**: ensures the model maintains diverse signal outputs
-- **Execution statistics**: fill rates, slippage, and exit-type distribution
-- **Risk metrics**: drawdown, position concentration, and correlation exposure
-
+All results are on one currency pair and one chronological split. The
+reward-variant counts are single development runs and are indicative only.
+The direct and decoupled systems differ in observation design, reward,
+checkpoint selection and execution, so the comparison characterises the two
+complete implementations rather than isolating one architectural variable.
+The decoupled-system PnL is a single-seed backtest with a fixed 1-pip
+transaction cost and no additional slippage model; it should not be read as
+an estimate of future returns.
 
 ## Conclusion
 
-We have presented a practical solution to the zero-trade collapse problem in
-financial RL. Rather than engineering increasingly complex reward functions, we
-restructured the trading system into a Signal Generator (RL model producing
-continuous confidence scores) and a deterministic Execution Engine (handling all
-position management logic).
+This paper presented a decoupled response to the zero-trade
+failure mode observed in direct RL trading. On the same USD/JPY data and
+chronological split, the direct DQN completed 0 trades, whereas the decoupled
+signal/execution system completed 2,625 trades with every position governed
+by explicit risk and exit rules.
 
-This architectural change eliminates zero-trade convergence by construction:
-the reward function cannot be maximized by inaction, and the execution engine
-guarantees that meaningful signals produce trades. The implementation patterns
-we describe---Position, Order, RiskManager, ExitPolicy---provide a testable,
-maintainable foundation for production trading systems.
+The contribution is architectural and operational: the model produces a
+directional score, while deterministic Python code owns position management.
+This boundary makes the execution rules independently testable and prevents
+the model from being solely responsible for exits. The reported backtest does
+not establish profitability, but it demonstrates a practical structure for
+building and evaluating RL-assisted trading systems.
 
-Future work includes extending the framework to multi-asset portfolios with
-cross-asset signal aggregation, incorporating online learning for the execution
-engine's parameters, and exploring hierarchical RL approaches where a
-higher-level agent optimizes the execution engine's configuration.
+## Acknowledgements and Disclosure
+
+Portions of this work were assisted using a generative AI tool (Snowflake CoCo, Claude, Codex).
+The tool was used for generating and refactoring
+experiment and execution-engine code, for drafting and revising this
+manuscript, and for producing figures from the recorded result files. All
+experiments were run, and all outputs reviewed, verified and revised, by the
+author, who takes full responsibility for the accuracy and integrity of the
+final content.
+
+This project is for educational and demonstration purposes only. It does not
+constitute financial advice, does not guarantee any trading profits, and
+should not be used for live trading.
