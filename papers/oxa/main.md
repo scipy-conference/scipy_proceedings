@@ -224,6 +224,8 @@ What's missing now is not a lack of bedrock elements, or ideas for flowers and h
 The 'soil' is the missing middle that provides the real basis for new models of scientific communication, attribution, discovery and remixing to occur.
 By working on that missing middle 'soil' layer, that's the unlocking and enabling function that makes so many more approaches possible, and what the tool developers at this meeting identified as a fundamental missing component in the ecosystem.
 It's crucial that these soil layers be community stewarded and governed, as an element of the ecosystem that is meant to connect different substrates and enable broad use and creativity from the developers of tools in the scientific space.
+This aligned with the gaps identified in the _Notebooks Now!_ project and pointed again to the need for a connecting, implementation-focused standard that is purpose-built and community-developed for sharing science digitally (where there is no need for the paper-shaped box) in a way that the modular elements of science in the 'bedrock' can be reused and remixed by both humans and machines. 
+Therefore in Day 2 of this meeting as a collaborative group, we began the work on OXA with the defining community and technical principles outlined below.
 
 ## The RFC and community process
 
@@ -398,13 +400,19 @@ formats at scale.
 
 [^number-myst]: There are over 18,000 dependencies of Jupyter Book, an implementation of MyST, based on GitHub dependency graph: <https://github.com/jupyter-book/jupyter-book/network/dependents>.
 
-OXA generalizes these efforts into a shared _exchange_ format. Where MyST and Quarto
+## Why a new standard
+
+Every mention of a new standard makes one think of the [xkcd comic on standards](https://xkcd.com/927/). That comic proceeds as Panel 1: 'Situation: there are 14 competing standards'. Panel 2: '14?! Ridiculous! We need to develop one universal standard that covers everyone's use cases'. Panel 3: 'Soon: Situation: there are 15 competing standards.'. The motivation for OXA is actually adverse to panel 2, there are existing generalized standards or approaches mentioned above and below in prior works that do an excellent job of covering a wide range of use cases. There are also existing standards like JATS and others specifically for scientific communication. However, to create a purpose-built standard for our current digital era, with both humans and machines as users of this standard, we need something focused on these needs, rather than trying to build in niche needs to a general solution or repurpose a not-right-sized existing standard. Creating a new approach **that can connect to any of the existing standards** lets us build on where we are without needing users, infrastructure organizations or tool developers to change. 
+
+OXA generalizes efforts into a shared _exchange_ format. Where for example, MyST and Quarto
 are authoring syntaxes and document pipelines, OXA is a neutral, web-native format onto which all of them — along with JATS — can map.
+
+We also, as a scientific communication community, need a framework and coordination approach and a community-governed and neutral space, that allows us to engage together in the process, staying aligned with the goals for scientific sharing without needing to create overly general solutions or be beholden to the needs of a specific few. This is again borrowing from the approaches of the open source community, with Requests for Comments, contributor guidelines, version control and transparent communication and decision making. Therefore the governance structure of OXA is as important as the technical foundation in allowing for institutional adoption that can move us towards a standard that is adopted across millions of articles.
 
 ## Related work: provenance, attribution, and research objects
 
-OXA enters a crowded landscape of efforts to make research
-machine-readable and reusable. We review the most relevant active community
+While we see that OXA fills a crucial need and niche, it does enter a crowded landscape of efforts to make research
+machine-readable and reusable. OXA is meant to complement, learn from and connect with existing efforts and these projects continue to be crucial in the ecosystem. We review the most relevant active community
 projects, emphasizing community-led work.
 
 **JATS and JATS4R.** JATS remains the substrate of the published scientific record, and
