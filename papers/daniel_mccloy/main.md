@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: On-boarding and retaining maintainer talent for MNE-Python
 abstract: |
-  MNE-Python is open-source software for analyzing electrophysiological data in neuroscience.
+  MNE-Python[^mnedef] is open-source software for analyzing electrophysiological data in neuroscience.
   Like many projects, we struggle to attract and retain maintainers.
   Besides the usual reasons (overworked researchers facing career instability
   and a publication-focused incentive structure),
@@ -13,11 +13,13 @@ abstract: |
   Currently, four alumni of those sprints are being onboarded as maintainers.
   We are seeing positive outcomes from this approach, but at a high cost.
   We are now developing a curriculum to streamline future onboarding efforts.
+
+  [^mnedef]: "MNE" is an initialism for "minimum norm estimation", one of several ways in which activity in the brain can be estimated from measurements of the electomagnetic field taken outside the head.
 ---
 
 ## Background
 
-MNE-Python [@mne_python] is open-source software for analyzing electrophysiological data in human neuroscience.
+MNE-Python<sup>1</sup> [@mne_python] is open-source software for analyzing electrophysiological data in human neuroscience.
 It was created in 2010 by [Alexandre Gramfort](https://alexandre.gramfort.net/) as a port of the original [MNE](https://mne.tools/stable/install/mne_c.html) software (written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
 The package is pure Python with no compiled code, and wraps many foundational Scientific Python libraries (NumPy [@numpy], SciPy [@scipy], Scikit-Learn [@sklearn1;@sklearn2], Pandas [@pandas1;@pandas2], Statsmodels [@statsmodels], and others) with 2D visualizations via Matplotlib [@matplotlib] and PyQtGraph [@pyqtgraph], and 3D visualizations via PyVista [@pyvista].
 The 1.12.1 release (2026-04-20) contained
@@ -28,10 +30,10 @@ and 318 pages of documentation
 (of which 204 are example/tutorial notebooks),
 as computed by `cloc` [@adanial_cloc].
 
-MNE-Python's initial emphasis was MEG and EEG signals, but has since expanded to encompass ECoG, fNIRS, and eyetracking data as well.
+MNE-Python's initial emphasis was magneto- and electro-encephalography (MEG and EEG) signals, but has since expanded to encompass electrocorticography (ECoG), functional near-infrared spectroscopy (fNIRS), and eyetracking data as well.
 It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
-MNE-Python supports reading structural MR images for visualizing estimated neural activity in the context of individual subject's anatomy,
-but does *not* perform analysis of MRI, MRS, DTI, or other MR-based neuroimaging methods; these modalities are well-covered by other Python neuroimaging software (*e.g.*, `nibabel`, `nilearn`, `nipy`, `nipype`, `DIPY`, and many others).
+MNE-Python supports reading structural magnetic resonance (MR) images for visualizing estimated neural activity in the context of individual subject's anatomy,
+but does *not* perform analysis of MR images, MR spectroscopic images, diffusion tensor images (DTI), or other MR-based neuroimaging methods; these modalities are well-covered by other Python neuroimaging software (*e.g.*, `nibabel`, `nilearn`, `nipy`, `nipype`, `DIPY`, and many others).
 
 ### Ecosystem
 
