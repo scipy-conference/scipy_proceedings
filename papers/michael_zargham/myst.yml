@@ -79,6 +79,7 @@ project:
         - w3c2012owl2
         - tall2008transition
         - tall2013
+        - curvenote2025
   exports:
     - id: pdf
       format: typst
