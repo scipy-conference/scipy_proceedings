@@ -16,6 +16,17 @@ project:
   authors:
     - name: Sho Tanaka
       email: sho.tanaka@snowflake.com
+      orcid: 0009-0007-7369-0267
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Formal analysis
+        - Investigation
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
       affiliations:
         - Snowflake, Tokyo
       corresponding: true
@@ -38,9 +49,11 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
+        - moody1998
         - stable_baselines3
         - gymnasium
         - sutton2018
+        - talib
   exports:
     - id: pdf
       format: typst
