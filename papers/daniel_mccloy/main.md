@@ -182,11 +182,14 @@ However, that seven attendees are ranking among the top 10% contributors to MNE-
 ### Onboarding Costs
 
 The onboarding efforts, however, came with considerable monetary and personnel costs.
-The sprints and maintainer onboarding were funded by three separate grants over a six-year period.
+The sprints and maintainer onboarding were funded by three separate grants over a six-year period, with a total cost exceeding $100,000.
 Beyond the monetary requirements (compensation for the trainees and key personnel),
-they were a huge investment of existing maintainers' time.
+they were a huge investment of existing maintainers' time.[^totalhours]
 To spell it out: the time spent training new maintainers could not be used to fix bugs or make progress on our roadmap, thereby putting further strain on the maintenance of the software (at least in the short term).
 Nonetheless, looking ahead we still consider this a valuable investment that hopefully will make future maintenance easier by distributing it across a larger team, and by creating resources that make it easier to keep the size of that team stable going forward.
+
+[^totalhours]: Although we lack detailed records, we estimate 1200-1500 hours of maintainer time spent directly on organizing and carrying out the trainings, plus additional time spent on grantwriting, reporting, and related tasks.
+
 
 ### Onboarding Obstacles and Outlook
 
