@@ -6,7 +6,11 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: On-boarding and retaining maintainer talent for MNE-Python
   # subtitle:
-  description: Add a two sentence description about your article.
+  description: |
+    We describe the struggle to attract and retain maintainers for scientific software
+    projects, and our attempts to surmount the problem in the MNE-Python project.
+    Our approach involved progressive training sprints over several years, which
+    yielded positive outcomes but at a high cost..
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Britta U. Westner
