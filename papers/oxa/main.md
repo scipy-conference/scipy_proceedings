@@ -87,8 +87,8 @@ over-busy researchers who don't necessarily have the skills or time to do this a
 work. OXA addresses this through its positioning as an exchange format.
 Existing articles can be decomposed into modular elements and what's
 then possible with these elements can be demonstrated immediately, both not
-requiring new work from researchers, but showing what's possible when we can
-communicate science in new ways, and can motivate why a researcher may want
+requiring new work from researchers and showing what's possible when we can
+communicate science in new ways, so can motivate why a researcher may want
 to work differently. Examples such as the openRxiv and Curvenote Reader partnership
 described below demonstrate this approach.
 Additionally, OXA provides a pathway to sharing science in new ways.
@@ -99,25 +99,24 @@ OXA helps us build the _bridge_ from where we are to where we want to go.
 This paper is itself written in MyST Markdown [@doi:10.25080/hwcj9957] and submitted through the SciPy
 Proceedings toolchain, which since 2024 has been built on Curvenote
 [@doi:10.25080/nkvc9349]. That toolchain is part of the same lineage we describe
-below, and OXA can be understood as a generalization and community standardization of the structured document model that already underlies these tools.
+below, and OXA can be understood as a generalization and community standardization of the structured document model specifically for scientific communication that already underlies these tools.
 
 ## From modular software to modular science
 
 The SciPy community already lives in a world that is not how most of the rest of science yet
 operates. SciPy [@scipy], NumPy [@numpy], pandas [@pandas1; @pandas2],
 Matplotlib [@matplotlib], and the libraries built on them are modular _and_
-composable. A user can `import` what they need, build something new, and the
-result inherits the trustworthiness of its constituents. Progress is
-multiplicative because integration is cheap. The papers we write about that work
-are, by comparison, monolithic and integration-hostile: the figure cannot be
-cited independently of the paper, the data cannot be queried from the paper, and the code cannot be run against the data without re-implementing context the paper held only implicitly.
+composable. A user can `import` what they need, build something, and the
+result inherits the trustworthiness of the modular components, composing them into something new. Progress is
+multiplicative because integration is expected and relatively straightforward. However, the papers we write about that work
+are not modular or composable. Papers are currently monolithic and integration-hostile, everything gets trapped in a paper-shaped box. The figure cannot be pulled out of or
+cited independently of the paper, the data cannot be queried from the paper, and the code cannot be run against the data without re-implementing context the paper only eluded to. To reach this _composable_ potential, we need to be able to share about science in the same _modular_ ways we share code.
 
 It is worth being precise about a distinction that is often blurred in
-conversations about open science. _Modularity_ and _disaggregation_ — placing
-each research component in a different, type-appropriate repository — are not the
-same thing. The push, over the past two decades, to unbundle the scientific paper
+conversations about open science - _dissaggregation_ and _modularity_. _Disaggregation_ is placing
+each research component in a different, type-appropriate repository. _Modularity_ is dividing something into separate modules or components that can then be recombined. While _disaggregation_ does achieve the goal of separating components, it does not necessarily easily allow for reuse or recombination. Therefore it's important to note that _disaggregation_ and _modularity_ are not the same thing. The push, over the past two decades, to unbundle the scientific paper
 (separating preprints from peer review, peer review from venue, venue from data
-hosting, data hosting from code) has been important and largely correct. But
+hosting, data hosting from code) has been been focused on _disaggregation_ which is an important step, especially for appropriate archiving and curation. However,
 disaggregation is not, on its own, the goal.
 The goal is **ecosystem composability**: research products whose components can be found, reused,
 recombined, and extended without losing their integrity or provenance
@@ -144,11 +143,11 @@ recombined, and extended without losing their integrity or provenance
   - Integrated system with provenance
 :::
 
-Modular science is the principle that scientific outputs can become as composable as
+**Modular science is the principle that scientific outputs can become as composable as
 scientific software, given the right standards, identifiers, tooling, and
-packaging infrastructure. The emerging primitives are visible: `import figure from paper` is no longer a metaphor.
-With component-level identifiers and a structured-document standard, a figure published in one preprint can be embedded —
-with full provenance — in a review article, a textbook, a grant proposal, another
+packaging infrastructure.** The emerging primitives are visible: `import figure from paper` is no longer a metaphor.
+With component-level identifiers and a structured-document standard, a figure published in one preprint can be embedded, 
+with full provenance, in a review article, a textbook, a grant proposal, another
 lab's analysis notebook, or an AI chat. With the right standards the figure stays alive; the data underneath it stays addressable; updates propagate; attribution is automatic.
 
 ## Background
@@ -201,11 +200,11 @@ computational notebook into the version of record [@notebooksinpublishing]:
    citation, and attribution attach to the article DOI, not to the figure,
    dataset, or method that other researchers may want to reuse.
 
-The _Notebooks Now!_ working groups concluded that integrating computational
+The _Notebooks Now!_ working groups concluded that **integrating computational
 documents into scholarly publishing requires a re-imagination of the publishing
 processes — from submission through peer review to production — and authoring
 tools that can execute content, display computational and interactive outputs
-directly, and archive that content faithfully. OXA is an attempt to provide the
+directly, and archive that content faithfully.** OXA is an attempt to provide the
 missing data substrate for exactly that re-imagination.
 
 ### San Diego standards meeting
@@ -221,7 +220,7 @@ In this meeting, a 'bedrock, soil, flowers' framework was put forth.
 In a modular science ecosystem, the modular elements of science - the data, code, images, protocols - are the 'bedrock'.
 They are the foundation on which scientific claims are built.
 The 'flowers' are the output of combining these modular elements - the articles, visualizations, discovery tools, the things we typically consume or explore as readers of science.
-What's missing now is not a lack of bedrock elements, or ideas for flowers, and how science can be shared, but the connections from the bedrock that would allow for more 'flowers' and experiments in scientific communication.
+What's missing now is not a lack of bedrock elements, or ideas for flowers and how science can be shared, but the connections from the bedrock that would allow for more 'flowers' and experiments in scientific communication.
 The 'soil' is the missing middle that provides the real basis for new models of scientific communication, attribution, discovery and remixing to occur.
 By working on that missing middle 'soil' layer, that's the unlocking and enabling function that makes so many more approaches possible, and what the tool developers at this meeting identified as a fundamental missing component in the ecosystem.
 It's crucial that these soil layers be community stewarded and governed, as an element of the ecosystem that is meant to connect different substrates and enable broad use and creativity from the developers of tools in the scientific space.
@@ -236,7 +235,7 @@ publishers, and standards groups around modular, continuous publishing.
 Governance proceeds through a Request for Comments (RFC) process: the technical
 structure is proposed, input is gathered from the community, and implementation
 is driven in parallel. The work is distributed across a set of public
-repositories in the `oxa-dev` GitHub organization.
+repositories in the [`oxa-dev`](https://github.com/oxa-dev) GitHub organization.
 
 The specification and schemas are CC0-licensed, and the tooling is MIT-licensed,
 lowering the barrier for tool builders, publishers, and repositories to adopt and
