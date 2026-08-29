@@ -157,8 +157,10 @@ This is due to a mixture of factors: a small pool of qualified people, the unfav
 For both sprints, around half of the attendees continued to contribute beyond the first year.
 Taking both sprints together, ten attendees contributed for two years or longer.
 In 2026, five and four years after the sprints, four attendees are still regularly contributing.
-Our contributor statistics show furthermore, that seven sprint attendees are currently ranking in the top 10% of all-time contributors to the project.
+Our contributor statistics show furthermore, that eight sprint attendees are currently ranking in the top 10% of all-time contributors to the project.[^topten]
 This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
+
+[^topten]: Contribution statistics are quantified as lines added to or deleted from the repository, as in [this script](https://github.com/mne-tools/mne-python/blob/bb034adbcfeda62560d36cd6dfd89301488260b5/tools/dev/update_credit_json.py); results can be viewed at https://mne.tools/dev/credits/credit.html. We acknowledge that this approach provides an incomplete picture of contribution history, but is (at the time of writing) the best estimate we have available.
 
 ```{figure} figure1.png
 :label: fig:reten
