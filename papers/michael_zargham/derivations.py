@@ -184,7 +184,7 @@ def costate_norm_drift() -> sp.Expr:
     Hamiltonian of the saddle-point game. After ``simplify()`` this
     returns exactly 0 — proving the conservation law symbolically.
 
-    The §8 cell ``sym-conservation-check`` calls this and shows the
+    The §8 cell ``sym-conservation-simplify`` calls this and shows the
     result as a one-line ``sp.simplify(...)`` returning the symbol 0.
     """
     f1, f2 = reduced_dynamics()

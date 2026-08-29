@@ -31,7 +31,7 @@ import numpy as np
 
 
 # Container for the shared chase trajectories used by chase_demo (§3)
-# and dispersal_crossing (§6 bridge). Computed once per (w, ell, T_max,
+# and dispersal_crossing (§7 bridge). Computed once per (w, ell, T_max,
 # alpha_hint) tuple via _compute_chase_trajectories below.
 _ChaseData = namedtuple("_ChaseData", [
     "w", "ell", "T_max", "alpha_hint",
@@ -113,7 +113,7 @@ DISPERSAL = "#c0392b"
 
 # ---------------------------------------------------------------------------
 # Shared trajectory data — single source of truth so the §3 motivation
-# chase and the §6 dispersal_crossing analysis show the SAME chase.
+# chase and the §7 dispersal_crossing analysis show the SAME chase.
 # ---------------------------------------------------------------------------
 
 
@@ -126,7 +126,7 @@ def _compute_chase_trajectories(w: float = 0.45,
     players' lab-frame paths.
 
     Cached so chase_demo() (§3 motivation) and dispersal_crossing()
-    (§6 analysis) share the same trajectories without re-integrating.
+    (§7 analysis) share the same trajectories without re-integrating.
     """
     from scipy.integrate import solve_ivp  # local import (heavy)
     from numerics import lambdify_rhs, terminal_conditions  # noqa: PLC0415
@@ -242,7 +242,7 @@ def _compute_chase_trajectories(w: float = 0.45,
 @_lru_cache(maxsize=1)
 def _recover_chase_from_demo() -> "_ChaseData":
     """Recover analytical quantities from the hardcoded chase_demo
-    trajectory so the §6 analysis decomposes the *same* chase the §3
+    trajectory so the §7 analysis decomposes the *same* chase the §3
     header shows.
 
     The chase_demo trajectory is STITCHED from two optimal
@@ -375,7 +375,7 @@ def _recover_chase_from_demo() -> "_ChaseData":
 # kink of ~48 degrees at _SWITCH_IDX = 24 — the dispersal-surface
 # crossing that motivates the §3 narrative.
 #
-# These arrays are the *header*'s source of truth. The §6 analysis
+# These arrays are the *header*'s source of truth. The §7 analysis
 # (dispersal_crossing) uses a separate single-characteristic
 # integration via _compute_chase_trajectories — it cannot reproduce
 # this stitched chase exactly. Author chose the visual clarity of
@@ -578,13 +578,13 @@ def chase_demo() -> plt.Figure:
     characteristics joined at the dispersal point) rather than a
     single-characteristic integration. This produces a more visually
     informative motivation figure than any single-α optimal chase
-    would. The §6 ``dispersal_crossing`` analysis necessarily uses a
-    single characteristic (the analytical decomposition requires it),
-    so the two figures show *related but not identical* chases.
+    would. The §7 ``dispersal_crossing`` figure recovers this same
+    stitched chase via ``_recover_chase_from_demo``, so the two
+    figures decompose literally the *same* chase.
     """
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
 
-    # Marker vocabulary shared with the §6 dispersal_crossing subplot
+    # Marker vocabulary shared with the §7 dispersal_crossing subplot
     # figure so the reader has a consistent visual hook:
     #     ● circle  →  start of curve
     #     ★ star    →  direction change / dispersal switch
@@ -660,12 +660,12 @@ def chase_demo() -> plt.Figure:
 
 
 # ---------------------------------------------------------------------------
-# §3 supporting — problem_geometry (lifted from problem_geometry_plot, L322-449)
+# §5 supporting — problem_geometry (lifted from problem_geometry_plot, L322-449)
 # ---------------------------------------------------------------------------
 
 
 def problem_geometry() -> plt.Figure:
-    """§3 lab-frame schematic: P with heading θ + turning circle, E with v_E.
+    """§5 lab-frame schematic: P with heading θ + turning circle, E with v_E.
 
     Lifted from hc-marimo's ``problem_geometry_plot`` (L322-449). Pursuer
     is a body-oriented triangle with a heading arrow, a heading-angle arc,
@@ -935,7 +935,7 @@ def trajectory_fan(trajectories: Sequence, w: float, ell: float) -> plt.Figure:
 
 
 # ---------------------------------------------------------------------------
-# §7 — trajectory_frame (lifted from trajectory_animation_plot, L1963-2054)
+# hc-marimo — trajectory_frame (lifted from trajectory_animation_plot, L1963-2054)
 # ---------------------------------------------------------------------------
 
 
@@ -945,7 +945,7 @@ def trajectory_frame(
     w: float,
     ell: float,
 ) -> plt.Figure:
-    """§7 single τ frame for the ipywidgets scrubber.
+    """Single τ frame for the hc-marimo scrubber (not rendered in the paper).
 
     Lifted from hc-marimo's ``trajectory_animation_plot`` (L1963-2054).
     For each trajectory in the ensemble, draws the path up to backward
@@ -995,7 +995,7 @@ def trajectory_frame(
 
 
 # ---------------------------------------------------------------------------
-# §7 — reachable_set_view (lifted from reachable_set_plot, L2445-2532)
+# §8 — reachable_set_view (lifted from reachable_set_plot, L2445-2532)
 # ---------------------------------------------------------------------------
 
 
@@ -1471,12 +1471,12 @@ def reachable_set_heatmap(
 
 
 # ---------------------------------------------------------------------------
-# §12 — conservation_diagnostics (lifted from conservation_plots, L2576-2666)
+# hc-marimo — conservation_diagnostics (cut from the paper; cited in §10) (lifted from conservation_plots, L2576-2666)
 # ---------------------------------------------------------------------------
 
 
 def conservation_diagnostics(trajectories: Sequence, w: float) -> plt.Figure:
-    """§12 two-panel reproducibility evidence: H* and ‖p‖² drift along τ.
+    """Two-panel reproducibility evidence (ships with hc-marimo; see §10): H* and ‖p‖² drift along τ.
 
     Lifted from hc-marimo's ``conservation_plots`` (L2576-2666). Along
     optimal characteristics, ``H* = 0`` and ``||p||^2`` is conserved. The
@@ -1796,7 +1796,7 @@ def coordinate_progression() -> plt.Figure:
 
 
 # ---------------------------------------------------------------------------
-# §6/§7 — dispersal_crossing (single characteristic, three views)
+# §7 — dispersal_crossing (the glass-box exemplar, six views)
 # ---------------------------------------------------------------------------
 
 
@@ -1806,49 +1806,39 @@ def dispersal_crossing(
     T_max: float = 10.0,
     alpha_hint: float | None = 1.7,
 ) -> plt.Figure:
-    """§6→§7 bridge — chase scene + 4 analytical decompositions (1+4 layout).
+    """§7 — the glass-box exemplar: one optimal chase, six coordinate views.
 
-    Five-panel figure that makes the dispersal-surface event visible
-    from BOTH the pursuer's and the evader's perspective. The
+    Six-panel (2×3) figure that makes the dispersal-surface event
+    visible from BOTH the pursuer's and the evader's perspective. The
     pedagogical message: the characteristic is a 1-D curve in 4-D
-    state space that crosses a *seam* — the surface σ=0 where the
-    optimal strategies transition. The pursuer's bang-bang control
-    jumps; the evader's continuous heading reverses direction. Both
-    lab-frame paths exhibit curvature kinks at the same instant.
+    state space that crosses a *switching boundary* — the surface σ=0
+    where the optimal strategies transition. Both lab-frame paths
+    exhibit curvature kinks at the same instant.
 
-    Layout (1 tall chase panel on the left + 2×2 analytical panels
-    on the right):
+    Layout (2×3):
 
-    LEFT — **Chase panel** (same scenario as the §3 chase_demo
-        motivation figure, here color-coded by σ-regime). Pursuer
-        drawn thick, evader drawn thinner. Both paths split into
-        two σ-regime arcs (solid for the first-encountered sign,
-        dashed for the second; dashes let the underlying solid show
-        through where the two arcs overlap spatially).
+      (1,1) Lab frame, pursuer highlighted (same chase as the §3
+            chase_demo motivation figure, color-coded by σ-segment;
+            the evader is greyed).
+      (1,2) Pursuer's switching function σ(t), forward in time; the
+            dispersal switch is the discontinuous sign change at ★.
+      (1,3) Body-frame state trajectory (x_1, x_2).
+      (2,1) Lab frame, evader highlighted.
+      (2,2) Evader's heading ψ*(t) = atan2(p_1, p_2); jumps at the
+            dispersal switch as the costate re-anchors across it.
+      (2,3) Costate trajectory (p_1, p_2)(t) — arcs on two ‖p‖-circles
+            (norm conserved along each segment) joined by a chord at
+            the switch. Most striking visualization of the boundary.
 
-    RIGHT 2×2 — the chase decomposed:
-
-      (1,2) Pursuer's switching function σ(τ). Starts at 0
-            (transversality at the terminal circle), grows, then
-            crosses zero — the dispersal event.
-      (1,3) Body-frame state characteristic (x_1(τ), x_2(τ)). Phase-
-            portrait reading practice for (2,3).
-      (2,2) Evader's heading ψ*(τ) = atan2(p_1, p_2). Continuous,
-            but its derivative dψ*/dτ = sign(σ) FLIPS at the crossing.
-      (2,3) Costate trajectory (p_1, p_2)(τ) — an arc on the
-            ‖p‖-circle (conserved) that goes one way, then REVERSES
-            at the crossing. Most striking visualization of the seam.
-
-    The strategy-space framing: the σ=0 surface is the seam.
-    Crossing it means both players smoothly switch which side of the
-    bang-bang structure they're on. The chase panel shows both
-    players, the right panels decompose the why.
+    The strategy-space framing: the σ=0 surface is the switching
+    boundary. The lab panels show both players; the analytical
+    panels decompose the why.
     """
     # Recover analytical quantities from the hardcoded chase_demo so
-    # §3 and §6 show literally the same chase. The recovered chase is
+    # §3 and §7 show literally the same chase. The recovered chase is
     # stitched from two characteristics (α_B=95° pre-switch, α_A=40°
     # post-switch), so the σ, p, ψ* trajectories all exhibit genuine
-    # discontinuities at the dispersal point — that IS the seam.
+    # discontinuities at the dispersal point — that IS the dispersal switch.
     _ = (w, ell, T_max, alpha_hint)  # ignored; recovery uses demo's params
     data = _recover_chase_from_demo()
     w = data.w
@@ -2358,7 +2348,7 @@ def dispersal_crossing(
     ax.set_xlabel(r"$p_1$", fontsize=11)
     ax.set_ylabel(r"$p_2$", fontsize=11)
     ax.set_aspect("equal")
-    ax.set_title(r"(2,3) Costate $(p_1, p_2)(\tau)$ — rotation reverses at the seam",
+    ax.set_title(r"(2,3) Costate $(p_1, p_2)(\tau)$ — rotation reverses at the switch",
                  fontsize=11)
     ax.grid(True, alpha=0.2)
     ax.legend(loc="upper right", fontsize=10)
@@ -2503,7 +2493,7 @@ def dispersal_crossing(
 
     fig.suptitle(
         rf"Crossing a characteristic ($w={w:.2f}$, $\ell={ell:.2f}$, "
-        rf"$\alpha={alpha_hint:.2f}$): the dispersal surface is a *seam* in "
+        rf"$\alpha={alpha_hint:.2f}$): the dispersal surface is a *switching boundary* in "
         "strategy space — both players' strategies kink at $\\sigma=0$",
         fontsize=12, y=0.995,
     )
