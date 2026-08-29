@@ -7,11 +7,11 @@ project:
   title: Avoiding Zero-Trade Policies in RL with a Decoupled MLOps Architecture
   # subtitle:
   description: >
-    A direct Stable-Baselines3 DQN trading USD/JPY 5-minute bars completed
-    zero trades on the held-out period. We describe a decoupled architecture
-    in which the RL model emits a directional score and a deterministic
-    Python execution engine owns position management. On the same data and
-    split, the decoupled system completed 2,625 fully risk-managed trades.
+    A direct Stable-Baselines3 DQN trading USD/JPY 5-minute bars completed zero
+    trades on the held-out period. We describe a decoupled architecture in which
+    the RL model emits a directional score and a deterministic Python execution
+    engine owns position management. On the same data and split, the decoupled
+    system completed 2,625 fully risk-managed trades.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Sho Tanaka
