@@ -546,10 +546,10 @@ direction. Because this conversion routes through the same canonical schema that
 already backs Stencila's parsers and codecs for many other formats, it inherits that
 format support: MyST Markdown, Quarto (`.qmd`), Jupyter notebooks (`.ipynb`),
 Microsoft Word (`.docx`), and other Markdown flavors can be converted into OXA — and
-back out again. This is the practical payoff of the typed-node lineage traced above:
+back out again. **This is the practical payoff of the typed-node lineage traced above:
 rather than asking authors to adopt a new syntax, OXA can meet them in the formats
 they already use, and documents they have already written become a source of
-structured, OXA-native content.
+structured, OXA-native content.**
 
 ## Open standards as the substrate
 
@@ -565,8 +565,8 @@ open-source implementations today. The gap is integrative and connective: produc
 hides this complexity from the researcher while preserving the openness of the
 substrate beneath.
 
-Cultures change when the new way is _better_ than the old way, offering a 'moving towards', rather than
-just a 'moving away from'. The most durable path to a modular research record is to
+**Cultures change when the new way is _better_ than the old way, offering a 'moving towards', rather than
+just a 'moving away from'.** The most durable path to a modular research record is to
 make modular outputs visibly more useful than the PDF — to the original authors,
 their collaborators, and the broader field — and to make the path from existing
 work to modular output smooth enough that a typical lab can take it easily.
@@ -595,7 +595,11 @@ the RFC process; the licensing-and-attribution framework for modular components 
 under active development; and the 2026 roadmap includes further large-scale pilots
 and deeper integration of the Reader experience into bioRxiv and medRxiv. The
 broader test will be adoption: whether tool builders, publishers, and repositories
-converge on OXA as a shared layer. We invite the SciPy community — long a leader
+converge on OXA as a shared layer. A standard is only as useful as the number of tools and institutions that actually emit and consume it. 
+
+Other limitations or things to continue to address include how the OXA structuring occurs, "AI-readability" and the handling of versioning and continuous content. Even with a friendlier format, producing well-typed, richly linked OXA documents takes good conversion tooling, and that tooling is still in its early stages and designed for particular groups. Creating the format needs to be achievable for everyone, not just well-resourced or particularly tech-savvy players. Additionally the current work has focused on the use case of 'flowers' designed for humans, like new reading experiences. We need to test against use cases with AI agents and LLMs that are increasingly the consumers of scientific communication to close that "AI-readability" gap. Finally, OXA leans into preprints and computational content that changes over time. It's a strength for continuous science, but it means that OXA needs to be designed to handle versioning and pinning, so that both modularity and provenance are maintained. Directed work and community engagement around these topics will be crucial. 
+
+We invite the SciPy community — long a leader
 in computational, open, and reproducible science, and the originators of much of
 the composable software ecosystem this paper takes as its model — to engage with
 the specification, contribute RFCs, and build on the architecture to ensure it's fit for
