@@ -1,0 +1,58 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-jim_pivarski
+  title:
+    'From LiDAR to action: detecting upland gullies to combat erosion and forest
+    fires'
+  description: >-
+    This paper describes a scientific Python workflow for identifying upland
+    gullies in LiDAR-derived elevation data and delivering the results through a
+    lightweight interactive map for restoration work.
+  authors:
+    - name: Jim Pivarski
+      email: jpivarski@uchicago.edu
+      orcid: 0000-0002-6649-343X
+      roles:
+        - Formal analysis
+        - Investigation
+        - Methodology
+        - Software
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
+      affiliations:
+        - id: uchicago_dsi
+      corresponding: true
+  affiliations:
+    - id: uchicago_dsi
+      name: University of Chicago Data Science Institute
+  keywords:
+    - LiDAR
+    - geospatial analysis
+    - erosion
+    - wildfire mitigation
+    - Numba
+    - PMTiles
+  abbreviations:
+    DSI: Data Science Institute
+    OAEC: Occidental Arts and Ecology Center
+    LiDAR: Light Detection and Ranging
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Dolman2025FuelsToFlows
+        - OAECGullyStuffing
+        - SonomaVegMap
+        - textureshading
+        - cupy
+        - jax
+        - pmtiles
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.tex
+      output: full_text.pdf
