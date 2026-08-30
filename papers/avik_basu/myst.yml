@@ -33,10 +33,6 @@ project:
     AUC: Area Under the ROC Curve
     ML: Machine Learning
     UUID: Universally Unique Identifier
-  # Reproduction notebooks ship with the paper as artifacts; they are not pages of
-  # it, so keep MyST from auto-discovering them as additional documents.
-  exclude:
-    - nbs/**
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

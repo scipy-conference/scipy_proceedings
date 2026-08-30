@@ -69,10 +69,10 @@ detected without waiting for labels. Our contributions are:
 ### SHAP attributions
 
 SHAP (SHapley Additive exPlanations) assigns each feature of a single prediction
-a contribution value derived from cooperative game theory, distributing the gap
-between a model's output and a baseline expectation across the input features
-[@shap_nips]. For a prediction $f(x)$, the attributions $\phi_i$ satisfy an
-additive decomposition,
+a contribution value derived from the Shapley value of cooperative game theory
+[@shapley1953], distributing the gap between a model's output and a baseline
+expectation across the input features [@shap_nips]. For a prediction $f(x)$, the
+attributions $\phi_i$ satisfy an additive decomposition,
 
 ```{math}
 :label: shap-additivity
@@ -85,9 +85,10 @@ negative one pulls it below. For tree ensembles, these attributions can be
 computed exactly and efficiently [@shap_treeexplainer], which makes per-
 prediction explanation practical at production volumes.
 
-For monitoring we are not interested in any single explanation. We are interested
-in the *distribution* of $\phi_i$ for each feature across many predictions, and
-in how that distribution evolves over time. Two summaries are central. The
+For monitoring we are not interested in any single explanation, which is the
+usual per-prediction use [@basu2025shap]. We are interested in the *distribution*
+of $\phi_i$ for each feature across many predictions, and in how that
+distribution evolves over time. Two summaries are central. The
 **mean absolute attribution** $\mathbb{E}[|\phi_i|]$ is a global importance
 measure that quantifies how much feature $i$ moves predictions, regardless of direction. The
 **mean signed attribution** $\mathbb{E}[\phi_i]$ captures the typical *direction*
@@ -325,7 +326,7 @@ The clearest is `race`: its raw PSI is 0.008, far below the 0.1 "warn" band, whi
 its attribution PSI is 0.752, far above the 0.25 "alert" band, a ratio of roughly
 91. The racial composition of the traffic barely moved; the model's *use* of race
 changed substantially. `native-country` shows the same pattern (0.426 vs. 0.038),
-as do `hours-per-week` (0.119 vs. 0.008) and `capital-loss` (0.176 vs. 0.000). An
+as do `hours-per-week` (0.118 vs. 0.008) and `capital-loss` (0.176 vs. 0.000). An
 input-drift dashboard would show nothing actionable on any of these four; an
 attribution dashboard would flag all of them.
 
@@ -345,6 +346,9 @@ vs. drifted period, log scale. Dashed guides mark the conventional 0.1 (warn) an
 directly (`age`, `marital-status`, `relationship`, all larger in input space),
 and disagree sharply on `race`, `native-country`, `hours-per-week`, and
 `capital-loss`, where the inputs are stable but the model's use of them is not.
+Four features falling below the warn band in both views (`capital-gain`,
+`fnlwgt`, `occupation`, `sex`) are omitted, since neither kind of monitoring
+would act on them.
 :::
 
 `shap-monitor` reports a +33% change in `age` mean absolute attribution, +82% for
@@ -366,9 +370,6 @@ no drifted mass at all, the mechanism behind the inflated PSI discussed in
 (case-b)=
 ### Study B: same inputs, same accuracy, different reasoning
 
-Study A leaves the central question open, because input monitoring could have
-caught that shift on its own. Study B closes it by removing input drift entirely.
-
 We reuse Study A's training split, the same 24,008 younger-population training
 rows, and fit several model versions on it, then score every version on the same
 10,290 validation rows. The older population plays no part here. Because all
@@ -388,44 +389,43 @@ deprioritizations implemented with LightGBM's per-feature split-gain penalty.
 :::{table} Four version-2 constructions, all scored on the same 10,290 rows as version 1 (F1 = 0.710). Raw-input PSI is exactly zero for every feature in every row, so input monitoring cannot fire. "Flagged" counts features whose attribution PSI reaches the 0.25 alert band.
 :label: tbl:versions
 
-| v2 construction | F1 | $\Delta$F1 | Agreement | SHAP AUC | Flagged |
-|---|---|---|---|---|---|
-| identical retrain (null control) | 0.7097 | +0.0000 | 100.0% | n/a | **none** |
-| hyperparameter change | 0.6953 | −0.0143 | 98.2% | 1.000 | 10 of 14 |
-| `relationship` deprioritized | 0.7089 | −0.0008 | 98.7% | 1.000 | 3 |
-| `education-num` dropped | 0.7054 | −0.0043 | 98.7% | 1.000 | 2 |
+| Name | v2 construction | F1 | $\Delta$F1 | Agreement | SHAP AUC | Flagged |
+|---|---|---|---|---|---|---|
+| **Control** | identical retrain | 0.710 | +0.000 | 100% | n/a | **none** |
+| **Retune** | new hyperparameters | 0.695 | −0.014 | 98.2% | 1.00 | 10 of 14 |
+| **Demote-rel** | `relationship` denied split gain | 0.709 | −0.001 | 98.7% | 1.00 | 3 |
+| **Demote-edu** | `education-num` denied split gain | 0.705 | −0.004 | 98.7% | 1.00 | 2 |
 :::
 
-**The null control stays silent, and accuracy monitoring passes everything else.**
-Refitting with identical data and settings reproduces version 1 exactly: 100%
-prediction agreement, every attribution PSI 0.00, nothing flagged: the monitor
-does not manufacture drift where none exists. Across the three genuine
-regressions, meanwhile, the largest F1 change is 1.4 points and the smallest is
-0.8 *hundredths* of a point, so a gate on aggregate metrics admits all of them.
+**Control stays silent, and accuracy monitoring passes everything else.**
+Refitting with identical data and settings reproduces version 1 exactly. Across
+the three genuine regressions, meanwhile, the largest F1 change is 1.4 points and
+the smallest is under a *tenth* of a point, so a gate on aggregate metrics
+admits all of them.
 
-**The headline case relocates reasoning without disturbing accuracy.** In the
-`relationship` construction, F1 moves by −0.0008 while the attribution structure
-is rearranged: `relationship` collapses from a mean absolute attribution of 0.579
-to 0.000 and falls from rank 3 to rank 14, its correlated substitute
-`marital-status` absorbs the role, rising from 0.795 to 1.414 (+78%) and from rank
-2 to rank 1, and `sex` declines from 0.096 to 0.057. Attribution PSIs are 20.72,
+**Demote-rel relocates reasoning without disturbing accuracy.** Here F1 moves by
+−0.001 while the attribution structure is rearranged: `relationship` collapses
+from a mean absolute attribution of 0.579 to 0.000 and falls from rank 3 to rank
+14, its correlated substitute `marital-status` absorbs the role, rising from
+0.795 to 1.414 (+78%) and from rank 2 to rank 1, and `sex` declines from 0.096 to
+0.057. Attribution PSIs are 20.72,
 3.14, and 0.99 respectively; every other feature stays below the alert band. The
-alerting policy of [](#alerting) would page on exactly the three features involved
+[alerting policy](#alerting) would page on exactly the three features involved
 and stay quiet on the remaining eleven. @fig:versions shows the full picture.
 
-**Localization degrades when the change is diffuse.** The hyperparameter row is
-the least contrived of the three: no penalty is applied, only a different
-training configuration, which is the most common thing to differ between two
-production versions. It is detected, but it flags 10 of 14 features, because a
-broad configuration change moves reasoning broadly rather than relocating one
-feature's role. It is also the row where F1 drops most (−0.0143), so it is the
-weakest of the three on the accuracy-preservation axis. We report it because its
-realism is exactly the point, and its diffuseness is a useful warning: the
-per-feature signals localize a targeted regression well and a systemic one poorly.
+**Retune shows that localization degrades when the change is diffuse.** It is the
+least contrived of the three: no penalty is applied, only a different training
+configuration, which is the most common thing to differ between two production
+versions. It is detected, but it flags 10 of 14 features, because a broad
+configuration change moves reasoning broadly rather than relocating one feature's
+role. It is also the row where F1 drops most (−0.014), so it is the weakest of
+the three on the accuracy-preservation axis. We report it because its realism is
+the point, and its diffuseness is a useful warning: the per-feature signals
+localize a targeted regression well and a systemic one poorly.
 
 :::{figure} figure4.png
 :label: fig:versions
-Study B, `relationship` construction: mean absolute SHAP attribution per feature
+Study B, `demote-relationship` construction: mean absolute SHAP attribution per feature
 for version 1 (blue) and version 2 (orange), computed on identical inputs. Shaded
 rows mark the affected group. `relationship` collapses to zero while its
 correlated substitute `marital-status` absorbs the role. Overall accuracy and
@@ -551,7 +551,7 @@ which is the version-regression pattern of [](#version-regression),
 rather than on time.
 
 (alerting)=
-### Command line and alerting
+### Command line
 
 For operational use the same analysis is available from a command-line interface,
 which is convenient for cron-driven reports and for piping machine-readable output
