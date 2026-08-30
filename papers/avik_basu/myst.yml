@@ -33,19 +33,22 @@ project:
     AUC: Area Under the ROC Curve
     ML: Machine Learning
     UUID: Universally Unique Identifier
+  # Reproduction notebooks ship with the paper as artifacts; they are not pages of
+  # it, so keep MyST from auto-discovering them as additional documents.
+  exclude:
+    - nbs/**
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-        - shap_nips
+        # None of these six has a registered DOI: a 2006 Wiley monograph, a blog
+        # post, two NeurIPS-proceedings papers, and two software projects.
+        # Every other reference now carries one.
         - psi_siddiqi
         - adversarial_validation
         - evidently
-        - alibi_detect
         - shapmonitor
-        - sklearn1
-        - sklearn2
         - lightgbm
         - apache_arrow
   exports:

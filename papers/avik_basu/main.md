@@ -2,74 +2,67 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: 'Right Predictions, Wrong Reasons: Explanation Drift Monitoring in Production'
 abstract: |
-  Machine learning models in production can keep making correct predictions
-  while silently changing the reasoning behind them. Because traditional
-  monitoring watches input distributions and evaluation metrics, this shift in
-  reasoning often goes undetected until the model's performance visibly degrades.
-  By then, the model may have served many flawed decisions. We describe
-  *explanation drift monitoring*: tracking the distribution of per-feature
-  SHapley Additive exPlanations (SHAP) attributions over time and alerting when
-  it moves. Explanation drift is a complement to input feature drift and to
-  performance monitoring, not a replacement; it is most valuable in the common
-  situation where ground-truth labels arrive with a long delay. We discuss the
-  signals that make explanation drift measurable, i.e., per-feature Population
-  Stability Index (PSI), a multivariate adversarial-validation score, and changes
-  in attribution magnitude, rank, and sign, and we relate them to three recurring
-  production failure patterns: concept drift, model-version regressions that
-  preserve accuracy, and data-pipeline errors that input monitoring cannot see.
-  We ground the approach in a worked case study on the UCI Adult Income dataset,
-  where a model's F1 score holds steady across a demographic shift
-  while its SHAP attributions change dramatically. Finally, we present `shap-monitor`, an
-  open-source Python package that implements this workflow with low
-  instrumentation overhead, and we discuss the practical challenges of running it
-  in production.
+  Machine learning models in production can keep making correct predictions while
+  silently changing the reasoning behind them. Because traditional monitoring
+  watches input distributions and evaluation metrics, this shift often goes
+  undetected until performance visibly degrades. We describe *explanation drift
+  monitoring*: tracking the distribution of per-feature SHapley Additive
+  exPlanations (SHAP) attributions over time and alerting when it moves. It is a
+  complement to input feature drift and performance monitoring, not a replacement,
+  and is most valuable where ground-truth labels arrive with a long delay. We
+  describe the signals that make it measurable: per-feature Population Stability
+  Index (PSI), a multivariate adversarial-validation score, and changes in
+  SHAP attributions. We relate these to three failure patterns. Two case studies on the
+  UCI Adult Income dataset delimit what the signal adds.
+  Finally, we present `shap-monitor`, an open-source Python package implementing
+  this workflow with low instrumentation overhead, and discuss the practical
+  challenges of running it in production.
 ---
 
 ## Introduction and motivation
 
 A model that keeps reporting good accuracy is easy to trust and easy to ignore.
-Yet a model can produce the *right predictions for the wrong reasons*: it can
-hold its headline metrics steady while the features driving its decisions change
+Yet a model can produce the *right predictions for the wrong reasons*. In other
+words, it can hold its headline metrics steady while the features driving its
+decisions change
 underneath it. When that happens, the model has quietly become a different model.
 A model whose behavior was never validated will eventually fail, and the
 eventual failure tends to be sudden and hard to diagnose.
 
-Most production ML monitoring is built around two families of signal. The first
-is **performance monitoring**: accuracy, F1, AUC, calibration, and business KPIs
-computed once ground-truth labels are available. The second is **input drift
-monitoring**: statistical tests on incoming feature distributions, watching for
-the data to move away from what the model was trained on. Both are valuable and
-both are necessary. Both also have a blind spot.
+By *wrong* we do not mean less accurate. We mean reasoning that no longer matches
+what was validated at deployment. A model whose attributions have moved is
+answering for reasons nobody reviewed, and in a regulated setting that is a
+problem independent of whether the headline metric has moved at all.
 
-Performance monitoring is the ground truth, but it is frequently *lagging*. In
-many real-world systems labels are delayed by weeks or months: loan-default
-labels mature over a repayment horizon, fraud labels require investigation, and
-churn is only confirmed after a customer has already left. Until the labels
-arrive, performance monitoring is blind. Input drift monitoring does not need
-labels, but it answers the question *did the data change?* rather than
-*did the model's use of the data change?*.
+Most production ML monitoring is built around two families of signal, and both
+share a blind spot. The first is **performance monitoring**, which includes
+metrics such as accuracy, F1, AUC, and business KPIs. However, these metrics
+require the ground truth labels, which are often delayed by weeks or months. The
+second is **input drift monitoring**, which monitors incoming feature
+distributions. It needs no labels, but it answers *did the data change?* rather
+than *did the model's use of the data change?*.
 
-This paper is about a third signal that sits between the two: **explanation
-drift**, the change over time in *how* a model attributes its predictions to
+This paper is about a third signal, **explanation drift monitoring**, which
+measures the change over time in *how* a model attributes its predictions to
 input features. We measure it by logging per-feature SHAP attributions
 [@shap_nips] for sampled production traffic and tracking their distributions over
 time. When the model starts relying on different features, or relying on the same
-features in a different direction, the SHAP distributions move and can be detected
-without waiting for labels.
+features in a different direction, the SHAP distributions move and can be
+detected without waiting for labels. Our contributions are:
 
-Our contributions are:
-
-1. A practical framing of explanation drift as a monitoring signal that
-   complements input drift and performance monitoring, with an explicit account
-   of what each signal can and cannot catch.
+1. A delineation of *when* explanation drift carries information that input-drift
+   monitoring does not, and when it merely restates it. We support this with two
+   case studies chosen to fall on opposite sides of that line: one in which input
+   monitoring detects the shift at least as strongly as the explanation signal,
+   and one in which input monitoring is structurally blind to it.
 2. A description of concrete, low-overhead detection signals, including per-feature PSI,
    a multivariate adversarial-validation score, and attribution magnitude/rank/sign changes,
    and how to interpret them.
 3. A mapping from these signals to three failure patterns that recur in production:
    concept drift, accuracy-preserving model-version regressions, and data-pipeline
    errors invisible to input monitoring.
-4. An open-source reference implementation, `shap-monitor` [@shapmonitor], and a
-   reproducible case study demonstrating the blind spot it closes.
+4. An open-source library, `shap-monitor` [@shapmonitor], which allows users to
+   monitor explanation drift for their models and use-cases.
 
 ## Background
 
@@ -88,8 +81,8 @@ f(x) = \phi_0 + \sum_{i=1}^{M} \phi_i,
 
 where $\phi_0$ is the base (expected) value and $\phi_i$ is the contribution of
 feature $i$. A positive $\phi_i$ pushes the prediction above the baseline; a
-negative one pulls it below. For tree ensembles, `TreeExplainer` computes these
-attributions exactly and efficiently [@shap_treeexplainer], which makes per-
+negative one pulls it below. For tree ensembles, these attributions can be
+computed exactly and efficiently [@shap_treeexplainer], which makes per-
 prediction explanation practical at production volumes.
 
 For monitoring we are not interested in any single explanation. We are interested
@@ -98,22 +91,45 @@ in how that distribution evolves over time. Two summaries are central. The
 **mean absolute attribution** $\mathbb{E}[|\phi_i|]$ is a global importance
 measure that quantifies how much feature $i$ moves predictions, regardless of direction. The
 **mean signed attribution** $\mathbb{E}[\phi_i]$ captures the typical *direction*
-of the feature's effect. A change in either of these is a change in the model's reasoning.
+of the feature's effect. A change in either of these, in absolute terms or
+relative to the other features, is a change in the model's reasoning.
 
 ### What existing monitoring catches, and what it misses
 
-Consider a tabular classifier serving live traffic. Input drift monitoring tests
-whether each incoming feature's distribution has shifted from a reference window,
-typically with a univariate statistic such as PSI or a Kolmogorov-Smirnov (KS)
-test, and tools such as Evidently [@evidently] and Alibi Detect [@alibi_detect]
-make this routine. Performance monitoring, once labels land, tells us whether the
-model is still accurate. Neither directly observes the model's decision process.
+In practice, input drift monitoring tests each incoming feature's distribution
+against a reference window with a univariate statistic such as PSI or a
+Kolmogorov-Smirnov (KS) test, and tools such as Evidently [@evidently] and Alibi
+Detect [@alibi_detect] make this routine. What neither family observes is the
+model's decision process itself. That process is a function of both the inputs and
+the learned model, so it can move when no single feature distribution has moved
+far enough to alarm and no label has yet arrived to contradict it.
 
-The gap is the case where inputs look acceptable, labels have not yet arrived,
-and yet the model's behavior has changed. This is precisely where explanation
-drift is informative: it observes the model's *output reasoning*, which is a
-function of both the inputs and the learned model, and therefore reacts to
-changes that a feature-only view can miss.
+### Related work
+
+Explanation distributions have been proposed as a shift-detection signal before,
+and we build directly on that work. Mougan et al. introduced *explanation shift*,
+showing on tabular data that a classifier trained to separate reference-period
+from current-period SHAP vectors can be a more sensitive indicator of a
+performance-relevant shift than detectors operating on the inputs themselves
+[@mougan2022explanation; @mougan2023explanation]. The adversarial-validation
+construction we describe in [](#adversarial) is essentially their Explanation
+Shift Detector, and we claim no novelty for it. Attribution
+drift is also monitored in at least one production system: Amazon SageMaker Model
+Monitor compares the ranking of global SHAP importances against a training
+baseline using a normalized discounted cumulative gain score, and alerts when it
+falls below a threshold [@sagemaker_monitor].
+
+What we add on top of the related work here is threefold. First, an explicit
+account of *which* production failures this signal can and cannot catch, in
+particular separating the common case where explanation drift merely re-expresses
+an input shift that ordinary monitoring would already flag from the case where it
+is the only signal available. Second, a set of signals
+read *together*: per-feature PSI to localize, an adversarial score for joint
+shift, and magnitude, rank, and sign summaries to characterize the change, where
+SageMaker's monitor uses rank alone and the explanation-shift literature uses the
+joint classifier alone. Third, an open-source implementation that logs
+attributions from a live prediction path into a queryable store and is not tied to
+a managed platform.
 
 ## Explanation drift
 
@@ -123,25 +139,15 @@ distinct from input feature drift in an important way. Input drift asks whether
 $P(X)$ has changed. Explanation drift asks whether $P(\phi(X))$ has changed,
 where $\phi$ is the explanation function induced by the *current model*. The
 attribution distribution couples the data and the model, so explanation drift can
-surface for at least three reasons:
+surface three ways: covariate shift, concept drift, or a change in the model
+itself. [](#patterns) develops the latter two as production failure patterns.
 
-- the input distribution moved in a way that changed which features the model
-  leans on (covariate shift with a behavioral consequence);
-- the relationship between features and target changed, so the same inputs are
-  now used differently (concept drift); or
-- the model itself changed, i.e., a new version, or a silent change in an upstream
-  transformation, so attributions shift even on identical inputs.
-
-Crucially, none of these requires labels to detect. That makes explanation drift
-a *leading* signal in delayed-label regimes, where it can flag a problem during
-the window when performance monitoring is still blind.
-
-Explanation drift is a complement, not a replacement. Input drift remains the
-right tool for raw data-quality and distribution questions; performance
-monitoring remains the arbiter of whether the model is actually still good. The
-value of explanation drift is that it narrows the blind spot between them, and
-that because attributions are per-feature it points at *which* part of the
-model's reasoning moved, which is a strong lead for root-cause analysis.
+Crucially, none of these requires labels to detect, which makes explanation drift
+a *leading* signal in delayed-label regimes. Explanation drift is a complement,
+not a replacement. It narrows the blind spot between the other two signals rather
+than superseding either. Because attributions are per-feature, it also points at
+*which* part of the reasoning moved, which is a strong lead for root-cause
+analysis.
 
 ## Detecting explanation drift
 
@@ -164,20 +170,25 @@ divergence:
 
 where $r_b$ and $c_b$ are the reference and current proportions in bin $b$.
 Applied to the SHAP values of a feature, PSI quantifies how much that feature's
-*contribution* distribution has shifted. The conventional reading is that PSI below 0.1
-is stable, 0.1–0.25 warrants investigation, and above 0.25 indicates significant
-shift and transfers directly. PSI is cheap, interpretable, and per-feature, which
-makes it a good default for a first-pass alarm and for localizing drift to
-specific features. A KS test is a reasonable alternative univariate statistic;
-PSI's advantage here is the familiar, calibrated banding.
+*contribution* distribution has shifted. The conventional banding (below 0.1 is
+stable, 0.1–0.25 warrants investigation, above 0.25 indicates significant shift)
+was developed for raw scorecard distributions, and we carry it over to attribution
+distributions unchanged; it is a useful default rather than a calibrated result,
+and [](#psi-magnitudes) records an important caveat on reading large values. PSI
+is cheap, interpretable, and per-feature, which makes it a good first-pass alarm
+and a good way to localize drift to specific features.
 
+(adversarial)=
 ### Multivariate shift (adversarial validation)
 
-Per-feature tests miss joint shifts: combinations of attributions can move even
+Per-feature tests miss joint shifts, i.e., combinations of attributions can move even
 when no single feature's marginal PSI looks alarming. *Adversarial validation*
 captures this. We label reference-period attribution vectors as class 0 and
-current-period vectors as class 1, train a classifier to tell them apart, and
-measure its cross-validated AUC [@adversarial_validation]. An AUC near 0.5 means
+current-period vectors as class 1, train a simple classifier to tell them apart, and
+measure its cross-validated AUC. Adversarial validation is a general technique
+[@adversarial_validation]; applying it to attribution vectors as a drift detector
+is due to Mougan et al., who introduce it as the *Explanation Shift Detector*
+[@mougan2022explanation; @mougan2023explanation]. An AUC near 0.5 means
 the two periods are statistically indistinguishable; an AUC approaching 1.0 means
 the model's reasoning in the two periods is easily separable, i.e., strong evidence of
 drift. The classifier's feature importances additionally rank *which* attribution
@@ -190,16 +201,12 @@ Beyond distributional distance, three interpretable summaries describe the
 *nature* of a shift. The **change in mean absolute attribution** says whether a
 feature became more or less influential overall. The **change in importance
 rank** says whether the model's priority ordering of features was reshuffled. And
-a **sign flip**, i.e., a change in the typical direction of a feature's contribution,
-is the most striking: it means a feature that used to push predictions one way now
-pushes them the other. Sign flips on important features are a high-signal
+a **sign flip**, i.e., a change in the typical direction of a feature's
+contribution, means a feature that used to push predictions one way now pushes
+them the other. Sign flips on important features are a high-signal
 indication that relationships learned during training no longer hold.
 
-Read together, these signals answer complementary questions: PSI asks *how much*
-each feature's contribution moved, adversarial AUC asks *whether the joint
-reasoning is distinguishable at all*, and the magnitude/rank/sign summaries
-describe *in what way* the reasoning changed.
-
+(patterns)=
 ## Major failure patterns
 
 Explanation drift is worth monitoring because it catches failure modes that the
@@ -217,6 +224,7 @@ drift sits in between: as the model encounters inputs whose learned relationship
 no longer match reality, its attribution magnitudes and signs shift, and PSI on
 the affected SHAP distributions rises before the labels confirm the damage.
 
+(version-regression)=
 ### Model-version regression: same accuracy, different reasoning
 
 Model retraining and redeployment is routine, and validation usually gates on
@@ -229,6 +237,7 @@ versions on the *same* inputs surfaces it directly: a high adversarial-validatio
 AUC between versions, or large per-feature rank and sign changes, reveals that the
 reasoning regressed even though the accuracy did not.
 
+(pipeline-errors)=
 ### Data-pipeline errors invisible to input monitoring
 
 Some of the most damaging production incidents are upstream data bugs: a feature
@@ -240,79 +249,222 @@ distorts, which the attribution distribution registers immediately. Because
 explanation drift is per-feature, it both detects the problem and points at the
 feature whose pipeline to inspect.
 
-## Case study: a stable score hiding a reasoning shift
+## Case studies
 
-To make the blind spot concrete and reproducible, we walk through a covariate
-shift on the UCI Adult Income dataset [@uci_adult], a standard tabular benchmark
-predicting whether annual income exceeds \$50K. We construct a deliberate
-demographic shift: we train on the younger population (age $\le 45$) and treat the
-older population (age $> 45$) as drifted "production" traffic. This mirrors a
-model developed on one population and deployed to serve another. We fit a LightGBM
-classifier [@lightgbm], use `TreeExplainer` for exact attributions
-[@shap_treeexplainer], and compute all drift statistics with `shap-monitor`
-[@shapmonitor].
+We report two studies, chosen to sit on opposite sides of the question the
+previous section raises: *when does watching attributions tell you something that
+watching inputs would not?* Study A is a covariate shift, the scenario in which
+explanation drift is most often demonstrated. It is also, as we show, one in
+which input monitoring detects the same event at least as decisively. Study B removes
+input drift entirely by construction, leaving explanation drift as the only
+label-free signal available.
 
-The first thing to notice is that **performance barely moves**. The model's F1
-score is 0.71 on the reference (younger) validation data and 0.72 on the drifted
-(older) production data. Had we been watching F1 alone — and remembering that in
-production we would not even have these labels for weeks — we would have seen
-nothing worth investigating.
+Both use the UCI Adult Income dataset [@uci_adult], a standard tabular benchmark
+predicting whether annual income exceeds \$50K, and a LightGBM classifier
+[@lightgbm] with exact attributions from `TreeExplainer` [@shap_treeexplainer].
+Every number, table, and figure below is regenerated by
+`examples/paper_case_study.py` in the `shap-monitor` repository [@shapmonitor].
+All fetch the dataset directly, so no manual data preparation is required.
 
-The explanation signal tells a completely different story. @fig:blindspot places
-the two side by side: F1 is essentially flat across the shift, while the
-adversarial-validation drift score over the SHAP attributions jumps from 0.50 (a
-no-drift control, where reference data is split in half) to 0.97 (reference vs.
-drifted). An AUC of 0.97 means the model's reasoning in the two regimes is almost
-perfectly separable, i.e., the model is making similarly accurate predictions through
-substantially different reasoning.
+Because attributions carry sampling variance, every adversarial-validation figure
+we report is the mean over 20 independent subsamples of 4,000 rows per window,
+with intervals giving the 2.5th and 97.5th percentiles across those repetitions;
+PSI intervals come from 200 bootstrap resamples. We deliberately subsample
+*without* replacement. A with-replacement bootstrap duplicates rows, and because
+the adversarial AUC is cross-validated, a duplicated row can appear in both a
+training and a validation fold; the classifier then memorizes it. That artifact
+inflated a genuine no-drift control from 0.50 to roughly 0.61 in our first
+attempt, and anyone reproducing this measurement should be aware of it.
+
+(case-a)=
+### Study A: a stable score over a shifting population
+
+We train on the younger population (age $\le 45$) and treat the older population
+(age $> 45$) as drifted production traffic, mirroring a model developed on one
+population and deployed to serve another. The reference window is the held-out
+validation split ($n = 10{,}290$); the current window is the older population
+($n = 14{,}544$).
+
+**Performance barely moves.** F1 is 0.710 on the reference data and 0.721 on the
+drifted data. Watching F1 alone, and recalling that in production those labels
+would not exist for weeks, nothing would prompt an investigation.
+
+**The attribution signal fires, and so does input monitoring.** The
+adversarial-validation AUC over SHAP attributions rises from 0.499 [0.489, 0.512]
+on a no-drift control to 0.967 [0.965, 0.971] between the two periods. The same
+statistic computed on the *raw inputs*, however, reaches 1.000 [1.000, 1.000].
+On this shift, input-drift monitoring is not merely also triggered: at the level
+of the joint distribution it separates the two periods perfectly, and more
+decisively than the explanation signal does. @fig:blindspot shows this in its
+left panel.
+
+A deliberate demographic shift is exactly the regime input monitoring was
+designed for, and explanation drift adds no *global* detection power here. Taken
+alone, Study A establishes the weaker of the available claims: that a model's
+attribution behavior can change substantially while its accuracy does not.
 
 :::{figure} figure1.png
 :label: fig:blindspot
-The monitoring blind spot. The model's F1 score is flat across the demographic
-shift (0.71 → 0.72), so performance monitoring sees nothing, and in a delayed-
-label setting these labels would not be available yet anyway. An
-adversarial-validation drift score computed over the model's SHAP attributions
-rises from 0.50 (no-drift control) to 0.97, revealing that the model's reasoning
-changed substantially even though its accuracy did not.
+Two regimes for the same signal. **Left (Study A):** under a demographic covariate
+shift the model's F1 is flat (0.710 → 0.721), so performance monitoring sees
+nothing, but *both* the raw-input and the SHAP adversarial scores detect the shift,
+the raw inputs more strongly (1.000 vs. 0.967). Explanation drift adds no global
+detection power in this regime. **Right (Study B):** two model versions scored on
+identical inputs. Raw-input drift is zero by construction and the raw adversarial
+score sits at chance (0.500), while the attribution distributions are perfectly
+separable (1.000) at effectively unchanged accuracy. Error bars are 2.5–97.5
+percentile intervals over 20 repeated subsamples.
 :::
 
-Per-feature PSI localizes the shift. @fig:psi shows the PSI of each feature's SHAP
-distribution between the reference and drifted periods, on a log scale because the
-values span more than two orders of magnitude. The `age` feature's attribution PSI
-is 11.07 — far above the 0.25 "significant shift" threshold — and several other
-features (`race`, `marital-status`, `workclass`) also cross the alert line. The
-model has reorganized which features drive its decisions for the older population.
+**The per-feature view is where the two signals disagree.** @fig:psi
+plots each feature's PSI in attribution space beside its PSI in input space, and
+the aggregate picture above conceals a systematic divergence.
+
+For four features the input distribution is quiet while the attributions are not.
+The clearest is `race`: its raw PSI is 0.008, far below the 0.1 "warn" band, while
+its attribution PSI is 0.752, far above the 0.25 "alert" band, a ratio of roughly
+91. The racial composition of the traffic barely moved; the model's *use* of race
+changed substantially. `native-country` shows the same pattern (0.426 vs. 0.038),
+as do `hours-per-week` (0.119 vs. 0.008) and `capital-loss` (0.176 vs. 0.000). An
+input-drift dashboard would show nothing actionable on any of these four; an
+attribution dashboard would flag all of them.
+
+This is the sense in which the predictions here are right for the wrong reasons.
+The model's F1 *improved* slightly across this shift, so nothing in the
+performance signal argues for intervention, and the racial composition of the
+traffic barely moved, so nothing in the input signal does either; yet the model's
+reliance on `race` shifted by two orders of magnitude more than that composition
+did. Whether the change is harmful is a question for review; that it would have
+gone unreviewed is the failure.
 
 :::{figure} figure2.png
 :label: fig:psi
-Per-feature PSI of the SHAP attribution distributions, reference vs. drifted
-period (log scale). The dashed guides mark the conventional 0.1 (warn) and 0.25
-(alert) thresholds. The `age` attribution distribution moves by a PSI of 11.07,
-and several other features cross the alert threshold — the model is attributing
-its predictions very differently under the shift.
+Per-feature PSI in attribution space (red) against input space (blue), reference
+vs. drifted period, log scale. Dashed guides mark the conventional 0.1 (warn) and
+0.25 (alert) thresholds. The two views agree on the features the shift acted on
+directly (`age`, `marital-status`, `relationship`, all larger in input space),
+and disagree sharply on `race`, `native-country`, `hours-per-week`, and
+`capital-loss`, where the inputs are stable but the model's use of them is not.
 :::
 
-Looking inside the most-drifted feature confirms the picture. @fig:dist overlays
-the distribution of `age` SHAP values in the two periods. In the reference period
-the attributions are broad and bimodal; in the drifted period they collapse into a
-tight, strongly positive cluster — for the older population, `age` has become a
-consistent, large positive driver of the high-income prediction. Alongside this,
-`shap-monitor` reports a +33% increase in `age` mean absolute attribution, an +82%
-increase for `workclass`, and sign flips on `marital-status` and `workclass`,
-meaning those features reversed their typical contribution direction. None of this
-is visible in the F1 score.
+`shap-monitor` reports a +33% change in `age` mean absolute attribution, +82% for
+`workclass`, +51% for `capital-gain`, and sign flips on six features including
+`marital-status` and `workclass`, meaning their typical contribution direction
+reversed.
 
 :::{figure} figure3.png
 :label: fig:dist
 Distribution of `age` SHAP values, reference (blue) vs. drifted (orange). The
 reference distribution is broad and bimodal; under the shift it collapses to a
-tight, strongly positive cluster (dashed lines mark the means). For the older
-population, `age` has become a consistent large positive driver of the prediction.
+tight, strongly positive cluster, so `age` becomes a consistent large positive
+driver for the older population. Dotted lines are the ten reference quantile bin
+edges PSI is computed over, and the shaded span marks the four bins that receive
+no drifted mass at all, the mechanism behind the inflated PSI discussed in
+[](#psi-magnitudes).
 :::
 
-The lesson generalizes beyond this dataset. A flat headline metric is not evidence
-that a model is behaving as it did at validation time. Explanation drift makes the
-difference observable, and does so without waiting for labels.
+(case-b)=
+### Study B: same inputs, same accuracy, different reasoning
+
+Study A leaves the central question open, because input monitoring could have
+caught that shift on its own. Study B closes it by removing input drift entirely.
+
+We reuse Study A's training split, the same 24,008 younger-population training
+rows, and fit several model versions on it, then score every version on the same
+10,290 validation rows. The older population plays no part here. Because all
+versions consume byte-identical inputs, per-feature input PSI is exactly $0$ for
+all fourteen features under *every* construction, and the adversarial score on the
+raw inputs sits at chance, 0.500 [0.490, 0.509]. This is not a small number that
+might have been larger under a different shift; there is no input difference to
+detect. For calibration, the same no-shift measurement in attribution space gives
+0.499 [0.489, 0.512].
+
+Reporting a single constructed regression would invite the objection that it is
+the one setting where the signal happens to work. We therefore report a family of
+four version pairs, summarized in @tbl:versions, spanning a true null control, an
+un-engineered change of training configuration, and two deliberate feature
+deprioritizations implemented with LightGBM's per-feature split-gain penalty.
+
+:::{table} Four version-2 constructions, all scored on the same 10,290 rows as version 1 (F1 = 0.710). Raw-input PSI is exactly zero for every feature in every row, so input monitoring cannot fire. "Flagged" counts features whose attribution PSI reaches the 0.25 alert band.
+:label: tbl:versions
+
+| v2 construction | F1 | $\Delta$F1 | Agreement | SHAP AUC | Flagged |
+|---|---|---|---|---|---|
+| identical retrain (null control) | 0.7097 | +0.0000 | 100.0% | n/a | **none** |
+| hyperparameter change | 0.6953 | −0.0143 | 98.2% | 1.000 | 10 of 14 |
+| `relationship` deprioritized | 0.7089 | −0.0008 | 98.7% | 1.000 | 3 |
+| `education-num` dropped | 0.7054 | −0.0043 | 98.7% | 1.000 | 2 |
+:::
+
+**The null control stays silent, and accuracy monitoring passes everything else.**
+Refitting with identical data and settings reproduces version 1 exactly: 100%
+prediction agreement, every attribution PSI 0.00, nothing flagged: the monitor
+does not manufacture drift where none exists. Across the three genuine
+regressions, meanwhile, the largest F1 change is 1.4 points and the smallest is
+0.8 *hundredths* of a point, so a gate on aggregate metrics admits all of them.
+
+**The headline case relocates reasoning without disturbing accuracy.** In the
+`relationship` construction, F1 moves by −0.0008 while the attribution structure
+is rearranged: `relationship` collapses from a mean absolute attribution of 0.579
+to 0.000 and falls from rank 3 to rank 14, its correlated substitute
+`marital-status` absorbs the role, rising from 0.795 to 1.414 (+78%) and from rank
+2 to rank 1, and `sex` declines from 0.096 to 0.057. Attribution PSIs are 20.72,
+3.14, and 0.99 respectively; every other feature stays below the alert band. The
+alerting policy of [](#alerting) would page on exactly the three features involved
+and stay quiet on the remaining eleven. @fig:versions shows the full picture.
+
+**Localization degrades when the change is diffuse.** The hyperparameter row is
+the least contrived of the three: no penalty is applied, only a different
+training configuration, which is the most common thing to differ between two
+production versions. It is detected, but it flags 10 of 14 features, because a
+broad configuration change moves reasoning broadly rather than relocating one
+feature's role. It is also the row where F1 drops most (−0.0143), so it is the
+weakest of the three on the accuracy-preservation axis. We report it because its
+realism is exactly the point, and its diffuseness is a useful warning: the
+per-feature signals localize a targeted regression well and a systemic one poorly.
+
+:::{figure} figure4.png
+:label: fig:versions
+Study B, `relationship` construction: mean absolute SHAP attribution per feature
+for version 1 (blue) and version 2 (orange), computed on identical inputs. Shaded
+rows mark the affected group. `relationship` collapses to zero while its
+correlated substitute `marital-status` absorbs the role. Overall accuracy and
+every input distribution are unchanged; the reasoning has been relocated.
+:::
+
+This is the model-version regression of [](#version-regression), demonstrated
+rather than described, and it is the case in which explanation drift is not a
+complement to the existing signals but the only label-free signal available at
+all. The same argument applies to the pipeline-error pattern of
+[](#pipeline-errors), where a feature pinned to a plausible constant leaves the
+marginal distribution in range while the model's use of it collapses.
+
+(psi-magnitudes)=
+### A caveat on reading large PSI values
+
+The `age` attribution PSI of 11.07 [10.90, 12.49] in Study A deserves comment,
+because a value two orders of magnitude above the alert threshold invites being
+read as a magnitude when it should be read as a saturation flag.
+
+`shap-monitor` bins the reference distribution into ten quantile bins, so each
+reference bin holds about 10% of the mass by construction and the $r_b$ term
+cannot approach zero. Under the null this behaves well: the largest attribution
+PSI in our no-drift control is 0.0079. The instability is on the other side of the
+ratio. When the current distribution collapses into a narrow region, as `age` does
+in @fig:dist, reference bins receive *no* current mass, and $c_b$ must be floored
+at some $\epsilon$ to keep the logarithm finite. Four of the ten bins are empty
+here, and they contribute 75% of the total. Since each empty bin contributes
+roughly $-r_b \ln(\epsilon / r_b)$, the total is a direct function of that
+constant: holding the data fixed and varying $\epsilon$ from $10^{-10}$ to
+$10^{-3}$ moves the reported PSI from 11.07 to 4.61.
+
+PSI therefore remains sound for *detection* and for *ranking* features by how far
+their attributions moved, which is what a monitoring system needs. But a value far
+above the alert band should be reported as saturated rather than quoted as a
+quantity, and such values are not comparable across implementations that choose
+different flooring constants. Where a stable magnitude is wanted, a bounded
+divergence such as Jensen–Shannon avoids the artifact entirely; we report PSI here
+for continuity with the banding practitioners already know.
 
 ## Open-source implementation
 
@@ -320,7 +472,8 @@ difference observable, and does so without waiting for labels.
 implements this workflow with a deliberately small surface area: a logger to
 capture attributions in production, a storage backend, and an analyzer to compute
 drift. It builds on SHAP [@shap_nips], scikit-learn [@sklearn1; @sklearn2], NumPy
-[@numpy], and pandas [@pandas2].
+[@numpy], and pandas [@pandas2]. The repository's
+`examples/lightgbm_example.ipynb` introduces the API step by step.
 
 ### Logging attributions in production
 
@@ -392,10 +545,12 @@ print(adv.attrs["adversarial_auc"])           # 0.5 = no drift, 1.0 = max drift
 The comparison returns, per feature, its PSI, its mean absolute attribution in
 each period, the percentage change in importance, the change in importance rank,
 and whether its contribution direction flipped, exactly the quantities reported
-in the case study. To compare two deployed models on the same traffic, the
-version-regression pattern — `compare_versions` performs the same analysis keyed
-on the logged model version.
+in the case studies. To compare two deployed models scored on the same traffic,
+which is the version-regression pattern of [](#version-regression),
+`compare_versions` performs the same analysis keyed on the logged model version
+rather than on time.
 
+(alerting)=
 ### Command line and alerting
 
 For operational use the same analysis is available from a command-line interface,
@@ -418,28 +573,22 @@ between the current window and a fixed baseline exceeds a chosen level (for
 example 0.8). Restricting per-feature alerts to features above a minimum mean
 absolute attribution avoids noisy alarms on features the model barely uses.
 
-### Batch versus streaming, and overhead
-
-The dominant cost is computing the explanations, not storing or analyzing them.
-For tree models, `TreeExplainer` is fast enough to run inline on a sampled
-fraction of requests; for expensive explainers, or very high request rates,
-attribution is better done out of band, i.e., log the inputs and explain them in a
-periodic batch job — so that the prediction path is never blocked. Drift analysis
-itself is a cheap offline computation over the logged Parquet and is naturally run
-on a schedule (hourly or daily) rather than per request.
-
 ## Challenges and limitations
 
 Explanation drift monitoring is a useful signal, but it is not free and not a
 panacea.
 
-**Explainer cost.** Exact attributions are cheap for tree models but expensive for
-model-agnostic explainers such as `KernelExplainer`. Sampling and out-of-band
-computation mitigate this, but the cost must be budgeted, and very low sample rates
-trade statistical power for cheapness.
+**Explainer cost.** Computing the explanations dominates the cost, not storing or
+analyzing them. Exact attributions are cheap for tree models, where
+`TreeExplainer` is fast enough to run inline on a sampled fraction of requests,
+but expensive for model-agnostic explainers such as `KernelExplainer`. Sampling
+and out-of-band computation (logging the inputs and explaining them in a periodic
+batch job, so the prediction path is never blocked) mitigate this, but the cost
+must be budgeted, and very low sample rates trade statistical power for
+cheapness.
 
 **Baseline choice.** Drift is always measured *relative to a reference*. A poorly
-chosen baseline — too short, unrepresentative, or itself already drifted —
+chosen baseline (too short, unrepresentative, or itself already drifted)
 produces misleading comparisons. Seasonal traffic in particular calls for a
 seasonally aware reference rather than a naive trailing window.
 
@@ -452,7 +601,26 @@ system evolves.
 correlated features and to explainer configuration, so a portion of measured drift
 may reflect attribution variance rather than genuine reasoning change. Adequate
 sample sizes per window and a fixed explainer configuration reduce, but do not
-eliminate, this.
+eliminate, this. Every headline figure we report therefore carries an interval
+over repeated subsamples rather than being quoted as a point estimate.
+
+**Reading the adversarial score.** Because $\phi(X)$ depends on $X$, an
+attribution-space statistic moves whenever the inputs move, so a high adversarial
+AUC is not on its own evidence of a reasoning change: in Study A the raw inputs are
+separable at AUC 1.000, and most of the attribution-space separability is
+inherited rather than added. Reporting the input-space statistic alongside it, as
+we do throughout, is what disentangles them, and the case for explanation drift as
+an independent signal rests on [](#case-b), where the inputs are identical by
+construction. The score also saturates (a systematic change across ten thousand
+rows reaches 1.000 whether the underlying regression is total or partial), making
+it a sensitive detector but a poor measure of severity. The per-feature magnitude,
+rank, and sign changes should carry the diagnostic weight.
+
+**Scope of the evidence.** Both case studies use a single public benchmark, and
+the version regressions in [](#case-b) are deliberately constructed. Together they
+establish that this class of failure exists and that the other two monitoring
+signals are structurally unable to see it; they do not establish how frequently it
+arises in production, which a public dataset cannot show.
 
 **It is a leading indicator, not truth itself.** Explanation drift tells you the
 model's reasoning changed; it does not, by itself, tell you whether that change is
@@ -463,20 +631,25 @@ automatic trigger for rollback.
 ## Conclusion and future work
 
 Production models can keep their accuracy while quietly changing the reasoning
-behind their predictions, and the standard monitoring stack, which includes input drift plus
-delayed-label performance has a structural blind spot for exactly this. Tracking
-the distribution of SHAP attributions over time closes much of that gap. It is a
-label-free, leading signal that complements existing monitoring, and because it is
-per-feature it both detects drift and localizes it. Our case study showed a model
-holding F1 steady (0.71 → 0.72) across a demographic shift while its
-adversarial-validation drift score rose from 0.50 to 0.97 and the `age` attribution
-PSI reached 11, a reasoning change that was invisible to accuracy and would have
-been invisible for weeks in a realistic delayed-label setting.
+behind their predictions, and the standard monitoring stack, input drift plus
+delayed-label performance, has a structural blind spot for exactly this. Tracking
+SHAP attribution distributions over time closes part of that gap with a
+label-free signal that, because it is per-feature, both detects drift and
+localizes it.
 
-The `shap-monitor` package provides an open-source reference implementation, and
-the technique itself is implementation-agnostic. Promising directions for future
-work include asynchronous and streaming logging to further reduce overhead,
-additional storage backends for cloud-native deployments, and richer alerting that
-fuses explanation drift with input-drift and performance signals into a single,
-better-calibrated alarm. We hope explanation drift monitoring becomes a standard
-third pillar of production ML observability, alongside the two it complements.
+Our two studies delimit where it helps. Under a demographic covariate shift
+([](#case-a)), input-drift monitoring separated the two periods more decisively
+than the attribution view did; what the attribution view added was per-feature, on
+`race` and three others where the inputs stayed quiet while the attributions
+crossed the alert band. In [](#case-b), versions scored on byte-identical inputs
+preserve accuracy while relocating a rank-3 feature's contribution onto a
+correlated substitute, so input and performance monitoring are both silent and
+explanation drift is the only signal that fires. It stays quiet on a true null
+retrain.
+
+The `shap-monitor` package provides an open-source implementation. Promising
+directions for future work include asynchronous logging, additional storage
+backends, and alerting that fuses explanation drift with input-drift and
+performance signals into a single, better-calibrated alarm. We hope explanation
+drift monitoring becomes a standard third pillar of production ML observability,
+alongside the two it complements.
