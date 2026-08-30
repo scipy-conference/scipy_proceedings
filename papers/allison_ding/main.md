@@ -8,9 +8,9 @@ abstract: |
 
 ## Introduction
 
-Topic modeling is often used when a text corpus is too large or varied for manual inspection. Classical methods such as Latent Dirichlet Allocation (LDA) model documents as mixtures of latent topics [@lda]. More recent approaches, including BERTopic, treat topic discovery as a clustering problem over dense semantic representations: documents are embedded with transformer models, reduced to a lower-dimensional manifold, clustered, and then summarized with topic keywords [@bertopic].
+Topic modeling is often used when a text corpus is too large or varied for manual inspection. Classical methods such as Latent Dirichlet Allocation (LDA) model documents as mixtures of latent topics, representing each document as a probability distribution over a fixed set of topics inferred from word co-occurrence patterns [@lda]. More recent approaches, including BERTopic, treat topic discovery as a clustering problem over dense semantic representations: documents are embedded with transformer models, reduced to a lower-dimensional manifold, clustered, and then summarized with topic keywords [@bertopic].
 
-This modern pipeline is attractive because it is modular and works well with general-purpose text embeddings. It also exposes a practical failure mode. Density-based clustering algorithms such as HDBSCAN can assign low-confidence or low-density documents to an outlier topic, commonly labeled `-1` [@hdbscan]. In small amounts, this behavior is useful: not every document should be forced into a topic. In real corpora, however, the noise cluster can become large enough to undermine the analysis. In the motivating IMDb experiment, a baseline BERTopic configuration assigned 62.39% of documents to noise, leaving 37.61% of the corpus represented by explicit topics.
+This modern pipeline is attractive because it is modular and works well with general-purpose text embeddings. It also exposes a practical failure mode: density-based clustering algorithms such as HDBSCAN can assign low-confidence or low-density documents to an outlier topic, commonly labeled `-1`, rather than to any meaningful cluster [@hdbscan]. In small amounts, this behavior is useful: not every document should be forced into a topic. In real corpora, however, the noise cluster can become large enough to undermine the analysis. In the motivating IMDb experiment, a baseline BERTopic configuration assigned 62.39% of documents to noise, leaving 37.61% of the corpus represented by explicit topics.
 
 This paper introduces Balanced Coherence, Diversity, and Noise-Suppression Metric-guided Hyperparameter Optimization (BCDNM-HPO), a workflow for reducing such noise assignments without treating noise reduction as the only objective. The central idea is simple: define a scalar objective that rewards coherence and diversity while penalizing deviation from a target noise percentage, then use hyperparameter optimization (HPO) to search over the UMAP and HDBSCAN configuration space. The method does not propose a new topic model. Instead, it supplies an optimization layer around existing BERTopic components and can be adapted to other embedding, dimensionality-reduction, and clustering choices.
 
@@ -27,7 +27,7 @@ The weights control the relative emphasis on coherence, diversity, and target-no
 
 ## Background and Related Work
 
-LDA remains a foundational topic-modeling method and is still useful when bag-of-words assumptions and a fixed number of topics are appropriate [@lda]. In noisy corpora, however, LDA requires practitioners to choose the number of topics and tune priors indirectly. It does not expose a native noise-cluster mechanism and does not directly optimize for the fraction of documents that receive interpretable topic assignments.
+Latent Dirichlet Allocation (LDA) is not new and remains a foundational topic modeling method and is still useful when bag-of-words assumptions and a fixed number of topics are appropriate [@lda]. In noisy corpora, however, LDA requires practitioners to choose the number of topics and tune priors indirectly. It does not expose a native noise-cluster mechanism and does not directly optimize for the fraction of documents that receive interpretable topic assignments.
 
 Neural topic models, including the Neural Variational Document Model (NVDM), represent documents with learned latent variables and can capture richer semantics than classical count-based approaches [@nvdm]. These models add flexibility, but they also introduce more training complexity and can be sensitive to the quality of the latent space. Rather than replacing an existing topic-modeling pipeline with a new neural architecture, our work addresses a more operational problem: how to tune a BERTopic-style workflow so that excessive noise assignments move toward a chosen target without sacrificing topic coherence or diversity.
 
@@ -40,6 +40,8 @@ To address this need, BCDNM combines coherence, diversity, and deviation from a 
 We use Optuna to optimize the BCDNM objective, with the Tree-structured Parzen Estimator (TPE) guiding the search [@optuna]. Gensim's topic-coherence implementation computes $c_v$ coherence [@roeder_topic_coherence], while a topic-word uniqueness score measures diversity. The GPU path builds on NVIDIA cuML. Prior work introduced an end-to-end GPU implementation of UMAP and reported speedups of up to 100x while preserving embedding quality [@nolet_gpu_umap]. More recent work extends GPU-accelerated UMAP to massive-scale, out-of-core processing with optional multi-GPU execution [@park_out_of_core_umap]. In our notebook, the UMAP and HDBSCAN stages access GPU acceleration through the zero-code-change `cuml.accel` interface [@cuml_accel].
 
 ## BCDNM Objective
+
+
 
 ### Objective Function
 
@@ -173,6 +175,8 @@ The reported evaluation focuses on four quantities:
 - Noise percentage $N$, the percentage of documents assigned to topic `-1`.
 - Target noise deviation $\Delta_N = |N - \tau|$, where lower values indicate closer agreement with the chosen target noise percentage.
 
+
+
 ## Results
 
 The source experiment uses $\tau = 20$. The baseline assigns 62.39% of documents to the noise topic, corresponding to a target deviation of 42.39 percentage points. The optimized BCDNM-HPO configuration assigns 39.19% to noise, corresponding to a target deviation of 19.19 percentage points. This is a 23.20 percentage-point absolute reduction in both observed noise percentage and target deviation, increasing the share of clustered documents from 37.61% to 60.81%.
@@ -215,14 +219,9 @@ The coherence and diversity scores both decrease slightly. This is expected: mov
 
 The intertopic distance maps provide a qualitative view of the change. The optimized result contains more visible topic bubbles and a broader topic index range, consistent with more documents being represented by explicit topics. The maps should be interpreted as exploratory diagnostics rather than definitive proof of topic quality.
 
-:::{figure} figures/baseline_intertopic.png
-:label: fig:baseline_intertopic
-Baseline BERTopic intertopic distance map from the source materials.
-:::
-
-:::{figure} figures/bcdnm_intertopic.png
-:label: fig:bcdnm_intertopic
-BCDNM-HPO intertopic distance map from the source materials. The optimized model assigns more documents to explicit topics and reports a noise percentage closer to the 20% target.
+:::{figure} figures/bertopic_comparison.png
+:label: fig:bertopic_comparison
+The left figure represents Baseline BERTopic intertopic distance map and the right figure represents BCDNM-HPO intertopic distance map from the source materials. The optimized model assigns more documents to explicit topics and reports a noise percentage closer to the 20% target.
 :::
 
 ## Discussion
