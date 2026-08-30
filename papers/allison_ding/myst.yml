@@ -1,0 +1,58 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-allison_ding
+  title:
+    'BCDNM-HPO: Balancing Coherence, Diversity, and Target Noise in
+    GPU-Accelerated BERTopic'
+  description:
+    'A preference-aware hyperparameter optimization layer for BERTopic that
+    balances coherence, diversity, and deviation from a target noise percentage
+    using GPU-accelerated UMAP and HDBSCAN.'
+  thumbnail: figures/metric_comparison.png
+  authors:
+    - name: Allison Ding
+      email: allisond@nvidia.com
+      affiliations:
+        - NVIDIA
+      corresponding: true
+    - name: Mitesh Patel
+      email: miteshp@nvidia.com
+      affiliations:
+        - NVIDIA
+    - name: Corey Nolet
+      email: cnolet@nvidia.com
+      affiliations:
+        - NVIDIA
+  keywords:
+    - topic modeling
+    - BERTopic
+    - hyperparameter optimization
+    - RAPIDS
+    - cuML
+    - target noise
+    - GPU acceleration
+  abbreviations:
+    BCDNM: Balanced Coherence, Diversity, and Noise-Suppression Metric
+    HDBSCAN:
+      Hierarchical Density-Based Spatial Clustering of Applications with Noise
+    HPO: Hyperparameter Optimization
+    LDA: Latent Dirichlet Allocation
+    NVDM: Neural Variational Document Model
+    TPE: Tree-structured Parzen Estimator
+    UMAP: Uniform Manifold Approximation and Projection
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - nvdm
+        - maas_imdb
+        - ding_notebook
+        - park_out_of_core_umap
+        - cuml_accel
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
