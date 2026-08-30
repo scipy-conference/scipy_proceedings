@@ -1,7 +1,7 @@
 ---
 title: "Vibes, meet rigor: Evaluating and improving AI performance on complex scientific code"
 abstract: |
-  Scientists apply rigorous methods to their research, but rarely to the AI tools they use to write code. We tested different large language models (LLMs) in combination with domain-specific tools (including MCP servers and custom-written skills) to find the optimal combination for writing complex domain-specific code. To evaluate LLMs' understanding of Starsim, a Python-based disease modeling framework, we wrote a quantitative proficiency exam. Using this exam, we tested different LLMs and varied their access to tools. Scores ranged widely, from ~50% for Claude Haiku 4.5 and GPT-5 mini without tools to 98.7% for Claude Opus 4.8 with tools. While LLM choice had the biggest impact on exam scores, tool access also significantly improved performance for both the cheapest (Haiku) and most capable (Opus) models, with more modest benefits for intermediate models. Thus, to improve LLM performance on domain-specific problems, we recommend developing a set of AI tools with the help of quantitative evaluation.
+  Scientists apply rigorous methods to their research, but rarely to the AI tools they use to write code. We tested different large language models (LLMs) in combination with domain-specific tools (including MCP servers and custom-written skills) to find the optimal combination for writing complex domain-specific code. To evaluate LLMs' understanding of Starsim, a Python-based disease modeling framework, we wrote a quantitative proficiency exam. Using this exam, we tested different LLMs and varied their access to tools. Scores ranged widely across models, configurations, and trials, from ~55% for Claude Haiku 4.5 and GPT-5.4-mini in chat mode to 99.4% for Claude Opus 4.8 in agentic mode with tools. While LLM choice had the biggest impact on exam scores, tool access also improved performance for both the cheapest (Haiku) and most capable (Opus) models, with smaller benefits for intermediate models. For all models, tool utilization was low without specific prompt instructions. These results suggest that providing agents with additional tools for domain-specific problems results in a modest but robust performance improvement.
 ---
 
 ## Introduction
@@ -22,9 +22,9 @@ Our study has three ingredients: a proficiency exam that measures competence wit
 
 ### Starsim
 
-[Starsim](https://starsim.org/) [@starsim; @starsim_scipy] is a high-performance agent-based disease modeling library built on NumPy [@numpy], SciPy [@scipy], and Numba [@lam2015numba]. A Starsim model is assembled from composable modules: diseases (such as HIV or tuberculosis), transmission networks (such as airborne transmission in workplaces or sexual networks), health interventions (such as vaccines and treatments), and demographics (such as pregnancies, births, and deaths). Agents correspond to indices in structured arrays, which provides performance orders of magnitude faster than a fully object-oriented implementation [@kerr2022python]. Starsim has been used to model domains ranging from family planning [@o2023fpsim] and sexually transmitted infections [@stuart2024hpvsim; @stuart2026reduction] to COVID [@kerr2021covasim]  and Ebola [@delport2024estimating].
+[Starsim](https://starsim.org/) [@starsim; @starsim_scipy] is a high-performance agent-based disease modeling library built on NumPy [@numpy], SciPy [@scipy], and Numba [@lam2015numba]. A Starsim model is assembled from composable modules: diseases (such as HIV or tuberculosis), transmission networks (such as airborne transmission in workplaces or sexual networks), health interventions (such as vaccines and treatments), and demographics (such as pregnancies, births, and deaths). Agents correspond to indices in structured arrays, which provides performance orders of magnitude faster than a fully object-oriented implementation [@kerr2022python]. Starsim has been used to model domains ranging from family planning [@o2023fpsim] and sexually transmitted infections [@stuart2024hpvsim; @stuart2026reduction] to COVID [@kerr2021covasim] and Ebola [@delport2024estimating].
 
-The features that make Starsim powerful are also what make it hard for an AI to use correctly. It has a unit-aware time system spanning rates, probabilities, and durations; a custom random-number implementation that guarantees exact deterministic comparability across scenarios [@starsim_crn]; and performance-optimized indexing that tracks agents across births and deaths. In addition, since the diseases being modeled are often very complicated, the Starsim code needed to model them can also be very complicated. Using all of Starsim's features in a scientifically correct way demands familiarity with the framework itself as well as a strong grasp of disease modeling principles. The skills in our AI tools, and the questions in the exam, are primarily focused on this specialized knowledge.
+The features that make Starsim powerful are also what make it hard for an AI to use correctly. It has a unit-aware time system spanning rates, probabilities, and durations; a custom random-number implementation that guarantees exact deterministic comparability across scenarios [@starsim_crn]; and performance-optimized indexing that tracks agents across births and deaths. In addition, since the diseases being modeled are often very complicated, the Starsim code needed to model them can also be correspondingly complex. Using all of Starsim's features in a scientifically correct way demands familiarity with the framework itself as well as a strong grasp of disease modeling principles. The skills in our AI tools, and the questions in the exam, are primarily focused on this specialized knowledge.
 
 ### Starsim-AI
 
@@ -48,7 +48,7 @@ The exam covers five topics:
 
 A sixth section (innocuously labeled "Miscellaneous") checks for cheating, with questions answerable only with access to (a) the latest Starsim changelog, (b) the Starsim-AI skills, or (c) the solutions themselves.
 
-```{figure} ./figures/fig0_exam_question.png
+```{figure} ./figures/fig1_exam_question.png
 :label: fig-exam-question
 :width: 80%
 
@@ -65,39 +65,65 @@ In humanoid mode, we ran the three Anthropic models (Haiku 4.5, Sonnet 4.6, and 
 
 > You have the `starsim-ai` plugin loaded. It provides a set of Starsim-specific skills (covering e.g. diseases, networks, interventions, calibration, demographics, time and units, indexing, distributions, analyzers, and profiling) plus Context7 documentation lookup. USE THE `starsim-ai` SKILLS WHEREVER THEY ARE RELEVANT: before writing Starsim code for a sub-part, invoke the matching skill to ground your approach in the current Starsim API and idioms, and consult the relevant skill whenever you are unsure of the correct Starsim usage. These skills are authoritative for this version of Starsim; prefer them over your prior assumptions.
 
-Each combination (LLM, configuration, and effort level where applicable) was run five times to account for stochasticity in both answering and marking. Answers were graded by LLM-based marking agents rather than by hand, with marks point-checked and cross-validated against the schema by the human experts who wrote the exam. Hand-marking was infeasible: a completed exam was typically about 2,500 lines, roughly half of it executable Python, amounting to approximately 400,000 lines of output across all experiments.
+Each combination (LLM, configuration, and effort level where applicable) was run five times to account for stochasticity in both answering and marking. Answers were graded by LLM-based marking agents rather than by hand, with marks spot-checked and cross-validated against the schema by the human experts who wrote the exam. Hand-marking was infeasible: a completed exam was typically about 2,500 lines, roughly half of it executable Python, amounting to approximately 400,000 lines of output across all experiments.
 
 ## Results
 
 ### Performance scales with cost and skills
 
-Unsurprisingly, costlier models perform better. The cheapest models with single-turn ("chat") configurations, GPT-mini-chat (USD0.11) and Haiku-chat (USD0.21), also performed by far the worst (56.6% and 54.7%, respectively). The best-performing model, Opus-nudged (98.7%), was also among the most expensive (USD13.38). These results are shown in @fig-cost-score. Opus outperformed Sonnet on both performance and cost.
+Unsurprisingly, costlier models perform better. The cheapest models with single-turn ("chat") configurations, GPT-mini-chat (US\$0.11) and Haiku-chat (US\$0.21), also performed by far the worst (56.6% and 54.7%, respectively). The best-performing model, Opus-nudged (98.7%), was also among the most expensive (US\$13.38). These results are shown in @fig-cost-score and @tbl:quantifications. Opus outperformed Sonnet on both score and cost.
 
-```{figure} ./figures/fig1_cost_vs_score.png
+```{figure} ./figures/fig2_cost_vs_score.png
 :label: fig-cost-score
 :width: 90%
 
 Performance as a function of model cost. Shape shows LLM type, and color shows model configuration. Individual runs are shown as small symbols; large symbols are the mean for that model-configuration combination. Not all models were run with all configurations.
 ```
 
-Since skills tended to be evoked relatively infrequently without nudging (see below), we will focus on results that included nudging. Skills (with nudging) improved the performance of Haiku running in agent mode by 6.7% (from 68.9% to 75.6%), Sonnet by 2.0% (from 94.1% to 96.1%), and Opus by 1.7% (from 97.0% to 98.7%). While these gains may seem small, another way of looking at it is that skills reduced Opus' *mistakes* from 3.0% to 1.3% – a 57% improvement.
+:::{table} Exam score, tokens used, total cost, and thinking time as a function of model and configuration.
+:label: tbl:quantifications
+
+| Model    | Configuration           | Score (%)  | Tokens (thousands) | Cost (US\$)  | Time (minutes) |
+| -------- | ----------------------- | ---------- | ------------------ | ------------ | -------------- |
+| GPT-mini | Chat only               | 56.6 ± 3.7 | 31 ± 0             | 0.11 ± 0.00  | 2 ± 1          |
+| GPT-mini | Agent (no skills)       | 90.2 ± 1.2 | 13,669 ± 1,986     | 2.56 ± 0.18  | 77 ± 9         |
+| GPT-mini | Agent + skills          | 89.0 ± 1.8 | 15,445 ± 2,887     | 2.78 ± 0.29  | 90 ± 10        |
+| GPT-5.5  | Chat only               | 68.9 ± 2.8 | 75 ± 1             | 2.09 ± 0.03  | 27 ± 1         |
+| GPT-5.5  | Agent (no skills)       | 94.1 ± 1.4 | 4,310 ± 217        | 6.07 ± 0.18  | 60 ± 8         |
+| GPT-5.5  | Agent + skills          | 94.7 ± 1.2 | 3,910 ± 397        | 5.71 ± 0.42  | 47 ± 2         |
+| Haiku    | Chat only               | 54.7 ± 3.3 | 48 ± 4             | 0.21 ± 0.02  | 4 ± 0          |
+| Haiku    | Agent (no skills)       | 68.9 ± 7.7 | 13,686 ± 5,760     | 3.10 ± 0.42  | 47 ± 10        |
+| Haiku    | Agent + skills          | 72.3 ± 5.2 | 16,078 ± 8,116     | 3.28 ± 0.91  | 45 ± 8         |
+| Haiku    | Agent + skills + nudged | 75.6 ± 3.0 | 18,879 ± 2,924     | 3.41 ± 0.29  | 49 ± 16        |
+| Sonnet   | Chat only               | 64.9 ± 7.2 | 78 ± 7             | 1.08 ± 0.11  | 16 ± 2         |
+| Sonnet   | Agent (no skills)       | 94.1 ± 5.2 | 19,485 ± 7,782     | 13.09 ± 5.05 | 103 ± 40       |
+| Sonnet   | Agent + skills          | 94.1 ± 2.8 | 22,527 ± 8,318     | 14.24 ± 4.39 | 110 ± 33       |
+| Sonnet   | Agent + skills + nudged | 96.1 ± 1.6 | 24,226 ± 10,058    | 13.40 ± 4.64 | 94 ± 30        |
+| Opus     | Chat only               | 85.5 ± 1.4 | 51 ± 2             | 1.07 ± 0.05  | 7 ± 0          |
+| Opus     | Agent (no skills)       | 97.0 ± 2.3 | 10,441 ± 4,424     | 11.51 ± 3.99 | 56 ± 18        |
+| Opus     | Agent + skills          | 97.2 ± 1.7 | 9,010 ± 3,612      | 10.30 ± 3.64 | 51 ± 14        |
+| Opus     | Agent + skills + nudged | 98.7 ± 1.3 | 12,829 ± 5,043     | 13.38 ± 4.25 | 52 ± 17        |
+
+:::
+
+Since skills tended to be invoked relatively infrequently without nudging (see below), we will focus on results that included nudging. Skills (with nudging) improved the performance of Haiku running in agent mode by 6.7 percentage points (from 68.9% to 75.6%), Sonnet by 2.0pp (from 94.1% to 96.1%), and Opus by 1.7pp (from 97.0% to 98.7%). While these gains may seem small, another way of looking at it is that skills reduced Opus' *mistakes* from 3.0% to 1.3% – a 57% improvement.
 
 ### Model effort quickly saturates
 
-Claude models include a configurable "effort" parameter; higher effort consumes more tokens but is supposed to produce better results. As shown in @fig-effort-score, performance saturated above medium effort (extra-high and max effort levels were also run for a subset of trials, which also showed no further improvement; results not shown). Interestingly, skills (with nudging) improved performance in both the lowest-performance case (Sonnet-low, 92.0→95.1%) and the highest-performance case (Opus-high, 98.3→99.4%), but less in moderate-performance cases (Sonnet-medium, 96.7→96.1%; Opus-low 97.4→97.4%).
+Claude models include a configurable "effort" parameter; higher effort consumes more tokens but is supposed to produce better results. As shown in @fig-effort-score, performance saturated above medium effort (extra-high and max effort levels were also run for a subset of trials, which also showed no further improvement; results not shown). Interestingly, skills (with nudging) improved performance in both the lowest-performance case (Sonnet-low, 92.0→95.1%) and the highest-performance case (Opus-high, 98.3→99.4%), but less in moderate-performance cases (Sonnet-medium, 96.7→96.1%; Opus-low, 97.4→97.4%).
 
-```{figure} ./figures/fig2_effort_vs_score.png
+```{figure} ./figures/fig3_effort_vs_score.png
 :label: fig-effort-score
 :width: 90%
 
-Performance as a function of effort for Sonnet and Opus models. Note that vertical bars show minimum and maximum scores, not confidence intervals.
+Performance as a function of effort for Sonnet and Opus models. Points show the median across repeated runs; thick bars show the interquartile range and thin bars the full range (minimum to maximum), not confidence intervals.
 ```
 
 ### Marks are lost for multiple reasons
 
-No single factor accounted for a majority of marks lost. As shown in @fig-lost-marks, marks were lost approximately equally due to the answer being (a) incorrect, (b) omitted, or (c) for a different reason. Interestingly, the primary improvement in marks was due to a reduction in the number of omitted answers, rather than incorrect answers. This suggests that skills can be helpful in prompting the LLM to bring the solution to completion when it may have otherwise become stuck.
+No single factor accounted for a majority of marks lost. As shown in @fig-lost-marks, marks were lost approximately equally due to (a) the answer being incorrect, (b) the answer being omitted, or (c) some other reason. Interestingly, the primary improvement in marks was due to a reduction in the number of omitted answers, rather than incorrect answers. This suggests that skills can be helpful in prompting the LLM to bring the solution to completion when it may have otherwise become stuck.
 
-```{figure} ./figures/fig3_lost_marks.png
+```{figure} ./figures/fig4_lost_marks.png
 :label: fig-lost-marks
 :width: 90%
 
@@ -106,26 +132,28 @@ Exam marks lost as a function of reason.
 
 ### Marking is robust to judge choice
 
-Because the answers are marked by LLMs, a natural concern is whether the results are an artifact of a particular judge. @fig-judge-agreement addresses this by plotting the Anthropic judge's score against the OpenAI judge's score for every marked answer. The two judges agree closely (Pearson $R^2$ = 0.96) with only a small mean difference (the Anthropic judge is higher by 2.2% on average). The high cross-provider correlation indicates that the scores reflect properties of the answers rather than the idiosyncrasies of a single marker, and gives us confidence in the comparisons above.
+Because the answers are marked by LLMs, a natural concern is whether the results are an artifact of a particular judge. @fig-judge-agreement addresses this by plotting the Anthropic judge's score against the OpenAI judge's score for every marked answer. The two judges agree closely (Pearson $R^2$ = 0.96) with only a small mean difference (the Anthropic judge is higher by 2.2pp on average). The high cross-provider correlation indicates that the scores reflect properties of the answers rather than the idiosyncrasies of a single marker, and gives us confidence in the comparisons above.
 
-That said, the panel does reveal a small but consistent own-provider bias: each judge scores answers written by its own provider's models slightly more generously. On average, there was a preference of 2.1% for a judge towards its own work versus the other provider's. While much smaller than the variance in scores (in one extreme case, there was a 40-point gap between the Anthropic and OpenAI judges' scores on the same exam), it is still notable since even with a rigorous and explicit marking schema, it shows that a model's "personal" bias is still present.
+That said, the figure does reveal a small but consistent own-provider bias: each judge scores answers written by its own provider's models slightly more generously. On average, there was a preference of 2.1pp for a judge towards its own work versus the other provider's. While much smaller than the variance in scores (in one extreme case, there was a 40-point gap between the Anthropic and OpenAI judges' scores on the same exam), it is still notable that even with a rigorous and explicit marking schema, a model's "personal" bias is present.
 
-```{figure} ./figures/fig4_judge_agreement.png
+Human review of marking discrepancies revealed that most cases were the result of genuine ambiguity; in the case of the 40-point gap, for example, the OpenAI model did _not_ use Starsim to solve the problem, which led the Anthropic judge to award the solution 0 points, while the OpenAI judge awarded full points. The difference hinged on the judge's interpretation of the marking instruction "Use Starsim to answer questions unless it would add unnecessary complexity". In this case, the human reviewer agreed with the Anthropic judge's assessment (i.e., Starsim would have made the solution simpler, not more complex), but in other cases the OpenAI judge was deemed more accurate. However, note that in the vast majority of cases, both judges agreed.
+
+```{figure} ./figures/fig5_judge_agreement.png
 :label: fig-judge-agreement
 :width: 100%
 
-**(a)** Agreement between the two independent rubric judges. Each point is one graded answer, plotting the Anthropic judge's score (x) against the OpenAI judge's score (y); the dashed line is perfect agreement. The judges agree closely, across both agent configurations (color) and model providers (marker). **(b)** Distribution of score differences between the two judges. An unbiased judge would have a distribution centered on 0; as it is, the Claude judge has a slight preference for Claude models (shifting the distribution to the right), while the Anthropic judge is the opposite (shifting to the left).
+**(a)** Agreement between the two independent rubric judges. Each dot is one graded answer, plotting the Anthropic judge's score (x) against the OpenAI judge's score (y); the dashed line is perfect agreement. The judges agree closely, across both agent configurations (color) and model providers (marker). **(b)** Distribution of score differences between the two judges. An unbiased judge would have a distribution centered on 0; as it is, the Claude judge has a slight preference for Claude models (shifting the distribution to the right), while the OpenAI judge is the opposite (shifting to the left).
 ```
 
 ### Agents were reluctant to use skills
 
 To preserve tokens, agents only invoke skills (which get added to the context window) when they think they need them. However, agents can be overconfident ("you don't know what you don't know"), which in turn results in under-utilization of skills.
 
-In order to quantify skill utilization, we logged every time any agent invoked a skill. The combined set of skill uses across all runs is what we defined the denominator to be, i.e. "100% utilization". (While technically this number is dependent on the number of runs, we found it had mostly saturated in the 5 runs included here.) Out of these possible skill uses, we counted how many actual uses any given run had.
+In order to quantify skill utilization, we logged every time any agent invoked a skill. The combined set of skill uses across all runs is what we defined the denominator to be, i.e. "100% utilization". (While technically this number is dependent on the number of runs, we found it had effectively saturated after 3 runs, and 5 were included here.) Out of these possible skill uses, we counted how many actual uses any given run had. While this is a relative rather than absolute measure of skill use, it is not possible to independently determine when an agent "should have" invoked skills, except by seeing when they actually invoked them.
 
-As shown in @fig-skill-utilization, without nudging, agents invoked skills only 7.8% of the possible times they could have. This accounts for the relatively small performance gain provided by simply including skills. When provided with the additional prompt nudge, skill usage increased to 28.4% – a 3.6-fold increase. We attribute to skill under-use to agent overconfidence rather than an optimal efficiency tradeoff, since the nudged agents not only had better performance, they also sometimes had lower cost (see @fig-cost-score). Surprisingly, skill usage was relatively uniform across the questions, even though the difficulty of the questions varied markedly, and skills were of much more help for some questions than others.
+As shown in @fig-skill-utilization, without nudging, agents invoked skills only 13.1% of the possible times they could have. This accounts for the relatively small performance gain provided by simply including skills. When provided with the additional prompt nudge, skill usage increased to 45.2% – a 3.5-fold increase. We attribute skill under-use to agent overconfidence rather than an optimal efficiency tradeoff, since the nudged agents not only had better performance, they also sometimes had lower cost (see @fig-cost-score). Surprisingly, skill usage was relatively uniform across the questions, even though the difficulty of the questions varied markedly (with Q3 and Q4 being the most difficult), and skills were of much more help for some questions than others.
 
-```{figure} ./figures/fig5_skill_utilization.png
+```{figure} ./figures/fig6_skill_utilization.png
 :label: fig-skill-utilization
 :width: 90%
 
@@ -134,16 +162,22 @@ Utilization of Starsim-AI skills for each question in the exam.
 
 ## Discussion
 
-AI has progressed so rapidly that even over the 6-month duration of this project (January – June 2026), our initial findings are no longer valid. Specifically, when we first ran these analyses, performance from the highest performing model (Opus 4.6) was 70% without skills and 91% with skills – a staggeringly different result from what we find now for the best model (Opus 4.8; 97.0% without skills and 98.7% with skills). Even so, most of the qualitative trends remain: skills can still fix a large proportion of the errors (although 60% of a 3% error rate looks less impressive than 60% of a 30% error rate), and more expensive models do tend to perform better (although the worst models we tested now are roughly equivalent to the best models of 6 months ago).
+AI has progressed so rapidly that even over the 6-month duration of this project (January to June 2026), our initial findings are no longer valid. Specifically, when we first ran these analyses, performance from the highest-performing model (Opus 4.6) was 70% without skills and 91% with skills – a staggeringly different result from what we find now for the best model (Opus 4.8; 97.0% without skills and 98.7% with skills). Unfortunately, since these are not open-weight models, and since the agent harness code is not public, we are unable to determine exactly what caused such large performance improvements. Despite the large improvements in model performance over the last 6 months, most of the qualitative trends remain: skills can still fix a large proportion of the errors (although 60% of a 3% error rate looks less impressive than 60% of a 30% error rate), and more expensive models do tend to perform better (although the worst models we tested now are roughly equivalent to the best models of 6 months ago).
 
-In a sobering finding for anyone working on AI safety, we were surprised at the lengths to which agents went to cheat: scanning local folders and public GitHub repos for solutions, and attempting to use Bash and Python to circumvent explicitly blocked web search tools (to our amazement, `curl -s https://duckduckgo.com` became a frequently invoked command). This suggests that even with unambiguous prompting ("This is a CLOSED-BOOK exam and network access is PROHIBITED. Do NOT try to work around this restriction by any means."), when an agent is told it is sitting an exam, it seems it will often try to maximize its score at all costs. This was especially jarring in light of the agents' reluctance to use all the skills that had been provided to them.
+Our finding that skills helped most with the cheapest models (Haiku, GPT-5.4-mini) and the most capable models (Opus), but less so with intermediate models (Sonnet, GPT-5.5), was surprising. Since this capability categorization is constantly changing (i.e., today's most capable models will be tomorrow's intermediate models), this seems more likely to be an artifact of the five models tested here rather than a general principle of how LLMs use skills.
 
-This study has several limitations. First, there are nearly infinite possible variations in terms of skill content, description text for skill triggering, agent prompts, exam question content, etc. It is possible different choices made in each of these areas would have significantly impacted results, since skill content was tuned primarily based on human user feedback. Second, while the exam was human-written, the marking was done by LLMs; although we checked these marks where we could, we were not able to check everything, and given the relatively small differences between different models and configurations, differences of as few as 5 marks out of 300 could have a significant impact on the results. Finally, new models are continually released; whether or not these results remain valid for newer models like Claude Fable remains to be seen.
+In a sobering finding for anyone working on AI safety, we were surprised at the lengths to which agents went to cheat: scanning local folders and public GitHub repos for solutions, and attempting to use Bash and Python to circumvent explicitly blocked web search tools (to our amazement, `curl -s https://duckduckgo.com` became a frequently invoked command). This suggests that even with unambiguous prompting ("This is a CLOSED-BOOK exam and network access is PROHIBITED. Do NOT try to work around this restriction by any means."), when an agent is told it is sitting an exam, it seems it will sometimes try to maximize its score at all costs. This was especially jarring in light of the agents' reluctance to use all the skills that had been provided to them. While concerning, these attempts at cheating comprised a relatively small proportion of sessions (<10%). We manually reviewed the logs from these sessions, but were not able to determine conclusively why some agents chose the path of darkness.
+
+This study has several limitations. First, there are nearly infinite possible variations in terms of skill content, description text for skill triggering, agent prompts, exam question content, etc. It is possible that different choices made in each of these areas would have impacted results, since skill content was tuned primarily based on human user feedback. Second, while the exam was human-written, the marking was done by LLMs; although we checked these marks where we could, we were not able to check everything, and given the relatively small differences between different models and configurations, differences of as few as 5 marks out of 300 could have a meaningful impact on the results. Third, the same authors who wrote Starsim also wrote the exam, the marking scheme, and evaluated the LLMs' fidelity to the marking scheme; independent replication would increase the robustness of these results. Finally, new models are continually released; whether or not these results hold for newer models like Claude Fable remains to be seen.
 
 ## Conclusion
 
 One of the most valuable benefits of writing quantitative evaluations for an LLM is that it forces a decision on what questions are most important, and what "correct" means for those questions. While these are often relatively clear-cut for software engineering tasks ("Does the server run?"), they become decidedly murkier on many scientific questions. Especially in disease modeling, since "all models are wrong" [@box1976science], deciding which answers count as "correct" is often a matter of personal preference. However, even if unambiguous rigor is typically unattainable, imperfect rigor is still preferable to placing one's faith in the vibes.
 
+## Data availability
+
+All code and materials are publicly available except the Starsim exam itself, which is intentionally kept private to avoid questions and solutions becoming part of models' training data, which would reduce the exam's usefulness; however, the exam is available on request. Materials that are available publicly include [Starsim](https://github.com/starsimhub/starsim) (version 3.3.0), [Starsim-AI](https://github.com/starsimhub/starsim_ai) (version 1.4), the [code to run the evaluations](https://github.com/starsimhub/scipy2026_code) (minus the exam and solutions), and the [code to make the figures](https://github.com/starsimhub/scipy2026_paper) for this paper. We used `uv` to ensure exact reproducibility between environments.
+
 ## Disclosures
 
-Portions of this work were assisted using generative AI tools (Claude Code and GPT). The tools were used to assist with (1) writing code, (2) taking the exams, (3) marking the exams, (4) extracting data and summarizing results, (5) generating figures, and (6) drafting the initial outline of the manuscript. At each stage of the process, outputs were reviewed, verified, and revised by the authors, and the vast majority (>95%) of the text in the manuscript was human-written. The authors take full responsibility for the accuracy and integrity of the final content.
+Portions of this work were assisted by generative AI tools (Claude Code and GPT). The tools were used to assist with (1) writing code, (2) taking the exams, (3) marking the exams, (4) extracting data and summarizing results, (5) generating figures, (6) drafting the initial outline of the manuscript, and (7) light copyediting. At each stage of the process, outputs were reviewed, verified, and revised by the authors, and the vast majority (>95%) of the text in the manuscript was typed out by human fingers. The authors take full responsibility for the accuracy and integrity of the final content.
