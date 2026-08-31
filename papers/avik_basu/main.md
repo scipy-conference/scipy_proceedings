@@ -328,8 +328,9 @@ its attribution PSI is 0.752, far above the 0.25 "alert" band, a ratio of roughl
 91. The racial composition of the traffic barely moved; the model's *use* of race
 changed substantially. `native-country` shows the same pattern (0.426 vs. 0.038),
 as do `hours-per-week` (0.118 vs. 0.008) and `capital-loss` (0.176 vs. 0.000). An
-input-drift dashboard would show nothing actionable on any of these four; an
-attribution dashboard would flag all of them.
+input-drift dashboard would show nothing actionable on any of these four; in
+attribution space all four clear the warn threshold and `race` and
+`native-country` clear the alert threshold.
 
 This is the sense in which the predictions here are right for the wrong reasons.
 The model's F1 *improved* slightly across this shift, so nothing in the
@@ -642,7 +643,7 @@ Our two studies delimit where it helps. Under a demographic covariate shift
 ([](#case-a)), input-drift monitoring separated the two periods more decisively
 than the attribution view did; what the attribution view added was per-feature, on
 `race` and three others where the inputs stayed quiet while the attributions
-crossed the alert band. In [](#case-b), versions scored on byte-identical inputs
+crossed the warn band. In [](#case-b), versions scored on byte-identical inputs
 preserve accuracy while relocating a rank-3 feature's contribution onto a
 correlated substitute, so input and performance monitoring are both silent and
 explanation drift is the only signal that fires. It stays quiet on a true null
