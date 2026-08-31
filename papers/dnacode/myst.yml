@@ -1,0 +1,79 @@
+version: 1
+
+extends: ../papers.yml
+
+project:
+  id: scipy-2026-dnacode
+  title:
+    'Benchmarking Edge-Accelerated Genomics: A Pilot Study of Unified Memory
+    Architectures in Deep-Sea Metagenomics'
+  description:
+    'A pilot study benchmarking GPU-accelerated metagenomic read binning on the
+    NVIDIA DGX Spark (Grace Blackwell GB10), achieving 10–44× end-to-end speedup
+    over CPU baselines using RAPIDS cuML, PySpark, and Project Glow.'
+
+  authors:
+    - name: Vinay Vyas
+      orchid: 0009-0001-7360-2155
+      email: vinaykvyas@gmail.com
+      affiliations:
+        - Independent Researcher
+      corresponding: true
+
+  keywords:
+    - GPU acceleration
+    - metagenomics
+    - RAPIDS
+    - unified memory
+    - edge computing
+    - PySpark
+    - deep-sea genomics
+
+  abbreviations:
+    GPU: Graphics Processing Unit
+    CPU: Central Processing Unit
+    UMAP: Uniform Manifold Approximation and Projection
+    DBSCAN: Density-Based Spatial Clustering of Applications with Noise
+    PCA: Principal Component Analysis
+    VRAM: Video Random Access Memory
+    PCIe: Peripheral Component Interconnect Express
+    LPDDR5X: Low Power Double Data Rate 5X
+    SoC: System on Chip
+    JVM: Java Virtual Machine
+    UDF: User-Defined Function
+    CAPEX: Capital Expenditure
+    OPEX: Operating Expenditure
+    cuML: CUDA Machine Learning Library
+    cuDF: CUDA DataFrame Library
+    SRA: Sequence Read Archive
+    NCBI: National Center for Biotechnology Information
+    NVLink: NVIDIA NVLink interconnect
+    FASTQ: FAST All Quality format
+    k-mer: k-length nucleotide subsequence
+
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - rapids_cuml
+        - rapids_spark
+        - parabricks
+        - kislyuk2009
+        - campello2013
+        - martin2017malaspina
+        - sklearn1
+        - dagster
+        - sra_toolkit
+        - glow2019
+        - nvidia_dgx_spark_hardware
+        - nvidia_hotchips_2025
+        - servethehome_gb10
+        - arm_developer_dgx_spark
+        - nvidia_dgx_spark_product
+
+exports:
+  - id: pdf
+    format: typst
+    template: https://github.com/curvenote-templates/scipy.git
+    article: main.md
+    output: full_text.pdf
