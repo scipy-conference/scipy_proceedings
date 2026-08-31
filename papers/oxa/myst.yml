@@ -1,0 +1,213 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-oxa
+  title: 'OXA: An Open Exchange Architecture for Modular and Composable Scientific Content'
+  description: >-
+    OXA is a community-driven specification that represents scientific documents
+    and their components as typed, addressable JSON objects, providing an open
+    exchange substrate for modular and composable research.
+  authors:
+    - id: rowanc1
+      name: Rowan Cockett
+      email: rowan@curvenote.com
+      corresponding: true
+      orcid: 0000-0002-7859-8394
+      github: rowanc1
+      affiliations:
+        - id: csf
+        - id: curvenote
+        - id: jupyter
+      roles:
+        - Conceptualization
+        - Methodology
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+    - id: nokome
+      name: Nokome Bentley
+      email: nokome@stenci.la
+      orcid: 0000-0003-1608-7967
+      github: nokome
+      affiliations:
+        - id: stencila
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Writing – review & editing
+    - id: monica
+      name: Monica Granados
+      orcid: 0000-0002-6750-9341
+      affiliations:
+        - id: creativecommons
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+    - name: Franklin Koch
+      orcid: 0000-0002-6393-7058
+      affiliation:
+        - id: curvenote
+        - id: jupyter
+      github: fwkoch
+      roles:
+        - Conceptualization
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: michael
+      name: Michael Markie
+      orcid: 0000-0001-7021-3018
+      affiliations:
+        - id: elifepathways
+      roles:
+        - Conceptualization
+        - Methodology
+        - Project administration
+        - Supervision
+        - Writing – review & editing
+    - name: Steve Purves
+      orcid: 0000-0002-0760-5497
+      affiliation:
+        - id: curvenote
+        - id: jupyter
+      github: stevejpurves
+      email: steve@curvenote.com
+      roles:
+        - Conceptualization
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: carlos
+      name: Carlos Scheidegger
+      orcid: 0009-0006-9163-6136
+      github: cscheid
+      affiliations:
+        - id: posit
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Writing – review & editing
+    - id: paul
+      name: Paul Shannon
+      orcid: 0000-0002-3684-4470
+      affiliations:
+        - id: elifepathways
+      roles:
+        - Conceptualization
+        - Methodology
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – review & editing
+    - id: gabe
+      name: Gabriel Stein
+      orcid: 0000-0003-4003-0418
+      github: gabestein
+      affiliations:
+        - id: openrxiv
+      roles:
+        - Conceptualization
+        - Writing – review & editing
+    - id: tracy
+      name: Tracy Teal
+      email: tracy@openrxiv.org
+      orcid: 0000-0002-9180-9598
+      github: tracykteal
+      affiliations:
+        - id: openrxiv
+      roles:
+        - Conceptualization
+        - Investigation
+        - Methodology
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+  affiliations:
+    - id: csf
+      name: Continuous Science Foundation
+      ror: https://ror.org/00zwsrq61
+      github: continuous-foundation
+      bluesky: continuous.foundation
+      linkedin: https://www.linkedin.com/company/continuous-foundation
+    - id: curvenote
+      name: Curvenote Inc.
+      country: Canada
+      ror: https://ror.org/02mz0e468
+      email: support@curvenote.com
+      url: https://curvenote.com
+      linkedin: https://www.linkedin.com/company/curvenote/
+      bluesky: curvenote.com
+      github: curvenote
+    - id: openrxiv
+      name: openRxiv
+      url: https://openrxiv.org
+      ror: https://ror.org/03vc1wb14
+    - id: stencila
+      name: Stencila
+      url: https://stenci.la
+    - id: elifepathways
+      name: eLife Pathways
+      url: https://elifepathways.org
+      ror: https://ror.org/04rjz5883
+    - id: posit
+      name: Posit, PBC
+      url: https://posit.co
+      ror: https://ror.org/03wc8by49
+    - id: creativecommons
+      name: Creative Commons
+      url: https://creativecommons.org
+      ror: https://ror.org/02ed4cj64
+    - id: jupyter
+      name: Project Jupyter
+      url: https://jupyter.org
+  keywords:
+    - modular science
+    - open standards
+    - reproducibility
+    - executable documents
+    - scientific publishing
+    - JATS
+  # Abbreviations used in the paper (https://mystmd.org/guide/glossaries-and-terms#abbreviations)
+  abbreviations:
+    OXA: Open Exchange Architecture
+    JATS: Journal Article Tag Suite
+    MECA: Manuscript Exchange Common Approach
+    AST: Abstract Syntax Tree
+    RFC: Request for Comments
+    CSF: Continuous Science Foundation
+    MyST: Markedly Structured Text
+    RDS: Reproducible Document Stack
+    ERA: Executable Research Article
+    AGU: American Geophysical Union
+    ATProto: AT Protocol
+  # Citation keys without a DOI are exempted from the `doi-exists` check
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - jupyter
+        - jats
+        - meca
+        - notebooksinpublishing
+        - pandoc
+        - quarto
+        - openrxivlabsreader
+        - unifiedjs
+        - elife-era
+        - stencila
+        - plotly
+        - bokeh
+        - altair
+        - jats4r
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
