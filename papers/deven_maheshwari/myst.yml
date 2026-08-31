@@ -55,7 +55,7 @@ project:
         - hastie1990
         - xiong2019
         - agarwal2021
-        - anthropic2024
+        - anthropic2025
         - sklearn1
         - sklearn2
   exports:

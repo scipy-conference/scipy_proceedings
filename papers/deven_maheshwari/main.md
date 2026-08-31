@@ -39,16 +39,14 @@ class that automates smoothing parameter selection over large matrices of data. 
 case study on forest cover across nine monitoring sites, we show how GAMMs can be a scalable and
 interpretable improvement on other common time series models. This is especially
 applicable in noisy, low-data, and multi-entity regimes often encountered in conservation databases.
-A secondary case study on elephant movement telemetry then demonstrates the robustness of this
+A secondary case study on elephant movement speed, tracking over the course of one year, demonstrates the robustness of this
 pipeline by applying it unmodified to a dataset that differs from the forest series in sampling
 frequency, response variable, and noise structure. We show the relative improvements GAMs offer in
 comparison to Generalized Linear Models (GLMs) and standard linear regression models (OLS), as
 well as the challenges of considering deep learning regression analysis for ecological data.
 
 We further discuss how our design decisions were shaped by trade offs between interpretability,
-robustness, and predictive performance. Additionally, we reflect on the broader challenges of
-developing data analysis tools. This includes mitigating the risks of overfitting and
-maintaining user trust while abstracting complexity.
+robustness, and predictive performance. This includes topics like mitigating the risks of overfitting and maintaining user trust.
 
 Finally, we explain how we implemented our framework within Ecoscope, an open-source Python
 library for conservation analytics. We provide a brief overview of the package architecture and
@@ -56,31 +54,20 @@ demonstrate how Ecoscope enables the successful real-world deployment of our tre
 pipeline within the EarthRanger monitoring platform, which is currently being used by more than
 800 wildlife conservation sites across the globe.
 
-### Research Questions
-
-This study seeks to answer three main questions:
-
-1. Which regression modeling approach provides the best balance of predictive performance,
-   robustness, and interpretability across ecological datasets?
-2. To what extent do multi-site models, such as GAMMs, improve trend estimation and prediction
-   capabilities for regime changes in ecological datasets compared to per-site analysis?
-3. How do current frontier LLMs fare in hyperparameterization for machine learning data analysis models?
-
 ## Related Work
 
 ### EarthRanger and the Ecoscope Library
 
 EarthRanger is an open-source software platform developed by the Allen Institute for AI and
-Wildlife Dynamics, designed to support protected area managers, ecologists, and wildlife
+Wildlife Dynamics. It is used to support protected area managers, ecologists, and wildlife
 biologists in analysis. The system consists of seven main components — Core Server, API,
 Storage, Gundi, Web App, Mobile App, and Ecoscope — providing functionality for data handling
 and storage, real-time and post-collection analysis, visualization, and sharing. EarthRanger
 handles a variety of data including GPS telemetry, ranger patrol data, camera traps, and remote sensing.
 
-Ecoscope is the open-source Python analytics layer of EarthRanger, developed and maintained by
-Wildlife Dynamics and AI2. Its modules are used for analysis workflows related to wildlife
+Ecoscope is the open-source Python analytics layer of EarthRanger. Its modules are used for analysis workflows related to wildlife
 movement and conservation datasets. It can handle data from major Earth reporting
-data lakes -- including EarthRanger, Google Earth Engine, MoveBank, and GeoPandas. The library
+data lakes including EarthRanger, Google Earth Engine, MoveBank, and GeoPandas. The library
 supports conservationists as a visualization tool with established workflows unique to each
 study, and has been integral in reducing analysis time in a wide range of research and conservation
 fields.
@@ -100,7 +87,7 @@ sparseness, irregularity, and comparability. Measurement noise is common due to 
 interaction from other abiotic and biotic factors. Additionally, there exists a massive obstacle in
 communicating findings to sites exhibiting similar traits.
 
-In choosing a well-fitting and robust regression model we consider the relative strengths and increased
+In choosing a well fitting and robust regression model we consider the relative strengths and increased
 complexity of four curves: standard linear regression (OLS), Generalized Linear Models (GLM), Generalized
 Additive Models (GAM), and Generalized Additive Mixed Models (GAMMs).
 
@@ -283,7 +270,7 @@ because they allow test observations to occur before their corresponding trainin
 Rolling origin evaluation addresses this by enforcing chronological ordering throughout the
 evaluation pipeline.
 
-A minimum training size is specified (15 years for the forest cover work). At each step, the model is
+A minimum training size is specified (15 years for the forest cover work; not applied to the single-year elephant dataset). At each step, the model is
 trained on all observations up to a cutoff year and evaluated on the subsequent $N$ years of
 observations (3 years in this work). The cutoff is then advanced by one year and the process repeats
 until the end of the series is reached. For each evaluation window, MAE and RMSE are computed
@@ -324,7 +311,7 @@ We apply the trend fitting pipeline to nine Kenyan forest monitoring sites spann
 Forest survival area in acres is extracted from the Hansen Global Forest Change dataset
 [@hansen2013] via Google Earth Engine, retaining only pixels whose year-2000 tree cover exceeds
 60%. Annual loss within each site is accumulated and subtracted from the baseline forested area to
-give a survival curve. OLS, GLM, and GAM are fit independently per site, and the GAMM is fit jointly
+give a survival curve. OLS, GLM, and GAM are fit independently per site. The GAMM is fit jointly
 across all nine sites as a shared cubic B-spline trend with a per-site random intercept, estimated
 by Markov chain Monte Carlo through Bambi [@bambi] and PyMC [@pymc].
 
@@ -383,7 +370,7 @@ sites. OLS $R^2$ ranges from 0.80 to 0.98, and GLM $R^2$ from 0.81 to 0.99.
 Selected $\alpha$ values are ecologically interpretable. Eburu receives $\alpha = 0.0014$ reflecting its
 sharp single-year drop. Samburu receives $\alpha = 95.5$ consistent with its near-flat trend.
 MaraConservancies receives $\alpha = 0.035$ capturing its sharp 2012–2014 cliff, and Marmanet
-receives $\alpha = 14.85$ despite a visible regime change, reflecting that rolling origin
+receives $\alpha = 14.85$ despite a visible regime change. This shows how  rolling origin
 cross-validation favors smoother curves.
 
 :::{table} In-sample fit metrics comparing the smoothing parameter, AIC, and $R^2$ for each site.
@@ -482,8 +469,8 @@ deployments. The research question: can an LLM propose a credible and narrower s
 (threshold of 20 values) when fed site characteristics? For each of the nine sites, a prompt was
 constructed describing quantitative characteristics computed from the data: site name, year range,
 total forest loss, mean annual loss, variance of annual loss, and the presence and timing of a
-regime change. Claude Sonnet was selected as the model of choice due to its widespread use in
-industry [@anthropic2024]. Rounds of full grid search, LLM-guided search, and a random control
+regime change. Claude Sonnet 4, was selected as the model of choice due to its widespread use in
+industry [@anthropic2025]. Rounds of full grid search, LLM-guided search, and a random control
 group of 20 $\alpha$ values in a random range of equal log-width to the LLM suggestion were used
 to generate a comparison table.
 
@@ -513,7 +500,7 @@ as Marmanet ($\alpha = 14.85$), Narok ($\alpha = 47.5$), and Samburu ($\alpha = 
 :::
 
 Overall, the context window of LLMs is not currently suited for hyperparameterization when
-compared to the brute-force grid search implemented in Ecoscope. There is limited current
+compared to the brute force grid search implemented in Ecoscope. There is limited current
 reasoning about the nonlinear dynamics of each site as well as model awareness of regime changes
 in the data. The LLM fails to represent the relationship between the ecological site factors and the
 smoothing penalty under cross-validation. For example, Marmanet has a visible drop in the data
