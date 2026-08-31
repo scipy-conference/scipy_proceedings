@@ -1,0 +1,59 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-loi_jesse
+  title:
+    'Bridging the Technical Gap: A Student-Led Data Extraction Pipeline for
+    Community-Driven Document Analysis'
+  description:
+    'This paper presents the impacts of using LLMs to extract and use
+    information from PDF documents and how effective it is compared to human
+    labeling. We present results from fuzzy matches between human and LLM
+    labels.'
+
+  # Binding the abstract and contents clearly for the single-paper template
+  abstract: |
+    This paper presents the impacts of using Large Language Models (LLMs) to extract and process information from complex PDF documents, assessing its operational efficiency compared to traditional human labeling workflows. Hosting a multi-campus datathon, we label over 400 documents to create a ground truth for our model evaluation. We present comparative results highlighting fuzzy matches between human annotations and LLM-generated labels. As a result, we demonstrate the viability of large language models in document analysis.
+
+  authors:
+    - name: Jesse Loi
+      email: jesse.loi418@gmail.com
+      orcid: 0000-0002-0696-3882
+      affiliations:
+        - Seattle University
+
+    - name: Ariana Mendible
+      email: mendible@seattleu.edu
+      orcid: 0000-0001-7820-3658
+      affiliations:
+        - Seattle University
+
+  keywords:
+    - document extraction
+    - LLMs
+    - data labeling
+    - LLM evaluation
+
+  abbreviations:
+    MyST: Markedly Structured Text
+    RAG: Retrieval-Augmented Generation
+    LLM: Large Language Model
+
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
+  bibliography:
+    - references.bib
