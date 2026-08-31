@@ -1,0 +1,60 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-jarrod_millman
+  # Ensure your title is the same as in your `main.md`
+  title: 'The Space to Build It: How Scientific Needs Shaped an Ecosystem'
+  # subtitle:
+  description:
+    'A personal, memoir-style account for the "Spirit of SciPy" track, tracing
+    one path through 25 years of the scientific Python ecosystem''s
+    growth---from a 2005 meeting at UC Berkeley to the coordination structures
+    and academic homes that sustain it today. Organized around how the ecosystem
+    started, how it grew, and how it has lasted, the paper closes by asking who
+    is trusted with the room and time to build such infrastructure, and who pays
+    for that time when their institutions will not.'
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: K. Jarrod Millman
+      email: millman@berkeley.edu
+      orcid: 0000-0002-5263-5070
+      affiliations:
+        - Berkeley Institute for Data Science, UC Berkeley
+      corresponding: true
+  keywords:
+    - Scientific Python
+    - NumPy
+    - SciPy
+    - Neuroimaging
+    - Berkeley
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - oliphant2004status
+        - oliphant2004comments
+        - oliphant2005updating
+        - oliphant2005numeric3
+        - perry2005guido
+        - oliphant2005berkeley
+        - oliphant2006numpy1.0
+        - oliphant2007sprint
+        - millman2009scipy070
+        - scipy070notes
+        - scientificpython2020planning
+        - schreiner2023scientificpythondevguide
+        - scientificpythonDevelopmentGuide
+        - ucberkeley2025datamajor
+        - cloudbankEducators
+        - perez2024bidsvision
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
