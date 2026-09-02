@@ -1,0 +1,63 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-autofoam
+  title: 'AutoFOAM: The Self-Refining Autonomous OpenFOAM Agent'
+  description: |
+    AutoFOAM is a self-evolving LLM agent that autonomously authors, executes,
+    scores, and iteratively improves OpenFOAM cases from natural-language prompts
+    using a seven-layer evolution loop with anti-collapse mechanisms.
+  authors:
+    - name: Arun Govind Neelan
+      email: arungovindneelan@gmail.com
+      corresponding: false
+      affiliations:
+        - SimuNetics, Kanniyakumari, Tamil Nadu -- 629173
+    - name: A Seshaditya
+      email: adi@onnes.in
+      corresponding: true
+      affiliations:
+        - Onnes Cryogenics, Hyderabad, India
+        - Quasi AI, Berlin, Germany
+  keywords:
+    - Computational Fluid Dynamics
+    - OpenFOAM
+    - Large Language Models
+    - autonomous agent
+    - self-evolving AI
+  abbreviations:
+    CFD: Computational Fluid Dynamics
+    LLM: Large Language Model
+    DPO: Direct Preference Optimization
+    SFT: Supervised Fine-Tuning
+    RAG: Retrieval-Augmented Generation
+    OOD: Out-of-Distribution
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - weller1998tensor
+        - anderson2020computational
+        - openfoam_foundation
+        - brown2020language
+        - touvron2023llama
+        - hui2024qwen2
+        - bai2023qwen
+        - rafailov2023direct
+        - yue2025foamgpt
+        - pandey2025openfoamgpt
+        - yue2025foamagent2
+        - shumailov2024curse
+        - vllm
+        - xgrammar
+        - chroma
+        - ghia1982
+        - devahldavis1983
+        - somasekharan2025cfdllmbench
+        - yue2025foamagent
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
