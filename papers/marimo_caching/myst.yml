@@ -1,0 +1,80 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>`; the folder is `<firstname_surname>`
+  id: scipy-2026-marimo_caching
+  # Ensure your title is the same as in your `main.md`
+  title: 'Hash all the things: Caching for fast notebook restarts'
+  subtitle: Content-addressed, cell-level cache reuse in marimo
+  description: >
+    A content-addressed cache for cells in a reactive Python notebook. Hash
+    recurrence over a dataflow DAG with parent-hash substitution at unhashable
+    boundaries; lazy stub loading for typed blobs; and an empirical
+    characterization of where caching wins and where it loses (cheap-body cells
+    with large refs).
+  license: CC-BY-4.0
+  open_access: true
+  authors:
+    - name: Dylan Madisetti
+      email: dylan@marimo.io
+      orcid: 0000-0003-1269-4989
+      corresponding: true
+      affiliations:
+        - marimo
+      roles:
+        - Conceptualization
+        - Methodology
+        - Software
+        - Investigation
+        - Validation
+        - Visualization
+        - Writing – original draft
+    - name: Myles Scolnick
+      email: myles@marimo.io
+      orcid: 0009-0003-4254-9632
+      affiliations:
+        - marimo
+      roles:
+        - Software
+        - Conceptualization
+        - Writing – review & editing
+    - name: Akshay Agrawal
+      email: akshay@marimo.io
+      orcid: 0009-0004-6472-0055
+      affiliations:
+        - marimo
+      roles:
+        - Software
+        - Conceptualization
+        - Writing – review & editing
+  keywords:
+    - reactive notebooks
+    - content-addressed caching
+    - memoization
+    - reproducibility
+    - dataflow
+    - marimo
+    - Python
+  abbreviations:
+    DAG: Directed Acyclic Graph
+    CA: Content-Addressed
+    EP: ExecutionPath
+    CEP: ContextExecutionPath
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - vanderplas2020pluto
+        - bostock2017observable
+        - valim2020livebook
+        - ipyflow
+        - victor2012inventing
+        - jupytercache
+        - diskcache
+        - koop2017dataflow
+        - dolstra2004nix
+        - dolstra2006purely
+        - joblib
+        - streamlit2023caching
+        - manz2026beyond

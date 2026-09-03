@@ -1,0 +1,65 @@
+// Cache key dispatch — top-down flow.
+// Rendered to figs/fig1_dispatch_flow.png via `make flowchart`, then
+// composed with the rasterized derivation listing (figs/alg_hash.typ)
+// into figs/fig1_dispatch.png by figs/compose_fig1.py.
+//
+// A cell with no references contributes only its compiled bytecode.
+// Otherwise, each reference contributes either a content hash or the
+// stored key of the cell that produced it. These contributions feed the
+// same sha256 combiner with the cell's compiled bytecode to produce H(cell).
+
+digraph dispatch {
+  rankdir = TB;
+  graph [bgcolor="transparent", fontname="serif", fontsize=11,
+         nodesep=0.25, ranksep=0.32];
+  node  [fontname="serif", fontsize=10, color="#333333", penwidth=0.9,
+         margin="0.10,0.05"];
+  edge  [fontname="serif", fontsize=9, color="#555555", arrowsize=0.7];
+
+  // ── entry ─────────────────────────────────────────────────────
+  cell [label="cell",
+       shape=box, style="rounded,filled", fillcolor="#f5f5f5"];
+
+  // ── decisions ────────────────────────────────────────────────
+  q_refs [label="any\nreferences?",
+          shape=diamond, style=filled, fillcolor="#e3f2fd"];
+  per_ref [label="for each ref",
+           shape=box, style="rounded,filled", fillcolor="#f5f5f5"];
+  q_content [label="content\naddressable?",
+          shape=diamond, style=filled, fillcolor="#e8f5e9"];
+
+  // ── reference contributions ──────────────────────────────────
+  no_refs [label="no reference\nhashes",
+        shape=box, style="rounded,filled", fillcolor="#e3f2fd"];
+  content [label="content hash\nsha256(value bytes)",
+        shape=box, style="rounded,filled", fillcolor="#e8f5e9"];
+  producer [label="producer key\nH(parent)",
+        shape=box, style="rounded,filled", fillcolor="#fff3e0"];
+
+  // ── combiner + output (bottom) ───────────────────────────────
+  src     [label="cell bytecode\nsha256(bytecode)",
+           shape=box, style="rounded,filled", fillcolor="#f5f5f5"];
+  combine [label="combine keys\nsha256(src ‖ k₁ ‖ k₂ ‖ …)",
+           shape=box, style="rounded,filled", fillcolor="#fafafa"];
+  out     [label="H(cell)",
+           shape=oval, style=filled, fillcolor="#fff9c4"];
+
+  // ── flow ────────────────────────────────────────────────────
+  cell      -> q_refs;
+  q_refs    -> no_refs  [label="no"];
+  q_refs    -> per_ref  [label="yes"];
+  per_ref   -> q_content;
+  q_content -> content  [label="yes"];
+  q_content -> producer [label="no"];
+
+  no_refs -> combine;
+  content -> combine;
+  producer -> combine;
+  src  -> combine;
+  combine -> out;
+
+  // decisions on the spine, terminals beside them
+  { rank=same; q_refs; no_refs; }
+  { rank=same; q_content -> content -> producer [style=invis]; }
+  { rank=same; src; combine; }
+}
