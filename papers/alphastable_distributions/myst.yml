@@ -1,0 +1,102 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-alphastable_distributions
+  plugins:
+    - type: javascript
+      path: typst-cases.mjs
+  # Ensure your title is the same as in your `main.md`
+  title:
+    Density Functions and Random Number Generators of Alpha-Stable Distributions
+  # subtitle:
+  description:
+    The scipy-compatible python implementation of density functions \ and random
+    number generators for alpha-stable random variables.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Wael Tabbara
+      email: wkt03@mail.aub.edu
+      affiliations:
+        - Electrical & Computer Eng. Department, American University of Beirut,
+          Lebanon.
+      orcid: 0009-0003-0828-9507
+    - name: Sharafeddine Sharafeddine
+      email: ss4475@cornell.edu
+      affiliations:
+        - School of Electrical & Computer Engineering, Cornell University, USA.
+        - Electrical & Computer Eng. Department, American University of Beirut,
+          Lebanon.
+      orcid: 0009-0002-5623-575X
+    - name: Ahmad El-Hajj
+      email: aae108@mail.aub.edu
+      affiliations:
+        - Electrical & Computer Eng. Department, American University of Beirut,
+          Lebanon.
+      corresponding: true
+      orcid: 0009-0000-5343-1443
+    - name: Jihad Fahs
+      email: jf19@aub.edu.lb
+      affiliations:
+        - Electrical & Computer Eng. Department, American University of Beirut,
+          Lebanon.
+      orcid: 0000-0001-5670-7759
+    - name: Ibrahim Abou-Faycal
+      email: ia14@aub.edu.lb
+      affiliations:
+        - Electrical & Computer Eng. Department, American University of Beirut,
+          Lebanon.
+      orcid: 0000-0002-1596-318X
+  keywords:
+    - Heavy Tailed Data
+    - Heavy Tails
+    - Alpha Stable
+    - Levy Stable
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    PDF: Probability Density Function
+    CMS: Chambers-Mallows-Stuck
+    i.i.d: Independent and Identically Distributed
+    MSE: Mean Square Error
+    CDF: Commulative Distribution Function
+    AUB: American University of Beirut
+    HTP: Heavy Tails Package
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - kolmo1968
+        - Pollard1946LaplaceIntegral
+        - crovella1998heavy
+        - taleb2022statisticalconsequencesfattails
+        - sko2
+        - zolo
+        - Zolotarev1986
+        - ChambersJ.M.1976AMfS
+        - SamorodnitskyGennady2000Snrp
+        - NiederreiterHarald1992Rnga
+        - NolanJohnP.1997Ncos
+        - NolanJohnP2020USDM
+        - LePageRaoul1981CtaS
+        - MullerMervinE.1959Anoa
+        - NIST:DLMF
+        - SchnabelStefan2022Asaf
+        - BentkusV.2001LSRo
+        - Wintner1941CauchySingularities
+        - SciPyLevyStableManual
+        - alma991015644117709436
+        - Royuela-del-ValJavier2017l:FP
+        - Wuertz2016Stabledist
+        - teimouri2018alphastablerpackagemodelling
+        - Weron2004Computationally
+        - degroot2018probability
+        - robustanalysis
+        - JanickiAleksander1992Ciot
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.tex
+      output: full_text.pdf
