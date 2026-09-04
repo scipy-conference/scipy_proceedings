@@ -53,7 +53,7 @@ MNE-Python has no community manager; to the extent that community management hap
 [^bdfl]: The founding BDFL was Alexandre Gramfort, replaced by Daniel McCloy in 2022.
 
 ## Problem Statement
-Like many open-source software projects, MNE-Python struggles retain maintainers and reach a comfortable [Truck Factor](https://en.wikipedia.org/wiki/Bus_factor) [@AvelinoEtAl2016].
+Like many open-source software projects, MNE-Python struggles to retain maintainers and reach a comfortable [Truck Factor](https://en.wikipedia.org/wiki/Bus_factor) [@AvelinoEtAl2016].
 Part of the problem is that the pool is small: contributors and maintainers need relevant neuroscience knowledge (in order to implement sensible default behavior, stay on top of new methodological developments, and accurately communicate trade-offs for different analysis choices) and also need software development expertise (not just "writing good code", but also knowledge of testing, continuous integration and deployment, dependency and security management, and related topics).
 Since most MNE-Python users are not formally trained in software engineering, finding suitable candidates is difficult.
 The problem of attracting and retaining contributors is further aggravated by academic incentive systems which devalue open-source work compared to scientific publications [@WestnerEtAl2025];
@@ -112,8 +112,8 @@ In 2023, we held an Intermediate Sprint, open to alumni of the New Developer Spr
 Applications were again competitive, stipends were provided, and the sprint was again held online with staggered work times to accommodate participants' time zones.
 Participants chose larger contributing projects in advance, and could propose their own project (in their application) or choose from a range of pre-selected projects.
 The projects were more complex and took participants several days if not the whole week to complete.
-During the sprint, they joined with each other or with mentors for pair-programming sessions;
-hands-on contributing was complemented by daily short lectures on pertinent topics such as debugging, building documentation, deprecations, understanding output of the CIs we use, and more.
+During the sprint, they joined with each other or with mentors for pair-programming sessions.
+Hands-on contributing was complemented by daily short lectures on pertinent topics such as debugging, building documentation, deprecations, understanding output of the CIs we use, and more.
 While the New Developer Sprints had focused mostly on contribution skills, the projects at the Intermediate Sprint relied on neuroscience knowledge as well, making the experience more akin to the work done by seasoned contributors.
 Examples of sprint projects include how to handle bad channels when working with multiple recordings, adding functionality to equalize observation numbers ("epochs") for time-frequency-resolved data, fixing a bug in our permutation statistics code, or annotating eyetracking data.
 
@@ -124,16 +124,16 @@ We received funding in 2025, and began training three alumni of our Intermediate
 The funding again allowed us to provide substantial stipends to the trainees.
 For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
 
-After 6 months, onboarding activities transitioned from pre-prepared lessons to a combination of three activities:
+After 6 months, onboarding activities transitioned from prepared lessons to a combination of three activities:
 triage and PR review sessions, planning and execution of non-trivial documentation improvements,
 and phased improvements to our CI configuration.
 Plans for the second year of onboarding include deeper engagement with our user forum
 (including development of semi-automated approach to triaging user support queries),
 assessment and adoption of triage management tooling,
-involving the trainee maintainers in long-term planning (roadmap and funding) discussions,
+involving the trainee maintainers in long-term planning discussions (roadmap and funding),
 and integrating the lessons learned in year 1 into our in-process onboarding curriculum (see [](#curriculum) below).
 
-In addition to working directly with experienced MNE-Python maintainers, the trainee maintainers have also attended a variety of workshops and short courses, including training in Code-of-conduct response and enforcement, community management, and project management.
+In addition to working directly with experienced MNE-Python maintainers, the trainee maintainers have also attended a variety of workshops and short courses, including training in code-of-conduct response and enforcement, community management, and project management.
 Our funding for this onboarding project also supports two in-person sprints to integrate the trainee maintainers with the existing maintainer team.
 
 (curriculum)=
@@ -161,7 +161,7 @@ For both sprints, around half of the attendees continued to contribute beyond th
 Taking both sprints together, ten attendees contributed for two years or longer.
 In 2026, five and four years after the sprints, four attendees are still regularly contributing.
 Our contributor statistics show furthermore, that eight sprint attendees are currently ranking in the top 10% of all-time contributors to the project.[^topten]
-This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in this time.
+This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in that time.
 
 [^topten]: Contribution statistics are quantified as lines added to or deleted from the repository, as in [this script](https://github.com/mne-tools/mne-python/blob/bb034adbcfeda62560d36cd6dfd89301488260b5/tools/dev/update_credit_json.py); results can be viewed at https://mne.tools/dev/credits/credit.html. We acknowledge that this approach provides an incomplete picture of contribution history, but is (at the time of writing) the best estimate we have available.
 
@@ -178,7 +178,7 @@ This approach also allowed us to prioritize inclusivity in our recruitment and t
 As of now, this has lead to a slight increase in the diversity of our regular contributors and maintainers.
 Overall, we have retained roughly a third of the attendees for two years or longer.
 We do not have any insight into why long-term active attendees stop contributing, but assume that new careers, possibly outside of neuroscience, and the academic incentive system play a major role.
-However, that seven attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding approach on the project.
+However, that eight attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding approach on the project.
 
 
 
