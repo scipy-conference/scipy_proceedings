@@ -1,0 +1,53 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-pavan_govindaraju
+  # Ensure your title is the same as in your `main.md`
+  title: 'NODEFit: Fit time-series data with a Neural Differential Equation'
+  # subtitle:
+  description:
+    NODEFit is a Python package for fitting time-series data using Neural
+    Ordinary Differential Equations (Neural ODEs) and Neural Stochastic
+    Differential Equations (Neural SDEs).
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Pavan B. Govindaraju
+      email: pavan@splitfxm.com
+      affiliations:
+        - SplitFXM
+      corresponding: true
+      roles:
+        - Conceptualization
+        - Data curation
+        - Formal analysis
+        - Investigation
+        - Methodology
+        - Software
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
+  thumbnail: banner.png
+  keywords:
+    - neural-ode
+    - neural-sde
+    - time-series
+    - machine-learning
+    - differential-equations
+  bibliography:
+    - mybib.bib
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - chen2018torchdiffeq
