@@ -405,6 +405,14 @@ completes no trades and is a flat line at 0%. The decoupled system with
 −0.6%. The curve characterises behaviour, not a return expectation.
 ```
 
+In sum, on the same data and training budget, moving position management out
+of the learned policy and into deterministic execution code changed the
+system's behaviour from completing no trades at all to completing 2,625
+trades, each opened and closed by an explicit, testable rule. The near-flat
+final PnL underlines that the contribution is behavioural and
+operational---the architecture guarantees managed trading activity---not
+evidence that the signal itself is profitable.
+
 ## Limitations
 
 All results are on one currency pair and one chronological split. The
