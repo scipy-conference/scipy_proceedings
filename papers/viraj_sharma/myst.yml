@@ -1,0 +1,52 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-viraj_sharma
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Feel the model: Sensory Transduction of Neural Activations as a
+    Human-in-the-Loop Safety'
+  # subtitle:
+  description:
+    Proposal for developing a set of protocols and frameworks to convert
+    tranformer model activations into
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: viraj sharma
+      email: viraj@modelrecon.com
+      orcid: 0009-0006-6716-0430
+      affiliations:
+        - AAAI, Singapore (Student Member- Member Number 647983)
+        - Presidium School Delhi, India
+  keywords:
+    - activation map
+    - interpretibility
+    - transformers
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - bricken2023monosemanticity
+        - polanyi1966tacit
+        - dreyfus1980five
+        - kahneman2011thinking
+        - transformerlens
+        - saelens
+        - scikit-learn
+        - bloom2024gpt2sae
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
