@@ -40,6 +40,10 @@ project:
         - polanyi1966tacit
         - dreyfus1980five
         - kahneman2011thinking
+        - transformerlens
+        - saelens
+        - scikit-learn
+        - bloom2024gpt2sae
   exports:
     - id: pdf
       format: typst
