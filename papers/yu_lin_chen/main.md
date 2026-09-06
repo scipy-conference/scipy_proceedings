@@ -79,7 +79,7 @@ The selected masked workflow has six stages; the direct ablations are defined se
 :alt: Workflow for Qt .ts localization
 :width: 100%
 
-Workflow for Qt `.ts` localization. Stages 2--5 are repeated for each translation unit; protected tokens and mnemonic metadata are restored before a candidate is selected or a source-preserving fallback is recorded for review.
+Workflow for Qt `.ts` localization. Stages 2-5 are repeated for each translation unit; protected tokens and mnemonic metadata are restored before a candidate is selected or a source-preserving fallback is recorded for review.
 ```
 
 {numref}`fig-workflow-overview` separates rule-based processing from model-dependent generation. The tasks of parsing, token splitting, glossary lookup, token reinsertion, candidate selection, and validation are implemented by Python scripts and are shared across all backends. The backend adapter is the only part that changes when the workflow invokes different LLMs, for example by calling Gemini, Grok, or a local TAIDE model. This design makes it possible to evaluate whether the same workflow remains reliable across different models, rather than focusing on specific model providers.
@@ -349,7 +349,7 @@ emit CSV, JSON, and Markdown reports
 
 ## Implementation and Experimental Conditions
 
-Our implementation is a Python command-line workflow. The main runner builds fixed subsets, runs the C0--C4 experimental conditions below, writes generated `.ts` files, and calls evaluation and scoring scripts. The same selected subset is reused across model backends to enable pairwise comparisons.
+Our implementation is a Python command-line workflow. The main runner builds fixed subsets, runs the C0-C4 experimental conditions below, writes generated `.ts` files, and calls evaluation and scoring scripts. The same selected subset is reused across model backends to enable pairwise comparisons.
 
 ```{table} Experimental conditions.
 :name: tab-experimental-conditions
@@ -363,7 +363,7 @@ Our implementation is a Python command-line workflow. The main runner builds fix
 | C4 (Single candidate)  | yes | yes | 1 | Tests the value of generating multiple candidates |
 ```
 
-C0--C4 are experimental conditions for the same workflow over a fixed stratified subset of 3,000 message segments. C0 and C2 disable the structural hard lock and retain selected raw outputs so that direct-generation failures remain measurable. C1, C3, and C4 use masking, rule-based reassembly, strict validation, and a source-preserving fallback for rejected candidates. The conditions therefore compare complete operating configurations rather than isolating masking from the fallback policy. Our complete-corpus evaluation focuses on C1 because it is the selected production configuration, combining masking, glossary hints, and three candidates. Scaling up all experimental conditions would increase cost and review burden without being necessary to test whether this selected configuration produces structurally valid final artifacts for the QGIS Traditional Chinese localization workflow.
+C0-C4 are experimental conditions for the same workflow over a fixed stratified subset of 3,000 message segments. C0 and C2 disable the structural hard lock and retain selected raw outputs so that direct-generation failures remain measurable. C1, C3, and C4 use masking, rule-based reassembly, strict validation, and a source-preserving fallback for rejected candidates. The conditions therefore compare complete operating configurations rather than isolating masking from the fallback policy. Our complete-corpus evaluation focuses on C1 because it is the selected production configuration, combining masking, glossary hints, and three candidates. Scaling up all experimental conditions would increase cost and review burden without being necessary to test whether this selected configuration produces structurally valid final artifacts for the QGIS Traditional Chinese localization workflow.
 
 ### Direct generation and residual risk
 
@@ -371,7 +371,7 @@ A natural question is whether stronger prompting is sufficient. C0 and C2 should
 
 ### Validation fixtures and smoke tests
 
-Our artifact includes a bundled mini evaluation fixture for exercising the rule-based layer. The fixture contains archived 100-segment C0--C4 `.ts` outputs, condition metadata, selected-segment metadata, and evaluation outputs. The default reproduction will rerun the rule-based evaluator and scoring scripts on these archived `.ts` files, so that token checks, accelerator handling, XML well-formedness checks, condition comparison, scoring behavior, MQM request planning, and table generation can be verified without calling any model API.
+Our artifact includes a bundled mini evaluation fixture for exercising the rule-based layer. The fixture contains archived 100-segment C0-C4 `.ts` outputs, condition metadata, selected-segment metadata, and evaluation outputs. The default reproduction will rerun the rule-based evaluator and scoring scripts on these archived `.ts` files, so that token checks, accelerator handling, XML well-formedness checks, condition comparison, scoring behavior, MQM request planning, and table generation can be verified without calling any model API.
 
 The fixture is not presented as a full regeneration of the paper experiments: it does not rerun LLM translation, candidate generation, glossary-assisted prompting, or token reassembly during generation. Those steps are covered by the workflow scripts and can be exercised through optional cloud/local LLM reruns, while the default reproduction path provides a stable offline check of the rule-based evaluation and reporting code path.
 
@@ -381,9 +381,9 @@ The fixture is not presented as a full regeneration of the paper experiments: it
 
 This section evaluates the effectiveness of our workflow. The purpose of the evaluation is not to rank the models we use. Rather, it is to validate the method we propose. It has two reported layers and one complementary semantic-review protocol.
 
-1. **Subset condition comparison:** Grok, Gemini, and TAIDE are evaluated under conditions C0--C4 on the same 3,000-segment stratified subset of source messages.
+1. **Subset condition comparison:** Grok, Gemini, and TAIDE are evaluated under conditions C0-C4 on the same 3,000-segment stratified subset of source messages.
 2. **Complete corpus:** Grok, Gemini, and TAIDE are evaluated under C1 on all 28,924 QGIS source messages.
-3. **Semantic review:** We use MQM-style sampled judging to evaluate semantic adequacy, terminology, fluency, and locale style on the C0--C4 outputs. This is separate from rule-based structural scoring.
+3. **Semantic review:** We use MQM-style sampled judging to evaluate semantic adequacy, terminology, fluency, and locale style on the C0-C4 outputs. This is separate from rule-based structural scoring.
 
 The evaluation subset uses multi-label stratification based on source-string features that are likely to affect localization reliability, including plural/numerus messages, Qt placeholders, accelerator markers, HTML/XML content, glossary hits, numeric or code-like content, newline/control characters, long strings, and ordinary strings. Because these feature categories overlap, a segment may carry more than one label; the final subset is fixed and reused across all model backends and experimental conditions.
 
@@ -423,7 +423,7 @@ $$
 MQM\text{-}ER = 1000 \times \frac{\sum_{u=1}^N\sum_{p \in P_u} p}{\sum_{u=1}^N |s_u|}.
 $$
 
-Lower values indicate fewer weighted semantic errors per 1,000 source characters. The fixed MQM penalties are 0, 1, 5, and 25 for neutral, minor, major, and critical findings, respectively. The auxiliary MQM score on a 0--100 scale is reported for readability; the error rate is the main semantic metric. For each backend-condition pair, Grok 4.3 judged three random samples of 200 segments, yielding 600 judgments. The same sampled segment positions were used across backends and conditions within each repeat. The reported approximate 95% half-width is $1.96s/\sqrt{3}$, where $s$ is the standard deviation of the three run-level MQM-ER values; with only three repeats, this interval is descriptive rather than a precise population estimate.
+Lower values indicate fewer weighted semantic errors per 1,000 source characters. The fixed MQM penalties are 0, 1, 5, and 25 for neutral, minor, major, and critical findings, respectively. The auxiliary MQM score on a 0-100 scale is reported for readability; the error rate is the main semantic metric. For each backend-condition pair, Grok 4.3 judged three random samples of 200 segments, yielding 600 judgments. The same sampled segment positions were used across backends and conditions within each repeat. The reported approximate 95% half-width is $1.96s/\sqrt{3}$, where $s$ is the standard deviation of the three run-level MQM-ER values; with only three repeats, this interval is descriptive rather than a precise population estimate.
 
 The MQM analysis is not framed as a claim that masking should improve semantic quality. The trade-off question is whether the semantic cost of masking is small enough to justify the structural safety gain. Let:
 
@@ -439,7 +439,7 @@ A value near zero indicates no material semantic penalty; a small positive value
 
 ### Experimental condition comparison: structural safety and semantic quality trade-off
 
-The full outputs of the C0--C4 experimental conditions over the 3,000-segment subset are archived in the accompanying reproducibility artifact. {numref}`tab-subset-comparison` reports the four conditions central to the main trade-off comparison: C0 direct (which is the baseline), C1 complete workflow, C2 direct generation with glossary hints, and C4 single-candidate masked workflow. C3 is omitted from the table because it mainly isolates the glossary component; however, it is included in the artifact and does not show a distinct structural failure pattern. In the table, MQM-ER is reported as mean ± approximate 95% half-width over repeated MQM judge runs. `Rule QA` is the deterministic dashboard score defined above, not a linguistic translation-quality score.
+The full outputs of the C0-C4 experimental conditions over the 3,000-segment subset are archived in the accompanying reproducibility artifact. {numref}`tab-subset-comparison` reports all five experimental conditions. In the table, MQM-ER is reported as mean ± approximate 95% half-width over repeated MQM judge runs. `Rule QA` is the deterministic dashboard score defined above, not a linguistic translation-quality score.
 
 ```{table} Comparison summary on the 3,000-segment subset.
 :name: tab-subset-comparison
@@ -449,20 +449,25 @@ The full outputs of the C0--C4 experimental conditions over the 3,000-segment su
 | Grok 4.3 | C0 | Direct  | 5.67 | 93.60 | 6.289 ± 0.368 |
 | Grok 4.3 | C1 | Complete workflow | 0.00 | 92.57 | 9.005 ± 2.807 |
 | Grok 4.3 | C2 | Direct + glossary | 5.13 | 94.54 | 3.630 ± 1.488 |
+| Grok 4.3 | C3 | Masked without glossary | 0.00 | 92.12 | 13.540 ± 4.216 |
 | Grok 4.3 | C4 | Single candidate | 0.00 | 92.40 | 11.016 ± 2.372 |
 | Gemini 3.1 Flash-Lite | C0 | Direct  | 8.70 | 92.72 | 7.194 ± 1.702 |
 | Gemini 3.1 Flash-Lite | C1 | Complete workflow | 0.00 | 92.97 | 11.109 ± 2.481 |
 | Gemini 3.1 Flash-Lite | C2 | Direct + glossary | 9.30 | 92.81 | 4.904 ± 1.945 |
+| Gemini 3.1 Flash-Lite | C3 | Masked without glossary | 0.00 | 92.88 | 13.500 ± 2.036 |
 | Gemini 3.1 Flash-Lite | C4 | Single candidate | 0.00 | 92.82 | 12.482 ± 3.276 |
 | TAIDE 12B | C0 | Direct  | 30.10 | 76.11 | 37.339 ± 10.414 |
 | TAIDE 12B | C1 | Complete workflow | 0.00 | 84.52 | 40.736 ± 6.212 |
 | TAIDE 12B | C2 | Direct + glossary | 25.17 | 79.63 | 31.564 ± 5.943 |
+| TAIDE 12B | C3 | Masked without glossary | 0.00 | 81.85 | 47.200 ± 10.462 |
 | TAIDE 12B | C4 | Single candidate | 0.00 | 80.72 | 41.402 ± 6.335 |
 ```
 
 Under the implemented conditions without masking, C0 and C2 retain non-zero structural risk for every backend: Grok C0 and C2 have structure-failure rates of 5.67% and 5.13%, Gemini C0 and C2 have rates of 8.70% and 9.30%, and TAIDE C0 and C2 have rates of 30.10% and 25.17%. These results do not claim to rule out all possible prompt-only methods; they show that direct generation leaves a residual token-preservation risk in this workflow. In contrast, all masked condition bundles produce final artifacts with zero observed structure failures under the token classes we have checked; candidates that fail strict validation are replaced by source-preserving fallbacks and flagged for review. The full item-level breakdown shows that direct generation failures concentrate in newline preservation, Qt shortcut-marker preservation, HTML/XML tag preservation, and placeholder preservation. Detailed counts are reported in the accompanying reproducibility artifact so as to keep this paper concise.
 
 MQM shows the expected semantic trade-off. C2, the direct condition with glossary hints, obtains the lowest MQM error rate for all three backends, but it also retains non-zero structural failure rates. C1 has a higher MQM error rate than C0 and C2, while its masking, reassembly, validation, and fallback bundle produces structurally valid final artifacts under the extractors we implement. Thus, the direct conditions receive lower aggregate MQM-ER, whereas the selected production bundle gives stronger final-artifact structural protection.
+
+Compared with C3, C1 has higher Rule QA and lower mean MQM-ER for all three backends. These results suggest a favorable effect of glossary hints in this experiment, but the differences are descriptive and no statistical significance is claimed.
 
 ### The effect of generating multiple candidates
 
@@ -476,7 +481,7 @@ Complete-corpus C1 experiments were run on all 28,924 QGIS source messages for e
 
 Structure score is the arithmetic mean of eight preservation scores: Qt placeholders, brace placeholders, printf placeholders, HTML/XML entities, HTML/XML tags, numbers, newlines, and accelerators. For each class $r$, its score is $100(1-n_r/N)$, where $n_r$ is the number of segments with an observed preservation failure for class $r$ and $N$ is the number of messages checked. Rule QA is the deterministic dashboard score defined above. Possibly untranslated counts segments flagged by the rule-based detector as retaining substantial source-language residue.
 
-```{table} Comparing the three LLMs under the production condition C1.
+```{table} Comparing the three LLMs under the production condition C1. Zero observed structural failure does not imply complete localization.
 :name: tab-complete-corpus-c1
 
 | Backend | Messages checked | Structure failure % ↓ | Structure score ↑ | Rule QA ↑ | Avg. valid candidates | Possibly untranslated |
@@ -495,21 +500,21 @@ The complete-corpus result confirms that the subset finding scales up to the com
 (sec-reproducibility-artifact)=
 ## Reproducibility and Artifact Availability
 
-The [qgis-llm-localization-workflow repository](https://github.com/leo062644/qgis-llm-localization-workflow) provides the workflow code, configurations, reports, and a compact 100-segment reproduction fixture. The complete archived outputs used for the paper tables—C0--C4 for the 3,000-segment subset and C1 for all 28,924 messages, across all three backends—are available in [Depositar](https://pid.depositar.io/ark:37281/k553s150r), identified by the persistent identifier `ark:37281/k553s150r`.
+The [qgis-llm-localization-workflow repository](https://github.com/leo062644/qgis-llm-localization-workflow) provides the workflow code, configurations, reports, and a compact 100-segment reproduction fixture. The complete archived outputs used for the paper tables—C0-C4 for the 3,000-segment subset and C1 for all 28,924 messages, across all three backends—are available in [Depositar](https://pid.depositar.io/ark:37281/k553s150r), identified by the persistent identifier `ark:37281/k553s150r`.
 
 ```{table} Reproducibility levels.
 :name: tab-reproducibility-levels
 
 | Level | Command or location | New model calls? | What it verifies |
 |---|---|---:|---|
-| Mini rule-based evaluation | `python scripts/run_repro.py full-mini`; `experiments/demo_ablation_grok_100/` | No | Reruns rule-based evaluation, scoring, condition comparison, and MQM request generation on bundled 100-segment C0--C4 `.ts` outputs. |
+| Mini rule-based evaluation | `python scripts/run_repro.py full-mini`; `experiments/demo_ablation_grok_100/` | No | Reruns rule-based evaluation, scoring, condition comparison, and MQM request generation on bundled 100-segment C0-C4 `.ts` outputs. |
 | Extended archived-output scoring | `python code/public_repository/scripts/run_repro.py score --experiment experiments/<experiment> --force-eval` | No | From the Depositar archive root, recomputes structural and deterministic Rule QA metrics from archived generated `.ts` files rather than from preformatted table rows. |
 | Optional MQM or translation rerun | `python scripts/run_repro.py mqm ... --run-grok`; `python scripts/run_repro.py translate ...` | Yes | Rebuilds MQM judge outputs or regenerates a small translation test run using cloud AI credentials or local inference. |
 ```
 
-The default mini rule-based evaluation is reviewer-friendly and can be used offline. It uses the same C0--C4 condition definitions and the same rule-based evaluator/scorer as this paper's experiments, but on a smaller 100-segment archived-output fixture so that it can run quickly. It should be interpreted as an executable validation of the rule-based evaluation, scoring, comparison, and request-planning code paths, not as a full regeneration of LLM translation outputs or as a substitute for the 3,000-segment and 28,924-message experimental artifacts.
+The default mini rule-based evaluation is reviewer-friendly and can be used offline. It uses the same C0-C4 condition definitions and the same rule-based evaluator/scorer as this paper's experiments, but on a smaller 100-segment archived-output fixture so that it can run quickly. It should be interpreted as an executable validation of the rule-based evaluation, scoring, comparison, and request-planning code paths, not as a full regeneration of LLM translation outputs or as a substitute for the 3,000-segment and 28,924-message experimental artifacts.
 
-The compact repository release contains the source `.ts` file, tabular glossary resources, C0--C4 configuration files, workflow scripts, the 100-segment fixture and demo outputs, workflow manifests, rule-based evaluation outputs, MQM request-planning outputs, and an `.env.example` file. The Depositar archive contains the generated `.ts` outputs and evaluation reports for the reported 3,000-segment C0--C4 comparison and 28,924-message C1 runs. With that archive, the same scoring command recomputes rule-based metrics from archived outputs without new model calls. Rerunning translation or MQM judging requires the appropriate cloud LLM API credentials or local inference hardware. API keys are excluded from the repository and are supplied through environment variables such as `XAI_API_KEY` and `GEMINI_API_KEY`.
+The compact repository release contains the source `.ts` file, tabular glossary resources, C0-C4 configuration files, workflow scripts, the 100-segment fixture and demo outputs, workflow manifests, rule-based evaluation outputs, MQM request-planning outputs, and an `.env.example` file. The Depositar archive contains the generated `.ts` outputs and evaluation reports for the reported 3,000-segment C0-C4 comparison and 28,924-message C1 runs. With that archive, the same scoring command recomputes rule-based metrics from archived outputs without new model calls. Rerunning translation or MQM judging requires the appropriate cloud LLM API credentials or local inference hardware. API keys are excluded from the repository and are supplied through environment variables such as `XAI_API_KEY` and `GEMINI_API_KEY`.
 
 In addition to the reproducibility archive, the released Traditional Chinese localization files are deposited as public datasets in [Depositar](https://data.depositar.io/), a public repository for research datasets, with persistent ARK identifiers. The released datasets include the QGIS 4.0 zh-Hant Translation Dataset (TS/QM Files), identified by `ark:37281/k5f167n46` and available at <https://pid.depositar.io/ark:37281/k5f167n46>, and the Long Term Release QGIS 3.44 zh-Hant Translation Dataset (TS/QM Files), identified by `ark:37281/k5g11462n` and available at <https://pid.depositar.io/ark:37281/k5g11462n>. These deposits provide persistent access to the released translation files; the GitHub repository provides the workflow and compact fixture, while the paper's complete experimental outputs are in the Depositar archive linked above.
 
