@@ -2,10 +2,11 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Feel the model: Sensory Transduction of Neural Activations as a Human-in-the-Loop Safety"
 abstract: |
-  Current mechanistic interpretability methods, such as sparse autoencoders (SAEs), activation classifiers, and natural language autoencoders share a core assumption: that safety-relevant information in a model’s internal representations can be faithfully captured through human-understandable text. I find this to be limiting, as it is not only lossy but also directionally biased, discarding signals that do not align with linguistic categories.
+  Current mechanistic interpretability methods, such as sparse autoencoders (SAEs), activation classifiers, and natural language autoencoders share a core assumption: that safety-relevant information in a model's internal representations can be faithfully captured through human-understandable text. I find some evidence that this assumption may not hold well for unusual or out-of-distribution internal states.
 
-  Using GPT-2 and published sparse autoencoders (SAEs), I compare classifiers trained directly on raw model activations with those trained on SAE-derived features. I show that cases of disagreement between these classifiers where SAE features predict one behavioral class while raw activations predict another—correlate with ground-truth misclassifications in the SAE-based classifier. This reveals a concrete failure mode, which I term interpretive displacement, wherein the text label assigned to an activation pattern actively misdirects human interpretability.
+  Using GPT-2 and a published sparse autoencoder, I find that SAE reconstruction quality tends to drop on unusual inputs (source code, repeated-token sequences, keyboard mashing, non-English text) compared to ordinary text, and that in several cases, the existing text labels for the most active SAE features on these inputs describe unrelated, ordinary concepts instead of flagging the input as unusual. This points to a possible failure mode: a human operator monitoring only text-based feature labels might get no warning exactly when the underlying activation looks least like anything the labeling process was built to describe. This motivates Activation Sensory Transduction (AST), a framework proposed in this paper that tries to give a human operator a way to inspect activation information directly, through non-linguistic senses, instead of only through text.
 ---
+
 ## Introduction
 
 The main idea in mechanistic interpretability converts a model's internal activations
@@ -35,62 +36,32 @@ or language model produces.
 
 ## The Information Loss Problem
 
-The following two experiments examine differences between raw model activations and SAE-derived representations.
+The following experiment looks at whether SAE-derived representations still signal that something is unusual when the underlying model activation is unusual, rather than just testing which representation makes a "better" classifier feature.
 
-### Experiment 1: Classification Performance
+### Anomaly Blind-Spot Test
 
-To evaluate whether SAE-derived representations discard behaviorally relevant information, a comparative classification experiment was conducted.
+To test this, I built two sets of 20 prompts for GPT-2 (the 124M-parameter model, `d_model` 768): a "normal" set of ordinary English sentences, and an "anomalous" set of inputs GPT-2 can still process but that do not look like typical training text - source code, repeated-token sequences, keyboard mashing, and non-English text. For each prompt, I took the last-token residual-stream activation at `blocks.8.hook_resid_pre` and ran it through a published sparse autoencoder (`gpt2-small-res-jb`), then measured how much of the original activation survived being compressed and rebuilt by the SAE (fraction of variance explained, or FVE).
 
-To test this, I took GPT-2 and gave it 240 prompts - some it could answer confidently, some it couldn't. I measured how confused the model was for each prompt using entropy. Then I trained two simple classifiers - one using the model's raw internal activations, one using the SAE's text features - and asked both to predict whether the model was confused or not. The raw activation classifier was right 93% of the time. The SAE classifier was only right 85% of the time. The 8% gap is information that existed in the model's internals but got lost when I converted it to text features.
+On average, normal prompts kept 94.8% of their variance (SD 1.1%), while anomalous prompts kept only 82.8% (SD 4.5%), a gap that looks unlikely to be chance (Mann-Whitney U test, p < 0.0001). In this sample, the SAE reconstructed anomalous activations noticeably worse than ordinary ones.
 
-```{list-table} Classification results
+```{list-table} Reconstruction fidelity, normal vs. anomalous prompts
 :header-rows: 1
-* - Metric
-  - Value
-* - Baseline
-  - 0.500
-* - SAE features (text)
-  - 0.847
-* - Raw activations
-  - 0.931
-* - Information lost by SAE
-  - 0.083
+* - Prompt type
+  - Mean FVE
+  - SD
+* - Normal
+  - 0.948
+  - 0.011
+* - Anomalous
+  - 0.828
+  - 0.045
 ```
 
-Raw activations predicted model behavioral state with 93.1% accuracy, while SAE text features achieved only 84.7%, an 8.3 percentage point gap above a 50% baseline. This gap represents a direct measurement of behavioral signal destroyed by the SAE's text-mediated encoding. Information that existed in the model's internal geometry did not survive the compression into human-readable features.
+I then looked, for each anomalous prompt, at which SAE feature fired most strongly and what text description that feature has in Neuronpedia's existing public explanations for this SAE. A few of the resulting labels seemed to have little to do with the actual input: repeated-token spam ("the the the...") was labeled "phrases related to physical actions or confrontations," a string of hex byte values was labeled as referring to "the 21st century," and keyboard-mashed text was labeled as referring to a made-up named entity. In these cases, a human operator relying only on the text label would likely get no indication that anything unusual was happening, even though the underlying activation was measurably unusual by reconstruction error. A similar pattern showed up across a few different kinds of anomalous input (code, repeated tokens, keyboard mashing, hex values, and foreign-language text), though this was based on reading through examples rather than a formal count; scoring label accuracy systematically over a larger set is left for future work.
 
-[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-info-loss-in-sae-v3.ipynb)
+This looks like a concrete example of the paper's central concern: the text layer may not just lose information overall, it can sometimes fail quietly - giving a plausible-sounding but unrelated label right when the underlying signal looks least like anything the labeling process was built to describe.
 
-### Experiment 2: Interpretive Displacement
-
-A second experiment examined whether SAE-derived features merely reduced predictive accuracy or could actively produce misleading interpretations.
-
-I looked for cases where the two classifiers disagreed - where the raw activation classifier said "this model is confused" but the SAE classifier said "this model is confident." In those disagreement cases, I checked which classifier matched ground truth. The raw classifier was correct more often than the SAE classifier. This means the SAE is not just losing information - it is sometimes pointing in the wrong direction entirely. A human relying on SAE features to monitor the model would not just miss things; they might be actively misled.
-
-Results:
-
-```{list-table} Entropy comparison
-:header-rows: 1
-* - Representation
-  - Prompt type
-  - Mean entropy
-* - Model
-  - Factual
-  - 5.781266689300537
-* - Model
-  - Counterfactual
-  - 6.571504592895508
-* - SAE
-  - Factual
-  - 1.0776017904281616
-* - SAE
-  - Counterfactual
-  - 0.915539026260376
-```
-
-When entropy was computed over SAE feature activations rather than the model's output distribution, the ordering reversed - factual prompts produced higher SAE entropy (1.077) than counterfactual prompts (0.916), the opposite of what the model itself showed (5.78 vs 6.57). This result suggests a form of interpretive displacement, where the SAE-derived representation appears to encode uncertainty differently from the underlying model.
-
-[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-interpretive-displacement.ipynb)
+[View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-2026-paper-anomaly-blind-spot.ipynb)
 
 
 
@@ -159,13 +130,13 @@ Phase 1 is achievable with commodity hardware, standard audio-processing librari
 
 ## Experimentation
 
-As a part of testing the proposition, a set of demonstrations which target different modalities were performed.
+As a part of testing the proposition, a set of demonstrations which target different modalities were performed. The phase portrait, sonification, and EDF clients below are test/development scripts rather than standalone reproducible artifacts: each calls the Model Activations API over a live backend session (Section 7.1.1) and requires the reader to run that backend themselves and supply the resulting URL. This is a known limitation of the current demonstration code.
 
 ### Main setup
 
 #### Model Activations API
 
-As a part of testing the client modalities of a typical activation data, an API is created to generate activation vectors and activation sequences for clients.
+As a part of testing the client modalities of a typical activation data, an API is created to generate activation vectors and activation sequences for clients. The backend loads GPT-2 Large (`d_model` 1280) and exposes activations from layer 8's residual stream.
 
 It has two API endpoints:
 
@@ -189,6 +160,8 @@ Figure: Phase portrait of activation trajectories.
 
 Interpretation of the Phase Portrait
 
+This figure plots GPT-2 Large's layer-8 residual-stream activations, projected to two dimensions, as the model reads each prompt token by token.
+
 The points crowd near (0, -5) to (0, -10) where many prompts' final tokens land. This region appears to correspond to a common pre-generation activation state.
 
 The counterfactual paths (red) diverge most. "The capital of Valdoria is" goes down to (-30, -20) before returning. "The Zorblax protocol" starts far right at (30, +14). These trajectories exhibit attractor-like behavior, with simple prompts converging rapidly toward a stable region.
@@ -210,9 +183,9 @@ A demonstration of the AST sonifier is available at:
 
 ### BCI modalities
 
-The BCI modality explores whether model activations can be represented using formats familiar to neuroscience tools. Instead of converting activations into text labels, AST converts a compressed activation vector into a multi-channel signal that can be visualised and analysed using existing brain-signal software. The goal is not to claim that model activations are brain activity, but to investigate whether signal-analysis techniques developed for neuroscience can provide another way for humans to inspect model state.
+The BCI modality explores whether model activations can be represented using formats familiar to neuroscience tools. Instead of converting activations into text labels, AST converts a compressed activation vector into a multi-channel signal that can be visualised and analysed using existing brain-signal software. The goal is not to claim that model activations are brain activity, but to investigate whether signal-analysis techniques developed for neuroscience can provide another way for humans to inspect model state. As with the other modalities in this section, activations come from GPT-2 Large's layer-8 residual stream (`d_model` 1280), bucketed to 32 channels for display.
 
-MNE-Python is a widely used neuroscience visualisation tool. In AST it is used as a display layer that converts activation data into familiar signal plots, heatmaps, and channel views. The resulting visualisations provide another way to inspect model state without first translating activations into language.
+MNE-Python is a widely used neuroscience visualisation tool [@mne-python]. In AST it is used as a display layer that converts activation data into familiar signal plots, heatmaps, and channel views. The resulting visualisations provide another way to inspect model state without first translating activations into language.
 
 The following example was generated from the prompt "France".
 
@@ -230,10 +203,16 @@ The EDF view presents the same activation data through several complementary vis
 
 
 
+## Software
+
+This work relies on the following open-source software: TransformerLens [@transformerlens], SAE-Lens [@saelens], scikit-learn [@scikit-learn], MNE-Python [@mne-python], pyEDFlib [@pyedflib], NumPy [@numpy], and Matplotlib [@matplotlib]. The sparse autoencoder used throughout this paper, `gpt2-small-res-jb`, is due to [@bloom2024gpt2sae].
+
+
+
 ## Conclusion
 
-The mechanistic interpretability literature has made substantial progress in understanding transformer model internals. The progress has been built on a paradigm that converts activations into text. This paper argues that the paradigm has a structural limitation: it can only reveal what our language can describe. Model internals that do not map cleanly onto human language are, by construction, invisible to text-mediated interpretability.
+The mechanistic interpretability literature has made substantial progress in understanding transformer model internals. Much of that progress has been built on a paradigm that converts activations into text. This paper argues that this paradigm may have a structural limitation: it can mostly only reveal what our language is able to describe. Model internals that do not map cleanly onto human language may be difficult, or impossible, for text-mediated interpretability to capture.
 
-This is not an argument against SAEs, probing classifiers, or attribution methods. It is an argument that the field has a single channel - text - and that a single channel provides single-point-of-failure oversight. The same representational constraints that make a model's deceptive behavior hard to describe in text may make it visible to a trained sensory channel.
+This is not an argument against SAEs, probing classifiers, or attribution methods. It is an argument that the field currently leans on a single channel - text - and that relying on a single channel could mean single-point-of-failure oversight. The same representational limits that make a model's deceptive behavior hard to describe in text might, in principle, still be noticeable through a trained sensory channel.
 
-If a model state can generate a sensory signal that a trained human operator flags before a text-based probe names it, that is a safety gain - regardless of whether the operator can articulate what they perceived. The doctor does not need to dictate the MRI to act on what they see.
+If a model state can generate a sensory signal that a trained human operator notices before a text-based probe names it, that could be a meaningful safety gain - regardless of whether the operator can put into words what they perceived. The doctor does not need to dictate the MRI to act on what they see.
