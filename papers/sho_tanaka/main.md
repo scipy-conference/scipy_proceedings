@@ -16,7 +16,7 @@ abstract: |
   win rate and a realized return of $-0.64\%$. `EvalCallback` retained the
   best evaluated checkpoint rather than relying on the final training state.
   The result demonstrates the operational value of separating signal
-  generation from deterministic execution; it is a behavioural backtest on
+  generation from deterministic execution; it is a behavioral backtest on
   one currency pair, not a claim of profitability.
 ---
 
@@ -67,7 +67,7 @@ Our contributions are:
   and 2,625 fully managed trades for the decoupled system.
 
 We make no claim of profitability. All PnL figures are backtests on a single
-currency pair and are reported to characterise *behaviour*, not returns.
+currency pair and are reported to characterise *behavior*, not returns.
 
 (sec-baseline)=
 ## Experimental Setup and the Zero-Trade Baseline
@@ -82,9 +82,11 @@ chronological 70/30 train/test split (49,388 / 21,167 bars). The 21,167 test
 bars yield 21,116 evaluable steps after constructing 50-bar observations and
 next-bar transitions. A `FeatureEngineer` computes 155 technical features per
 bar (moving averages, RSI, MACD, ATR, Bollinger bands, returns at several
-horizons, and so on). TA-Lib provides a subset of the standard technical
-indicators; the remaining custom and return-based features are implemented
-with NumPy and pandas. The observation comprises a 50-bar window, flattened
+horizons, and so on). TA-Lib is a Python wrapper around the widely used
+open-source TA-Lib C library, which implements over 150 standard technical
+analysis indicators; it provides a subset of the indicators used here, and
+the remaining custom and return-based features are implemented with NumPy
+and pandas. The observation comprises a 50-bar window, flattened
 to a $50 \times 155 = 7{,}750$-dimensional vector.
 
 ### Environment and agent
@@ -92,8 +94,9 @@ to a $50 \times 155 = 7{,}750$-dimensional vector.
 The environment is a Gymnasium `Env` with a discrete action space
 $\{\text{HOLD}, \text{BUY}, \text{SELL}\}$. BUY opens or holds a long
 position, SELL opens or holds a short position, and switching direction
-closes the existing position first. Each completed round-trip pays a
-transaction cost of 1 pip (0.0001 in price units). Episodes are 1,000 bars
+closes the existing position first. A transaction cost of 1 pip (equal to
+0.0001 in this environment's price units) is charged each time a position is
+opened or closed, so a completed round-trip pays 2 pips. Episodes are 1,000 bars
 long with random start points. The reward at each step is
 
 ```{math}
@@ -106,7 +109,17 @@ r_t = 100 \cdot \big( w_u \, \Delta \mathrm{PnL}^{\text{unrealized}}_t
 ```
 
 where $w_u$, $b_{\text{complete}}$ and $b_{\text{profit}}$ are the reward
-design knobs we varied. The agent is a Stable-Baselines3 `DQN` [@mnih2015] with an MLP
+design knobs we varied. Writing $p_t$ for the close of bar $t$ and
+$\pi_t \in \{-1, 0, +1\}$ for the position after the action at step $t$
+(short, flat, long), the unrealized term is the one-bar fractional price
+change signed by the open position,
+$\Delta \mathrm{PnL}^{\text{unrealized}}_t = \pi_t \, (p_{t+1} - p_t) / p_t$
+(zero when flat), and the realized term is zero except on a step that closes
+a position opened at price $p_{\text{entry}}$ with direction $\pi$, when
+$\Delta \mathrm{PnL}^{\text{realized}}_t = \pi \, (p_t - p_{\text{entry}}) /
+p_{\text{entry}}$. The transaction cost is subtracted from the reward each
+time a position is opened or closed (omitted from @eq-reward for
+readability). The agent is a Stable-Baselines3 `DQN` [@mnih2015] with an MLP
 policy (`net_arch=[512, 512, 512, 256]`), learning rate $10^{-4}$, replay
 buffer 200k, batch size 512, $\gamma = 0.99$, $\epsilon$-greedy exploration
 annealed over the first 15% of training to a floor of 0.05, 100k training
@@ -116,11 +129,14 @@ test period.
 ### Reward variants tried before the poster
 
 @tbl-reward-variants summarises the reward designs explored during
-development, labelled as on the poster, and @fig-reward-designs visualises
-their trade counts. The counts are from the original development runs
-(single seed each) and are indicative only.
+development, labeled as on the poster, and @fig-reward-designs visualises
+their trade counts. The counts are from the original single-seed development
+runs: each configuration was trained exactly once, with one random-number
+seed governing network initialization, exploration and episode start points.
+Because run-to-run variability under different seeds was not measured, the
+counts are indicative only.
 
-```{list-table} Reward designs explored during development and their test-set trade counts (single development runs).
+```{list-table} Reward designs explored during development and their test-set trade counts (single-seed development runs).
 :label: tbl-reward-variants
 :header-rows: 1
 * - Label
@@ -150,27 +166,30 @@ their trade counts. The counts are from the original development runs
 :width: 90%
 
 Poster Fig. 2: completed test-set trades for the four reward designs in
-@tbl-reward-variants. These counts come from single development runs and show
+@tbl-reward-variants. These counts come from single-seed development runs and show
 that some reward variants induced trading, but not that they were stable or
 profitable.
 ```
 
 The "Zero-Trade Collapse" configuration ($w_u = 0$, $b_{\text{complete}} =
 b_{\text{profit}} = 0$) is the baseline used throughout the rest of the paper.
-Reproduced on the 2025 period with the settings above, it emitted BUY on all
-21,116 test steps and completed 0 trades, for a realized return of 0.00%. A
-policy that emits BUY forever opens one position on the first bar and never
-closes it, so it registers as zero *completed* trades and zero *realized*
-PnL.
+The configuration emits BUY on all 21,116 test steps and completes 0 trades, for
+a realized return of 0.00% when reproduced on the 2025 period with the
+aforementioned settings. A policy that emits BUY forever opens one
+position on the first bar and never closes it, so it registers as zero
+*completed* trades and zero *realized* PnL.
 
 ### Why reward shaping was abandoned
 
-Each reward variant that produced trades did so at the price of a new
+Each reward variant that produces trades does so at the price of a new
 hyperparameter ($b_{\text{complete}}$, $b_{\text{profit}}$, the hold penalty)
-whose value was tuned to the training period and did not transfer. The reward
-was being asked to simultaneously encourage *good* trades, discourage *bad*
-ones, and define what "good" means, and every adjustment moved the
-equilibrium rather than removing the degenerate one. After roughly 75 such
+whose value is tuned to the training period and does not transfer. The reward
+is asked to simultaneously encourage *good* trades, discourage *bad*
+ones, and define what "good" means, and every adjustment moves the
+equilibrium---by which we mean the stable policy that training settles into
+and no longer improves away from under a given reward design---rather than
+removing the degenerate one. Each row of @tbl-reward-variants (buy-and-hold,
+erratic trading, a single constant action) is such an equilibrium. After roughly 75 such
 runs, we stopped editing the reward and changed the system boundary instead.
 
 (sec-arch)=
@@ -179,7 +198,11 @@ runs, we stopped editing the reward and changed the system boundary instead.
 ### Design
 
 The monolithic agent combines directional prediction and position management
-in a single discrete action. The decoupled system assigns these responsibilities
+in a single discrete action. "Decoupling" here means splitting the system at
+exactly that point: the learned model and the hand-written execution logic
+become two independent components whose only interface is a single scalar
+score, so that either side can be tested, inspected or replaced without
+touching the other. The decoupled system assigns these responsibilities
 to separate components:
 
 - **Directional scoring** is handled by the RL model, which emits a
@@ -308,8 +331,8 @@ for obs, bar in zip(observations, bars):
 ### Checkpoint selection with `EvalCallback`
 
 Saving only the final training state can discard an earlier, better
-checkpoint. The poster pipeline therefore used an `EvalCallback` with a
-separate evaluation environment and loaded the best saved checkpoint for the
+checkpoint. The poster pipeline therefore uses an `EvalCallback` with a
+separate evaluation environment and loads the best saved checkpoint for the
 decoupled backtest:
 
 ```python
@@ -382,27 +405,22 @@ completes no trades and is a flat line at 0%. The decoupled system with
 −0.6%. The curve characterises behaviour, not a return expectation.
 ```
 
-## Future Work
-
-The poster identified three directions for extending the system:
-
-1. **Stronger signal models.** Evaluate Transformer-based models with
-   self-attention and gradient-boosted models such as LightGBM.
-2. **Risk and position sizing.** Add volatility-scaled position sizing and a
-   portfolio-level drawdown cap.
-3. **Deployment.** Validate the complete pipeline through live paper trading
-   and publish the reference execution engine.
-
 ## Limitations
 
 All results are on one currency pair and one chronological split. The
-reward-variant counts are single development runs and are indicative only.
+reward-variant counts come from single-seed development runs and are
+indicative only.
 The direct and decoupled systems differ in observation design, reward,
 checkpoint selection and execution, so the comparison characterises the two
 complete implementations rather than isolating one architectural variable.
-The decoupled-system PnL is a single-seed backtest with a fixed 1-pip
-transaction cost and no additional slippage model; it should not be read as
-an estimate of future returns.
+The decoupled-system PnL is a single-seed backtest whose only trading
+friction is a fixed 1-pip cost deducted per completed trade. Order fills are
+idealized: entries fill at the bar close, and stop-loss, take-profit and
+trailing-stop exits fill exactly at their trigger levels. Live execution adds
+a variable bid-ask spread and slippage---fills worse than the trigger price
+when the market gaps or moves quickly---none of which is modeled here, so the
+reported PnL is optimistic and should not be read as an estimate of future
+returns.
 
 ## Conclusion
 
@@ -418,6 +436,18 @@ This boundary makes the execution rules independently testable and prevents
 the model from being solely responsible for exits. The reported backtest does
 not establish profitability, but it demonstrates a practical structure for
 building and evaluating RL-assisted trading systems.
+
+## Future Work
+
+The poster identified three directions for extending the system:
+
+1. **Stronger signal models.** Evaluate Transformer-based models with
+   self-attention and gradient-boosted models such as LightGBM.
+2. **Risk and position sizing.** Add volatility-scaled position sizing and a
+   portfolio-level drawdown cap.
+3. **Deployment.** Validate the complete pipeline through live paper trading
+   and publish the reference execution engine.
+
 
 ## Acknowledgements and Disclosure
 

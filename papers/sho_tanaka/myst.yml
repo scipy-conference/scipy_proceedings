@@ -45,6 +45,7 @@ project:
     RSI: Relative Strength Index
     MACD: Moving Average Convergence Divergence
     MLOps: Machine Learning Operations
+    pip: Percentage in Point
   error_rules:
     - rule: doi-exists
       severity: ignore
