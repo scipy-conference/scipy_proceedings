@@ -1,0 +1,66 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-deven_maheshwari
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Climate is not a straight line: Scalable Python-based GAMM Workflows for
+    Wildlife Conservation'
+  description: >
+    A Python-based GAMM trend fitting framework for wildlife conservation,
+    deployed within Ecoscope and evaluated on forest cover datasets across nine
+    Kenyan monitoring sites.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Deven Maheshwari
+      email: devenm@uw.edu
+      orcid: 0009-0005-3826-6511
+      affiliations:
+        - University of Washington, Allen School of Computer Science and
+          Engineering
+        - Allen Institute for AI (AI2)
+    - name: Jake Wall
+      email: jakew@earthranger.com
+      affiliations:
+        - Allen Institute for AI (AI2); Earth Ranger
+        - Wildlife Dynamics
+    - name: Catherine Villenueve
+      email: catherine.villeneuve@mila.quebec
+      affiliations:
+        - Montreal Institute for Learning Algorithms (MILA)
+  keywords:
+    - Generalized Additive Mixed Models
+    - Ecological Trend Analysis
+    - Wildlife Conservation
+    - Time Series
+    - Bayesian Optimization
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    GAMM: Generalized Additive Mixed Model
+    GAM: Generalized Additive Model
+    GLM: Generalized Linear Model
+    OLS: Ordinary Least Squares
+    LLM: Large Language Model
+    REML: Restricted Maximum Likelihood
+    MAE: Mean Absolute Error
+    RMSE: Root Mean Squared Error
+    AIC: Akaike Information Criterion
+    BIC: Bayesian Information Criterion
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - hastie1990
+        - xiong2019
+        - agarwal2021
+        - anthropic2025
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
