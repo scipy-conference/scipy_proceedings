@@ -155,7 +155,7 @@ parameter $\alpha \geq 0$ is applied.
 
 **Generalized Additive Mixed Model (GAMM):** The GAMM extends the GAM to multi-site
 data by decomposing the smooth trend into a global component shared across all sites and
-site specific smooth deviations modeled as random effects:
+site-specific random intercepts:
 
 ```{math}
 :label: eq:gamm
@@ -180,7 +180,6 @@ This section describes the key design decisions behind these classes, evaluating
 between model flexibility and stability. Primary design decisions include normalization,
 smoothing parameter selection, and evaluation techniques.
 
-(alpha-normalization)=
 ### Alpha Selection and Normalization
 
 The GAM smoothing parameter $\alpha$ controls the balance between curve flexibility and
@@ -213,7 +212,8 @@ that test observations always occur after their corresponding training observati
 realistic forecasting performance.
 
 During rolling origin cross-validation, the GAM is trained on a temporal subset of the data but
-predicts observations within the full time range. To prevent out of bounds errors in spline
+predicts observations within the full time range. $\alpha$ is reselected via grid search on each
+training window rather than fixed from a full-series fit. To prevent out of bounds errors in spline
 evaluation, the lower and upper knot boundaries are set to the full dataset range rather than the
 training subset range. Boundaries passed as raw year values are converted to the normalized scale
 before being passed to the spline constructor. A sliding window trains the model on $N$ years and
@@ -291,7 +291,7 @@ globally and relies on built-in Ecoscope functionality for I/O routing and plott
 
 The trend analysis module enforces guards for a variety of data reporting issues. First, not all
 sites have the same number of observations. The cross-validator selection described in
-{ref}`alpha-normalization` adapts automatically to sample size with either leave-one-out or
+{ref}`Alpha Selection and Normalization` adapts automatically to sample size with either leave-one-out or
 time-series-aware validation. A minimum observation warning is raised when any site has fewer than
 ten data points. Second, time intervals can be inconsistent or missing in reports. The framework is
 not restricted to annual data: the time variable $X$ is treated as a continuous numeric input and
@@ -326,7 +326,6 @@ general decline in forest cover with a relatively large drop-off between 2016–
 alignment with the GAM curve.
 :::
 
-(elephant-speed)=
 ### Elephant Walking Speed
 
 To test whether the framework transfers beyond annual remote sensing data, we apply the identical
@@ -475,7 +474,7 @@ group of 20 $\alpha$ values in a random range of equal log-width to the LLM sugg
 to generate a comparison table.
 
 The LLM's proposed range contained the optimal $\alpha$ in 2 of 9 sites, compared to 3 of 9 for the
-random control group. The LLM suggested $\alpha = 0.01$ for 8 of 9 sites regardless of the
+random control group. The LLM suggested $\alpha = 0.01$ for 7 of 9 sites regardless of the
 site-specific characteristics. It did correctly identify low-$\alpha$ sites such as Eburu and
 MaraConservancies, where regime changes are observed. The LLM failed on high-$\alpha$ sites such
 as Marmanet ($\alpha = 14.85$), Narok ($\alpha = 47.5$), and Samburu ($\alpha = 95.5$).
@@ -499,7 +498,7 @@ as Marmanet ($\alpha = 14.85$), Narok ($\alpha = 47.5$), and Samburu ($\alpha = 
 </table>
 :::
 
-Overall, the context window of LLMs is not currently suited for hyperparameterization when
+Overall, in this experiment, Claude Sonnet 4 with a single zero-shot prompt is not currently suited for hyperparameterization when
 compared to the brute force grid search implemented in Ecoscope. There is limited current
 reasoning about the nonlinear dynamics of each site as well as model awareness of regime changes
 in the data. The LLM fails to represent the relationship between the ecological site factors and the
@@ -522,7 +521,7 @@ MaraConservancies, Eburu, Loita, Marmanet, and MountLondiani all exhibit distinc
 phases separated by sudden transitions. OLS and GLM produce a single averaged rate that
 misrepresents both the stable and rapidly changing phases, while the GAM correctly fits each
 phase independently. A ranger using OLS at MaraConservancies in 2011 would have forecast
-gradual continued loss and missed the 35% collapse that followed.
+gradual continued loss and missed the 35% collapse that followed from 2012 to 2016.
 
 The GAMM can add a further benefit by learning shared change patterns across the nine sites.
 Areas undergoing similar transitions in the same period benefit from pooled information, improving
@@ -541,7 +540,7 @@ per-site GAM.
 ### LLM vs Grid Search for Alpha Selection
 
 The LLM initialization experiment shows that Claude Sonnet does not outperform random search
-for $\alpha$ selection on the nine forest cover sites. The model suggested $\alpha = 0.01$ for eight of
+for $\alpha$ selection on the nine forest cover sites. The model suggested $\alpha = 0.01$ for seven of
 nine sites regardless of input characteristics, correctly identifying low-$\alpha$ sites with strong
 regime changes but failing entirely on smooth high-$\alpha$ sites including Marmanet, Narok, and
 Samburu. The current grid search implementation remains the appropriate default. The gap in
@@ -565,7 +564,7 @@ movement telemetry shows that the same pipeline transfers without modification t
 noisier series, recovering a stable nonlinear trend where the linear model reports no change.
 
 The LLM hyperparameter initialization experiment yields a negative result that is informative for
-future work. Current frontier models do not encode the relationship between ecological site
+future work. Under the prompting setup, Claude Sonnet 4 did not encode the relationship between ecological site
 characteristics and optimal smoothing parameters well. This defines a concrete research gap and
 motivates few-shot and Bayesian approaches as future directions.
 
@@ -583,3 +582,4 @@ The full implementation is available across three public repositories:
 - **Ecoscope library:** <https://github.com/wildlife-dynamics/ecoscope>
 - **Trend fitting module:** <https://github.com/wildlife-dynamics/ecoscope/blob/master/ecoscope/analysis/trend_analysis.py>
 - **Forest cover workflow:** <https://github.com/wildlife-dynamics/wt-hansen-deforestation>
+- **Elephant speed map workflow:** <https://github.com/wildlife-dynamics/speedmap-trend>
