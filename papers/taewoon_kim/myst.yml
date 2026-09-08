@@ -35,7 +35,7 @@ project:
     JVM: Java Virtual Machine
     ACID: Atomicity, Consistency, Isolation, Durability
     GAV: Graph Analytical View
-    GIL: Global Interpreter Lock
+    WAL: Write-Ahead Log
   # Ignore the doi-exists check for citation keys that legitimately have no DOI
   error_rules:
     - rule: doi-exists
