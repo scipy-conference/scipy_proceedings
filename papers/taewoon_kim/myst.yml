@@ -62,6 +62,8 @@ project:
         - zodb
         - arcadedb
         - jep282
+        - jvector
+        - diskann2019
         # SciPy 2023 papers — no DOI in the source tree (cited by article URL)
         - li2023aphylogeo
         - alted2023blosc2

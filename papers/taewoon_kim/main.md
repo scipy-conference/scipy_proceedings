@@ -10,22 +10,23 @@ abstract: |
   can be embedded in a host process. We present `arcadedb-embedded`, a Python package that
   runs ArcadeDB inside the Python process via JPype, using a Java Runtime Environment
   bundled in the wheel. One `pip install` gives a database with documents, a property graph, and vector
-  search, and needs no Java installation. Results come back as NumPy arrays, pandas
-  DataFrames, or Arrow tables. We demonstrate a hybrid retrieval workflow that chains
-  vector search, SQL filtering, and graph traversal over one dataset. We benchmark ArcadeDB,
-  as reached from Python, against SQLite, DuckDB, LadybugDB, and Chroma, and report its costs.
+  search, and needs no Java installation. Query results can be returned as Python lists,
+  NumPy arrays, pandas DataFrames, or Arrow tables. We demonstrate a hybrid retrieval workflow that chains
+  vector search, SQL filtering, and graph traversal over one dataset. We benchmark
+  `arcadedb-embedded` against SQLite, DuckDB, LadybugDB, and Chroma, and report its costs.
 ---
 
 ## Introduction
 
-A retrieval-augmented question-answering system stores posts and their metadata as
+A question-answering system over a Q&A site stores posts and their metadata as
 documents (queried with SQL, much like rows of a table, but without a fixed
 schema), models who-answered-what or what-cites-what as a graph, and retrieves passages by
 semantic similarity over vectors, all over the same corpus. Python is popular for these workloads, but no single
 Python-embeddable data store covers all three access patterns. The usual response is to assemble
-a stack of SQLite or DuckDB for documents, NetworkX or a graph database for
-the graph, and a vector index such as FAISS, hnswlib, or Chroma for embeddings
-[@duckdb2019; @sqlite; @networkx2008; @faisslib; @hnswlib; @chroma].
+a stack of SQLite or DuckDB for documents, NetworkX or an embedded graph database
+such as LadybugDB for the graph, and a vector index such as FAISS, hnswlib, or Chroma for
+vectors
+[@duckdb2019; @sqlite; @networkx2008; @ladybugdb; @faisslib; @hnswlib; @chroma].
 
 A stack of specialists is a reasonable default, and @datta2025composable makes the case
 for assembling one from interoperable Python libraries. It has costs when all three access
@@ -52,8 +53,8 @@ Concretely, this paper contributes:
 1. **An in-process multi-model database for Python.** Each wheel bundles a Java Runtime
    Environment (JRE) for its platform, from which the binding starts a Java Virtual Machine
    (JVM) inside the Python process via JPype. The binding covers JVM lifecycle, transactions,
-   and NumPy/pandas/Arrow interop, and installs on four platforms and five Python versions
-   with no Java present.
+   and NumPy/pandas/Arrow interop. Wheels exist for four platforms and five Python
+   versions, and the user never installs Java.
 2. **A hybrid workflow.** A single retrieval pipeline composes vector search, SQL
    filtering and graph traversal over one dataset in one process. A capability matrix
    shows that no single Python-embeddable alternative expresses this composition.
@@ -61,8 +62,7 @@ Concretely, this paper contributes:
    the engine, from Python, against embedded specialists on a real-world Q&A
    corpus, across transactional, analytical, and vector workloads. We report which models
    each side wins and what the unified engine costs in memory, startup, latency tails,
-      disk, and result transport into Python. Engine internals and algorithms are out of
-   scope.
+   disk, and result transport into Python.
 
 ## Background
 
@@ -83,7 +83,7 @@ interface and a vector index. For vectors, hnswlib provides the reference HNSW i
 Chroma packages HNSW behind a Python API [@chroma]. None of them provides all three
 models in one embedded engine ([](#tbl-capability)).
 
-:::{table} Capability matrix for the Python-embeddable data stores compared here; all five run in the host process (✓ native, ~ partial or through an official extension, ✗ absent). "All three" means documents with SQL, a property graph, and vector search. DuckDB's HNSW index is an experimental core extension; ArcadeDB's index is JVector (Vamana graphs with an HNSW-style hierarchy). SQLite has vector search only through extensions, and neither of them is a graph index. SQLite and DuckDB are relational, and LadybugDB is a graph database whose nodes live in typed node tables; in this comparison a row of those plays the role of a document. Chroma stores each entry as a text document with a metadata dict. ArcadeDB's SQL has `GROUP BY` and aggregates but no joins and no `OVER`/`PARTITION BY` window clause.
+:::{table} Capability matrix for the Python-embeddable data stores compared here; all five run in the host process (✓ native, ~ partial or through an official extension, ✗ absent). "All three" means documents with SQL, a property graph, and vector search. DuckDB's HNSW index is an experimental core extension; ArcadeDB's index is JVector [@jvector] (Vamana graphs [@diskann2019] with an HNSW-style hierarchy). SQLite has vector search only through extensions, and neither of them is a graph index. SQLite and DuckDB are relational, and LadybugDB is a graph database whose nodes live in typed node tables. Chroma stores each entry as a text document with a metadata dict. ArcadeDB's SQL has `GROUP BY` and aggregates but no joins and no `OVER`/`PARTITION BY` window clause.
 :label: tbl-capability
 | Capability | SQLite | DuckDB | LadybugDB | Chroma | ArcadeDB |
 |---|:--:|:--:|:--:|:--:|:--:|
@@ -116,7 +116,7 @@ JPype directly.
 import arcadedb_embedded as arcadedb
 
 # One in-process engine; persists to a local directory.
-with arcadedb.create_database("kb", jvm_kwargs={"heap_size": "4g"}) as db:
+with arcadedb.create_database("my_db", jvm_kwargs={"heap_size": "4g"}) as db:
     db.command("sql", "CREATE DOCUMENT TYPE Post")
     db.command("sql", "CREATE PROPERTY Post.id LONG")
     db.command("sql", "CREATE INDEX ON Post (id) UNIQUE_HASH")
@@ -126,7 +126,7 @@ with arcadedb.create_database("kb", jvm_kwargs={"heap_size": "4g"}) as db:
     rows = db.query("sql", "SELECT id, score FROM Post WHERE id = 1").to_list()
 ```
 
-**One handle for all three models.** The same `db` object queries documents (SQL), the
+**One object for all three models.** The same `db` object queries documents (SQL), the
 property graph (OpenCypher), and vectors (a graph index, searched with the
 `vectorNeighbors()` function). The first argument of `query()` selects the language. All three
 models share one transaction scope and one set of identifiers, so the hybrid
@@ -151,8 +151,7 @@ pandas and pyarrow are optional dependencies, imported only when the correspondi
 method is called. NumPy has no missing value for integers, so with `to_columns()` a nullable `INTEGER` column
 becomes `float64` with `NaN` holes, which loses the type and any precision above $2^{53}$.
 `to_arrow()` reads the same buffer and keeps its null bitmap, so the column stays `int64`.
-Both read one packed columnar buffer from the engine, and the Arrow path needs no extra
-Java code in the wheel. [](#sec-transport) measures the four export paths.
+Both read one packed columnar buffer from the engine. [](#sec-transport) measures the four export paths.
 
 **Cross-platform packaging.** Bringing an engine written in another language into Python
 usually means compiling a native C/C++ extension, with tooling such as scikit-build-core
@@ -163,8 +162,7 @@ the engine needs. The build produces wheels for Linux x86-64,
 Linux ARM64, macOS Apple Silicon, and Windows x86-64, for Python 3.10 to 3.14, twenty wheels
 in total. `pip install arcadedb-embedded` needs no Java installation and no `JAVA_HOME`
 ([](#fig-arch)). Each wheel is about
-70 MB, roughly four times a NumPy wheel, downloaded once at install. Every number in this
-paper was measured on the wheel published on PyPI as `arcadedb-embedded` 26.8.1.
+70 MB, roughly four times a NumPy wheel, downloaded once at install.
 
 :::{figure} figures/architecture.png
 :label: fig-arch
@@ -172,13 +170,14 @@ paper was measured on the wheel published on PyPI as `arcadedb-embedded` 26.8.1.
 The `arcadedb-embedded` architecture. A single Python process hosts a JVM (via JPype)
 running the ArcadeDB engine over one local, file-backed database. The Python API
 exposes documents/SQL, a property graph (OpenCypher), and vector search through
-one handle, with NumPy/pandas interop. The wheel bundles a per-platform JRE, so
-installation is a plain `pip install` with no Java present.
+one `db` object, with NumPy/pandas interop. The wheel bundles a per-platform JRE, so
+installation is a plain `pip install` and the user never installs Java.
 :::
 
-## Three models in one process
+## Documents, graph, and vectors in one process
 
-Each model is shown on its own below, then all three are combined in one workflow. The
+This section first shows how data gets in, then each model with its own query language,
+and finally one workflow that uses all three. The
 data is the Cross Validated
 (`stats.stackexchange.com`) Stack Exchange dump, a statistics and machine-learning Q&A site
 (CC BY-SA [@crossvalidated]). Questions and answers are documents, who-asked and who-answered
@@ -187,17 +186,16 @@ of the paper rebuilds this corpus with one command and runs the whole section en
 
 ### Ingestion
 
-All three models are loaded from Python objects: `insert_many()` takes a list of dicts for
-documents, `graph_batch()` takes lists of dicts and ids for vertices and edges, and embeddings
-go in as `float32` arrays. The examples below start from the Parquet files the benchmark
+Data enters all three models as Python objects: `insert_many()` takes a list of dicts
+for documents, `graph_batch()` takes lists of dicts and ids for vertices and edges, and
+embeddings go in as `float32` arrays. The examples below start from the Parquet files the benchmark
 suite prepares and read them with pandas, selecting only the columns a type needs, because
 ArcadeDB has no Parquet or Arrow reader. Loading costs more than in the specialists. On the
 Cross Validated corpus, ArcadeDB needs about 17.5 s for the 426k posts and about 27 s for the graph.
 SQLite and DuckDB read the same Parquet files natively in about 0.3 s, and LadybugDB bulk-loads
 the graph with `COPY` in about 0.6 s ([](#tbl-document), [](#tbl-graph)). Little of that gap is
 the Python boundary. Most of the load time goes to the unique hash index on `id` that the
-point-lookup workload relies on. The engine's own CSV importer skips Python and is not faster
-on this corpus for the same reason.
+point-lookup workload relies on.
 
 ### Documents
 
@@ -209,13 +207,12 @@ same database as the graph and vectors below.
 
 Loading a corpus row by row pays a Python-to-Java call per row, so bulk ingestion
 goes through `insert_many()`, which serializes a batch to one string and loops over it on
-the Java side. As with the graph below, the columns a type does not need are never read
-into Python:
+the Java side. Only the columns the type needs are read into Python:
 
 ```python
 import pandas as pd
 
-data = "datasets/prepared/stats.stackexchange.com"   # written by the suite's prepare.py
+data = "datasets/prepared/stats.stackexchange.com"   # written by the benchmark suite's prepare step
 
 # read only the columns the type needs; the post body stays in the file
 posts = pd.read_parquet(f"{data}/posts.parquet", columns=["id", "score", "title"])
@@ -224,14 +221,15 @@ db.insert_many("Post", posts.to_dict("records"), commit_every=10_000)
 
 ### Property graph
 
-Vertex and edge types are declared with SQL. OpenCypher creates them implicitly on first
-write, as in Neo4j, but we declare them so that properties can be typed and indexed. Bulk
+Vertex and edge types are declared with SQL. OpenCypher can create them implicitly on
+first write, as in Neo4j, and can add indexes and uniqueness constraints, but the typed
+float-array property and the vector index below need SQL, so we declare everything there. Bulk
 loading goes through a `graph_batch()` context manager. `create_vertices()` and `new_edges()` each cross into the JVM once for a
 whole list and the batch commits on flush, instead of one crossing and one transaction per
 element. `batch_size` is the number of edges buffered before an automatic flush, and
 `create_vertices()` returns the ids, so edges reuse them instead of querying them
 back.
-Graph queries then use OpenCypher through the same handle:
+Graph queries then use OpenCypher through the same `db` object:
 
 ```python
 import pandas as pd
@@ -243,7 +241,7 @@ db.command("sql", "CREATE VERTEX TYPE Userx")
 db.command("sql", "CREATE EDGE TYPE HAS_ANSWER")
 db.command("sql", "CREATE EDGE TYPE AUTHORED_BY")
 
-data = "datasets/prepared/stats.stackexchange.com"   # written by the suite's prepare step
+data = "datasets/prepared/stats.stackexchange.com"   # written by the benchmark suite's prepare step
 
 # read only the columns the types need; the post body stays in the file
 posts = pd.read_parquet(f"{data}/posts.parquet",
@@ -254,7 +252,7 @@ users = pd.read_parquet(f"{data}/users.parquet", columns=["id", "reputation"])
 links = pd.read_parquet(f"{data}/edges_answers.parquet")   # question_id, answer_id
 
 with db.graph_batch(batch_size=100_000) as batch:
-    # create_vertices returns one RID per row, so edges reuse them instead of querying
+    # create_vertices() returns one RID per row, so edges reuse them instead of querying
     qrid = dict(zip(questions.id, batch.create_vertices("Question", [
         {"id": i, "score": s, "title": t, "embedding": e.tolist()}
         for i, s, t, e in zip(questions.id, questions.score, questions.title, embeddings)])))
@@ -270,21 +268,21 @@ db.query("opencypher",
     "MATCH (q:Question)-[:HAS_ANSWER]->(a:Answer)-[:AUTHORED_BY]->(u:Userx) "
     "WHERE q.id = $qid RETURN a.id, a.score, u.reputation "
     "ORDER BY a.score DESC",
-    {"qid": 3}).to_list()          # Cypher binds $name from a dict; SQL uses positional ?
+    {"qid": 3}).to_list()          # Cypher binds $name from a dict; SQL binds :name or ?
 ```
 
 For graph *analytics* over the same data, a GAV is created
 (`CREATE GRAPH ANALYTICAL VIEW ... VERTEX TYPES (...) EDGE TYPES (...)`). The build runs
 in the background, so the statement returns before the GAV is usable and
-`SELECT status FROM schema:graphAnalyticalViews` is read until it reports `READY`. The view
+`SELECT status FROM schema:graphAnalyticalViews` is read until it reports `READY`. The GAV
 is an in-memory copy of the selected vertex and edge types, laid out for fast traversal, and
 it is kept up to date as the graph changes.
 
 ### Vectors
 
 Embeddings are stored as a float-array property and indexed with an `LSM_VECTOR` index.
-The index is a JVector graph index, built from Vamana graphs in a multi-layer hierarchy
-comparable to HNSW. Search is a SQL function over the index. Parameters (`dimensions`, `similarity`,
+The index is a JVector graph index [@jvector], built from Vamana graphs [@diskann2019] in
+a multi-layer hierarchy comparable to HNSW. Search is a SQL function over the index. Parameters (`dimensions`, `similarity`,
 `maxConnections`, `beamWidth` = `ef_construction`) are set on the index, and the query
 supplies `ef_search`. `maxConnections` is the per-layer out-degree, while hnswlib's $M$
 is half of it, because hnswlib builds its base layer at degree $2M$ and upper layers at $M$. Setting both to the same number compares a half-degree ArcadeDB
@@ -312,8 +310,7 @@ Given a popular "seed" question, we answer one query: *find questions similar to
 one, keep the well-scored ones, and return their best answers with the reputation of who
 wrote them.* The steps are a vector search, a SQL filter, and a Cypher traversal
 ([](#fig-hybrid)). They pass 200 vector candidates to the SQL filter, 50 that pass the filter to
-the graph traversal, and return the top 10 answers. The `IN` lists are built as text to match
-the timed script, and `IN :ids` with a list parameter also works. The first two steps are kept
+the graph traversal, and return the top 10 answers. The first two steps are kept
 apart so that each stage can be timed separately. An application does not have to split
 them, because `vectorNeighbors()` returns whole documents, so the filter can sit on the vector search
 in one statement, `SELECT id, title, score FROM (SELECT expand(vectorNeighbors(...)))
@@ -336,24 +333,25 @@ cands = db.query("sql",
     "Question[embedding]", arcadedb.to_java_float_array(seed), 200, 100).to_list()
 
 # 2) SQL: keep well-scored candidates (ids flow straight from step 1)
-ids = "[" + ",".join(str(int(c["id"])) for c in cands) + "]"
+ids = [int(c["id"]) for c in cands]
 filt = db.query("sql",
-    f"SELECT id, title, score FROM Question WHERE id IN {ids} "
-    f"AND score >= 1 ORDER BY score DESC LIMIT 50").to_list()
+    "SELECT id, title, score FROM Question WHERE id IN :ids "
+    "AND score >= 1 ORDER BY score DESC LIMIT 50", {"ids": ids}).to_list()
 
 # 3) CYPHER: traverse to answers + answerers' reputation
-fids = "[" + ",".join(str(int(r["id"])) for r in filt) + "]"
+fids = [int(r["id"]) for r in filt]
 hits = db.query("opencypher",
-    f"MATCH (q:Question)-[:HAS_ANSWER]->(ans:Answer)"
-    f"-[:AUTHORED_BY]->(usr:Userx) "
-    f"WHERE q.id IN {fids} "
-    f"RETURN q.id AS qid, ans.id AS aid, ans.score AS ascore, "
-    f"usr.reputation AS rep ORDER BY ascore DESC LIMIT 10").to_list()
+    "MATCH (q:Question)-[:HAS_ANSWER]->(ans:Answer)"
+    "-[:AUTHORED_BY]->(usr:Userx) "
+    "WHERE q.id IN $fids "
+    "RETURN q.id AS qid, ans.id AS aid, ans.score AS ascore, "
+    "usr.reputation AS rep ORDER BY ascore DESC LIMIT 10", {"fids": fids}).to_list()
 ```
 
-Over the complete Cross Validated corpus (about 214k questions, 209k answers, and 108k
-users), the workflow takes a median of 12.9 ms over 20 warm repetitions: 5.9 ms for the
-vector search, 5.0 ms for the SQL filter, and 2.0 ms for the Cypher traversal.
+The workflow runs on the part of the Cross Validated corpus its query needs: the 214k
+questions, their 209k answers, and the 108k users who wrote those answers. The benchmarks
+below load the whole corpus. The workflow takes a median of 12.9 ms over 20 warm
+repetitions: 5.9 ms for the vector search, 5.0 ms for the SQL filter, and 2.0 ms for the Cypher traversal.
 Timings were measured on the same system as the comparison tables below.[^host]
 
 The Cypher step runs over a GAV, created as in the Property graph section, since the
@@ -362,14 +360,17 @@ traversal is analytical. The graph benchmark below shows how much the GAV speeds
 ## Benchmarks
 
 Is each model competitive enough for practical use, and what does it cost? We compare
-ArcadeDB, *as reached from Python*, against widely used Python-embeddable specialists for
-each model: SQLite and DuckDB (documents), LadybugDB (graph), and Chroma (vectors).
+`arcadedb-embedded` against widely used Python-embeddable specialists for each model:
+SQLite and DuckDB (documents), LadybugDB (graph), and Chroma (vectors). "ArcadeDB" in the
+tables and text below means `arcadedb-embedded`, measured from Python.
 
 **Protocol.** Every measurement runs in its own Docker container, one container at a time,
 with the same CPU cores and memory cap allocated to every backend, and is repeated 5 times in fresh containers. We report
 the median across the 5 repetitions with the full [min–max] range, since timing
 distributions are right-skewed and the median is the recommended summary
-[@raasveldt2018fair; @hoefler2015scientific]. Engines run their shipped defaults except where stated.[^protocol]
+[@raasveldt2018fair; @hoefler2015scientific]. Engines run their shipped defaults except where stated.[^protocol] In every table, higher is
+better for throughput and recall, and lower is better for everything else: latency, build
+and load times, memory, and disk.
 
 The data is the Cross Validated (`stats.stackexchange.com`) public data dump
 [@crossvalidated], a statistics and machine-learning Q&A corpus of about 426k posts, 346k
@@ -379,9 +380,8 @@ engines (degree as in the Vectors section, `ef_construction` $= 100$, `ef_search
 and we report recall@10 against an exact ground truth. Graph OLAP for ArcadeDB uses a GAV.
 For document OLAP we first build a `NOTUNIQUE` index on each column the suite groups or
 filters by (`post_type`, `owner_user_id`, `score`), so the engine answers from an index instead of scanning the type; the index
-build is timed separately and excluded from query times. ArcadeDB and `arcadedb-embedded` both
-release monthly and are under active development, so the numbers below describe one release,
-26.8.1, and later releases are expected to improve on them.[^host]
+build is timed separately and excluded from query times. ArcadeDB and `arcadedb-embedded` are
+version 26.8.1 throughout.[^host]
 
 [^protocol]: Each container is pinned to the same eight cores. SQLite runs WAL with `synchronous=NORMAL`, which its
     documentation recommends. ArcadeDB's JVM heap is capped at 16 GiB, because the default 4 GiB does not
@@ -408,8 +408,8 @@ recall@10. The exact query text for every workload is in the public benchmark su
 
 **Documents ([](#tbl-document)).** This workload runs the same SQL over the same posts
 that SQLite and DuckDB run over a table. SQLite is much faster than ArcadeDB on point
-operations, DuckDB is much faster on analytical queries, and ArcadeDB uses about 500 MiB
-more memory. Transactional throughput depends mostly on how often the engine
+operations, DuckDB is much faster on analytical queries, and ArcadeDB peaks at about 800 MiB
+of memory against about 300 MiB for the other two. Transactional throughput depends mostly on how often the engine
 syncs to disk. SQLite and ArcadeDB both run with relaxed durability here (SQLite's
 recommended write-ahead log (WAL) setting, ArcadeDB's default asynchronous flush), and at that setting SQLite
 does about 87,000 ops/s to ArcadeDB's 6,400. DuckDB syncs on every commit and has no setting to
@@ -421,7 +421,7 @@ DuckDB answers the suite in about 9 ms versus ArcadeDB's 1,400 ms.
     with `synchronous=FULL`. The SQLite strict figure is in the suite's append log rather than
     the frozen results table.
 
-:::{table} Document model (Cross Validated corpus): SQLite, DuckDB, ArcadeDB. OLTP is a mixed point read/insert/update workload (ops/s, higher better), OLAP an analytical aggregation suite (ms, lower better). Durability: SQLite WAL+NORMAL and ArcadeDB async WAL are bounded-loss, DuckDB fsyncs per commit. Median [min–max] over 5 reps. Peak = container memory, DB = on-disk size at the end of the OLTP rep (MiB). Best value per column in bold.
+:::{table} Document model (Cross Validated corpus): SQLite, DuckDB, ArcadeDB. OLTP is a mixed point read/insert/update workload (ops/s), OLAP an analytical aggregation suite (ms). SQLite and ArcadeDB run with relaxed durability (they do not sync to disk on every commit); DuckDB syncs on every commit. Median [min–max] over 5 reps. Peak = container memory, DB = on-disk size at the end of the OLTP rep (MiB). Best value per column in bold.
 :label: tbl-document
 | Backend | OLTP ops/s | OLAP ms | Ingest s | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|
@@ -438,7 +438,7 @@ commit as well, it still leads, 595 against 525 ops/s. The OLTP reads do not dep
 setting, and there ArcadeDB is ahead at the median and at the 99th percentile (p99), though
 its single worst one-hop read is slower ([](#tbl-latency)).
 
-:::{table} Graph model (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s), OLAP a multi-query analytical suite (ms), Ingest the bulk load of vertices and edges (s). ArcadeDB OLAP uses a GAV, whose build time is shown separately. Durability: LadybugDB fsyncs per commit with no relaxation knob; ArcadeDB is at its async default. Median [min–max] over 5 reps. Peak = container memory, DB = on-disk size at the end of the OLTP rep (MiB). Best value per column in bold.
+:::{table} Graph model (Cross Validated corpus): LadybugDB, ArcadeDB. OLTP is neighborhood/traversal point ops (ops/s), OLAP a multi-query analytical suite (ms), Ingest the bulk load of vertices and edges (s). ArcadeDB OLAP uses a GAV, whose build time is shown separately. LadybugDB syncs to disk on every commit; ArcadeDB runs at its relaxed default. Median [min–max] over 5 reps. Peak = container memory, DB = on-disk size at the end of the OLTP rep (MiB). Best value per column in bold.
 :label: tbl-graph
 | Backend | OLTP ops/s | OLAP ms | GAV build s | Ingest s | Peak MiB | DB MiB |
 |---|--:|--:|--:|--:|--:|--:|
@@ -470,8 +470,8 @@ less than Chroma's Python import alone (0.37 s).
 
 **Latency ([](#tbl-latency)).** On the transactional reads and the vector queries,
 ArcadeDB's median and p99 latencies beat DuckDB and LadybugDB and trail SQLite and Chroma. Its worst single operation, though, is 35 to 146 ms
-across the three models against 0.05 to 11 ms for the specialists. That matters for an
-application with a hard per-request bound, and not for one with a p99 target.
+across the three models against 0.05 to 11 ms for the specialists. For most applications
+this rare slow request does not matter, but it does if every request has a strict deadline.
 
 :::{table} Per-operation latency (ms) of the read operations in the OLTP workloads and of the vector queries, on the Cross Validated corpus: the median operation, the p99 tail, and the single worst operation, each reported as the median over 5 repetitions. Best value per group in bold.
 :label: tbl-latency
@@ -488,8 +488,9 @@ application with a hard per-request bound, and not for one with a p99 target.
 | | ArcadeDB | 3.86 | 7.11 | 145.9 |
 :::
 
-**Memory.** On the document workload ArcadeDB uses about 500 MiB more than SQLite and
-DuckDB. That is the cost of running a JVM, with the engine's heap and page cache inside it. The graph build is the one place it is far larger, and on vectors its disk-backed index uses less memory than Chroma's.
+**Memory.** On the document workload ArcadeDB peaks at about 800 MiB against about 300 MiB
+for SQLite and DuckDB. The difference is the cost of running a JVM, with the engine's heap
+and page cache inside it. The graph build is the one place it is far larger, and on vectors its disk-backed index uses less memory than Chroma's.
 
 
 
@@ -502,7 +503,7 @@ serializes one JSON string per batch for Python to parse, `to_columns()` reads a
 columnar buffer with `numpy.frombuffer()`, and `to_arrow()` wraps that same buffer as a
 `pyarrow.Table`.
 
-:::{table} Result transport, 200k-row document type, four columns (two integer, one double, one string). Median of 7 timed passes after 2 warmups, milliseconds, lower is better. The engine executes the same query for every method.
+:::{table} Result transport, 200k-row document type, four columns (two integer, one double, one string). Median of 7 timed passes after 2 warmups, milliseconds. The engine executes the same query for every method.
 :label: tbl-transport
 | Rows | `iter_dicts()` | `to_json_list()` | `to_columns()` | `to_arrow()` |
 |---|--:|--:|--:|--:|
@@ -524,17 +525,17 @@ purely numeric result would narrow this.
 
 `arcadedb-embedded` makes the ArcadeDB Java engine usable as an embedded database from
 Python. Python is a thin layer over the engine, and the layer does add overhead, but it is
-small: the same vector search takes about 10% longer from Python than from Java, and the
-engine's own work, the query itself, is identical in both. The overhead only becomes
-visible on large results, and the transport table above shows how much the method chosen
-to return them matters.
+small: compared with a pure Java program running the same vector search on the same
+engine, going through Python adds about 10% to the latency. The query itself does the same
+work in both. The overhead only becomes visible on large results, and the transport table
+above shows how much the method chosen to return them matters.
 
 ## When to use it
 
 `arcadedb-embedded` is most useful when an application needs two or more of documents, a
 graph, and vector search over the same data, on one machine, and wants them in one process
-with one set of identifiers and one transaction scope. Retrieval-augmented prototypes and
-document or graph applications that also want similarity search are the typical cases. In
+with one set of identifiers and one transaction scope. The typical case is the hybrid workflow shown above, where one query has to combine a
+similarity search with filters over documents and a traversal over the graph. In
 that setting it is fast enough: point reads and graph traversals answer in well under a
 millisecond, vector queries in single-digit milliseconds at the same recall as a dedicated
 index, and everything is ACID.
@@ -554,9 +555,12 @@ engine as a Python wheel with its own JRE, so one engine provides documents,
 graph, and vectors from one process. The hybrid workflow uses all three in turn, a vector
 search, then a SQL filter over the documents, then a graph traversal, without data leaving
 the engine. In the benchmarks each specialist is faster on its own
-model, and `arcadedb-embedded` is competitive on latency and recall while covering all
-three. Being a
-generalist has a price, mainly in memory and loading time. The ArcadeDB project wrote the engine; this paper contributes the binding, the packaging,
+model, but `arcadedb-embedded` holds its own while covering all three: it beats LadybugDB
+on transactional graph work, beats DuckDB on point reads, and matches Chroma's recall with
+less memory. Being a
+generalist has a price, mainly in memory and loading time. Both ArcadeDB and
+`arcadedb-embedded` release monthly and are under active development, so these numbers
+describe one release, 26.8.1, and later releases are expected to improve on them. The ArcadeDB project wrote the engine; this paper contributes the binding, the packaging,
 and the in-process workflow. The binding (Apache-2.0), the benchmark suite, and the results
 behind every table are public:
 
