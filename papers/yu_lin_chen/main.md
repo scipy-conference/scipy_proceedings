@@ -65,7 +65,7 @@ Semantic quality is evaluated separately. MQM is an analytic translation quality
 
 ### Workflow overview and LLM backends
 
-The selected masked workflow has six stages; the direct ablations are defined separately below:
+The selected masked workflow has six stages; the experimental conditions are defined separately below:
 
 1. Parse the Qt `.ts` file into translation units.
 2. Extract mnemonic metadata and split each source string into protected tokens and translatable text spans.
@@ -294,7 +294,7 @@ $$
 
 Here, $\hat{t}_{u,j}$ is the $j$-th candidate for translation unit $u$. In this strict masked path, every emitted validation issue blocks automatic acceptance.
 
-If no generated candidate passes strict validation in a masked condition, the source string is written as a source-preserving fallback and the translation unit is logged as review-required; such a fallback is not counted as completed localization. In the current implementation, this status is recorded in the external run log rather than in the `.ts` `unfinished` attribute, so the log must accompany the generated artifact during review. In the direct ablations C0 and C2, the selected raw candidate and its detected issues are retained so that structural failures remain observable. Review state is not used as a key quality metric because it may have several operational causes: no valid candidate, backend exception, malformed JSON, or intentionally conservative rejection. Detailed review-state counts are reported in the accompanying reproducibility artifact. This paper focuses on structural failure rate, deterministic rule-based QA diagnostics, and MQM semantic quality.
+If no generated candidate passes strict validation in a masked condition, the source string is written as a source-preserving fallback and the translation unit is logged as review-required; such a fallback is not counted as completed localization. In the current implementation, this status is recorded in the external run log rather than in the `.ts` `unfinished` attribute, so the log must accompany the generated artifact during review. In conditions C0 and C2, the selected raw candidate and its detected issues are retained so that structural failures remain observable. Review state is not used as a key quality metric because it may have several operational causes: no valid candidate, backend exception, malformed JSON, or intentionally conservative rejection. Detailed review-state counts are reported in the accompanying reproducibility artifact. This paper focuses on structural failure rate, deterministic rule-based QA diagnostics, and MQM semantic quality.
 
 ### Guarantee boundary of translation validation
 
