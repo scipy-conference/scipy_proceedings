@@ -1,0 +1,85 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2026-qgis_llm_localization
+  title: >
+    Toward Reliable Localization of Free and Open Source Software: LLM-assisted
+    Translation Workflows for QGIS
+  description: >
+    A validation-first Python workflow for using LLMs to assist Qt .ts
+    localization, with a QGIS Traditional Chinese case study, deterministic
+    structural validation, and reviewable open-source artifacts.
+  authors:
+    - name: Yu-Lin Chen
+      orcid: 0009-0009-1539-6646
+      email: aswendy062666@gmail.com
+      affiliations:
+        - National Sun Yat-sen University, Taiwan
+        - Institute of Information Science, Academia Sinica, Taiwan
+      corresponding: true
+    - name: Tyng-Ruey Chuang
+      orcid: 0000-0003-4439-1325
+      email: trc@iis.sinica.edu.tw
+      affiliations:
+        - Institute of Information Science, Academia Sinica, Taiwan
+        - Research Center for Humanities and Social Sciences, Academia Sinica,
+          Taiwan
+        - Research Center for Information Technology Innovation, Academia
+          Sinica, Taiwan
+    - name: Cheng-Jen Lee
+      orcid: 0000-0002-4645-381X
+      email: u103133.u103135@gmail.com
+      affiliations:
+        - Institute of Information Science, Academia Sinica, Taiwan
+  keywords:
+    - QGIS
+    - localization
+    - large language models
+    - validation
+    - Qt Linguist
+    - open source software
+    - translation memory
+    - terminology management
+    - machine translation
+    - software engineering
+    - Traditional Chinese
+    - geographic information systems
+    - reproducible workflows
+  abbreviations:
+    FOSS: Free and Open Source Software
+    GIS: Geographic Information Systems
+    HTML: HyperText Markup Language
+    LLM: Large Language Model
+    LLMs: Large Language Models
+    QA: Quality Assurance
+    QM: Qt compiled translation file
+    TS: Qt Translation Source
+    XML: Extensible Markup Language
+    API: Application Programming Interface
+    CSV: Comma-Separated Values
+    MT: Machine Translation
+    MQM: Multidimensional Quality Metrics
+    UI: User Interface
+    URL: Uniform Resource Locator
+    XSD: XML Schema Definition
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - qt_ts_format
+        - qgis_translation_guidelines
+        - google_structured_outputs
+        - xai_structured_outputs
+        - mqm_what_is
+        - google_gemini_flash_lite_api
+        - xai_grok_43
+        - taide_gemma3_12b_2602
+        - google_gemma3_12b_pt
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
+  bibliography:
+    - mybib.bib

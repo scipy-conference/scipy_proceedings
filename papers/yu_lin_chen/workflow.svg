@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1150" viewBox="130 0 1470 1150" role="img" aria-labelledby="title desc">
+<title id="title">Workflow for Qt .ts Localization</title>
+<desc id="desc">Left whitespace reduced by cropping the SVG viewBox. A six-stage vector flowchart for translating a Qt .ts localization file while preserving protected tokens and validating structural quality.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+    <path d="M 0 0 L 8 4 L 0 8 z" fill="#1F1F1F" />
+  </marker>
+  <marker id="bluearrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+    <path d="M 0 0 L 12 6 L 0 12 z" fill="#0B57D0" />
+  </marker>
+  <filter id="softShadow" x="-5%" y="-5%" width="110%" height="120%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.10"/>
+  </filter>
+  <style>
+    .panel { filter: url(#softShadow); }
+  </style>
+</defs>
+<rect x="130" y="0" width="1470" height="1150" fill="white"/>
+
+<text x="800.0" y="48" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" fill="#1F1F1F" text-anchor="middle" >Selected Masked Workflow for Qt .ts Localization</text>
+<rect x="245" y="70" width="1110" height="60" rx="12" fill="#F5F9FF" stroke="#0B57D0" stroke-width="2"/>
+<path d="M285 84 H312 L330 102 V120 H285 Z" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<path d="M312 84 V102 H330" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<line x1="294" y1="104" x2="318" y2="104" stroke="#0B57D0" stroke-width="2"/>
+<line x1="294" y1="112" x2="320" y2="112" stroke="#0B57D0" stroke-width="2"/>
+<text x="800" y="108" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#1F1F1F" text-anchor="middle" >Input: Qt .ts source file, glossaries, backend, workflow configuration</text>
+<line x1="800" y1="130" x2="800" y2="150" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="170" y="150" width="1160" height="80" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="190.0" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="199.0" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >1</text>
+<text x="275" y="183" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="275" dy="0">Parse the Qt .ts file into translation units</tspan>
+</text>
+<text x="275" y="212" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#4A4A4A" text-anchor="start">
+<tspan x="275" dy="0">Read the file and prepare the units to translate</tspan>
+</text>
+<line x1="800" y1="230" x2="800" y2="250" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,5)">
+<rect x="170" y="245" width="1160" height="80" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="285.0" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="294.0" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >2</text>
+<text x="275" y="278" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="275" dy="0">Split source into TEXT/TOKEN spans; store mnemonic metadata separately</tspan>
+</text>
+<text x="275" y="307" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#4A4A4A" text-anchor="start">
+<tspan x="275" dy="0">Separate language from protected elements while retaining mnemonic information</tspan>
+</text>
+</g>
+<line x1="800" y1="330" x2="800" y2="350" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,10)">
+<rect x="170" y="340" width="1160" height="80" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="380.0" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="389.0" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >3</text>
+<text x="275" y="373" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="275" dy="0">Retrieve glossary hints from tabular terminology resources</tspan>
+</text>
+<text x="275" y="402" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#4A4A4A" text-anchor="start">
+<tspan x="275" dy="0">Look up preferred terms for the current source segment</tspan>
+</text>
+</g>
+<line x1="800" y1="430" x2="800" y2="450" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,15)">
+<rect x="170" y="435" width="1160" height="90" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="480.0" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="489.0" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >4</text>
+<text x="275" y="468" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="275" dy="0">Use an interchangeable LLM backend to translate only the TEXT spans</tspan>
+</text>
+<text x="275" y="497" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#4A4A4A" text-anchor="start">
+<tspan x="275" dy="0">Send the translatable spans, glossary hints, and workflow settings to the selected backend</tspan>
+</text>
+</g>
+<line x1="800" y1="540" x2="800" y2="560" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,15)">
+<rect x="170" y="545" width="1160" height="300" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="580" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="589" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >5</text>
+<text x="275" y="584" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="start" >Restore tokens and mnemonics, validate candidates, and select an output</text>
+<rect x="250" y="610" width="405" height="58" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.7"/>
+<path d="M278 625 H315 V650 H293 L282 660 V650 H278 Z" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<circle cx="290" cy="638" r="2.5" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<circle cx="298" cy="638" r="2.5" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<circle cx="306" cy="638" r="2.5" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="335" y="634" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="335" dy="0">Receive one or more</tspan>
+<tspan x="335" dy="19.549999999999997">candidate TEXT-span translations</tspan>
+</text>
+<rect x="250" y="685" width="405" height="58" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.7"/>
+<path d="M285 703 H302 C301 696,312 696,311 703 H324 V716 C317 715,317 727,324 726 V737 H309 C310 730,299 730,300 737 H285 Z" fill="#0B57D0" stroke="#0B57D0" stroke-width="1"/>
+<text x="335" y="709" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="335" dy="0">Reinsert protected tokens and</tspan>
+<tspan x="335" dy="19.549999999999997">restore mnemonic metadata</tspan>
+</text>
+<rect x="250" y="760" width="405" height="58" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.7"/>
+<path d="M301 772 L324 781 V797 C324 809,313 815,301 811 C289 815,278 809,278 797 V781 Z" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<path d="M291 795 L298 802 L313 787" fill="none" stroke="#0B57D0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="335" y="784" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="335" dy="0">Check each candidate for</tspan>
+<tspan x="335" dy="19.549999999999997">validation issues</tspan>
+</text>
+<line x1="452.5" y1="668" x2="452.5" y2="685" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="452.5" y1="743" x2="452.5" y2="760" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<polygon points="830,635.0 960.0,710 830,785.0 700.0,710" fill="#FFF7E0" stroke="#F9AB00" stroke-width="2"/>
+<text x="830" y="685" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1F1F1F" text-anchor="middle">
+<tspan x="830" dy="0">Any candidate</tspan>
+<tspan x="830" dy="19.549999999999997">without validation</tspan>
+<tspan x="830" dy="19.549999999999997">issues?</tspan>
+</text>
+<path d="M 655 789.0 H 675 V 710 H 700.0" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1025" y="650" width="270" height="95" rx="10" fill="#E9F7EC" stroke="#137333" stroke-width="2"/>
+<circle cx="1060" cy="697.5" r="22" fill="white" stroke="#137333" stroke-width="3"/>
+<path d="M1049 697.5 L1057 705.5 L1073 687.5" fill="none" stroke="#137333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1095" y="683" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="1095" dy="0">Select the lowest-risk</tspan>
+<tspan x="1095" dy="18.4">valid candidate and</tspan>
+<tspan x="1095" dy="18.4">record the output</tspan>
+</text>
+<path d="M 960.0 710 H 1015" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="965" y="695" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#137333" text-anchor="middle" >Yes</text>
+<g transform="translate(0,-12)">
+<rect x="930" y="770" width="300" height="75" rx="10" fill="#FCE8E6" stroke="#B3261E" stroke-width="2"/>
+<circle cx="965" cy="807.5" r="22" fill="#B3261E" stroke="none" stroke-width="0"/>
+<circle cx="965" cy="799.5" r="7" fill="white" stroke="none" stroke-width="0"/>
+<path d="M951 821.5 C955 809.5 975 809.5 979 821.5" fill="white"/>
+<text x="1000" y="799" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="1000" dy="0">Use source fallback,</tspan>
+<tspan x="1000" dy="19.2">mark the row for review,</tspan>
+<tspan x="1000" dy="19.2">and log diagnostics</tspan>
+</text>
+</g>
+<path d="M 830 785.0 V 787.5 H 920" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<g transform="translate(0,-12)">
+<text x="850" y="827" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#B3261E" text-anchor="middle" >No</text>
+</g>
+</g>
+<line x1="800" y1="860" x2="800" y2="880" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,15)">
+<rect x="170" y="865" width="1160" height="150" rx="12" fill="white" stroke="#0B57D0" stroke-width="2"/>
+<circle cx="215" cy="903" r="27" fill="#0B57D0" stroke="none" stroke-width="0"/>
+<text x="215" y="912" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle" >6</text>
+<text x="800" y="905" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1F1F1F" text-anchor="middle" >Validate the generated .ts file and emit QA reports</text>
+<rect x="205" y="937" width="205" height="60" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.5"/>
+<circle cx="238" cy="967" r="20" fill="white" stroke="#0B57D0" stroke-width="3"/>
+<path d="M228 967 L236 975 L250 957" fill="none" stroke="#0B57D0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="273" y="962" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="273" dy="0">Check XML</tspan>
+<tspan x="273" dy="16.099999999999998">well-formedness</tspan>
+</text>
+<rect x="428" y="937" width="205" height="60" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.5"/>
+<rect x="443" y="971" width="8" height="18" fill="none" stroke="#0B57D0" stroke-width="2"/>
+<rect x="456" y="959" width="8" height="30" fill="none" stroke="#0B57D0" stroke-width="2"/>
+<rect x="469" y="947" width="8" height="42" fill="none" stroke="#0B57D0" stroke-width="2"/>
+<text x="496" y="962" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="496" dy="0">Create a</tspan>
+<tspan x="496" dy="16.099999999999998">structural report</tspan>
+</text>
+<rect x="651" y="937" width="205" height="60" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.5"/>
+<rect x="669" y="947" width="30" height="40" fill="none" stroke="#0B57D0" stroke-width="3" rx="3"/>
+<path d="M678 959 L683 964 L693 954" fill="none" stroke="#0B57D0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="677" y1="975" x2="692" y2="975" stroke="#0B57D0" stroke-width="2"/>
+<text x="719" y="962" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="719" dy="0">Create rule-based</tspan>
+<tspan x="719" dy="16.099999999999998">QA report</tspan>
+</text>
+<rect x="874" y="937" width="205" height="60" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.5"/>
+<path d="M907 945 L914 961 L931 962 L918 973 L922 989 L907 980 L892 989 L896 973 L883 962 L900 961 Z" fill="none" stroke="#0B57D0" stroke-width="3" stroke-linejoin="round"/>
+<text x="942" y="962" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="942" dy="0">Create MQM</tspan>
+<tspan x="942" dy="16.099999999999998">report</tspan>
+</text>
+<rect x="1097" y="937" width="205" height="60" rx="8" fill="#F5F9FF" stroke="#0B57D0" stroke-width="1.5"/>
+<ellipse cx="1130" cy="951" rx="19" ry="8" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<path d="M1111 951 V984 C1111 992,1149 992,1149 984 V951" fill="none" stroke="#0B57D0" stroke-width="3"/>
+<path d="M1111 967 C1111 975,1149 975,1149 967" fill="none" stroke="#0B57D0" stroke-width="2"/>
+<text x="1165" y="962" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="start">
+<tspan x="1165" dy="0">Export reports as</tspan>
+<tspan x="1165" dy="16.099999999999998">CSV, JSON, or</tspan>
+<tspan x="1165" dy="16.099999999999998">Markdown</tspan>
+</text>
+</g>
+<line x1="800" y1="1030" x2="800" y2="1050" stroke="#1F1F1F" stroke-width="2" marker-end="url(#arrow)"/>
+<g transform="translate(0,5)">
+<rect x="220" y="1045" width="1160" height="70" rx="12" fill="#E9F7EC" stroke="#137333" stroke-width="2"/>
+<circle cx="270" cy="1080" r="24" fill="#137333" stroke="none" stroke-width="0"/>
+<path d="M260 1064 H276 L286 1074 V1096 H260 Z" fill="none" stroke="white" stroke-width="3"/>
+<path d="M276 1064 V1074 H286" fill="none" stroke="white" stroke-width="3"/>
+<text x="800" y="1088" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#1F1F1F" text-anchor="middle" >Output: translated .ts file, translation log, structural / QA / MQM reports</text>
+</g>
+<defs>
+  <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+    <path d="M 0 0 L 8 4 L 0 8 z" fill="#0B57D0" />
+  </marker>
+</defs>
+<path d="M 1330 715 H 1390 V 290 H 1330" fill="none" stroke="#0B57D0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+<rect x="1405" y="455" width="165" height="150" rx="14" fill="white" stroke="#0B57D0" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1487" y="495" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#0B57D0" text-anchor="middle">
+<tspan x="1487" dy="0">For each</tspan>
+<tspan x="1487" dy="21.599999999999998">translation unit:</tspan>
+<tspan x="1487" dy="21.599999999999998">repeat stages</tspan>
+<tspan x="1487" dy="21.599999999999998">2–5</tspan>
+</text>
+</svg>
