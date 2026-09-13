@@ -36,17 +36,15 @@ an experiment means pinning several packages instead of one.
 
 This paper describes the alternative, one embedded multi-model database that holds
 documents, a property graph, and vector indexes. That database is ArcadeDB [@arcadedb], an
-Apache-2.0 Java engine that keeps all three models in one store. In this paper
-"the engine" always means ArcadeDB itself, its unmodified Java code including its query
-languages; there is no lower-level library. Documents are queried with
+Apache-2.0 Java application that keeps all three models in one store (referred to as "the engine" throughout the rest of the paper). Documents are queried with
 its SQL dialect, the graph with OpenCypher, and vectors through a graph index of the
 Hierarchical Navigable Small World (HNSW) family. Transactional (online transaction processing, OLTP) and analytical (online analytical
 processing, OLAP) queries run over the same data. ArcadeDB is ACID (atomic, consistent,
 isolated, durable). Its Graph Analytical Views (GAV), an ArcadeDB-specific structure, speed
 up graph analytics while the base graph stays transactional.
 
-`arcadedb-embedded` binds the Java engine through JPype [@jpype; @arcadedbpython]. The
-benchmarks report the tasks on which the engine is slower than the specialists.
+`arcadedb-embedded` binds the Java engine through JPype [@jpype; @arcadedbpython].
+The paper contains benchmarks comparing `arcadedb-embedded` to the specialists.
 
 Concretely, this paper contributes:
 
@@ -193,8 +191,7 @@ suite prepares and read them with pandas, selecting only the columns a type need
 ArcadeDB has no Parquet or Arrow reader. Loading costs more than in the specialists. On the
 Cross Validated corpus, ArcadeDB needs about 17.5 s for the 426k posts and about 27 s for the graph.
 SQLite and DuckDB read the same Parquet files natively in about 0.3 s, and LadybugDB bulk-loads
-the graph with `COPY` in about 0.6 s ([](#tbl-document), [](#tbl-graph)). Little of that gap is
-the Python boundary. Most of the load time goes to the unique hash index on `id` that the
+the graph with `COPY` in about 0.6 s ([](#tbl-document), [](#tbl-graph)). Most of the load time goes to the unique hash index on `id` that the
 point-lookup workload relies on.
 
 ### Documents
