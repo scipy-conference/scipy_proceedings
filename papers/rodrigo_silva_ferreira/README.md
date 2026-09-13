@@ -17,6 +17,7 @@ claim is produced by the code it contains.
 |------|-------------|
 | `interactive_scientific_computing.ipynb` | The paper (executed, with figures and outputs embedded). |
 | `build_notebook.py` | Generator that reproduces the notebook from source prose + code. |
+| `figure_helpers.py` | Schematic figure-drawing functions imported by the notebook's setup cell. |
 | `references.bib` | Complete bibliography (61 entries), each verified against a primary source. |
 | `figures/` | Publication-quality figures (`.png` and vector `.pdf`) written during execution. |
 | `cooling.py` | A small module written *by* the notebook (Section 8 demonstration). |
