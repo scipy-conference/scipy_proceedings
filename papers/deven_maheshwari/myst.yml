@@ -45,6 +45,7 @@ project:
     REML: Restricted Maximum Likelihood
     MAE: Mean Absolute Error
     RMSE: Root Mean Squared Error
+    MSE: Mean Squared Error
     AIC: Akaike Information Criterion
     BIC: Bayesian Information Criterion
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys

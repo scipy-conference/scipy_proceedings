@@ -180,6 +180,7 @@ This section describes the key design decisions behind these classes, evaluating
 between model flexibility and stability. Primary design decisions include normalization,
 smoothing parameter selection, and evaluation techniques.
 
+(sec-alpha-selection)=
 ### Alpha Selection and Normalization
 
 The GAM smoothing parameter $\alpha$ controls the balance between curve flexibility and
@@ -291,7 +292,7 @@ globally and relies on built-in Ecoscope functionality for I/O routing and plott
 
 The trend analysis module enforces guards for a variety of data reporting issues. First, not all
 sites have the same number of observations. The cross-validator selection described in
-{ref}`Alpha Selection and Normalization` adapts automatically to sample size with either leave-one-out or
+[Alpha Selection and Normalization](#sec-alpha-selection) adapts automatically to sample size with either leave-one-out or
 time-series-aware validation. A minimum observation warning is raised when any site has fewer than
 ten data points. Second, time intervals can be inconsistent or missing in reports. The framework is
 not restricted to annual data: the time variable $X$ is treated as a continuous numeric input and
