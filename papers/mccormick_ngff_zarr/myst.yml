@@ -95,6 +95,7 @@ project:
     SIMD: Single Instruction, Multiple Data
     RFC: Request for Comments
     API: Application Programming Interface
+    LPS: Left-Posterior-Superior
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
