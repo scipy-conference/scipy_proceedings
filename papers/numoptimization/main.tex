@@ -1,3 +1,5 @@
+\title{Numerical Stability Pitfalls in Scientific Optimization Pipelines}
+
 \begin{abstract}
 
 Optimization algorithms are central to scientific machine-learning and parameter-estimation workflows. Yet even mature scientific Python workflows can hide numerical instability: an optimizer may satisfy its stopping criterion while returning parameters that are poorly conditioned, physically implausible, or highly sensitive to small perturbations. In a parameter-estimation workflow, for example, apparently converged coefficients may still change sharply after tiny perturbations to the data.
@@ -20,7 +22,7 @@ This paper investigates these failures at the workflow level. Rather than propos
 
 The paper makes three practical contributions. First, it organizes common optimizer failures into a taxonomy of geometric, arithmetic, differential, and structural instability. Second, it presents a large-scale empirical study of SciPy optimizers on the University of California, Irvine (UCI) HIGGS dataset, emphasizing preprocessing, Hessian conditioning, and computational cost. Third, it synthesizes these observations into a workflow-oriented auditing protocol for researchers who use optimization inside larger scientific workflows.
 
-The discussion complements classical numerical analysis texts and software documentation rather than replacing them. References such as Nocedal and Wright~\cite{nocedal} and Higham~\cite{higham} provide rigorous treatments of conditioning, floating-point arithmetic, and convergence theory. The present work addresses a different gap: the distance between algorithmic theory and the practical behavior of end-to-end scientific Python workflows. Standard references explain what can go wrong in principle, but they do not show how reliably these failures appear across randomized runs in SciPy pipelines or package the resulting checks as a staged auditing protocol for working researchers. The contribution here is therefore organizational and empirical rather than theoretical: it connects instability mechanisms to observable diagnostic signatures, quantifies their frequency under controlled stress conditions, and assembles the guidance into a reproducible protocol targeted at the scientific Python ecosystem.
+The discussion complements classical numerical analysis texts and software documentation rather than replacing them. References such as \cite{nocedal} and \cite{higham} provide rigorous treatments of conditioning, floating-point arithmetic, and convergence theory. The present work addresses a different gap: the distance between algorithmic theory and the practical behavior of end-to-end scientific Python workflows. Standard references explain what can go wrong in principle, but they do not show how reliably these failures appear across randomized runs in SciPy pipelines or package the resulting checks as a staged auditing protocol for working researchers. The contribution here is therefore organizational and empirical rather than theoretical: it connects instability mechanisms to observable diagnostic signatures, quantifies their frequency under controlled stress conditions, and assembles the guidance into a reproducible protocol targeted at the scientific Python ecosystem.
 
 \section{Optimization in Scientific Computing}
 
@@ -36,13 +38,13 @@ These objectives are rarely solved in isolation. They are usually embedded in so
 
 \subsection{Common Optimization Interfaces}
 
-SciPy exposes these workflows through routines such as \texttt{minimize}, \texttt{least\_squares}, \texttt{curve\_fit}, \texttt{root}, \texttt{differential\_evolution}, and \texttt{basinhopping}. These interfaces include methods such as BFGS, L-BFGS-B, Nelder-Mead, Powell, conjugate gradient, trust-region methods, and Levenberg-Marquardt. Table~\ref{tab:failure-modes} summarizes several common warning signs and first-line responses.
+SciPy exposes these workflows through routines such as \texttt{minimize}, \texttt{least\_squares}, \texttt{curve\_fit}, \texttt{root}, \texttt{differential\_evolution}, and \texttt{basinhopping}. These interfaces include methods such as BFGS, L-BFGS-B, Nelder-Mead, Powell, conjugate gradient, trust-region methods, and Levenberg-Marquardt. \cref{tab:failure-modes} summarizes several common warning signs and first-line responses.
 
 \begin{table}
 \centering
 \begin{tabular}{p{0.24\textwidth}p{0.34\textwidth}p{0.32\textwidth}}
 \hline
-Failure mode & Observable symptom & Typical response \\
+\textbf{Failure mode} & \textbf{Observable symptom} & \textbf{Typical response} \\
 \hline
 Ill-conditioning & Narrow valleys, large condition numbers, or zig-zagging iterates & Rescale variables or regularize \\
 Finite-difference noise & Erratic gradients & Supply analytic or complex-step derivatives \\
@@ -59,7 +61,7 @@ Initialization sensitivity & Different runs give different optima & Use multi-st
 
 Conditioning measures how strongly a numerical problem amplifies perturbations. In optimization, it determines whether small errors in data, arithmetic, or intermediate calculations remain harmless or become large changes in the returned solution.
 
-For a nonsingular matrix $A$, the normwise condition number is defined as~\cite{golub,trefethen}:
+For a nonsingular matrix $A$, the normwise condition number is defined as~\citep{golub,trefethen}:
 
 \begin{equation}
 \kappa(A) = \|A\| \cdot \|A^{-1}\|
@@ -105,7 +107,7 @@ These numerical symptoms matter because they directly affect scientific interpre
 
 Polynomial regression using Vandermonde feature construction provides a controlled example of geometric instability in scientific optimization workflows. As polynomial degree increases, the resulting design matrix becomes progressively ill-conditioned, amplifying sensitivity to perturbation and destabilizing least-squares estimation.
 
-To quantify this effect, Vandermonde matrices were constructed across 100 random uniformly sampled grids on the interval $[0,1]$, with 100 sample points in each grid. Table~\ref{tab:vandermonde_conditioning} reports the resulting condition-number statistics as polynomial degree increases.
+To quantify this effect, Vandermonde matrices were constructed across 100 random uniformly sampled grids on the interval $[0,1]$, with 100 sample points in each grid. \cref{tab:vandermonde_conditioning} reports the resulting condition-number statistics as polynomial degree increases.
 
 The results demonstrate rapid instability amplification under increasing polynomial complexity. By degree 20, condition numbers frequently exceeded $10^{15}$, entering regimes associated with catastrophic numerical sensitivity and effectively singular optimization geometry.
 
@@ -190,7 +192,7 @@ Forward finite differences are commonly used:
 f'(x) \approx \frac{f(x+h)-f(x)}{h}
 \end{equation}
 
-Choosing a stable step size $h$ is difficult because the approximation must balance two competing error sources~\cite{press}. SciPy finite-difference settings are often reasonable for well-scaled variables, but they can fail when parameters are extremely small, extremely large, or measured in incompatible units.
+Choosing a stable step size $h$ is difficult because the approximation must balance two competing error sources~\citep{press}. SciPy finite-difference settings are often reasonable for well-scaled variables, but they can fail when parameters are extremely small, extremely large, or measured in incompatible units.
 
 \subsection{Roundoff Error}
 
@@ -324,9 +326,9 @@ Convergence logs often reveal instability that scalar termination messages hide.
 
 \subsection{Relation to Existing Diagnostic Tooling}
 
-Many of these diagnostics are already supported by mature scientific software. SciPy optimization routines expose convergence messages, status codes, callback hooks, derivative options, Hessian or Hessian-vector interfaces for second-order methods, and trust-region algorithms whose behavior can be inspected through iteration counts, function evaluations, gradient norms, and termination messages~\cite{scipy}. These features provide low-level access to optimizer behavior.
+Many of these diagnostics are already supported by mature scientific software. SciPy optimization routines expose convergence messages, status codes, callback hooks, derivative options, Hessian or Hessian-vector interfaces for second-order methods, and trust-region algorithms whose behavior can be inspected through iteration counts, function evaluations, gradient norms, and termination messages~\citep{scipy}. These features provide low-level access to optimizer behavior.
 
-Derivative and curvature tooling further expands this diagnostic ecosystem. Packages such as \texttt{numdifftools} can approximate gradients, Jacobians, and Hessians by finite differences, supporting derivative checks and sensitivity analysis when analytic derivatives are unavailable~\cite{numdifftools}. Automatic differentiation systems such as JAX can provide programmatic gradients, Jacobians, Hessians, and gradient-consistency checks when the objective is differentiable and written in a compatible computational model~\cite{jax}. In machine-learning workflows, libraries such as Optax provide optimizer-state monitoring, adaptive gradient transformations, learning-rate schedules, and gradient clipping mechanisms that help control unstable updates~\cite{optax}.
+Derivative and curvature tooling further expands this diagnostic ecosystem. Packages such as \texttt{numdifftools} can approximate gradients, Jacobians, and Hessians by finite differences, supporting derivative checks and sensitivity analysis when analytic derivatives are unavailable~\citep{numdifftools}. Automatic differentiation systems such as JAX can provide programmatic gradients, Jacobians, Hessians, and gradient-consistency checks when the objective is differentiable and written in a compatible computational model~\citep{jax}. In machine-learning workflows, libraries such as Optax provide optimizer-state monitoring, adaptive gradient transformations, learning-rate schedules, and gradient clipping mechanisms that help control unstable updates~\citep{optax}.
 
 The present work does not replace these tools. It organizes their mechanisms---derivative evaluation, callbacks, curvature inspection, trust-region control, and optimizer-state monitoring---into a workflow-level framework for identifying and reporting instability patterns across scientific optimization pipelines.
 
@@ -338,7 +340,7 @@ The empirical study is not intended to establish universal optimizer rankings. I
 
 \subsection{UCI HIGGS Dataset}
 
-The main experiment uses the HIGGS dataset (UCI Machine Learning Repository dataset 280, DOI: \href{https://doi.org/10.24432/C5V312}{10.24432/C5V312})~\cite{higgs}. From the repository's \texttt{HIGGS.csv.gz} release, the study samples 250,000 of the 11,000,000 simulated events, each containing 28 real-valued physics features and a binary classification target. The optimization problem is logistic regression, solved through SciPy optimizers across 100 randomized train/test splits. The complete HIGGS pipeline and instability stress test are archived with the paper as a \href{numoptimization.ipynb}{supplementary Jupyter notebook}. Logistic regression was selected because it provides a smooth and interpretable optimization landscape whose conditioning behavior can be analyzed directly without introducing deep-learning-specific optimizer dynamics~\cite{boyd}. This setting combines a real scientific dataset, moderate-dimensional feature geometry, and a smooth objective whose Hessian conditioning can be measured directly.
+The main experiment uses the HIGGS dataset (UCI Machine Learning Repository dataset 280, DOI: \href{https://doi.org/10.24432/C5V312}{10.24432/C5V312})~\citep{higgs}. From the repository's \texttt{HIGGS.csv.gz} release, the study samples 250,000 of the 11,000,000 simulated events, each containing 28 real-valued physics features and a binary classification target. The optimization problem is logistic regression, solved through SciPy optimizers across 100 randomized train/test splits. The complete HIGGS pipeline and instability stress test are archived with the paper as a \href{numoptimization.ipynb}{supplementary Jupyter notebook}. Logistic regression was selected because it provides a smooth and interpretable optimization landscape whose conditioning behavior can be analyzed directly without introducing deep-learning-specific optimizer dynamics~\citep{boyd}. This setting combines a real scientific dataset, moderate-dimensional feature geometry, and a smooth objective whose Hessian conditioning can be measured directly.
 
 The evaluated methods are BFGS, CG, L-BFGS-B, and Powell. Powell was retained because derivative-free optimization remains common in scientific workflows where stable analytic derivatives are unavailable. Each method is run with and without feature scaling so that optimizer behavior can be compared under different conditioning regimes. The reported metrics include success rate, test log loss, test accuracy, Hessian condition number, function evaluations, iterations, and runtime. These HIGGS results are the core empirical evidence in the paper; the earlier analytic examples serve only to explain mechanisms.
 
@@ -418,7 +420,7 @@ Mean Test Accuracy & 0.6311 & 0.6395 & Improved convergence consistency \\
 
 To evaluate whether the scaling improvements reflect consistent behavior rather than isolated averages, we compared paired scaled and unscaled runs across randomized train/test splits. For each optimizer, the scaled and unscaled configurations were matched by seed, allowing direct comparison of preprocessing effects on the same data partition.
 
-Table~\ref{tab:scaling_significance} reports the relative change in Hessian conditioning, function evaluations, and runtime after scaling. The runtime and conditioning improvements after scaling were consistent across randomized splits and substantially exceeded the observed run-to-run variance. Paired Wilcoxon signed-rank tests comparing scaled and unscaled runtime distributions yielded $p < 0.001$ across all gradient-based methods.
+\cref{tab:scaling_significance} reports the relative change in Hessian conditioning, function evaluations, and runtime after scaling. The runtime and conditioning improvements after scaling were consistent across randomized splits and substantially exceeded the observed run-to-run variance. Paired Wilcoxon signed-rank tests comparing scaled and unscaled runtime distributions yielded $p < 0.001$ across all gradient-based methods.
 
 \begin{table}
 \centering
@@ -574,7 +576,7 @@ After scaling and mitigation, Hessian conditioning returned to stable levels and
 
 \subsection{Optimizer-Status Reliability Mismatches}
 
-A \emph{false success} occurs when an optimizer reports successful convergence while remaining substantially distant from a known global optimum or physically meaningful solution. A \emph{false failure} occurs when an optimizer reports unsuccessful termination despite satisfying objective-value or residual criteria. These status-reliability mismatches motivate reporting objective values, diagnostics, and sensitivity checks alongside optimizer messages. The instability stress test in Table~\ref{tab:higgs_instability} demonstrates that these mismatches occur empirically even in standard scientific machine-learning workflows when severe conditioning pathologies are introduced.
+A \emph{false success} occurs when an optimizer reports successful convergence while remaining substantially distant from a known global optimum or physically meaningful solution. A \emph{false failure} occurs when an optimizer reports unsuccessful termination despite satisfying objective-value or residual criteria. These status-reliability mismatches motivate reporting objective values, diagnostics, and sensitivity checks alongside optimizer messages. The instability stress test in \cref{tab:higgs_instability} demonstrates that these mismatches occur empirically even in standard scientific machine-learning workflows when severe conditioning pathologies are introduced.
 
 \subsection{Scope and Limitations}
 

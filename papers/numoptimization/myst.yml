@@ -24,6 +24,8 @@ project:
     - conditioning
     - numerical auditing
     - HIGGS
+  abbreviations:
+    UCI: University of California, Irvine
   error_rules:
     - rule: doi-exists
       severity: ignore
