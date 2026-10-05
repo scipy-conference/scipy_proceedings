@@ -55,7 +55,7 @@ Together, through a modular LLM stack (prompts, tools, retrieval, embeddings, ve
 :::{figure} collab_image.png
 :label: fig-collaboration
 
-Figure 1: Collaboration during the hackathon.
+Collaboration during the hackathon.
 :::
 
 ## The Modern AI Stack in Python
@@ -173,7 +173,7 @@ Jasmine's hackathon project relied on retrieval to ground responses in a trusted
 :::{figure} core_pattern_rag_flow.png
 :label: fig-rag-flow
 
-Figure 2: RAG pipeline flow diagram.
+RAG pipeline flow diagram.
 :::
 
 ```python
@@ -234,7 +234,7 @@ In practice, the chatbot received structured requests, passed them to backend an
 
 1. **Separate Understanding from Computation** - The LLM interprets the user's intent, but the predictive model and analytics pipeline do the actual math. This keeps forecasting logic outside the model and makes the system easier to test and trust.
 
-2. **Let the LLM Request Structured Data** - Instead of free-form answers, the LLM calls a function like get_retention_risk(school_id). That request is precise, typed, and limited to the data the backend is designed to return.
+2. **Let the LLM Request Structured Data** - Instead of free-form answers, the LLM calls a function like `get_retention_risk(school_id)`. That request is precise, typed, and limited to the data the backend is designed to return.
 
 3. **Return Predictable Analytics** - The Python system aggregates predictions and returns structured outputs such as risk scores, dropout probability, and attendance trends. The LLM then explains those results in plain language.
 

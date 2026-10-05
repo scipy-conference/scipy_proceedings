@@ -30,6 +30,10 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    LLM: large language model
+    RAG: retrieval-augmented generation
+    MCP: Model Context Protocol
+    ML: machine learning
   # Disclosure per the SciPy 2026 Gen AI Policy. A matching disclosure
   # also appears as a "GenAI Usage Disclosure" section at the end of main.md.
   generative_ai_disclosure: >-
