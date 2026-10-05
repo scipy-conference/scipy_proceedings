@@ -39,6 +39,12 @@ project:
     DSI: Data Science Institute
     OAEC: Occidental Arts and Ecology Center
     LiDAR: Light Detection and Ranging
+    CNN: Convolutional Neural Network
+    SVM: SonomaVegMap
+    DFME: Difference From Mean Elevation
+    AUC: Area Under the Curve
+    ROC: Receiver Operating Characteristic
+    VMTK: Vascular Modeling Toolkit
   error_rules:
     - rule: doi-exists
       severity: ignore

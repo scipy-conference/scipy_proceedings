@@ -1,3 +1,5 @@
+\title{From LiDAR to action: detecting upland gullies to combat erosion and forest fires}
+
 \begin{abstract}
 
 The University of Chicago's Data Science Institute (DSI) works with 11th Hour Project grantees to support environmental and human rights work. In this paper, we describe a collaboration with the Occidental Arts \& Ecology Center (OAEC) on their Fuels-to-Flows program, which stabilizes upland waterways by adding brushwood that would otherwise fuel forest fires. Gullies are hidden by trees, so we used publicly available, sub-meter resolution LiDAR data to identify gullies by the shape of the landscape throughout Sonoma County, California. Due to the limited size of hand-labeled training datasets, we built an alternative to a Convolutional Neural Network (CNN) by engineering convolutional kernels using domain-specific knowledge---a ``right-sized machine learning'' solution for this problem---then identified gully centerlines and built a network of gullies as paths. The final deliverable is a statically hosted map application that puts all available information into the hands of restoration practitioners and land managers: the gully network, forest fire fuel proxies, aerial imagery, elevation contours, cross-sectional profiling tools, and differences in elevation between two LiDAR scans in 2013 and 2022. In this paper, we also describe how we overcame technological problems: CUDA programming in Python using Numba to handle our unusually large convolution kernels, PMTiles to serve hundreds of gigabytes of map data as a static website, and cross-sectional profiling tools.
@@ -6,7 +8,7 @@ The University of Chicago's Data Science Institute (DSI) works with 11th Hour Pr
 
 \section{Introduction}
 
-Through a partnership with the Schmidt Family Foundation's 11th Hour Project, the University of Chicago's Data Science Institute (DSI) contributes statistical and computational expertise to programs working for renewable energy, resilient food systems, healthy oceans, and the protection of human rights. The project described in this paper benefits the Occidental Arts \& Ecology Center (OAEC)'s Fuels-to-Flows program~\citep{Dolman2025FuelsToFlows}\citep{OAECGullyStuffing}, an innovative effort to solve two environmental problems, wildfires and erosion, in one stroke. Rather than eliminating brushwood that would fuel forest fires using controlled burns, this program packs that brushwood into small upland gullies to slow down runoff and retain water in the landscape.
+Through a partnership with the Schmidt Family Foundation's 11th Hour Project, the University of Chicago's Data Science Institute (DSI) contributes statistical and computational expertise to programs working for renewable energy, resilient food systems, healthy oceans, and the protection of human rights. The project described in this paper benefits the Occidental Arts \& Ecology Center (OAEC)'s Fuels-to-Flows program~\citep{Dolman2025FuelsToFlows,OAECGullyStuffing}, an innovative effort to solve two environmental problems, wildfires and erosion, in one stroke. Rather than eliminating brushwood that would fuel forest fires using controlled burns, this program packs that brushwood into small upland gullies to slow down runoff and retain water in the landscape.
 
 We at the DSI were originally consulted to help find new sites for the Fuels-to-Flows program by scanning LiDAR data to find gullies and forest fire fuels in Sonoma County, California. Derived LiDAR products for forest fire fuels, ``ladder fuel proxies,'' were already provided by the SonomaVegMap project~\citep{SonomaVegMap} as publicly available data products, so we focused on identifying gullies.
 
@@ -22,14 +24,14 @@ Most gullies are hard or impossible to find by aerial photography because they a
 
 Our geographic scope is the entirety of Sonoma County. The methods are not intrinsically limited to one county, but the available data products make the county a convenient boundary and it is already a significant expansion beyond the OAEC and its local collaborators. In addition, Sonoma County is somewhat unusual in having repeat coverage, which we can use to estimate landscape changes due to erosion. That said, the kernel length scales were chosen for the gully morphology visible in Sonoma County's half-meter bare-earth data, so regions with substantially different terrain or coarser, sparser LiDAR would likely require rescaling the kernels and re-fitting the model.
 
-The main deliverable of this work is a web-based map in which all data layers can be overlaid for comparison. Some of those layers are directly copied from SonomaVegMap, such as ladder fuel proxies (e.g.\ LiDAR density 1--4~meters above ground divided by LiDAR density 0--4~meters above ground), or the Sonoma County GIS for parcel files for land ownership boundaries, with reformatting to provide them as map tiles. Other layers required significant derivation, such as the network of gullies that can be overlaid on other images. All of these data products are hosted on Cloudflare with documentation on our website, {\small \url{https://github.com/dsi-clinic/gully-map}}, to allow experts to dynamically load them in ArcGIS or QGIS. However, our web-based map is easier for non-experts and does not require extra software. Table~\ref{tab:data-products} summarizes all of the data products.
+The main deliverable of this work is a web-based map in which all data layers can be overlaid for comparison. Some of those layers are directly copied from SonomaVegMap, such as ladder fuel proxies (e.g.\ LiDAR density 1--4~meters above ground divided by LiDAR density 0--4~meters above ground), or the Sonoma County GIS for parcel files for land ownership boundaries, with reformatting to provide them as map tiles. Other layers required significant derivation, such as the network of gullies that can be overlaid on other images. All of these data products are hosted on Cloudflare with documentation on our website, {\small \url{https://github.com/dsi-clinic/gully-map}}, to allow experts to dynamically load them in ArcGIS or QGIS. However, our web-based map is easier for non-experts and does not require extra software. \cref{tab:data-products} summarizes all of the data products.
 
 \begin{table}
 \centering
 \small
 \begin{tabular}{l l l r}
 \toprule
-Layer & Derivation & Formats & Size \\
+\textbf{Layer} & \textbf{Derivation} & \textbf{Formats} & \textbf{Size} \\
 \midrule
 Land ownership boundaries & Reformatted from Sonoma County GIS & PMTile & 27 MiB \\
 Ladder fuel proxies & Reformatted from SVM 2022 & PMTile, GeoTIFF & 115 MiB \\
@@ -49,7 +51,7 @@ Elevation 2013 \& 2022 & Reformatted from SVM 2013 \& 2022 & PMTile, GeoTIFF & 2
 
 \section{Gully Detection Model}
 
-Two of the map features listed in Table~\ref{tab:data-products} are useful for finding gullies: color-enhanced hillshade, which is a raster image, and the detected gully network, which is vector data.
+Two of the map features listed in \cref{tab:data-products} are useful for finding gullies: color-enhanced hillshade, which is a raster image, and the detected gully network, which is vector data.
 
 \subsection{Color-Enhanced Hillshade}
 
@@ -63,7 +65,7 @@ where $\mathcal{F}_x$ and $\mathcal{F}_y$ are horizontal and vertical Fourier tr
 1 - 2 (1 - x) (1 - y) & \textrm{otherwise.}
 \end{array}\right\}
 \]
-This effectively colorizes the hillshade with the texture-enhanced relief signal. A sample of this transformation is shown in the top half of Figure~\ref{fig:banner}.
+This effectively colorizes the hillshade with the texture-enhanced relief signal. A sample of this transformation is shown in the top half of \cref{fig:banner}.
 
 \begin{figure}
 \centering
@@ -90,7 +92,7 @@ K_{\mathrm{DFME}}(x,y)=
 0 & \textrm{otherwise}
 \end{array}\right\}
 \]
-for $w$ = 1 pixel and $R$ = 50 pixels (25~meters), illustrated on the left of Figure~\ref{fig:kernels}. Convolving this kernel with the bare-earth elevation image effectively subtracts each pixel from the mean of all pixels in a circle of radius $R$ around it.
+for $w$ = 1 pixel and $R$ = 50 pixels (25~meters), illustrated on the left of \cref{fig:kernels}. Convolving this kernel with the bare-earth elevation image effectively subtracts each pixel from the mean of all pixels in a circle of radius $R$ around it.
 
 A convolutional layer in a CNN convolves the image with several kernels that are learned as part of the global optimization. The kernels represent relevant shapes at different size scales by pooling (resizing) the image in each layer. While that's necessary for recognizing complex images like the face of a cat with sufficient generality to be insensitive to camera angles and lighting, our task is much simpler: gullies are trough-shaped and the Earth is always viewed from directly above. Instead of convolving with $K_{\mathrm{DFME}}$, we can convolve with a trough-shaped kernel,
 \[
@@ -106,7 +108,7 @@ K_{\mathrm{trough}}(x,y;\theta, \sigma)=
 & \text{otherwise}
 \end{array}\right\}
 \]
-where $K_{\mathrm{trough}}$ is parameterized by an angle $\theta$, illustrated in the middle of Figure~\ref{fig:kernels}. A convolution with this kernel highlights pixels that are lower than the surrounding region and also part of a linear path of low pixels, a path angled by $\theta$ and tapered like a Gaussian with characteristic length $\sigma$. Performing a weighted sum over such kernels at a variety of angles $\theta$ highlights pixels in troughs of any direction, and this process is equivalent to inference in one convolution layer of a CNN.
+where $K_{\mathrm{trough}}$ is parameterized by an angle $\theta$, illustrated in the middle of \cref{fig:kernels}. A convolution with this kernel highlights pixels that are lower than the surrounding region and also part of a linear path of low pixels, a path angled by $\theta$ and tapered like a Gaussian with characteristic length $\sigma$. Performing a weighted sum over such kernels at a variety of angles $\theta$ highlights pixels in troughs of any direction, and this process is equivalent to inference in one convolution layer of a CNN.
 
 In practice, we noticed that convolutions with $K_{\mathrm{trough}}$ also highlighted one-sided cliffs, usually artificial cliffs along roadsides, because the cliff matches one side of a trough and missing the other side only dampens the convolution by a factor of 2. As a veto, we added another kernel that only matches one-sided cliffs:
 \[
@@ -120,7 +122,7 @@ K_{\mathrm{cliff}}(x,y;\theta, \sigma)=
 & \text{otherwise,}
 \end{array}\right\}
 \]
-illustrated on the right of Figure~\ref{fig:kernels}. A model that gives positive weight to convolutions with $K_{\mathrm{trough}}$ and negative weight to convolutions with $K_{\mathrm{cliff}}$ can distinguish between troughs and cliffs.
+illustrated on the right of \cref{fig:kernels}. A model that gives positive weight to convolutions with $K_{\mathrm{trough}}$ and negative weight to convolutions with $K_{\mathrm{cliff}}$ can distinguish between troughs and cliffs.
 
 \begin{figure}
 \centering
@@ -129,7 +131,7 @@ illustrated on the right of Figure~\ref{fig:kernels}. A model that gives positiv
 \caption{Convolution kernels for pixelwise gully detection. Left: the DFME kernel ($K_{\mathrm{DFME}}$) is positive in one pixel in the center, negative in a large disk around it, and sums to zero. Middle: a trough-shaped kernel ($K_{\mathrm{trough}}$) replaces the single positive pixel with an angled line of a characteristic length $\sigma$, tapered as $\exp(-x^2/\sigma^2)$. Right: the cliff veto kernel ($K_{\mathrm{cliff}}$) is a positive (red) Gaussian on one side of an angled line and negative (blue) on the other.\label{fig:kernels}}
 \end{figure}
 
-To be clear, we are replacing a learned-kernel CNN with feature engineering inspired by CNNs. We are using domain knowledge to hand-craft a set of kernels. We also know that convolutions with $K_{\mathrm{trough}}(x,y;\theta, \sigma)$ should have a roughly sinusoidal dependence on $\theta$ for a point in a linear gully with a stronger dependence if $\sigma$ is large because the kernel shape is a good fit when aligned and a bad fit when misaligned. We verified this for several points in gullies, one of which is shown in Figure~\ref{fig:connected-gullies-single-pixel}.
+To be clear, we are replacing a learned-kernel CNN with feature engineering inspired by CNNs. We are using domain knowledge to hand-craft a set of kernels. We also know that convolutions with $K_{\mathrm{trough}}(x,y;\theta, \sigma)$ should have a roughly sinusoidal dependence on $\theta$ for a point in a linear gully with a stronger dependence if $\sigma$ is large because the kernel shape is a good fit when aligned and a bad fit when misaligned. We verified this for several points in gullies, one of which is shown in \cref{fig:connected-gullies-single-pixel}.
 
 \begin{figure}
 \centering
@@ -169,7 +171,7 @@ we performed a logistic regression with parameters $a_i$ and bias term $b$
 &+ a_5 (H_5 - L_5) + a_6 L_{15}(H_{15} - L_{15}) + a_7 \left| F_{15} \right| + b
 \end{aligned}
 \end{equation}
-over all pixels $x$, $y$ and obtained the results shown in Table~\ref{tab:fit-results}. The fitted model's predicted probabilities for pixels labeled as ``not in gully'' or ``in gully'' are shown for the 9~watersheds in Figure~\ref{fig:residuals}; note that these are in-sample residuals. The dominant term is $M_{15}$, the minimum convolution with $\sigma = 15$~meter troughs. Because $M_{15}$ values are negative in gullies with a negative coefficient, this term contributes positively to the probability that a pixel is in a gully. The rest of the terms are amplitudes, one interaction term, and the cliff veto. The cliff veto is fitted in absolute magnitude because it has an antisymmetry for $\theta \to \theta + \pi$. Because it is always positive and has a negative coefficient, it contributes negatively to the probability that a pixel is in a gully. Figure~\ref{fig:cross-validation} provides an out-of-sample measure of model quality: the Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC), cross-validated across the 9~watersheds. All AUC values are above 0.98, indicating not only good discriminating power, but also consistency across watersheds.
+over all pixels $x$, $y$ and obtained the results shown in \cref{tab:fit-results}. The fitted model's predicted probabilities for pixels labeled as ``not in gully'' or ``in gully'' are shown for the 9~watersheds in \cref{fig:residuals}; note that these are in-sample residuals. The dominant term is $M_{15}$, the minimum convolution with $\sigma = 15$~meter troughs. Because $M_{15}$ values are negative in gullies with a negative coefficient, this term contributes positively to the probability that a pixel is in a gully. The rest of the terms are amplitudes, one interaction term, and the cliff veto. The cliff veto is fitted in absolute magnitude because it has an antisymmetry for $\theta \to \theta + \pi$. Because it is always positive and has a negative coefficient, it contributes negatively to the probability that a pixel is in a gully. \cref{fig:cross-validation} provides an out-of-sample measure of model quality: the Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC), cross-validated across the 9~watersheds. All AUC values are above 0.98, indicating not only good discriminating power, but also consistency across watersheds.
 
 \begin{figure}
 \centering
@@ -190,7 +192,7 @@ over all pixels $x$, $y$ and obtained the results shown in Table~\ref{tab:fit-re
 \small
 \begin{tabular}{c c c | c c c}
 \toprule
-parameter & value & term & parameter & value & term \\
+\textbf{parameter} & \textbf{value} & \textbf{term} & \textbf{parameter} & \textbf{value} & \textbf{term} \\
 \midrule
 $a_1$ & $\,-3.16$ & $M_{15}$ & $a_5$ & $\,-0.27$ & $(H_5 - L_5)$ \\
 $a_2$ & $\,-0.72$ & $(L_{15} - M_{15})$ & $a_6$ & $\,\,\,0.63$ & $L_{15}(H_{15} - L_{15})$ \\
@@ -202,7 +204,7 @@ $a_4$ & $\,\,\,0.20$ & $(M_5 - M_{15})$ & $b$   & $\,-9.80$ & (bias/intercept) \
 \caption{Fit results for the logistic regression in Equation~\ref{eqn:logistic-fit}.\label{tab:fit-results}}
 \end{table}
 
-Since the terms of the logistic regression are not all linear combinations of the convolutions, our model has diverged from a standard CNN, but it's still advantageous to add a second ``layer'' to clean the image further. This subsequent step consisted in shrinking the image by a factor of 2 (pooling) and convolving again, this time with $K_{\mathrm{trough}}(x,y;\theta, \sigma)$ with $\sigma = 20$~meters and minimize over 16 grid-points in $\theta$. Figure~\ref{fig:gully-finding-quality} illustrates the result for one gully system: (a)~shows the color-enhanced hillshade for reference, (b)~is the DFME method, (c)~shows a threshold applied to the DFME image to make a mask, then each connected component is shown in a different color, (d)~shows the probability output of this two-layer method, and (e)~is a similar mask colored by connected components with a probability $>$ 5\% threshold. Compared with DFME, the two layers of trough convolutions produce a considerably less noisy image with the main gully's connections intact.
+Since the terms of the logistic regression are not all linear combinations of the convolutions, our model has diverged from a standard CNN, but it's still advantageous to add a second ``layer'' to clean the image further. This subsequent step consisted in shrinking the image by a factor of 2 (pooling) and convolving again, this time with $K_{\mathrm{trough}}(x,y;\theta, \sigma)$ with $\sigma = 20$~meters and minimize over 16 grid-points in $\theta$. \cref{fig:gully-finding-quality} illustrates the result for one gully system: (a)~shows the color-enhanced hillshade for reference, (b)~is the DFME method, (c)~shows a threshold applied to the DFME image to make a mask, then each connected component is shown in a different color, (d)~shows the probability output of this two-layer method, and (e)~is a similar mask colored by connected components with a probability $>$ 5\% threshold. Compared with DFME, the two layers of trough convolutions produce a considerably less noisy image with the main gully's connections intact.
 
 \begin{figure}
 \centering
@@ -211,7 +213,7 @@ Since the terms of the logistic regression are not all linear combinations of th
 \caption{Comparison of gully-finding algorithms: (a)~color-enhanced hillshade, (b)~DFME, \\ (c)~its connected components, (d)~two-layer trough convolution, (e)~its connected components.\label{fig:gully-finding-quality}}
 \end{figure}
 
-The next step is to reinterpret the above-threshold pixels of the image as nodes in a graph, connected with any neighbors on their 8~sides, and skeletonize the image by removing nodes if removing them does not change the connectivity of the graph. We implemented a greedy algorithm that removes pixels in increasing order of probability, so that the threshold could be set very low: probability $>$ 1\%. To see why such a low threshold is needed, see Figure~\ref{fig:residuals}: distributions of non-gully probability peaks near 0, but gully pixels, which are much less numerous in the data, are more uniform from 0 to 1. The skeletonization and its resulting graph are shown in Figure~\ref{fig:skeletonization-and-graph-building}.
+The next step is to reinterpret the above-threshold pixels of the image as nodes in a graph, connected with any neighbors on their 8~sides, and skeletonize the image by removing nodes if removing them does not change the connectivity of the graph. We implemented a greedy algorithm that removes pixels in increasing order of probability, so that the threshold could be set very low: probability $>$ 1\%. To see why such a low threshold is needed, see \cref{fig:residuals}: distributions of non-gully probability peaks near 0, but gully pixels, which are much less numerous in the data, are more uniform from 0 to 1. The skeletonization and its resulting graph are shown in \cref{fig:skeletonization-and-graph-building}.
 
 \begin{figure}
 \centering
@@ -230,13 +232,13 @@ In both cases, we developed the analysis using standard libraries, then replaced
 
 \section{Delivery as a Static Map Application}
 
-Although the data products described in Table~\ref{tab:data-products} are accessible to geospatial applications like ArcGIS and QGIS, most of the intended consumers are not geospatial experts, so we built a web-based map application. This application has a conventional interface: a large scrollable map with switches in a sidebar to toggle layers.
+Although the data products described in \cref{tab:data-products} are accessible to geospatial applications like ArcGIS and QGIS, most of the intended consumers are not geospatial experts, so we built a web-based map application. This application has a conventional interface: a large scrollable map with switches in a sidebar to toggle layers.
 
 Often, these map applications are built with a server to provide map tiles on demand. A custom server would require occasional maintenance, which scales poorly because the DSI develops applications for many projects, and servers must be maintained indefinitely. Maintenance could be offloaded to a service like MapTiler, but accumulating services with monthly fees is a different kind of maintenance scaling. The best option is to provide an application as a static website---files served by Cloudflare without any application logic outside of the user's web browser.
 
 The map and sidebar are all client-side HTML built with Svelte. The data products add up to hundreds of GiB, which is far too much to load with the webpage; it will need to be dynamically loaded as tiles. A directory structure of XYZ tiles adds significant overhead and MBTiles require an active server to look up entries in an SQLite database. Instead, we used PMTiles~\citep{pmtiles}, a file format in which tiles are embedded at known seek positions within the file. A client-side library uses an index to find those seek positions, and then does a partial HTTP GET to access one tile at a time. All of the raster and vector data products are served as PMTiles.
 
-The map application also allows users to draw a straight or curved line on the map for a cross-section of the elevation along that line, as shown in Figure~\ref{fig:dashboard}. The elevation data used for this calculation is also provided as PMTiles. Each 32-bit floating point number is cast as the RGBA channels of a PNG raster in PMTiles and then decoded on the client.
+The map application also allows users to draw a straight or curved line on the map for a cross-section of the elevation along that line, as shown in \cref{fig:dashboard}. The elevation data used for this calculation is also provided as PMTiles. Each 32-bit floating point number is cast as the RGBA channels of a PNG raster in PMTiles and then decoded on the client.
 
 \begin{figure}
 \centering
@@ -250,7 +252,7 @@ where you will find a link to the map application, documented links to data prod
 
 \section{Cross-Disciplinary Reach}
 
-While the gully-finding study was underway, one of us was co-mentoring a University of Chicago Data Science Clinic project on an unrelated topic: a team of students were predicting pathologic complete response to treatment in breast cancer from MRI images using graph neural networks of the blood vessels. Building a graph from voxels identified as being in blood vessels is very similar to building a graph from pixels identified as being in blood vessels, except that MRI voxels are 3-dimensional while the LiDAR elevation map is 2-dimensional. Both studies need the connectivity achieved by setting segmentation thresholds low, and therefore they both benefit from the probability-ordered skeletonization algorithm described in Section~\ref{sec:numba}.
+While the gully-finding study was underway, one of us was co-mentoring a University of Chicago Data Science Clinic project on an unrelated topic: a team of students were predicting pathologic complete response to treatment in breast cancer from MRI images using graph neural networks of the blood vessels. Building a graph from voxels identified as being in blood vessels is very similar to building a graph from pixels identified as being in blood vessels, except that MRI voxels are 3-dimensional while the LiDAR elevation map is 2-dimensional. Both studies need the connectivity achieved by setting segmentation thresholds low, and therefore they both benefit from the probability-ordered skeletonization algorithm described in \cref{sec:numba}.
 
 One of the students, Jos\'e Cardona, adapted the 2-dimensional skeletonization algorithm to 3-dimensional blood vessels and observed performance gains in the final analysis compared to using the Vascular Modeling Toolkit (VMTK) skeletonization module in 3D Slicer. In the following quarter, the algorithm was further generalized to 4-dimensional time-series of MRI images, and our co-mentor Anna Woodard is now applying it to high time-resolution imaging sequences beyond the scope of the Clinic course. This instance of cross-disciplinary transfer illustrates the value of generalist organizations like the DSI, as well as a tight relationship between research and teaching.
 
