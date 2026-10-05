@@ -112,7 +112,7 @@ Recall our goal is to evaluate whether an LLM's location identification is compa
 ```
 In the first case, $\min(i, j) = 0$ occurs when comparing a string to an empty string. Let $i$ and $j$ also represent indices in a matrix whose columns represent the indices of one of the strings, with the first column denoting the first character and so on, and whose row represents the indices of the other string. Recursively, the “distance” is represented by the number of steps needed to convert one string to another. Each step is either a character deletion, represented by $\text{lev}_{a,b}(i-1, j) + 1$, a character insertion, represented by $\text{lev}_{a,b}(i, j-1) + 1$, or a character substitution $\text{lev}_{a,b}(i-1, j-1) + c(a_i, b_j)$.
 
-```{figure} ./levenshtein_matrix.pdf
+```{figure} ./levenshtein_matrix.png
 :name: LevensteinMatrix
 :alt: Article to be read with questions along the side.
 :align: center
@@ -126,19 +126,19 @@ For the example in @fig:scorematrix, 6 steps are the optimal number required to 
 
 ```{math}
 :label: eq-score
-$$\text{Score}_{\text{norm}} = \left(1 - \frac{\text{lev}_{a,b}(|a|, |b|)}{\max(|a|, |b|)}\right) \times 100$$
+\text{Score}_{\text{norm}} = \left(1 - \frac{\text{lev}_{a,b}(|a|, |b|)}{\max(|a|, |b|)}\right) \times 100
 ```
 The current project makes use not of general fuzzy matching, but partial ratio fuzzy matching, or subset fuzzy matching. Instead of comparing the entire string, subset fuzzy matching only matches the best matching substring of equal length. In other words, there is not a penalty for deleting ends off of a longer string. We prefer partial ratio matching over traditional fuzzy matching as we have found LLMs to prefix or suffix appropriate responses with additional characters, such as commentary like "The location is...", or an LLM would surround its responses with quotation marks. We do not wish to penalize these additional characters, as that would not interfere with the correctness of the LLM's response. For string $a$ length $m$ and string $b$ length $n$ where $m<n$, subset fuzzy matching creates an $n \times n$ matrix and computes the Levenshtein distance for every potential window of length $m$ for string $b$. The choice to use a text-based match motivates tuning the model to replicate a human’s identification as much as possible, where the human is instructed to be as conservative as possible in their answers. No hard threshold of fuzzy score responses was used to determine a match, though scores of about 70 tended to contain the same content through individual verification.
 
 
-A fuzzy score by itself cannot be the sole determiner of the success of the LLM. Such a measurement would only be true if human responses to the labeling questions are deterministic given an article. However, as mentioned above, human responses may naturally differ as well. What we do instead then is perform a fuzzy comparison between two human responses. Then, we perform a fuzzy comparison between the LLM and one of the human responses. We can then compare the distributions of those responses. This is a methodology adopted by both [@han2025] and [@wang2023]. Han et al. specifically call this evaluation by human agreement. The strategy involves, in some way, a type of Turing test where model success is not determined by closeness of model response, but rather the closeness of the distributions of the fuzzy pairs. To allow for a more concrete description of such a Turing test, we introduce both the two-sample Kolmogorov-Smirnov test and the Wasserstein distance.
+A fuzzy score by itself cannot be the sole determiner of the success of the LLM. Such a measurement would only be true if human responses to the labeling questions are deterministic given an article. However, as mentioned above, human responses may naturally differ as well. What we do instead then is perform a fuzzy comparison between two human responses. Then, we perform a fuzzy comparison between the LLM and one of the human responses. We can then compare the distributions of those responses. This is a methodology adopted by both @han2025 and @wang2023. Han et al. specifically call this evaluation by human agreement. The strategy involves, in some way, a type of Turing test where model success is not determined by closeness of model response, but rather the closeness of the distributions of the fuzzy pairs. To allow for a more concrete description of such a Turing test, we introduce both the two-sample Kolmogorov-Smirnov test and the Wasserstein distance.
 
-The Kolmogorov-Smirnov (K-S) test and the Wasserstein difference on 1-dimensional data allow for a more nuanced analysis of the data by comparing distributions between the different label pairs. The K-S test takes two samples and provides a similarity score with p-value as to whether the difference between these distributions is statistically significant. It is analogous to a two sample t-test for means. A low statistic and a high p value for these tests would indicate that the distributions are not distinct enough to tell apart. The statistic $D$ is computed in equation 3.
+The Kolmogorov-Smirnov (K-S) test and the Wasserstein difference on 1-dimensional data allow for a more nuanced analysis of the data by comparing distributions between the different label pairs. The K-S test takes two samples and provides a similarity score with p-value as to whether the difference between these distributions is statistically significant. It is analogous to a two sample t-test for means. A low statistic and a high p value for these tests would indicate that the distributions are not distinct enough to tell apart. The statistic $D$ is computed in [](#eq-ks).
 
-$$D = \sup_x \vert{}F_1(x) - F_2(x)\vert{}$$
+$$D = \sup_x \vert{}F_1(x) - F_2(x)\vert{}$$ (eq-ks)
 
 We let $F_1(x)$ and $F_2(x)$ be our two empirical cumulative distribution functions created from our two sets (human-human and human-LLM) of fuzzy pairs. We then compute the supremum of the difference between these functions to identify the divergence between the two, giving us a metric to determine whether the LLM and human responses could have the same underlying distribution. However, note that this test is not meant to prove that two distributions are the same, but can only give strong evidence that distributions are distinct. In other words, the null hypothesis is that the distributions are the same and the test finds evidence to reject the null hypothesis. With that in mind, we cannot assert the null hypothesis and should hedge our conclusions.
-Known as the Earth Mover's Distance and introduced by [@rubner2000], the Wasserstein distance is a metric that measures how much must change to transform one probability distribution into another. It quantifies the cost of transporting probability mass to align two distributions. The distance can be formulated as follows:
+Known as the Earth Mover's Distance and introduced by @rubner2000, the Wasserstein distance is a metric that measures how much must change to transform one probability distribution into another. It quantifies the cost of transporting probability mass to align two distributions. The distance can be formulated as follows:
 
 $$W_1(F_1, F_2) = \int_{-\infty}^{\infty} \Bigl| F_1(x) - F_2(x) \Bigr| \, dx$$
 
@@ -157,7 +157,7 @@ We compare the distributions here where @fig:butterfly displays the data and @fi
 
 
 
-```{figure} ./fuzzy_match_score_comparison.pdf
+```{figure} ./fuzzy_match_score_comparison.png
 :name: human-human-comparison-baserow
 :label: fig:butterfly
 :alt: Human-to-Human fuzzy comparison distribution plot
@@ -166,7 +166,7 @@ We compare the distributions here where @fig:butterfly displays the data and @fi
 Distribution of fuzzy match scores for double-verified human-to-human annotations for the Baserow dataset.
 ```
 
-```{figure} ./fuzzy_match_score_kde.pdf
+```{figure} ./fuzzy_match_score_kde.png
 :name: human-human-comparison-zooniverse
 :label: fig:kde
 :alt: Human-to-Human fuzzy comparison distribution plot

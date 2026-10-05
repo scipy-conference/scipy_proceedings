@@ -38,6 +38,13 @@ project:
     MyST: Markedly Structured Text
     RAG: Retrieval-Augmented Generation
     LLM: Large Language Model
+    CUAPB: Communities United Against Police Brutality
+    GIS: geographic information system
+    ACRB: Atlanta Citizen Review Board
+    OCR: optical character recognition
+    NER: named entity recognition
+    PUA: Private Use Area
+    K-S: Kolmogorov-Smirnov
 
   error_rules:
     - rule: doi-exists
