@@ -37,6 +37,12 @@ project:
     - spatial machine learning
     - mixed-integer optimization
     - pharmaceutical marketing
+  abbreviations:
+    HCP: healthcare provider
+    TRx: Total Prescriptions
+    NBRx: New-to-Brand prescriptions
+    TCL: Territory Call List
+    PDP: partial-dependence plot
   # Most references are books, blogs, case studies, or proceedings without a
   # registered DOI; ignore the doi-exists check for these citation keys.
   error_rules:
