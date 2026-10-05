@@ -179,7 +179,7 @@ As summarized in {numref}`tab:headline`, the fine-tuned agent managed to solve 1
 
 
 
-The agent exhibited impressive physical reasoning skills, with a good match of $96.4\%$ when using the deterministic solver routing. By examining manually the four unmatched cases ({numref}`tab:prompt_examples`), one finds that these discrepancies arose only in mathematically ambiguous boundary regimes, namely the unsteady flow around cylinders at low Reynolds numbers, where the choice of the solver is `icoFoam` rather than the obligatory `pimpleFoam`. On the grounds of computational physics, the switch to `icoFoam` is still quite justified. We have also provided few solvers examples not supported by the present agent in ({numref}`tab:prompt_examples`).
+The agent exhibited impressive physical reasoning skills, with a good match of $96.4\%$ when using the deterministic solver routing. By examining manually the four unmatched cases ({numref}`tab:prompt_examples`), one finds that these discrepancies arose only in mathematically ambiguous boundary regimes, namely the unsteady flow around cylinders at low Reynolds numbers, where the choice of the solver is `icoFoam` rather than the obligatory `pimpleFoam`. On the grounds of computational physics, the switch to `icoFoam` is still quite justified. We have also provided few solvers examples not supported by the present agent in {numref}`tab:prompt_examples`.
 ```{list-table} OOD Evaluation Metrics.
 :label: tab:headline
 :header-rows: 1
