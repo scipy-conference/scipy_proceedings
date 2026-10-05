@@ -138,7 +138,7 @@ SRR5468452_1.fastq  (13 GB, ~18.5M paired-end reads)
                       │                               │
                       ▼                               │
               benchmark_summary.csv                   │
-              figures (PNG)  ◄─────────────────────────┘
+              figures (PNG)  ◄────────────────────────┘
 ```
 
 The k-mer pipeline uses PySpark's native text reader on the raw FASTQ, bypassing the
@@ -289,9 +289,10 @@ for interpretation.
 
 ## Per-Stage Timing
 
-**Table 1** and **Table 2** report wall-clock times per pipeline stage.
+[](#tbl:cpu-timing) and [](#tbl:gpu-timing) report wall-clock times per pipeline stage.
 
-**Table 1. CPU wall-clock time (seconds) — scikit-learn / umap-learn 0.5.12.**
+:::{table} CPU wall-clock time (seconds) — scikit-learn / umap-learn 0.5.12.
+:label: tbl:cpu-timing
 
 | Scale | PCA (s) | UMAP (s) | DBSCAN (s) | Total (s)    |
 |-------|---------|----------|------------|--------------|
@@ -300,8 +301,10 @@ for interpretation.
 | 500k  | 0.36    | 203.8    | 22.46      | **226.61**   |
 | 1M    | —       | ✗ infeasible (process terminated) | — | —  |
 | 2M    | —       | ✗ infeasible | —      | —            |
+:::
 
-**Table 2. GPU wall-clock time (seconds) — RAPIDS cuML 26.6.0 on GB10.**
+:::{table} GPU wall-clock time (seconds) — RAPIDS cuML 26.6.0 on GB10.
+:label: tbl:gpu-timing
 
 | Scale | Transfer (s) | PCA (s) | UMAP (s)   | DBSCAN (s) | Total (s)    |
 |-------|-------------|---------|------------|------------|--------------|
@@ -309,6 +312,7 @@ for interpretation.
 | 500k  | 0.54        | 0.13    | **10.61**  | 11.69      | **22.42**    |
 | 1M    | 1.12        | 0.24    | **40.55**  | 58.15      | **98.93**    |
 | 2M    | 2.10        | 0.47    | **156.02** | 280.49     | **436.97**   |
+:::
 
 See @fig:timing for the combined bar chart visualization.
 
@@ -333,7 +337,8 @@ each scale post-warm-up-fix. The resulting 95% CI, propagated from the CPU-side
 standard error via the delta method (GPU contributes no variance here, n=1), is
 reported alongside the point estimate.
 
-**Table 3. GPU speedup over CPU baseline.**
+:::{table} GPU speedup over CPU baseline.
+:label: tbl:speedup
 
 | Scale | CPU Total (s), mean ± std (n) | GPU Total (s) | Speedup | 95% CI      |
 |-------|--------------------------------|----------------|---------|-------------|
@@ -341,6 +346,7 @@ reported alongside the point estimate.
 | 500K  | 224.0 ± 3.3 (n=3)              | 22.42          | **9.99 times** | 9.82–10.16 times |
 | 1M    | ✗ infeasible   | 98.93         | — | n/a (no CPU baseline) |
 | 2M    | ✗ infeasible   | 436.97        | — | n/a (no CPU baseline) |
+:::
 
 See @fig:speedup for the speedup curve.
 
@@ -357,15 +363,18 @@ Both pipelines use identical hyperparameters. Minor numerical differences in clu
 assignments may arise from floating-point ordering differences between CPU and GPU
 kernels.
 
-**Table 4. Clustering output — CPU runs.**
+:::{table} Clustering output — CPU runs.
+:label: tbl:clusters-cpu
 
 | Scale | Clusters | Noise % | Note                                             |
 |-------|---------|---------|--------------------------------------------------|
 | 100k  | 1       | 0.01%   | DBSCAN eps=0.5 yields single cluster at this scale |
 | 200k  | 2       | 0.01%   |                                                  |
 | 500k  | 12      | 0.02%   |                                                  |
+:::
 
-**Table 5. Clustering output — GPU runs.**
+:::{table} Clustering output — GPU runs.
+:label: tbl:clusters-gpu
 
 | Scale | Clusters | Noise % |
 |-------|---------|---------|
@@ -373,6 +382,7 @@ kernels.
 | 500k  | 19      | 0.03%   |
 | 1M    | 65      | 0.04%   |
 | 2M    | 91      | 0.01%   |
+:::
 
 The DBSCAN epsilon parameter requires tuning to the UMAP embedding scale, which varies
 by dataset. This is a known caveat of DBSCAN on UMAP outputs [@campello2013] and is

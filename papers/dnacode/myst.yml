@@ -14,7 +14,7 @@ project:
 
   authors:
     - name: Vinay Vyas
-      orchid: 0009-0001-7360-2155
+      orcid: 0009-0001-7360-2155
       email: vinaykvyas@gmail.com
       affiliations:
         - Independent Researcher
@@ -50,6 +50,7 @@ project:
     NVLink: NVIDIA NVLink interconnect
     FASTQ: FAST All Quality format
     k-mer: k-length nucleotide subsequence
+    OOM: out of memory
 
   error_rules:
     - rule: doi-exists
@@ -70,10 +71,3 @@ project:
         - servethehome_gb10
         - arm_developer_dgx_spark
         - nvidia_dgx_spark_product
-
-exports:
-  - id: pdf
-    format: typst
-    template: https://github.com/curvenote-templates/scipy.git
-    article: main.md
-    output: full_text.pdf
