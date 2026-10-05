@@ -24,7 +24,7 @@ into a sparse combination of learned directions. Sparse autoencoders have emerge
 
 ### Probing Classifiers
 
-Probing classifiers are surveyed in:[@belinkov2021probing].
+Probing classifiers are surveyed in @belinkov2021probing.
 
 ### The Common Bottleneck
 
@@ -178,6 +178,13 @@ A sonifier dashboard was created to convert activations to audible sound with se
 
 A demonstration of the AST sonifier is available at:
 [https://www.youtube.com/watch?v=8D0n7ruvTxk](https://www.youtube.com/watch?v=8D0n7ruvTxk)
+
+:::{iframe} https://www.youtube.com/embed/8D0n7ruvTxk
+:placeholder: ast_sonifier_demo.png
+:width: 100%
+
+Demonstration of the AST sonifier.
+:::
 
 [View the Source Code](https://raw.githubusercontent.com/virajsharma2000/scipy-26-paper/refs/heads/main/scipy-paper-2026-ast-sonification.ipynb)
 
