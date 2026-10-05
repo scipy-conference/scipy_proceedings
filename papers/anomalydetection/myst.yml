@@ -41,6 +41,12 @@ project:
     - signal processing
   abbreviations:
     MAD: median absolute deviation
+    EEG: electroencephalography
+    UCR: University of California, Riverside
+    CUSUM: cumulative sum
+    LODO: leave-one-domain-out
+    ROC-AUC: receiver operating characteristic area under the curve
+    PR-AUC: precision-recall area under the curve
   exports:
     - id: pdf
       format: typst

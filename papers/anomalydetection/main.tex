@@ -1,3 +1,5 @@
+\title{Detecting Anomalies in Scientific Data Using SciPy's Statistical and Signal Tools}
+
 \begin{abstract}
 Scientific datasets often contain subtle anomalies caused by sensor faults,
 experimental drift, measurement noise, rare events, or abnormal signal behavior.
@@ -71,7 +73,7 @@ This paper differs from prior work by focusing on the distinction between anomal
 
 \section{Methods}
 
-Table~\ref{tab:learning-settings} summarizes the methodological difference between the controlled and UCR evaluations.
+\cref{tab:learning-settings} summarizes the methodological difference between the controlled and UCR evaluations.
 
 \begin{table}[htbp]
 \centering
@@ -102,7 +104,7 @@ We generate clean signals from six scientific signal domains:
     \item \textbf{Fluid-sensor signals}: quasi-periodic vortex-shedding-like signals with modulation and noise.
 \end{itemize}
 
-These are synthetic domain-inspired signals, not measurements from real instruments. They are used because controlled generation allows the true anomaly mechanism, severity, and noise level to be known. These domains were chosen because they differ in baseline structure, noise statistics, and signal dynamics. This allows the experiment to test whether anomaly behavior generalizes across heterogeneous scientific signals. Figure~\ref{fig:domain-examples} shows one independently sampled clean trace and one drift-anomaly trace from each domain.
+These are synthetic domain-inspired signals, not measurements from real instruments. They are used because controlled generation allows the true anomaly mechanism, severity, and noise level to be known. These domains were chosen because they differ in baseline structure, noise statistics, and signal dynamics. This allows the experiment to test whether anomaly behavior generalizes across heterogeneous scientific signals. \cref{fig:domain-examples} shows one independently sampled clean trace and one drift-anomaly trace from each domain.
 
 \begin{figure*}[htbp]
 \centering
@@ -131,7 +133,7 @@ and four noise levels:
 \[
 1.0,\; 2.0,\; 3.0,\; 5.0.
 \]
-For each anomalous setting, 20 repeats are generated, giving \(6 \times 5 \times 7 \times 4 \times 20 = 16{,}800\) anomalous traces. We independently generate 16,800 clean traces, balanced across the six domains and four noise levels. The final controlled dataset therefore contains 33,600 signals (50\% clean and 50\% anomalous), each with 512 time points. The extracted feature matrix contains the 56 SciPy-derived features listed in Table~\ref{tab:feature-list}.
+For each anomalous setting, 20 repeats are generated, giving \(6 \times 5 \times 7 \times 4 \times 20 = 16{,}800\) anomalous traces. We independently generate 16,800 clean traces, balanced across the six domains and four noise levels. The final controlled dataset therefore contains 33,600 signals (50\% clean and 50\% anomalous), each with 512 time points. The extracted feature matrix contains the 56 SciPy-derived features listed in \cref{tab:feature-list}.
 
 \subsection{SciPy Feature Extraction}
 
@@ -225,7 +227,7 @@ We evaluate three representations:
 
 For binary anomaly detection, we evaluate Logistic Regression, SVM-RBF, Random Forest, and Extra Trees models where applicable. For anomaly-type classification, we compare SciPy-feature models, relative-signature models, and raw-signal models. Both tasks use a row-level, stratified random split with 75\% of rows for training and 25\% for testing (random seed 42). The split is not grouped by repeat or domain. Only the separate leave-one-domain-out (LODO) evaluation holds out complete domains.
 
-Table~\ref{tab:model-hyperparameters} records the non-default model settings used in the controlled and UCR experiments. Parameters not shown retain their scikit-learn defaults. Logistic Regression, SVM-RBF, and One-Class SVM inputs are standardized; the UCR feature and raw-window inputs are robustly standardized from their normal training windows.
+\cref{tab:model-hyperparameters} records the non-default model settings used in the controlled and UCR experiments. Parameters not shown retain their scikit-learn defaults. Logistic Regression, SVM-RBF, and One-Class SVM inputs are standardized; the UCR feature and raw-window inputs are robustly standardized from their normal training windows.
 
 \begin{table*}[htbp]
 \centering
@@ -277,7 +279,7 @@ For each anomalous signal, the rule system computes the mean response of the exp
 
 \subsection{Binary Detection Was Trivial Under Controlled Injection}
 
-Perfect controlled binary scores show that the injected perturbations are measurable, but also that this synthetic boundary is too easy. Table~\ref{tab:binary-detection} therefore motivates the harder mechanism task rather than a claim of deployment performance.
+Perfect controlled binary scores show that the injected perturbations are measurable, but also that this synthetic boundary is too easy. \cref{tab:binary-detection} therefore motivates the harder mechanism task rather than a claim of deployment performance.
 
 \begin{table*}[htbp]
 \centering
@@ -306,7 +308,7 @@ Raw-signal tree baselines reached balanced accuracy near 0.71, showing that the 
 
 \subsection{Anomaly Diagnosis Was Substantially Harder}
 
-Each mechanism contributes 3,360 anomalous traces and 840 traces to the stratified test set (4,200 total). The best model reached macro-F1 0.4578, above the raw-signal baseline (0.2051) and most-frequent dummy (0.0667). The dummy's balanced accuracy is 0.20 but its macro-F1 is lower because it predicts only one class. Table~\ref{tab:type-classification} reports all results.
+Each mechanism contributes 3,360 anomalous traces and 840 traces to the stratified test set (4,200 total). The best model reached macro-F1 0.4578, above the raw-signal baseline (0.2051) and most-frequent dummy (0.0667). The dummy's balanced accuracy is 0.20 but its macro-F1 is lower because it predicts only one class. \cref{tab:type-classification} reports all results.
 
 \begin{table*}[htbp]
 \centering
@@ -328,7 +330,7 @@ Most-frequent dummy & 0.2000 & 0.2000 & 0.0667 & 840/class \\
 
 \subsection{Confusion Structure of Anomaly Mechanisms}
 
-The macro-F1 score shows that anomaly-mechanism classification is substantially harder than binary detection, but it does not reveal which mechanisms are confused. We therefore inspect the confusion matrix of the best anomaly-type classifier, SciPy Features + Random Forest. Table~\ref{tab:type-confusion-normalized} shows the row-normalized confusion matrix, where each row represents the true anomaly type and each column represents the predicted anomaly type.
+The macro-F1 score shows that anomaly-mechanism classification is substantially harder than binary detection, but it does not reveal which mechanisms are confused. We therefore inspect the confusion matrix of the best anomaly-type classifier, SciPy Features + Random Forest. \cref{tab:type-confusion-normalized} shows the row-normalized confusion matrix, where each row represents the true anomaly type and each column represents the predicted anomaly type.
 
 \begin{table*}[htbp]
 \centering
@@ -357,7 +359,7 @@ This pattern has a mechanistic explanation. Drift produces a sustained baseline 
 
 \subsection{Relative Feature-Group Signature Map}
 
-Table~\ref{tab:signature-map} shows the average relative feature-group signature for each anomaly type. The strongest group for every anomaly type was amplitude-energy.
+\cref{tab:signature-map} shows the average relative feature-group signature for each anomaly type. The strongest group for every anomaly type was amplitude-energy.
 
 \begin{table*}[htbp]
 \centering
@@ -378,11 +380,11 @@ Spike & 0.1046 & \textbf{0.5407} & 0.0738 & 0.0846 & 0.0566 & 0.0602 & 0.0796 \\
 
 The signature map does not support the simple hypothesis that each anomaly type maps cleanly to a different dominant feature group. Even after robust normalization, clipping, median aggregation, and relative normalization, amplitude-energy remained the dominant group for every anomaly type. This indicates that the controlled anomaly injections often changed global signal energy even when the intended anomaly mechanism was local, spectral, or structural.
 
-As a post-hoc no-energy control, we removed the amplitude-energy column from the mean signatures in Table~\ref{tab:signature-map} and renormalized the six remaining columns to sum to one. Statistical-distribution then became the largest mean group for all five mechanisms, with normalized shares between 0.227 and 0.231. Thus removing energy changes which group dominates but does not recover a distinct dominant group for each mechanism. This control is descriptive; we did not retrain the classifiers or recompute per-trace rule accuracy without the energy group.
+As a post-hoc no-energy control, we removed the amplitude-energy column from the mean signatures in \cref{tab:signature-map} and renormalized the six remaining columns to sum to one. Statistical-distribution then became the largest mean group for all five mechanisms, with normalized shares between 0.227 and 0.231. Thus removing energy changes which group dominates but does not recover a distinct dominant group for each mechanism. This control is descriptive; we did not retrain the classifiers or recompute per-trace rule accuracy without the energy group.
 
 \subsection{Rule-Based Diagnosis}
 
-The rule-based diagnosis system achieved overall accuracy = 0.1993, essentially equal to the 0.2000 accuracy of a most-frequent-class baseline on the balanced five-class dataset. Table~\ref{tab:rule-diagnosis} shows the accuracy by anomaly type and makes clear that the aggregate result comes almost entirely from predicting distribution shift.
+The rule-based diagnosis system achieved overall accuracy = 0.1993, essentially equal to the 0.2000 accuracy of a most-frequent-class baseline on the balanced five-class dataset. \cref{tab:rule-diagnosis} shows the accuracy by anomaly type and makes clear that the aggregate result comes almost entirely from predicting distribution shift.
 
 \begin{table}[htbp]
 \centering
@@ -407,7 +409,7 @@ This explains why the overall rule-based diagnosis accuracy was approximately ch
 
 \subsection{Leave-One-Domain-Out Generalization}
 
-To test domain generalization, we trained an anomaly-type classifier on five domains and tested on the held-out sixth domain. Table~\ref{tab:logo} shows the results.
+To test domain generalization, we trained an anomaly-type classifier on five domains and tested on the held-out sixth domain. \cref{tab:logo} shows the results.
 
 \begin{table}[htbp]
 \centering
@@ -431,7 +433,7 @@ The leave-one-domain-out results show partial but limited domain generalization.
 
 \subsection{Statistical Tests on Feature-Group Responses}
 
-Kruskal-Wallis tests were used to test whether feature-group responses differed by anomaly type. Table~\ref{tab:kruskal} shows the results.
+Kruskal-Wallis tests were used to test whether feature-group responses differed by anomaly type. \cref{tab:kruskal} shows the results.
 
 \begin{table}[htbp]
 \centering
@@ -462,7 +464,7 @@ An important irony is that the peak-transient and trend-residual groups, which a
 
 To evaluate whether the SciPy anomaly detection workflow transfers beyond controlled synthetic injection, we performed an external validation experiment on the 2021 UCR Time Series Anomaly Archive \citep{wu2021ucr}, using \texttt{UCR\_TimeSeriesAnomalyDatasets2021.zip} from the archive URL recorded in the notebook. The notebook does not record a download date. Unlike the controlled benchmark, where anomaly type, severity, and noise level are generated by design, the UCR archive contains real time-series anomaly problems with labeled anomaly intervals encoded in the file metadata.
 
-We evaluated the first 60 archive files in lexicographic filename order. Four files were skipped because the sliding-window labeling procedure produced no anomalous test windows, leaving 56 evaluated files. Table~\ref{tab:ucr-file-selection} identifies both sets. Each time series was converted into overlapping windows of length 128 with step size 16. Windows ending before the training boundary were used as normal training windows. Test windows were labeled anomalous if they overlapped the labeled anomaly interval by at least 10\% of the window length. Point-adjusted F1 treats an anomaly interval as detected if at least one overlapping window is flagged, which is common in time-series anomaly detection but can be more optimistic than raw window-level F1.
+We evaluated the first 60 archive files in lexicographic filename order. Four files were skipped because the sliding-window labeling procedure produced no anomalous test windows, leaving 56 evaluated files. \cref{tab:ucr-file-selection} identifies both sets. Each time series was converted into overlapping windows of length 128 with step size 16. Windows ending before the training boundary were used as normal training windows. Test windows were labeled anomalous if they overlapped the labeled anomaly interval by at least 10\% of the window length. Point-adjusted F1 treats an anomaly interval as detected if at least one overlapping window is flagged, which is common in time-series anomaly detection but can be more optimistic than raw window-level F1.
 
 \begin{table*}[htbp]
 \centering
@@ -490,7 +492,7 @@ The controlled benchmark and UCR validation evaluate different learning settings
 
 \subsection{Results}
 
-Table~\ref{tab:ucr-results} summarizes the real-data validation results. The strongest method by mean point-adjusted F1 was SciPy Features + Isolation Forest, which achieved mean point-adjusted F1 = 0.2884, raw F1 = 0.1248, ROC-AUC = 0.7758, PR-AUC = 0.1801, and event detection rate = 0.4107 across 56 evaluated files. SciPy Features + One-Class SVM achieved the highest event detection rate at 0.6607, but had a lower mean point-adjusted F1 of 0.2646.
+\cref{tab:ucr-results} summarizes the real-data validation results. The strongest method by mean point-adjusted F1 was SciPy Features + Isolation Forest, which achieved mean point-adjusted F1 = 0.2884, raw F1 = 0.1248, ROC-AUC = 0.7758, PR-AUC = 0.1801, and event detection rate = 0.4107 across 56 evaluated files. SciPy Features + One-Class SVM achieved the highest event detection rate at 0.6607, but had a lower mean point-adjusted F1 of 0.2646.
 
 \begin{table*}[htbp]
 \centering
@@ -516,7 +518,7 @@ The real-data results also show that different metrics emphasize different opera
 
 \subsection{Best and Worst Cases}
 
-The SciPy Features + Isolation Forest method performed strongly on some UCR files but failed completely on others. Table~\ref{tab:ucr-best-worst} gives the exact per-file scores underlying those examples.
+The SciPy Features + Isolation Forest method performed strongly on some UCR files but failed completely on others. \cref{tab:ucr-best-worst} gives the exact per-file scores underlying those examples.
 
 \begin{table*}[htbp]
 \centering
