@@ -191,7 +191,7 @@ As a result, marimo's browser export ({ref}`sec:wasm`) requires a Python version
 :::{figure} figs/fig1_dispatch.png
 :label: fig:dispatch
 :width: 100%
-Figure 1 shows the cascading hashing mechanism for references.
+The cascading hashing mechanism for references.
 The left panel traces how references contribute to a cell key; the right shows the derivation over the full cell, abridged from `BlockHasher.__init__` (`marimo/_save/hash.py`).
 :::
 

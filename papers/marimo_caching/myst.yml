@@ -60,6 +60,12 @@ project:
     CA: Content-Addressed
     EP: ExecutionPath
     CEP: ContextExecutionPath
+    WASM: WebAssembly
+    HTML: HyperText Markup Language
+    REPL: read-evaluate-print loop
+    ONNX: Open Neural Network Exchange
+    FFI: foreign function interface
+    UI: user interface
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
