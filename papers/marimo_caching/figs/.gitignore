@@ -1,0 +1,4 @@
+# Generated vector figures. `save_fig` writes both .svg and .png; we
+# track only the .png (vector XML dumps thousands of noisy diff lines).
+# Regenerate locally with `make figures`.
+*.svg
