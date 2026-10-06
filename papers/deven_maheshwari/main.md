@@ -331,8 +331,7 @@ alignment with the GAM curve.
 
 To test whether the framework transfers beyond annual remote sensing data, we apply the identical
 pipeline to GPS telemetry from a single collared elephant monitored by the Mara Elephant
-Project between March 2008 and April 2009. The record contains 8,355 hourly movement segments,
-which was summarized by a daily mean travel speed to give 367 observations.
+Project between March 2008 and April 2009. The record contains 8,355 hourly movement segments, which were summarized by a daily mean travel speed to give 367 observations.
 
 The contrast between model classes is more significant than in the forest cover case. OLS fits a
 nearly flat line at 0.55 km h$^{-1}$ whose slope is statistically indistinguishable from zero. The
@@ -469,7 +468,7 @@ deployments. The research question: can an LLM propose a credible and narrower s
 (threshold of 20 values) when fed site characteristics? For each of the nine sites, a prompt was
 constructed describing quantitative characteristics computed from the data: site name, year range,
 total forest loss, mean annual loss, variance of annual loss, and the presence and timing of a
-regime change. Claude Sonnet 4, was selected as the model of choice due to its widespread use in
+regime change. Claude Sonnet 4 was selected as the model of choice due to its widespread use in
 industry [@anthropic2025]. Rounds of full grid search, LLM-guided search, and a random control
 group of 20 $\alpha$ values in a random range of equal log-width to the LLM suggestion were used
 to generate a comparison table.

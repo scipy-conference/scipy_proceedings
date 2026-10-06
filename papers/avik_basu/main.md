@@ -82,8 +82,8 @@ f(x) = \phi_0 + \sum_{i=1}^{M} \phi_i,
 where $\phi_0$ is the base (expected) value and $\phi_i$ is the contribution of
 feature $i$. A positive $\phi_i$ pushes the prediction above the baseline; a
 negative one pulls it below. For tree ensembles, these attributions can be
-computed exactly and efficiently [@shap_treeexplainer], which makes per-
-prediction explanation practical at production volumes.
+computed exactly and efficiently [@shap_treeexplainer], which makes per-prediction
+explanation practical at production volumes.
 
 For monitoring we are not interested in any single explanation, which is the
 usual per-prediction use [@basu2025shap]. We are interested in the *distribution*

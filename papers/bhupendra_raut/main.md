@@ -80,7 +80,7 @@ Modules register with a global `ModuleRegistry` when their package is imported. 
 2. Currently requires adding the package path to the `pipeline.modules` list in the pipeline's configuration file
 3. Optionally declare contracts for boundary validation. These implementations will be made mandatory in the stable release.
 
-No other source files should require modification for adding a module. Replacing an existing module. For example, substituting a deep-learning segmenter for the threshold-based detector, requires only that the replacement produce the same output context key (`segmented_ds`) satisfying the same output contract.
+No other source files should require modification for adding a module. Replacing an existing module (for example, substituting a deep-learning segmenter for the threshold-based detector) requires only that the replacement produce the same output context key (`segmented_ds`) satisfying the same output contract.
 
 ### Scaling to Many Modules
 
@@ -295,7 +295,7 @@ The pipeline operates as two cooperating threads. `AwsNexradDownloader` continuo
 
 **NetworkX.** The tracking module maintains a `networkx.DiGraph` of all observed cells and lineage edges across the processing session. This graph computes cell age and dominant lineage edges in split/merge complexes [@hagberg2008exploring].
 
-**DuckDB and PyArrow.** Per-cell statistics are persisted as Parquet, a columnar on-disk file format for analytical data [@vohra2016parquet], written via PyArrow, the Python bindings to Apache Arrow's in-memory columnar layout [@lentner2019arrow]. Downstream queries are executed by an embedded DuckDB instance within `DataClient`. DuckDB is an in-process analytical SQL engine that runs directly against Parquet files [@raasveldt2019duckdb] which apply predicate and projection pushdown without loading full datasets into memory.
+**DuckDB and PyArrow.** Per-cell statistics are persisted as Parquet, a columnar on-disk file format for analytical data [@vohra2016parquet], written via PyArrow, the Python bindings to Apache Arrow's in-memory columnar layout [@lentner2019arrow]. Downstream queries are executed by an embedded DuckDB instance within `DataClient`. DuckDB is an in-process analytical SQL engine that runs directly against Parquet files [@raasveldt2019duckdb] and applies predicate and projection pushdown without loading full datasets into memory.
 
 (sec-roadmap)=
 ## Roadmap and Contribution Opportunities
