@@ -1,0 +1,80 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>`; the folder should be `<firstname_surname>`
+  id: scipy-2026-gustavo_haase
+  # Ensure your title is the same as in your `main.md`
+  title: 'PanelBox: A Comprehensive Python Library for Panel Data Econometrics'
+  description: >-
+    PanelBox is the first all-in-one Python library for panel data econometrics,
+    bringing dynamic GMM, spatial models, stochastic frontiers, panel
+    unit-root/cointegration tests, and interactive reporting to the scientific
+    Python stack.
+  authors:
+    - name: Gustavo Coelho Haase
+      email: gustavohaase@gmail.com
+      orcid: 0009-0000-5473-4913
+      affiliations:
+        - Banco do Brasil S.A., Brasília, Brazil
+      corresponding: true
+      roles:
+        - Conceptualization
+        - Software
+        - Methodology
+        - Validation
+        - Visualization
+        - Writing – original draft
+    - name: Paulo Henrique Dourado
+      email: paulodourado.unb@gmail.com
+      orcid: 0000-0003-2269-4333
+      affiliations:
+        - Banco do Brasil S.A., Brasília, Brazil
+      roles:
+        - Software
+        - Validation
+        - Writing – review & editing
+    - name: Osvaldo Candido
+      email: candido.f@gmail.com
+      orcid: 0000-0002-4850-6989
+      affiliations:
+        - Graduate School in Economics, Universidade Católica de Brasília,
+          Brasília, Brazil
+      roles:
+        - Supervision
+        - Conceptualization
+        - Writing – review & editing
+  keywords:
+    - panel data
+    - econometrics
+    - dynamic panel GMM
+    - spatial econometrics
+    - reproducible research
+  abbreviations:
+    GMM: Generalized Method of Moments
+    FE: Fixed Effects
+    RE: Random Effects
+    SFA: Stochastic Frontier Analysis
+    IRF: Impulse Response Function
+    PPML: Poisson Pseudo-Maximum-Likelihood
+  # Ignore the DOI-exists check for citation keys that have no DOI
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - linearmodels2019
+        - roodman2009stata
+        - roodman2009hansen
+        - seabold2010statsmodels
+        - mckinney2011pandas
+        - fritsch2019pdynmc
+        - panelbox2025
+        - scipy
+        - plotly
+        - wooldridge2010
+        - bond2001
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
