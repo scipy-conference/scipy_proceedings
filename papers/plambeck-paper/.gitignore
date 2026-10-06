@@ -1,0 +1,5 @@
+# Local build environment and MyST artifacts — do not commit
+.venv/
+_build/
+node_modules/
+*.log
