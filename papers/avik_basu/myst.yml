@@ -1,0 +1,55 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-avik_basu
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Right Predictions, Wrong Reasons: Explanation Drift Monitoring in
+    Production'
+  description:
+    Detecting when a production model keeps its accuracy but silently changes
+    its reasoning, by tracking SHAP attribution distributions over time as a
+    complement to feature-drift and performance monitoring.
+  authors:
+    - name: Avik Basu
+      email: avikbasu93@gmail.com
+      orcid: 0009-0002-4489-378X
+      corresponding: true
+      affiliations:
+        - Intuit, Inc.
+        - PyOpenSci
+  keywords:
+    - explainability
+    - SHAP
+    - model monitoring
+    - drift detection
+    - production machine learning
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    SHAP: SHapley Additive exPlanations
+    PSI: Population Stability Index
+    KS: Kolmogorov-Smirnov
+    AUC: Area Under the ROC Curve
+    ML: Machine Learning
+    UUID: Universally Unique Identifier
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        # None of these six has a registered DOI: a 2006 Wiley monograph, a blog
+        # post, two NeurIPS-proceedings papers, and two software projects.
+        # Every other reference now carries one.
+        - psi_siddiqi
+        - adversarial_validation
+        - evidently
+        - shapmonitor
+        - lightgbm
+        - apache_arrow
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
