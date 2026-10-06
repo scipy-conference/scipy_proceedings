@@ -95,7 +95,7 @@ layer between front-end usage and the terms of the spec, to provide users with
 a stable interface and a backend that is able to evolve and forward metadata
 as the specification and its terms evolve. This backend uses Python `dataclasses`
 to represent the specification model directly which is accessible to users for
-inspection, alongside with convenient access to the pixel data as lazy Dask arrays.
+inspection, along with convenient access to the pixel data as lazy Dask arrays.
 The core abstraction is a four-step pipeline: an in-memory array becomes an
 `NgffImage`, which becomes a multiscale `NgffMultiscales`, which is written
 to an OME-Zarr store.
@@ -267,7 +267,7 @@ nz.to_ngff_zarr("output.ome.zarr", multiscales, enabled_rfcs=[4])
 
 The most significant recent addition is emerging support for RFC-5, which
 provides first-class coordinate systems and transformations in OME-Zarr and is
-the centerpiece of the version 0.6 [@rfc5]. RFC-5 introduces named
+the centerpiece of version 0.6 [@rfc5]. RFC-5 introduces named
 coordinate systems (sets of axes) and a richer vocabulary of transformations —
 including identity, axis permutation and projection, translation, scale, affine, rotation,
 sequences of transformations, and field-based displacement and coordinate
