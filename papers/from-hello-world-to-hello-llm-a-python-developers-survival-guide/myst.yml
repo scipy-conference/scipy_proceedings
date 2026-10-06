@@ -1,0 +1,59 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-hello-llm-survival-guide
+  # Ensure your title is the same as in your `main.md`
+  title: "From Hello World to Hello LLM: A Python Developer's Survival Guide"
+  # subtitle: none
+  # Authors should have affiliations, emails and ORCIDs if available
+  # Editor Note: only one email address will be shown per person. Select one.
+  # Editor Note: author names will appear in the order listed here. Verify the order.
+  authors:
+    - name: Jasmine Omeke
+      email: j.omeke.consults@gmail.com
+      # email: jomeke@post.harvard.edu
+      orcid: 0009-0008-7044-3364
+      corresponding: true
+      affiliations: Airbnb
+    - name: Audrey Webb
+      email: audreyehiwebb@gmail.com
+      # email: awebb@berkeley.edu
+      orcid: 0009-0009-2257-3567
+      affiliations: Autodesk
+  keywords:
+    - LLM
+    - Python
+    - RAG
+    - AI tools
+    - education
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    LLM: large language model
+    RAG: retrieval-augmented generation
+    MCP: Model Context Protocol
+    ML: machine learning
+  # Disclosure per the SciPy 2026 Gen AI Policy. A matching disclosure
+  # also appears as a "GenAI Usage Disclosure" section at the end of main.md.
+  generative_ai_disclosure: >-
+    Generative AI (Claude, Anthropic) was used as an editing aid, primarily to
+    help tighten sentence structure and shorten overly long sentences in the
+    abstract, and to check grammar and flow. All technical content, code
+    examples, patterns, and conclusions are the authors' own work.
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
