@@ -1,0 +1,63 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-llm_agents_production
+  # Ensure your title is the same as in your `main.md`
+  title: Everything That Breaks When You Put an LLM Agent in Production
+  # subtitle:
+  description:
+    A production case study of reliability, observability, checkpointing,
+    concurrency control, and failure recovery in LLM-based agent workflows for
+    regulated batch record processing.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Sruthi Pisipati
+      email: sruthi.pisipati@gmail.com
+      affiliations:
+        - Boston Scientific Corporation
+      corresponding: true
+    - name: Haris Javed
+      email: javenest0012@gmail.com
+      affiliations:
+        - Boston Scientific Corporation
+  keywords:
+    - llm agents
+    - agentic ai
+    - production ai
+    - reliability engineering
+    - distributed systems
+    - observability
+    - batch processing
+    - scientific computing
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    AI: Artificial Intelligence
+    LLM: Large Language Model
+    API: Application Programming Interface
+    RAG: Retrieval-Augmented Generation
+    GPT: Generative Pre-trained Transformer
+    ID: Identifier
+    JSON: JavaScript Object Notation
+    TPM: Tokens Per Minute
+    UI: User Interface
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - brooker2015backoff
+        - sculley2015hidden
+        - openai2025gpt5
+        - openai2024embeddings
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf

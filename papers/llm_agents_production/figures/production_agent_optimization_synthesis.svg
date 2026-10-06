@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="230" viewBox="0 0 1200 230" role="img" aria-labelledby="title desc">
+  <title id="title">Production agent optimization synthesis</title>
+  <desc id="desc">A six-step flow from prototype to production batch, failure modes, reliability controls, optimization surface, and chosen operating point.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .accent { fill: #172554; stroke: #172554; }
+      .label { font: 700 19px Arial, sans-serif; fill: #0f172a; text-anchor: middle; }
+      .small { font: 400 13px Arial, sans-serif; fill: #475569; text-anchor: middle; }
+      .white { fill: #ffffff; }
+      .arrow { stroke: #64748b; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1200" height="230" fill="#f8fafc"/>
+  <g transform="translate(28,36)">
+    <rect class="box" x="0" y="0" width="160" height="135"/>
+    <text class="label" x="80" y="42">Prototype</text>
+    <text class="small" x="80" y="72">works once</text>
+    <text class="small" x="80" y="94">interactive retry</text>
+  </g>
+  <line class="arrow" x1="197" y1="103" x2="235" y2="103"/>
+  <g transform="translate(244,36)">
+    <rect class="box" x="0" y="0" width="160" height="135"/>
+    <text class="label" x="80" y="42">Batch</text>
+    <text class="small" x="80" y="72">many records</text>
+    <text class="small" x="80" y="94">unattended run</text>
+  </g>
+  <line class="arrow" x1="413" y1="103" x2="451" y2="103"/>
+  <g transform="translate(460,36)">
+    <rect class="box" x="0" y="0" width="160" height="135"/>
+    <text class="label" x="80" y="42">Failure</text>
+    <text class="small" x="80" y="72">timeouts</text>
+    <text class="small" x="80" y="94">partial output</text>
+  </g>
+  <line class="arrow" x1="629" y1="103" x2="667" y2="103"/>
+  <g transform="translate(676,36)">
+    <rect class="box" x="0" y="0" width="160" height="135"/>
+    <text class="label" x="80" y="42">Controls</text>
+    <text class="small" x="80" y="72">limits, retries</text>
+    <text class="small" x="80" y="94">checkpoints</text>
+  </g>
+  <line class="arrow" x1="845" y1="103" x2="883" y2="103"/>
+  <g transform="translate(892,36)">
+    <rect class="box" x="0" y="0" width="160" height="135"/>
+    <text class="label" x="80" y="42">Surface</text>
+    <text class="small" x="80" y="72">yield, cost</text>
+    <text class="small" x="80" y="94">TPM, agreement</text>
+  </g>
+  <line class="arrow" x1="1061" y1="103" x2="1099" y2="103"/>
+  <g transform="translate(1108,36)">
+    <rect class="box accent" x="0" y="0" width="64" height="135"/>
+    <text class="label white" x="32" y="58">Pick</text>
+    <text class="small white" x="32" y="84">point</text>
+  </g>
+</svg>
