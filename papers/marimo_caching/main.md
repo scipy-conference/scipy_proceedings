@@ -247,7 +247,7 @@ The two subsections below establish each property in turn.
 ### Invalidation does not miss tracked changes
 
 When the bytes of a content-addressed reference change, the hash changes, and so does every key built from it.
-However, the ``producer substitution'' case requires an argument tied directly to the notebook's execution.
+However, the "producer substitution" case requires an argument tied directly to the notebook's execution.
 Because marimo is a _reactive_ notebook, a value can change only if the cell that produced it re-runs, and a cell reactively re-runs only when its own code or inputs change, which are the components of its key.
 Provided that cell bodies are deterministic, an unchanged producer key therefore implies an unchanged value; {ref}`sec:limitations` discusses side effects and mutations that bypass the dataflow graph.
 
@@ -359,7 +359,7 @@ For a cached function, the same dispatch classifies the function's arguments at 
 # Storage and Loading
 
 On a cache hit, marimo must restore the variables the cached cell would have defined.
-marimo provides a few ``loaders'' that differ in how they store and load values.
+marimo provides a few "loaders" that differ in how they store and load values.
 However, restoring always has two parts: *lookup* finds the stored entry whose key matches $H(c)$, and *loading* deserializes the entry's values into memory.
 These two parts do not have to happen at the same time, because a notebook does not always need a value's bytes when it finds the corresponding cache entry.
 For example, a downstream cell may take a variable and pass it to a third cell without inspecting it.
