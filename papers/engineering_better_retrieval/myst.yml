@@ -1,0 +1,69 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-aarti_jha
+  # Ensure your title is the same as in your `main.md`
+  title: Engineering Better Retrieval for RAG
+  # subtitle:
+  description: >-
+    A three-stage framework for systematically optimizing retrieval pipelines in
+    Retrieval-Augmented Generation systems.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Aarti Jha
+      email: aajha@redhat.com
+      orcid: 0009-0000-2791-2067
+      corresponding: true
+      affiliations:
+        - Red Hat India Pvt. Ltd.
+    - name: Mahima Arora
+      email: cs.wu@example.org
+      orcid: 0000-0001-6299-5750
+      corresponding: true
+      affiliations:
+        - Red Hat India Pvt. Ltd.
+  keywords:
+    - retrieval-augmented generation
+    - information retrieval
+    - vector databases
+    - large language models
+    - document chunking
+    - RAG evaluation
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    RAG: Retrieval-Augmented Generation
+    LLM: Large Language Model
+    MMR: Maximal Marginal Relevance
+    SQL: Structured Query Language
+    RAGAS: Retrieval-Augmented Generation Assessment Suite
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - docling
+        - qdrant
+        - ragas
+        - langchain
+        - langgraph
+        - semantic_router
+        - lewis2020rag
+        - singh2025agenticrag
+        - yan2024crag
+        - anthropic2024contextual
+        - research_papers
+        - karpukhin2020dpr
+        - khattab2020colbert
+        - asai2023selfrag
+        - reimers2019sentencebert
+        - carbonell1998mmr
+        - retrieval_playground
+        - zheng2024stepback
+        - singh2024chunkrag
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
