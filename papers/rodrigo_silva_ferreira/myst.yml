@@ -1,0 +1,50 @@
+version: 1
+extends: ../papers.yml
+
+project:
+  id: scipy-2026-rodrigo-silva-ferreira
+
+  title: >-
+    25 Years of Interactive Scientific Computing: From IPython and Jupyter to
+    Open Source IDE-Native Notebooks
+
+  description: >-
+    An executable history of interactive scientific computing, tracing the
+    evolution from IPython through Project Jupyter to contemporary open-source
+    IDE-native notebook environments and AI-assisted scientific workflows.
+
+  authors:
+    - name: Rodrigo Silva Ferreira
+      email: rodrigosf672@gmail.com
+      orcid: 0009-0006-4991-5051
+      corresponding: true
+      affiliations:
+        - Independent Researcher, Pittsburgh, PA, USA
+
+  keywords:
+    - interactive computing
+    - Jupyter
+    - IPython
+    - scientific Python
+    - reproducible research
+    - literate programming
+    - open science
+    - notebooks
+
+  bibliography:
+    - references.bib
+
+  toc:
+    - file: interactive_scientific_computing.ipynb
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: interactive_scientific_computing.ipynb
+      output: full_text.pdf
+    - format: jats
+      article: interactive_scientific_computing.ipynb
+      output: _build/exports/jats.xml
+    - format: meca
+      article: interactive_scientific_computing.ipynb
+      output: meca.zip
