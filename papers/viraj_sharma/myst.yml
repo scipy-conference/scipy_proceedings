@@ -13,11 +13,10 @@ project:
     tranformer model activations into
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: viraj sharma
+    - name: Viraj Sharma
       email: viraj@modelrecon.com
       orcid: 0009-0006-6716-0430
       affiliations:
-        - AAAI, Singapore (Student Member- Member Number 647983)
         - Presidium School Delhi, India
   keywords:
     - activation map
