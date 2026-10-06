@@ -23,10 +23,12 @@ project:
     - name: Jake Wall
       email: jakew@earthranger.com
       affiliations:
-        - Allen Institute for AI (AI2); Earth Ranger
+        - Allen Institute for AI (AI2)
+        - EarthRanger
         - Wildlife Dynamics
-    - name: Catherine Villenueve
+    - name: Catherine Villeneuve
       email: catherine.villeneuve@mila.quebec
+      orcid: 0009-0005-4967-5986
       affiliations:
         - Montreal Institute for Learning Algorithms (MILA)
   keywords:
