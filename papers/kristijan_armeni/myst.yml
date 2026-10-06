@@ -24,8 +24,8 @@ project:
           email: team@civictechdc.org
           url: https://civictechdc.org
           github: https://github.com/orgs/civictechdc
-          city: Washinton
-          state: Disctrict of Columbia
+          city: Washington
+          state: District of Columbia
           country: United States of America
       roles:
         - Conceptualization
