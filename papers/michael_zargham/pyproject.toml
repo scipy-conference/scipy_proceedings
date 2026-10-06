@@ -1,0 +1,22 @@
+[project]
+name = "hc-scipy-2026-paper"
+version = "0.1.0"
+description = "SciPy 2026 paper — value function and reachable set of the homicidal chauffeur"
+requires-python = ">=3.10"
+dependencies = [
+    "bibtexparser>=1.4",
+    "jupyter>=1",
+    "matplotlib>=3.8",
+    "mystmd>=1.5",
+    "numpy>=1.26",
+    "pillow>=10",
+    "pytest>=8",
+    "pyyaml>=6",
+    "scipy>=1.12",
+    "sympy>=1.13",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+pythonpath = ["."]
