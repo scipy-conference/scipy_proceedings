@@ -376,7 +376,7 @@ In the previous section we specified a CatBoost regressor ensemble that translat
 
 The scenario table is built by isolating each HCP's latest observation, emitting a base scenario \(s=0\), and expanding \(s\) up to \(S_{\max}\). Feature alignment ensures every row carries the full union of predictors (including spatial lags), non-null HCP values \(v_i\), and validated constraint columns (\texttt{GEOGRAPHY}, \texttt{TERR\_CD}, \texttt{TERR\_MIN}, \texttt{TERR\_MAX}, \texttt{HCP\_MIN}, \texttt{HCP\_MAX}). The table is partitioned into geography-coherent batches to preserve territorial integrity and control memory use.
 
-We now specify the mixed-integer programming framework which consumes the counterfactual profiles to determine the best scenarios to use by the field force.
+We now specify the mixed-integer programming framework which consumes the counterfactual profiles to determine the best scenarios to be used by the field force.
 
 \subsubsection{Problem Statement and Formulation}
 \label{sec:mip_problem}
