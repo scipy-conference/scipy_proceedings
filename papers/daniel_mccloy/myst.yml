@@ -1,0 +1,101 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-daniel_mccloy
+  # Ensure your title is the same as in your `main.md`
+  title: On-boarding and retaining maintainer talent for MNE-Python
+  # subtitle:
+  description: |
+    We describe the struggle to attract and retain maintainers for scientific software
+    projects, and our attempts to surmount the problem in the MNE-Python project.
+    Our approach involved progressive training sprints over several years, which
+    yielded positive outcomes but at a high cost..
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Britta U. Westner
+      email: britta.westner@donders.ru.nl
+      orcid: 0000-0003-3231-1076
+      affiliations:
+        - Donders Institute for Brain, Cognition and Behavior
+        - Radboud University Medical Center
+      roles:
+        - Conceptualization
+        - Formal Analysis
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+    - name: Eric Larson
+      email: larsoner@uw.edu
+      orcid: 0000-0003-4782-5360
+      affiliations:
+        - Institute for Learning and Brain Sciences, University of Washington
+      roles:
+        - Conceptualization
+        - Supervision
+        - Writing – review & editing
+    - name: Daniel McCloy
+      email: dan@mccloy.info
+      orcid: 0000-0002-7572-3241
+      affiliations:
+        - Institute for Learning and Brain Sciences, University of Washington
+      corresponding: true
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+  keywords:
+    - neuroscience
+    - software maintenance
+    - software sustainability
+    - open source education
+    - community management
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    CI: continuous integration
+    PR: pull request
+    Q&A: question-and-answer
+    BDFL: benevolent dictator-for-life
+    GSoC: Google Summer of Code
+    DIY: do it yourself
+    OSPO: open-source program office
+    NSF: National Science Foundation
+    NIH: National Institutes of Health
+    DAF: Donor-Advised Fund
+    POSE: Pathways to enable Open-Source Ecosystems
+    EEG: electroencephalography
+    MEG: magnetoencephalography
+    ECoG: electrocorticography
+    fNIRS: functional near-infrared spectroscopy
+    MRI: magnetic resonance imaging
+    DTI: diffusion tensor imaging
+    MRS: magnetic resonance spectroscopy
+    MR: magnetic resonance
+    MNE: minimum norm estimation
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - mne_microstates
+        - pactools
+        - openneuropy
+        - mne_hcp
+    - rule: link-resolves
+      severity: ignore
+      keys:
+        - https://book.the-turing-way.org/
+        - https://data.crossref.org/fundingdata/funder/10.13039/100014989
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
