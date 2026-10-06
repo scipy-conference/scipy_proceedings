@@ -19,7 +19,7 @@ abstract: |
 ## Background
 
 MNE-Python [@mne_python] is open-source software for analyzing electrophysiological data in human neuroscience.
-"MNE" is an initialism for "minimum norm estimation", one of several ways in which activity in the brain can be estimated from measurements of the electomagnetic field taken outside the head.
+"MNE" is an initialism for "minimum norm estimation", one of several ways in which activity in the brain can be estimated from measurements of the electromagnetic field taken outside the head.
 The name is historical; nowadays MNE-Python implements many such inverse imaging algorithms, alongside analysis and visualization functionality described below.
 
 MNE-Python was created in 2010 by [Alexandre Gramfort](https://alexandre.gramfort.net/) as a port of the original [MNE](https://mne.tools/stable/install/mne_c.html) software (written in C by [Matti Hämäläinen](https://research.aalto.fi/en/persons/matti-h%C3%A4m%C3%A4l%C3%A4inen/)).
@@ -34,7 +34,7 @@ as computed by `cloc` [@adanial_cloc].
 
 MNE-Python's initial emphasis was magneto- and electro-encephalography (MEG and EEG) signals, but has since expanded to encompass electrocorticography (ECoG), functional near-infrared spectroscopy (fNIRS), and eyetracking data as well.
 It provides functionality for pre-processing (including filtering, downsampling, artifact detection and suppression), signal analysis (time-domain, spectral, spectrotemporal, clustering, decoding, and more), inverse imaging (estimation of cortical sources based on external sensor signals), and visualization.
-MNE-Python supports reading structural magnetic resonance (MR) images for visualizing estimated neural activity in the context of individual subject's anatomy,
+MNE-Python supports reading structural magnetic resonance (MR) images for visualizing estimated neural activity in the context of individual subjects' anatomy,
 but does *not* perform analysis of MR images, MR spectroscopic images, diffusion tensor images (DTI), or other MR-based neuroimaging methods; these modalities are well-covered by other Python neuroimaging software (*e.g.*, `nibabel`, `nilearn`, `nipy`, `nipype`, `DIPY`, and many others).
 
 ### Ecosystem
@@ -119,7 +119,7 @@ Examples of sprint projects include how to handle bad channels when working with
 
 ### Maintainer Onboarding
 
-After completion of the Intermediate Sprint we sought funding to support the onboarding new MNE-Python maintainers.
+After completion of the Intermediate Sprint we sought funding to support the onboarding of new MNE-Python maintainers.
 We received funding in 2025, and began training three alumni of our Intermediate Sprint and one exceptionally good GSoC contributor.
 The funding again allowed us to provide substantial stipends to the trainees.
 For the first 6 months, trainees met weekly (online) with an experienced maintainer to discuss topics such as optimization, configuring CIs, conducting code reviews, advanced testing concepts (fixtures, mocking, parametrization), environment management, packaging, dependencies, refactoring, release processes, and similar topics.
@@ -128,7 +128,7 @@ After 6 months, onboarding activities transitioned from prepared lessons to a co
 triage and PR review sessions, planning and execution of non-trivial documentation improvements,
 and phased improvements to our CI configuration.
 Plans for the second year of onboarding include deeper engagement with our user forum
-(including development of semi-automated approach to triaging user support queries),
+(including development of a semi-automated approach to triaging user support queries),
 assessment and adoption of triage management tooling,
 involving the trainee maintainers in long-term planning discussions (roadmap and funding),
 and integrating the lessons learned in year 1 into our in-process onboarding curriculum (see [](#curriculum) below).
@@ -160,7 +160,7 @@ This is due to a mixture of factors: a small pool of qualified people, the unfav
 For both sprints, around half of the attendees continued to contribute beyond the first year.
 Taking both sprints together, ten attendees contributed for two years or longer.
 In 2026, five and four years after the sprints, four attendees are still regularly contributing.
-Our contributor statistics show furthermore, that eight sprint attendees are currently ranking in the top 10% of all-time contributors to the project.[^topten]
+Our contributor statistics show, furthermore, that eight sprint attendees are currently ranking in the top 10% of all-time contributors to the project.[^topten]
 This includes some contributors who have been active for a smaller number of years but have been extraordinarily productive in that time.
 
 [^topten]: Contribution statistics are quantified as lines added to or deleted from the repository, as in [this script](https://github.com/mne-tools/mne-python/blob/bb034adbcfeda62560d36cd6dfd89301488260b5/tools/dev/update_credit_json.py); results can be viewed at https://mne.tools/dev/credits/credit.html. We acknowledge that this approach provides an incomplete picture of contribution history, but is (at the time of writing) the best estimate we have available.
@@ -175,10 +175,10 @@ In contrast to our past network-based recruitment practices, the current approac
 In our experience, providing education on how to contribute to open-source software, especially information specific to our project,
 greatly lowers the threshold for our users to be willing to attempt a contribution.
 This approach also allowed us to prioritize inclusivity in our recruitment and to address barriers that disproportionately impact underrepresented groups in our training.
-As of now, this has lead to a slight increase in the diversity of our regular contributors and maintainers.
+As of now, this has led to a slight increase in the diversity of our regular contributors and maintainers.
 Overall, we have retained roughly a third of the attendees for two years or longer.
 We do not have any insight into why long-term active attendees stop contributing, but assume that new careers, possibly outside of neuroscience, and the academic incentive system play a major role.
-However, that eight attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplifies the positive impact of our new onboarding approach on the project.
+However, that eight attendees are ranking among the top 10% contributors to MNE-Python and that four attendees are currently being onboarded to become maintainers exemplify the positive impact of our new onboarding approach on the project.
 
 
 
