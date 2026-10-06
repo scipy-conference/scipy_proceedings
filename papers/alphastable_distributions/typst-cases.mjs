@@ -654,6 +654,8 @@ function restoreLatexHeadingNumbering(tree, utils, source) {
 }
 
 function restoreSubfigureCaptions(tree, utils) {
+  // Subfigure label -> parent figure and letter, used to retarget xrefs below.
+  const subfigureTargets = new Map();
   utils.selectAll('container', tree).forEach((container) => {
     if (container.kind !== 'figure' || !Array.isArray(container.children))
       return;
@@ -690,6 +692,11 @@ function restoreSubfigureCaptions(tree, utils) {
         (child) => !['caption', 'legend'].includes(child?.type),
       );
       const letter = String.fromCharCode('a'.charCodeAt(0) + index);
+      if (subfigure.identifier && container.identifier)
+        subfigureTargets.set(subfigure.identifier, {
+          parent: container.identifier,
+          letter,
+        });
 
       gridChildren.push({ type: 'raw', typst: '[\n' });
       content.forEach((child) => {
@@ -720,6 +727,18 @@ function restoreSubfigureCaptions(tree, utils) {
       { type: 'div', children: gridChildren },
       ...container.children.filter((child) => !subfigures.includes(child)),
     ];
+  });
+
+  // Point subfigure references at the whole figure so the hover preview shows
+  // the full figure and its caption, keeping the letter in the link text
+  // (`\ref` -> "4a", `\cref` -> "Figure 4a").
+  utils.selectAll('crossReference', tree).forEach((node) => {
+    const target = subfigureTargets.get(node.identifier ?? node.label);
+    if (!target) return;
+    const prefix = node.children?.length ? '' : 'Figure\u00a0';
+    node.identifier = target.parent;
+    node.label = target.parent;
+    node.children = [{ type: 'text', value: `${prefix}%s${target.letter}` }];
   });
 }
 
@@ -895,8 +914,9 @@ function restoreExplicitReferenceSyntax(tree, utils) {
     // tex-to-myst represents `\eqref` as an empty reference. Supplying the
     // literal TeX template prevents a mismatched label prefix/target kind from
     // turning `equation~\eqref{...}` into e.g. “equation Table 1”.
-    if (!node.children?.length)
-      node.children = [{ type: 'text', value: '(%s)' }];
+    // `\cref` arrives with an explicit empty children array; leave it to MyST's
+    // kind-aware template so the whole "Table 1" is linked.
+    if (!node.children) node.children = [{ type: 'text', value: '(%s)' }];
   });
 }
 

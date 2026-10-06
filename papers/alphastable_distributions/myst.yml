@@ -19,33 +19,33 @@ project:
       email: wkt03@mail.aub.edu
       affiliations:
         - Electrical & Computer Eng. Department, American University of Beirut,
-          Lebanon.
+          Lebanon
       orcid: 0009-0003-0828-9507
     - name: Sharafeddine Sharafeddine
       email: ss4475@cornell.edu
       affiliations:
-        - School of Electrical & Computer Engineering, Cornell University, USA.
+        - School of Electrical & Computer Engineering, Cornell University, USA
         - Electrical & Computer Eng. Department, American University of Beirut,
-          Lebanon.
+          Lebanon
       orcid: 0009-0002-5623-575X
     - name: Ahmad El-Hajj
       email: aae108@mail.aub.edu
       affiliations:
         - Electrical & Computer Eng. Department, American University of Beirut,
-          Lebanon.
+          Lebanon
       corresponding: true
       orcid: 0009-0000-5343-1443
     - name: Jihad Fahs
       email: jf19@aub.edu.lb
       affiliations:
         - Electrical & Computer Eng. Department, American University of Beirut,
-          Lebanon.
+          Lebanon
       orcid: 0000-0001-5670-7759
     - name: Ibrahim Abou-Faycal
       email: ia14@aub.edu.lb
       affiliations:
         - Electrical & Computer Eng. Department, American University of Beirut,
-          Lebanon.
+          Lebanon
       orcid: 0000-0002-1596-318X
   keywords:
     - Heavy Tailed Data
