@@ -119,7 +119,7 @@ I propose a three-phase research program to evaluate the viability of AST:
   - Assessment of operator learning under supervised training
   - Improvement in classification accuracy
 * - 3  -  Comparative Oversight
-  - Does AST detect anomalies missed by text-based interpretibility methods?
+  - Does AST detect anomalies missed by text-based interpretability methods?
   - Head-to-head study: text labels vs. activation sonification
   - Miss rate, false alarm rate, response latency
 ```
@@ -136,7 +136,7 @@ As a part of testing the proposition, a set of demonstrations which target diffe
 
 #### Model Activations API
 
-As a part of testing the client modalities of a typical activation data, an API is created to generate activation vectors and activation sequences for clients. The backend loads GPT-2 Large (`d_model` 1280) and exposes activations from layer 8's residual stream.
+As a part of testing the client modalities of typical activation data, an API is created to generate activation vectors and activation sequences for clients. The backend loads GPT-2 Large (`d_model` 1280) and exposes activations from layer 8's residual stream.
 
 It has two API endpoints:
 
