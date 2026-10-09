@@ -79,7 +79,7 @@ decisions. Our contributions are:
    [@ref_juang2024] to validate whether feature labels correctly identify *which tokens* activate
    each feature, catching explanations that are "right for the wrong reasons."
 
-The remainder of this paper is organized as follows.[](#sec:raft) provides the ethical motivation for this work.
+The remainder of this paper is organized as follows. [](#sec:raft) provides the ethical motivation for this work.
 [](#sec:related) reviews related work.
 [](#sec:methodology) details our methodology. [](#sec:evaluation) describes our evaluation
 approach. [](#sec:experiments) presents our experimental setup, and [](#sec:results) reports
@@ -97,12 +97,12 @@ and adoption of the technology. Engendering trust in AI systems requires a frame
 AI development; we choose to follow the transparency principle outlined in the RAFT framework
 [@ref_gandhi2025] as the underpinning and motivation for understanding agent behavior.
 
-The advent of chat-based language models and rapid development in agenetic capabilities have highlighted the
+The advent of chat-based language models and rapid development in agentic capabilities have highlighted the
 ongoing need for robust and practical frameworks for AI Governance. Numerous political bodies and standards organizations
 have developed frameworks to manage the risks associated with AI - though these largely provide high-level ethical
 principles. By contrast, the RAFT framework is a value-criteria-indicator approach to Responsible AI that covers risks
 from traditional and generative AI. It is an intentionally lightweight methodology that focuses on what are considered
-"baseline" requirements for good AI Governance. The RAFT framework is compromised of 4 values - Reliable, Accountable,
+"baseline" requirements for good AI Governance. The RAFT framework is comprised of 4 values - Reliable, Accountable,
 Fair, and Transparent.
 
 ```{figure} images/RAFT.png
@@ -114,10 +114,10 @@ Core principles of the RAFT framework.
 ```
 From these principles organizations form specific criteria and indicators to assess whether their systems align to
 these values. For example, in the case of Transparency an organization might assign "explainable outputs"
-as a criteria towards alignment with this principle. Within that criterion will be multiple indicators that can be
+as a criterion towards alignment with this principle. Within that criterion will be multiple indicators that can be
 used as observable measures of progress - such as SHAP values (for predictive modeling) or chain-of-thought reasoning
 (in the case of generative AI systems). The mechanistic interpretability approach offered in this paper can serve as
-another indicator towards explainability and overall transparency of agenetic systems. Our hope is that by grounding
+another indicator towards explainability and overall transparency of agentic systems. Our hope is that by grounding
 the motivation for this work in a larger principles-based approach we can support the holistic development of responsible
 AI tooling.
 
@@ -127,13 +127,13 @@ AI tooling.
 ### Sparse Autoencoders for Interpretability
 
 Sparse autoencoders have emerged as a powerful tool for decomposing neural network activations
-into interpretable features. Bricken et al. [@ref_bricken2023] demonstrated that SAEs trained on
+into interpretable features. @ref_bricken2023 demonstrated that SAEs trained on
 language model activations can recover monosemantic features, identifying individual neurons in
 the SAE that correspond to single, interpretable concepts. This addresses the *superposition
 hypothesis*, which posits that neural networks represent more features than they have dimensions
 by encoding multiple concepts in overlapping directions [@elhage2022toymodelssuperposition].
 
-Cunningham et al. [@cunningham2023sparseautoencodershighlyinterpretable] extended this work with
+@cunningham2023sparseautoencodershighlyinterpretable extended this work with
 improvements to SAE training, including better initialization strategies and sparsity penalties.
 The JumpReLU activation function [@ref_rajamanoharan2024] provides exact sparsity, which improves
 interpretability by ensuring features are either clearly active or completely inactive.
@@ -157,7 +157,7 @@ in agent capabilities, interpretability of agent decisions has received limited 
 ### Automatic Interpretability
 
 Labeling features automatically addresses the scalability challenge of mechanistic
-interpretability. Bills et al. [@ref_bills2023] used language models to generate explanations for
+interpretability. @ref_bills2023 used language models to generate explanations for
 individual neurons. Our token-level fuzzing adapts this approach to validate whether feature
 labels identify the correct *tokens* that activate each feature.
 
@@ -333,7 +333,7 @@ where the columns of $W_\text{dec}$ are dictionary directions $\mathbf{d}_i$, wh
 to unit norm after each training step. The decoder bias $\mathbf{b}_\text{dec}$ is shared: it is
 subtracted before encoding and added after decoding.
 
-**Loss function.** Following Rajamanoharan et al. [@ref_rajamanoharan2024], the loss combines
+**Loss function.** Following @ref_rajamanoharan2024, the loss combines
 reconstruction with an L0 sparsity penalty:
 
 ```{math}
@@ -356,7 +356,7 @@ Since $H$ is non-differentiable, we use a smooth tanh approximation in practice:
 ```
 
 **Pseudo-gradients.** Because the Heaviside function has zero gradient almost everywhere,
-Rajamanoharan et al. [@ref_rajamanoharan2024] define pseudo-derivatives using a kernel density
+@ref_rajamanoharan2024 define pseudo-derivatives using a kernel density
 estimator with bandwidth $\varepsilon$ and rectangular kernel $K$. For the JumpReLU activation:
 
 ```{math}
@@ -804,7 +804,7 @@ SAE trained on that scenario (distinct from the SAE reported in this paper). In 
 captures a decision-token activation from the subject model, loads that pretrained SAE with
 `SAE.from_pretrained`, and reports the top features driving tool selection; it requires only
 `transformers` and `kiji-inspector` and runs on CPU. It can also be executed directly in
-Google Colab: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/575-lab/scipy_proceedings/blob/2026/papers/575-lab/quickstart_colab.ipynb)
+Google Colab: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scipy-conference/scipy_proceedings/blob/2026/papers/575-lab/quickstart_colab.ipynb)
 
 ### Limitations
 

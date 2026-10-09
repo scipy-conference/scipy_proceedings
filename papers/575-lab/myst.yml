@@ -11,7 +11,11 @@ project:
     A complete pipeline for interpreting agent tool-selection decisions with
     JumpReLU sparse autoencoders
   # subtitle:
-  description: Add a two sentence description about your article.
+  description:
+    A mechanistic interpretability pipeline that explains why AI agents choose
+    particular tools, using sparse autoencoder features extracted at the
+    decision token. Feature explanations are validated with token-level fuzzing
+    across agent scenarios in five domains.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Hannes Hapke
@@ -71,25 +75,6 @@ project:
     - AI agents
     - tool selection
     - feature interpretation
-  abstract: |
-    AI agents that autonomously select and run tools are increasingly deployed in business
-    contexts, yet their decision-making processes remain opaque. When an agent chooses to query
-    a database rather than search the web, what internal representations drive that choice?
-    Current approaches rely on prompt engineering, behavioral testing, or post-hoc explanations,
-    none of which reveal the actual computational mechanisms within the model. We present a
-    complete mechanistic interpretability pipeline for understanding agent tool-selection
-    decisions. Our approach extracts hidden-state activations from the subject model at the
-    precise moment of tool commitment (the *decision token*), trains a JumpReLU Sparse
-    Autoencoder (SAE) to decompose these activations into monosemantic features, and applies
-    contrastive analysis to identify which features are associated with specific decision
-    patterns. Crucially, the SAE learns the model's natural feature vocabulary without
-    contrastive supervision; contrastive pairs serve only as post-hoc statistical probes. We
-    validate our feature explanations using token-level fuzzing evaluation adapted from
-    EleutherAI's autointerp methodology, which tests whether labels identify the correct tokens
-    that activate each feature, not just the correct texts. Our pipeline processes diverse agent
-    scenarios across five domains and produces human-readable decision reports explaining the
-    internal factors driving tool selection. Our implementation is open source at
-    https://github.com/dataiku/kiji-inspector.
   # Table of contents: main manuscript + supplementary quickstart notebook
   toc:
     - file: main.md
@@ -112,6 +97,7 @@ project:
     SEM: Standard Error of the Mean
     ReLU: Rectified Linear Unit
     JumpReLU: Jump Rectified Linear Unit
+    CATE: Continuous Conditional Average Treatment Effect
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
