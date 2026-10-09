@@ -68,7 +68,7 @@ The source repository can be accessed from the [`usnistgov` Github repository](h
 ### Feature Relationships from Binary Data (`associations`)
 
 The primary function of `affinis` is to provide a consistent interface for feature relationship discovery, along the _entire lifecycle_ of a binary or bipartite dataset.
-While it's true that many relationship-detection and edge filtering routines use a "graph" (e.g. in the form of an adjacency matrix) as input, and returning a filtered graph as output, others use observation-level information from an original feature matrix.
+While it's true that many relationship-detection and edge filtering routines use a "graph" (e.g. in the form of an adjacency matrix) as input, and return a filtered graph as output, others use observation-level information from an original feature matrix.
 `affinis.associations` maintains a consistent API from observation data to feature relatedness measures.
 All functions in this module take in data as boolean design matrices (`observations x features`), and return a feature relatedness measure (`features x features`), i.e.,
 $f(X): \mathbb{B}^{m\times n} \rightarrow \mathbb{R}^{n\times n}$
@@ -91,7 +91,7 @@ Bipartite projection
 Backboning
 : _methods:_ `high_salience_skeleton` [@Robustclassificationsalient_Grady2012], `doubly_stochastic_filter` [@twostagealgorithm_Slater2009]
   \
-  Bipartite projections are notorious for becoming "hairballs" (with lots of edge noise). This class of methods try filter out edges using principled (often statistical) techniques, but only filter post-projection.
+  Bipartite projections are notorious for becoming "hairballs" (with lots of edge noise). This class of methods try to filter out edges using principled (often statistical) techniques, but only filter post-projection.
 
 Probabilistic graphical models (PGM)
 : _methods:_ `chow_liu` [@Approximatingdiscreteprobability_Chow1968], `forest_pursuit` [@sexton2025measuring]
@@ -130,7 +130,7 @@ The simplest way to "smooth" your results is to add at least one observation of 
 Add them to your overall counts to get a smoothed probability (Laplace smoothing) with `pseudocts=1.`
 
 Of course, you might not want these "pseudo-counts" to be worth as much as the "real" observations.
-Adding `pseudocts=0.5` would be using a Jeffrey's Prior.
+Adding `pseudocts=0.5` would be using a Jeffreys Prior.
 
 :::{figure}
 :align: center
@@ -155,7 +155,7 @@ $$
 We also provide a convenience to enforce `a+b=1`, which ensures the prior expected value is `a`, and when used for sampling purposes can prefer values of 0 or 1.[^bathtub]
 This is done with the `zero-sum` option, like so:
 
-[^bathtub]: i.e. a bathtub distribution, with the most likely values at the extremes instead of the middle)
+[^bathtub]: i.e. a bathtub distribution, with the most likely values at the extremes instead of the middle.
 
 ```python
 affinis.associations.forest_pursuit(X, pseudocts=('zero-sum',0.1))
@@ -165,11 +165,12 @@ Of course, all of this assumes that we can represent a given measure as a probab
 While most can (even atypical ones like cosine similarity in `affinis.associations.ochiai`) a few do not have a form that is easily representable as a ratio (like `affinis.associations.hyperbolic_project`).
 
 
-:::{image}
-:no-pdf: true
++++ {"no-pdf": true}
 
-![](img/smoothing-zero-sum.gif)
-:::
+```{image} img/smoothing-zero-sum.gif
+```
+
++++
 
 ### Visualization (`plots`)
 
@@ -177,7 +178,7 @@ Often when comparing the ability of an association measure to recover _structure
 
 Colors (like we have used above) can be somewhat hard to parse, so another option is to represent association strength with **size**.
 This intuition leads to what is commonly called a _Hinton diagram_.
-See #fig:assoc-example for a comparison of the Hinton diagrams for an example feature matrix, along with resulting feature relationship measures from `affinis.associations`.
+See @fig:assoc-example for a comparison of the Hinton diagrams for an example feature matrix, along with resulting feature relationship measures from `affinis.associations`.
 Size reflects normalized weight, while color can be used for the sign (positive vs negative).
 
 
@@ -264,7 +265,7 @@ The data $X$ is generated as a one-walk-per-row, one-node-per column binary matr
 The goal of a given challenge is to recover the ground truth graph $G$, _using only the data_ $X$.
 
 Every pair of $\{G,X\}$ can be given a unique ID in MENDR.
-For human readability, we create an ID that starts with its graph-type code, followed the number of nodes $n$, and the seed that generated the random sample, e.g:
+For human readability, we create an ID that starts with its graph-type code, followed by the number of nodes $n$, and the seed that generated the random sample, e.g:
 
 ```
 BL-N030S01
@@ -289,7 +290,7 @@ The parameters not included in the design are sampled randomly, using distributi
 | random walk **root**  | 1 sample $n_0 \sim \text{Multinomial}(n,1)$|
 | random **seed**       |  1, 2, ... ,  30                 |
 
-Experiment Settings (`MENDR` Dataset) {#tbl-mendr}
+Experiment Settings (`MENDR` Dataset)
 :::
 
 ### Serialization
@@ -370,7 +371,7 @@ The results in @tbl:mendr-results show a significant performance improvement of 
 | HSS             | 0.33 (0.36)     | 0.23 (0.22)     | 0.50 (0.19)     | 0.25 (0.35)     |
 | Resource Proj.  | 0.27 (0.43)     | 0.22 (0.19)     | 0.44 (0.31)     | 0.36 (0.31)     |
 
-Median (inter-quartile range) MENDR Benchmark results, reproduced from Table 6.3 in [@sexton2025measuring]
+Median (inter-quartile range) MENDR Benchmark results, reproduced from Table 6.3 in @sexton2025measuring
 :::
 
 GLasso still shows better performance with respect to APS, though for more investigation into the comparison of these two methods (and conditions under which Forest Pursuit can improve on GLasso's APS) see [@sexton2025measuring]
@@ -380,7 +381,7 @@ GLasso still shows better performance with respect to APS, though for more inves
 In order to rapidly benchmark network recovery algorithms across thousands of challenge datasets (as in MENDR), a different set of tradeoffs is needed when actually computing the performance---i.e. when _doing metrology_.
 
 First, for large networks, the number of _edges_ that need to be assessed grows _quadratically_ with the network size (number of nodes). This means, for instance, that a 1,000-node network will need to score a prediction set 3 orders of magnitude greater than that.
-Second, because edge predictions are general scalar-valued (or probabilities), the actual performance of an algorithm differs depending on the chosen edge threshold, so _all thresholds_ must be accounted for in the final performance estimate.
+Second, because edge predictions are generally scalar-valued (or probabilities), the actual performance of an algorithm differs depending on the chosen edge threshold, so _all thresholds_ must be accounted for in the final performance estimate.
 
 :::{aside}
 
@@ -410,7 +411,7 @@ Users would now have access to class properties that return useful metrics, calc
 
 - Positive Predictive Value (a.k.a. "Precision")
 - True-Positive Rate (i.e. Sensitivity, or "Recall")
-- Matthew's Correlation Coefficient (MCC)
+- Matthews Correlation Coefficient (MCC)
 - F-score
 - Fowlkes-Mallows index
 
