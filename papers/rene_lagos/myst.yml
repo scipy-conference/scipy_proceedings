@@ -16,7 +16,7 @@ project:
       orcid: 0000-0001-5195-9762
       affiliations:
         - Programa de Doctorado en Salud Pública, Instituto de Salud
-          Poblacional, Facultad de Medicina, Universidad de Chile.
+          Poblacional, Facultad de Medicina, Universidad de Chile
         - Centro para la Prevención y Control del Cáncer (CECAN)
         - Grupo de Ciencia de Datos para la Salud Pública
       corresponding: true
@@ -31,7 +31,7 @@ project:
     - name: Arnoldo Riquelme
       orcid: 0000-0002-8259-8960
       affiliations:
-        - Center for Cancer Prevention and Control (CECAN)
+        - Centro para la Prevención y Control del Cáncer (CECAN)
         - Department of Gastroenterology, Faculty of Medicine, Pontificia
           Universidad Católica de Chile
         - Instituto de Medicina, Red Salud UC Christus
@@ -42,6 +42,10 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    GC: Gastric cancer
+    ELT: Extract-Load-Transform
+    D-ETL: Dynamic ETL
+    DEIS: Department of Health Statistics and Information
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -52,6 +56,18 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - ferlay_j_global_2024
+        - departamento_de_estadistica_e_informacion_de_salud_norma_2016
+        - departamento_de_estadisticas_e_informacion_de_salud_norma_2023
+        - gautier_rpy2_2023
+        - hagberg_exploring_2008
+        - lagos_como_2025
+        - lagos_caracterizacion_2025
+        - lagos_effective_2026
+    - rule: link-resolves
+      severity: ignore
+      keys:
+        - https://tesisrenelagos.streamlit.app/
   exports:
     - id: pdf
       format: typst
