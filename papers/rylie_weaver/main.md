@@ -98,7 +98,8 @@ for head, outputs in predictions.items():
         print(f"\t{name}: {tuple(value.shape)}")
 ```
 
-:::{dropdown} Full Printed Output
+:::{note} Full Printed Output
+:class: dropdown
 
 ```text
 embeddings
@@ -475,7 +476,8 @@ output heads, whereas prediction runs included all 11 published heads. We used
 `num_splice_sites=512` for every sequence length, in line with the published
 model configuration.
 
-:::{dropdown} Throughput benchmark configuration
+:::{note} Throughput benchmark configuration
+:class: dropdown
 Benchmarks used one NVIDIA A100-SXM4-80GB GPU, batch size 1, the DeepMind
 precision policy, PyTorch 2.6.0 with CUDA 12.4, and `alphagenome-pt` 0.4.0. Each
 measurement reports the mean of 100 timed iterations following 20 warm-up
@@ -506,7 +508,8 @@ As training examples, we optimized the published architecture from both random
 and released parameters on masked language modeling and RNA-seq prediction using
 human chromosome 1.
 
-:::{dropdown} Training configuration
+:::{note} Training configuration
+:class: dropdown
 Each run used 16,384-bp sequences, a batch size of 8, a learning rate of
 $3\times10^{-5}$, the DeepMind precision policy, seed 42, and 1,000 training
 steps. Validation metrics were evaluated every 10 steps over 10 batches.

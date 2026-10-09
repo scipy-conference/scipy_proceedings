@@ -19,13 +19,15 @@ project:
       email: rweave15@vols.utk.edu
       orcid: 0000-0002-5205-7602
       affiliations:
-        - University of Tennessee, Knoxville; Oak Ridge National Laboratory
+        - University of Tennessee, Knoxville
+        - Oak Ridge National Laboratory
       corresponding: true
     - name: Gomathi Lakshmanan
       email: gomathi.l@hotmail.com
       orcid: 0009-0007-4155-7234
       affiliations:
-        - University of Tennessee, Knoxville; Oak Ridge National Laboratory
+        - University of Tennessee, Knoxville
+        - Oak Ridge National Laboratory
     - name: John Lagergren
       email: lagergrenjh@ornl.gov
       orcid: 0000-0002-8092-7433
@@ -39,6 +41,7 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    MLM: masked language modeling
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -49,6 +52,9 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - JAX-GitHub-2018
+        - PyTorch-NeurIPS-2019
+        - Transformers-NeurIPS-2017
   exports:
     - id: pdf
       format: typst
