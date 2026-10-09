@@ -1,0 +1,82 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2026-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2026-hongsup_shin
+  # No banner image for this paper (overrides the inherited default from ../papers.yml)
+  banner: null
+  # Ensure your title is the same as in your `main.md`
+  title:
+    'Automated Data Enrichment for Police Accountability: Where Agentic Judgment
+    Earns Its Place'
+  # subtitle:
+  description:
+    In high-stakes data enrichment a confidently wrong value is worse than a
+    blank, so the question is not whether an LLM can fill missing fields but
+    where agentic judgment earns its place. On the Texas Justice Initiative's
+    police shooting databases, a deterministic LangGraph pipeline searches,
+    validates, extracts, and escalates hard cases to a human, completing 92% of
+    officer and 70% of civilian records and inventing zero facts across twenty
+    fabricated incidents. Agency earns its place only in a judgment layer above
+    extraction, separating control flow (a relevance judge that escalates
+    wrong-article records) from bounded authority over a produced value (to null
+    or advise), each cleared by a reward-hacking-resistant evaluation gate. The
+    contribution is a discipline (an earn-it protocol) for deciding where
+    agentic judgment belongs in high-stakes data work.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Hongsup Shin
+      email: hongsup.shin@pm.me
+      orcid: 0009-0008-8437-6684
+      affiliations:
+        - Texas Justice Initiative
+      corresponding: true
+      roles:
+        - Conceptualization
+        - Data curation
+        - Formal analysis
+        - Investigation
+        - Methodology
+        - Software
+        - Validation
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
+  keywords:
+    - police accountability
+    - data enrichment
+    - LangGraph
+    - LLM-as-judge
+    - agentic workflows
+    - evaluation gate
+    - faithfulness
+    - human-in-the-loop
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    LLM: large language model
+    TJI: Texas Justice Initiative
+    OIS: officer-involved shooting
+    OAG: Office of the Attorney General
+    HITL: human-in-the-loop
+  # `doi-exists` is enforced for all references except these, which legitimately have no DOI
+  # (software/website @misc, a blog post, and a techreport). Add a new key here only if a
+  # genuinely DOI-less reference is added later.
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - anthropic2024agents
+        - fatalencounters
+        - langgraph
+        - langchain
+        - tavily
+        - psycopg2
+        - postgresql
+        - anthropic_claude
+        - tji2020ois
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
