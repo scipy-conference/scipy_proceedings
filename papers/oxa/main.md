@@ -110,13 +110,13 @@ composable. A user can `import` what they need, build something, and the
 result inherits the trustworthiness of the modular components, composing them into something new. Progress is
 multiplicative because integration is expected and relatively straightforward. However, the papers we write about that work
 are not modular or composable. Papers are currently monolithic and integration-hostile, everything gets trapped in a paper-shaped box. The figure cannot be pulled out of or
-cited independently of the paper, the data cannot be queried from the paper, and the code cannot be run against the data without re-implementing context the paper only eluded to. To reach this _composable_ potential, we need to be able to share about science in the same _modular_ ways we share code.
+cited independently of the paper, the data cannot be queried from the paper, and the code cannot be run against the data without re-implementing context the paper only alluded to. To reach this _composable_ potential, we need to be able to share about science in the same _modular_ ways we share code.
 
 It is worth being precise about a distinction that is often blurred in
-conversations about open science - _dissaggregation_ and _modularity_. _Disaggregation_ is placing
+conversations about open science - _disaggregation_ and _modularity_. _Disaggregation_ is placing
 each research component in a different, type-appropriate repository. _Modularity_ is dividing something into separate modules or components that can then be recombined. While _disaggregation_ does achieve the goal of separating components, it does not necessarily easily allow for reuse or recombination. Therefore it's important to note that _disaggregation_ and _modularity_ are not the same thing. The push, over the past two decades, to unbundle the scientific paper
 (separating preprints from peer review, peer review from venue, venue from data
-hosting, data hosting from code) has been been focused on _disaggregation_ which is an important step, especially for appropriate archiving and curation. However,
+hosting, data hosting from code) has been focused on _disaggregation_ which is an important step, especially for appropriate archiving and curation. However,
 disaggregation is not, on its own, the goal.
 The goal is **ecosystem composability**: research products whose components can be found, reused,
 recombined, and extended without losing their integrity or provenance
@@ -146,7 +146,7 @@ recombined, and extended without losing their integrity or provenance
 **Modular science is the principle that scientific outputs can become as composable as
 scientific software, given the right standards, identifiers, tooling, and
 packaging infrastructure.** The emerging primitives are visible: `import figure from paper` is no longer a metaphor.
-With component-level identifiers and a structured-document standard, a figure published in one preprint can be embedded, 
+With component-level identifiers and a structured-document standard, a figure published in one preprint can be embedded,
 with full provenance, in a review article, a textbook, a grant proposal, another
 lab's analysis notebook, or an AI chat. With the right standards the figure stays alive; the data underneath it stays addressable; updates propagate; attribution is automatic.
 
@@ -224,7 +224,7 @@ What's missing now is not a lack of bedrock elements, or ideas for flowers and h
 The 'soil' is the missing middle that provides the real basis for new models of scientific communication, attribution, discovery and remixing to occur.
 By working on that missing middle 'soil' layer, that's the unlocking and enabling function that makes so many more approaches possible, and what the tool developers at this meeting identified as a fundamental missing component in the ecosystem.
 It's crucial that these soil layers be community stewarded and governed, as an element of the ecosystem that is meant to connect different substrates and enable broad use and creativity from the developers of tools in the scientific space.
-This aligned with the gaps identified in the _Notebooks Now!_ project and pointed again to the need for a connecting, implementation-focused standard that is purpose-built and community-developed for sharing science digitally (where there is no need for the paper-shaped box) in a way that the modular elements of science in the 'bedrock' can be reused and remixed by both humans and machines. 
+This aligned with the gaps identified in the _Notebooks Now!_ project and pointed again to the need for a connecting, implementation-focused standard that is purpose-built and community-developed for sharing science digitally (where there is no need for the paper-shaped box) in a way that the modular elements of science in the 'bedrock' can be reused and remixed by both humans and machines.
 Therefore in Day 2 of this meeting as a collaborative group, we began the work on OXA with the defining community and technical principles outlined below.
 
 ## The RFC and community process
@@ -402,7 +402,7 @@ formats at scale.
 
 ## Why a new standard
 
-Every mention of a new standard makes one think of the [xkcd comic on standards](https://xkcd.com/927/). That comic proceeds as **Panel 1:** 'Situation: there are 14 competing standards'. **Panel 2:** '14?! Ridiculous! We need to develop one universal standard that covers everyone's use cases'. **Panel 3:** 'Soon: Situation: there are 15 competing standards.' The motivation for OXA is actually in opposition to Panel 2. There are existing generalized standards or approaches in prior works that do an excellent job of covering a wide range of use cases. There are also existing standards like JATS and others specifically for a print version of scientific communication. However, to create a purpose-built standard for our current digital era, with both humans and machines as users of this standard, we need something focused on these needs, rather than trying to build in niche needs to a general solution or repurpose a not-right-sized existing standard. Creating a new approach **that can connect to any of the existing standards** lets us build on where we are without needing users, infrastructure organizations or tool developers to change. 
+Every mention of a new standard makes one think of the [xkcd comic on standards](https://xkcd.com/927/). That comic proceeds as **Panel 1:** 'Situation: there are 14 competing standards'. **Panel 2:** '14?! Ridiculous! We need to develop one universal standard that covers everyone's use cases'. **Panel 3:** 'Soon: Situation: there are 15 competing standards.' The motivation for OXA is actually in opposition to Panel 2. There are existing generalized standards or approaches in prior works that do an excellent job of covering a wide range of use cases. There are also existing standards like JATS and others specifically for a print version of scientific communication. However, to create a purpose-built standard for our current digital era, with both humans and machines as users of this standard, we need something focused on these needs, rather than trying to build in niche needs to a general solution or repurpose a not-right-sized existing standard. Creating a new approach **that can connect to any of the existing standards** lets us build on where we are without needing users, infrastructure organizations or tool developers to change.
 
 OXA generalizes efforts into a shared _exchange_ format. Where for example, MyST and Quarto
 are authoring syntaxes and document pipelines, OXA is a neutral, web-native format onto which all of them — along with JATS — can map.
@@ -595,9 +595,9 @@ the RFC process; the licensing-and-attribution framework for modular components 
 under active development; and the 2026 roadmap includes further large-scale pilots
 and deeper integration of the Reader experience into bioRxiv and medRxiv. The
 broader test will be adoption: whether tool builders, publishers, and repositories
-converge on OXA as a shared layer. A standard is only as useful as the number of tools and institutions that actually emit and consume it. 
+converge on OXA as a shared layer. A standard is only as useful as the number of tools and institutions that actually emit and consume it.
 
-Other limitations or things to continue to address include how the OXA structuring occurs, "AI-readability" and the handling of versioning and continuous content. Even with a friendlier format, producing well-typed, richly linked OXA documents takes good conversion tooling, and that tooling is still in its early stages and designed for particular groups. Creating the format needs to be achievable for everyone, not just well-resourced or particularly tech-savvy players. Additionally the current work has focused on the use case of 'flowers' designed for humans, like new reading experiences. We need to test against use cases with AI agents and LLMs that are increasingly the consumers of scientific communication to close that "AI-readability" gap. Finally, OXA leans into preprints and computational content that changes over time. It's a strength for continuous science, but it means that OXA needs to be designed to handle versioning and pinning, so that both modularity and provenance are maintained. Directed work and community engagement around these topics will be crucial. 
+Other limitations or things to continue to address include how the OXA structuring occurs, "AI-readability" and the handling of versioning and continuous content. Even with a friendlier format, producing well-typed, richly linked OXA documents takes good conversion tooling, and that tooling is still in its early stages and designed for particular groups. Creating the format needs to be achievable for everyone, not just well-resourced or particularly tech-savvy players. Additionally the current work has focused on the use case of 'flowers' designed for humans, like new reading experiences. We need to test against use cases with AI agents and LLMs that are increasingly the consumers of scientific communication to close that "AI-readability" gap. Finally, OXA leans into preprints and computational content that changes over time. It's a strength for continuous science, but it means that OXA needs to be designed to handle versioning and pinning, so that both modularity and provenance are maintained. Directed work and community engagement around these topics will be crucial.
 
 We invite the SciPy community — long a leader
 in computational, open, and reproducible science, and the originators of much of
