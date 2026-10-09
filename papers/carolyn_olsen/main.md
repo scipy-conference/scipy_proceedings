@@ -66,7 +66,7 @@ retrieval* (whether to retrieve at all). It is comparatively under-evaluated, an
 therefore treat source selection as a research question in its own right and compare
 seven routing strategies in a single controlled, reproducible evaluation.
 
-The study, though, is in service of a larger goal. We release HiveGuide not as a **forkable template** for field-inspection assistants: a practitioner
+The study, though, is in service of a larger goal. We release HiveGuide as a **forkable template** for field-inspection assistants: a practitioner
 in agriculture, ecology, or equipment inspection can adopt the
 capture-extract-retrieve pattern wholesale, swap in their own
 schema and corpus, and use our results to pick a router for their own data. A forker
@@ -148,8 +148,8 @@ both, and generates a cited answer with `gpt-oss-120b`.
 Whisper (`whisper-1`) at roughly two seconds of latency. The completed transcription
 is then converted into a typed inspection record (next section). Each record is
 stored in PostgreSQL with a hive reference, timestamp, the raw transcription and
-notes, the structured observation fields (weather, temperature, queen/eggs/larvae/
-capped-brood visibility, laying pattern, activity level), and extracted action items.
+notes, the structured observation fields (weather, temperature,
+queen/eggs/larvae/capped-brood visibility, laying pattern, activity level), and extracted action items.
 
 **Ingestion.** The corpus is eight authoritative beekeeping references from
 cooperative-extension services and similar bodies, for example the Virginia
@@ -172,7 +172,7 @@ ungrounded answers and forces a retry.
 
 **Work required to fork for other disciplines:**
 The pipelines and the routing interface can run unchanged. Forkers will need to swap out
-the schema, the corpus, and the routing keys, as well asyou retouch a short list of tools and labels: the SQL query, the heuristic cues, the hive as the inspected unit, so they point at the new domain (@tbl:fork).
+the schema, the corpus, and the routing keys, as well as retouch a short list of tools and labels: the SQL query, the heuristic cues, the hive as the inspected unit, so they point at the new domain (@tbl:fork).
 
 ```{list-table} What a forker keeps, swaps, and retouches.
 :label: tbl:fork
@@ -250,8 +250,8 @@ whose domain literature lives in PDFs.
 We frame source selection as classifying each query into one of three intents
 (`personal_only`, `documents_only`, or `both_combined`) and routing accordingly.
 
-Critically, *all* classification-based strategies share a single routing-and-
-generation pipeline; they differ only in how they produce the intent label. This
+Critically, *all* classification-based strategies share a single
+routing-and-generation pipeline; they differ only in how they produce the intent label. This
 makes the comparison a controlled experiment: the retrieval and generation code is
 held constant.
 
@@ -572,8 +572,8 @@ metric is best read comparatively across strategies rather than as end-task
 accuracy.
 
 Agent failures shape the agent quality metrics. Under our error definition (no
-usable answer after retries), agent discretion failed on 54.7% of queries and agent
-+ intent on 49.3%, mostly from exhausting the 10-iteration budget on a mid-tier
+usable answer after retries), agent discretion failed on 54.7% of queries and
+agent + intent on 49.3%, mostly from exhausting the 10-iteration budget on a mid-tier
 open-source model and from tool-response parsing errors. Context relevance is
 consequently computed over a smaller, survivor-biased sample, and the groundedness
 means in @tbl:quality include failed queries scored 0 (success-only values appear in
