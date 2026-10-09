@@ -8,12 +8,12 @@ project:
   # subtitle:
   description:
     'A personal, memoir-style account for the "Spirit of SciPy" track, tracing
-    one path through 25 years of the scientific Python ecosystem''s
-    growth---from a 2005 meeting at UC Berkeley to the coordination structures
-    and academic homes that sustain it today. Organized around how the ecosystem
-    started, how it grew, and how it has lasted, the paper closes by asking who
-    is trusted with the room and time to build such infrastructure, and who pays
-    for that time when their institutions will not.'
+    one path through 25 years of the scientific Python ecosystem''s growth—from
+    a 2005 meeting at UC Berkeley to the coordination structures and academic
+    homes that sustain it today. Organized around how the ecosystem started, how
+    it grew, and how it has lasted, the paper closes by asking who is trusted
+    with the room and time to build such infrastructure, and who pays for that
+    time when their institutions will not.'
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: K. Jarrod Millman
@@ -31,6 +31,8 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    BIDS: Berkeley Institute for Data Science
+    BIC: Brain Imaging Center
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -52,6 +54,8 @@ project:
         - ucberkeley2025datamajor
         - cloudbankEducators
         - perez2024bidsvision
+        - vanderwalt2009future
+        - varoquaux2009scikitlearn
   exports:
     - id: pdf
       format: typst

@@ -52,7 +52,7 @@ It was built on top of `numeric`, a multi-dimensional array package maintained b
 Jonathan Taylor had already begun `brainstat` for functional magnetic resonance imaging (fMRI) analysis, John Hunter (`matplotlib`) was developing `pbrain` for electroencephalogram (EEG) and electrocorticography (ECoG) analysis, and John introduced us to Fernando Pérez (`ipython` and later `jupyter`), connecting our neuroimaging effort to the broader Python tools that were taking shape around it.
 
 At the same time, Perry Greenfield's team at the Space Telescope Science Institute had introduced `numarray`: a second, incompatible array implementation aimed at very large images. New projects were encouraged to use it, older ones could not easily migrate, and no agreed path to unification existed [@oliphant2004status; @oliphant2004comments].
-Meanwhile, the `numpy-discussion` list provided a shared communication spaces across this divide, so the same people were discussing `numeric` and `numarray` even as their code bases remained split.
+Meanwhile, the `numpy-discussion` list provided a shared communication space across this divide, so the same people were discussing `numeric` and `numarray` even as their code bases remained split.
 
 ## The 2005 meeting
 
@@ -133,7 +133,7 @@ Stéfan van der Walt in his "The future of SciPy and its development infrastruct
 
 ## Infrastructure and diaspora
 
-In February 2009, Stéfan van der Walt posted to the `scipy-dev` list with a subject line that, unknown to him, echoed Travis Oliphant's email after the 2005 Berkeley meeting: "_The future of SciPy and its development infrastructure_" [vanderwalt2009future].
+In February 2009, Stéfan van der Walt posted to the `scipy-dev` list with a subject line that, unknown to him, echoed Travis Oliphant's email after the 2005 Berkeley meeting: "_The future of SciPy and its development infrastructure_" [@vanderwalt2009future].
 In Travis' 2005 email, he had worried that there were "few SciPy devotees" and even fewer contributors.
 Now, four years later, Stéfan worried that `scipy` was a "big library of code, used by many scientists," but still maintained by only a few people.
 
@@ -143,7 +143,7 @@ There was no community consensus about distributed version control at the time; 
 Travis worried that adding formal process would drive away contributors.
 Stéfan and David Cournapeau argued that without it, the burden would become unsustainable.
 
-Gaël Varoquaux, a member of the neuroimaging team, wrote to me the Saturday after SciPy 2009 [varoquaux2009scikitlearn].
+Gaël Varoquaux, a member of the neuroimaging team, wrote to me the Saturday after SciPy 2009 [@varoquaux2009scikitlearn].
 He had just run a Birds of a Feather session on establishing a standard machine learning package, building on the `scikits.learn` code from David Cournapeau's 2007 GSoC project that I had mentored.
 The enthusiasm had been "huge," he wrote, and he was ready to move quickly.
 But "in order to streamline the process, we need a mailing list, version control and a website."
@@ -177,7 +177,7 @@ https://www.space-kerala.org/first-indian-scipy-conference-held-trivandrum
 
 Conference proceedings, published and citable, were a mechanism for converting the work done on creating and maintaining software libraries into something a tenure file could recognize.
 Papers were submitted as reStructuredText source in a public GitHub repository; review happened in the open, via pull requests attached to identifiable individuals; reviewers were acknowledged by name.
-The toolchain, developed with Gaël Varoquaux and extended by Stéfan van der Walt into a system using Sphinx, LaTeX, custom scripts, and the `procbuild` preview bot, was an early instance of what would later be called "open peer review" and put into practice the principles I articulated in a 2012 paper titled "_Learning from Open Source Software Projects to Improve Scientific Review_" [ghosh2012learning].
+The toolchain, developed with Gaël Varoquaux and extended by Stéfan van der Walt into a system using Sphinx, LaTeX, custom scripts, and the `procbuild` preview bot, was an early instance of what would later be called "open peer review" and put into practice the principles I articulated in a 2012 paper titled "_Learning from Open Source Software Projects to Improve Scientific Review_" [@ghosh2012learning].
 Its goal was explicitly iterative: reviewers and editors worked with authors to guide papers toward acceptance, so that submitting to the SciPy conference proceedings meant opening your writing to the same collaborative scrutiny that good open source development demands.
 
 My last year as co-chair for the SciPy conference was 2011.
