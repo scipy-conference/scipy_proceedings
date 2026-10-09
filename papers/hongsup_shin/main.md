@@ -637,7 +637,7 @@ The natural next step is a *self-healing* loop in which agentic effort moves to 
 
 ## Code and data availability
 
-The pipeline, the evaluation harness, and the multi-objective gate are open source at `github.com/hongsupshin/police-data-intelligence` [code archive DOI: *to be deposited on Zenodo*]. The autonomous-agent baseline of {ref}`tbl:baseline` and its transcripts are included as well (`src/baselines/autonomous_agent/`, with outputs under `output/adversarial_baseline/`). The underlying datasets are published by the Texas Justice Initiative [@tji2020ois] [dataset citation/DOI: *to be confirmed*]. The accept/reject *decision* in this paper is a pure function of two saved holdout reports, so it can be recomputed from those reports at no cost; regenerating the reports themselves (`python -m src.eval.run_eval <dataset> --limit 100 --stratified`) requires inference and, because of run-to-run model variance, is not bit-for-bit reproducible.
+The pipeline, the evaluation harness, and the multi-objective gate are open source at `github.com/hongsupshin/police-data-intelligence`. The autonomous-agent baseline of {ref}`tbl:baseline` and its transcripts are included as well (`src/baselines/autonomous_agent/`, with outputs under `output/adversarial_baseline/`). The underlying datasets are published by @tji2020ois. The accept/reject *decision* in this paper is a pure function of two saved holdout reports, so it can be recomputed from those reports at no cost; regenerating the reports themselves (`python -m src.eval.run_eval <dataset> --limit 100 --stratified`) requires inference and, because of run-to-run model variance, is not bit-for-bit reproducible.
 
 ## Conclusions
 
