@@ -50,7 +50,7 @@ trades) where the direct agent does not (0 trades).
 :label: fig-decoupled-architecture
 :width: 95%
 
-Poster Fig. 1: the decoupled architecture. Market features are passed to the
+The decoupled architecture. Market features are passed to the
 DQN signal generator, and only its directional score crosses the boundary to
 the deterministic execution engine, which owns exits and risk controls.
 ```
@@ -165,7 +165,7 @@ counts are indicative only.
 :label: fig-reward-designs
 :width: 90%
 
-Poster Fig. 2: completed test-set trades for the four reward designs in
+Completed test-set trades for the four reward designs in
 @tbl-reward-variants. These counts come from single-seed development runs and show
 that some reward variants induced trading, but not that they were stable or
 profitable.
@@ -366,9 +366,9 @@ same held-out period.
 :label: fig-poster
 :width: 100%
 
-The SciPy 2026 virtual poster as presented. Panel 3 and Fig. 3 report the
-2,625-trade decoupled result; Fig. 2 shows the trade counts of the reward
-variants in @tbl-reward-variants.
+The SciPy 2026 virtual poster as presented. Panel 3 and poster Fig. 3 (@fig-cumpnl) report the
+2,625-trade decoupled result; poster Fig. 2 (@fig-reward-designs) shows the
+trade counts of the reward variants in @tbl-reward-variants.
 ```
 
 ```{list-table} Test-set behaviour on USD/JPY 5-min, 2025-09-08 to 2025-12-19 (21,167 bars; 21,116 evaluable steps).
