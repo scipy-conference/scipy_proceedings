@@ -9,7 +9,7 @@ project:
     tables.
   authors:
     - name: Mahima Arora
-      email: maharoroa@redhat.com
+      email: maharora@redhat.com
       orcid: 0000-0001-6299-5750
       affiliations:
         - Red Hat India Pvt. Ltd.
@@ -36,6 +36,10 @@ project:
     SQL: Structured Query Language
     API: Application Programming Interface
     pp: percentage points
+    MM: Multimodal
+    TO: text-only
+    CR: Context Recall
+    AC: Answer Correctness
   error_rules:
     - rule: doi-exists
       severity: ignore
