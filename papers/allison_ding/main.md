@@ -221,7 +221,7 @@ The intertopic distance maps provide a qualitative view of the change. The optim
 
 :::{figure} figures/bertopic_comparison.png
 :label: fig:bertopic_comparison
-The left figure represents Baseline BERTopic intertopic distance map and the right figure represents BCDNM-HPO intertopic distance map from the source materials. The optimized model assigns more documents to explicit topics and reports a noise percentage closer to the 20% target.
+The left figure represents the Baseline BERTopic intertopic distance map and the right figure represents the BCDNM-HPO intertopic distance map from the source materials. The optimized model assigns more documents to explicit topics and reports a noise percentage closer to the 20% target.
 :::
 
 ## Discussion
