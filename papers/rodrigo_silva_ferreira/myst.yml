@@ -31,9 +31,36 @@ project:
     - open science
     - notebooks
 
+  abbreviations:
+    REPL: read–eval–print loop
+    DAP: Debug Adapter Protocol
+
   bibliography:
     - references.bib
 
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - becker1984s
+        - grus2018idontlike
+        - ipython2001firstrelease
+        - jep47_debugger_protocol
+        - jupyter-messaging
+        - jupyter-nbformat
+        - jupyter_cache
+        - jupytext
+        - knuth1992literate
+        - merkel2014docker
+        - msft_dap_spec
+        - msft_lsp_spec
+        - nbdev
+        - nbdime
+        - nbval
+        - papermill
+        - pedregosa2011scikit
+        - pimentel2015collecting
+        - testbook
   toc:
     - file: interactive_scientific_computing.ipynb
   exports:
