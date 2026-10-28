@@ -1,0 +1,9 @@
+version: 1
+extends: ../../../proceedings.yml
+project:
+  title: ngff-zarr
+  authors:
+    - name: Matt McCormick
+      affiliation: Fideus Labs LLC
+      orcid: 0000-0001-9475-3756
+  abstract: A Lean and Kind OME-Zarr Toolkit for Bioimaging
