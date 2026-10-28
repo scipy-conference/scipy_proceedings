@@ -69,9 +69,3 @@ project:
       template: https://github.com/curvenote-templates/scipy.git
       article: interactive_scientific_computing.ipynb
       output: full_text.pdf
-    - format: jats
-      article: interactive_scientific_computing.ipynb
-      output: _build/exports/jats.xml
-    - format: meca
-      article: interactive_scientific_computing.ipynb
-      output: meca.zip
