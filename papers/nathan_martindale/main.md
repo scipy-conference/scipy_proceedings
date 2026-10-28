@@ -53,8 +53,7 @@ information accumulates) and flows (equations that define how those
 accumulations increase or decrease over time) and often exhibit nonlinear
 behavior arising from feedback loops and time delays [@Radzicki2020].
 SDM explores top-down impacts to system behavior, as opposed to
-a paradigm like agent-based modeling which explores emergent phenomenon in a
-system from a bottom-up encoding of small-scale interactions [@martin15].
+a paradigm like agent-based modeling which explores emergent phenomena in a system from a bottom-up encoding of small-scale interactions [@martin15].
 SDM was first developed by Jay Forrester in 1956 to understand how corporate
 structure impacted employment oscillations at a General Electric plant
 [@Radzicki2020;@lane07]. The approach has since been applied in many different
@@ -94,7 +93,7 @@ between a population and the population's birth rate (i.e., as the population
 grows, birth rate grows, causing the population to grow even faster).
 Interaction between the two populations occurs in the predation loop, shown in
 the middle of [Figure %s](#fig:pred_prey_cld), where prey sustains the
-predator population but decreases the prey population and thus preventing
+predator population but decreases the prey population, thus preventing
 unbounded growth from either population's positive feedback loop. Causal loop
 diagrams like the one shown only highlight general interactions in a system, but
 the specific values used in variables associated with these concepts impact the
@@ -104,7 +103,7 @@ overall behavior.
 :label: fig:pred_prey_cld
 An example causal loop diagram (commonly used to highlight feedback loops) of
 interactions between two populations. "R" (reinforcing), or positive feedback
-loops increase exponentionally; "B" (balancing), or negative feedback loops,
+loops increase exponentially; "B" (balancing), or negative feedback loops,
 oscillate or push towards homeostasis.
 :::
 
@@ -139,7 +138,7 @@ structure is more likely based on a set of observed data.
 Example probability distributions before and after Bayesian inference. These
 probability distributions could represent what the likely value of a particular
 parameter is. The prior shows a wider, "uncertain" value, whereas the
-posterior (the updated distribution after trying to fit some data), shows
+posterior (the updated distribution after trying to fit some data) shows
 tighter probability mass around two specific likely values.
 :::
 
@@ -164,7 +163,7 @@ P(\text{hypothesis}|\text{data}) =
 
 When constructing a system dynamics model, some parameter values may be unknown
 or uncertain. A phenomenon could be modeled by several
-different SDM structures or pathways. Because each have ranges of possible values for
+different SDM structures or pathways. Because each has ranges of possible values for
 input parameters, the complexity of the phenomenon may mean there is no
 obvious appropriate structure for closely modeling real-world data. Therefore, applying
 Bayesian statistics in these situations allows the use of probability distributions
@@ -574,7 +573,7 @@ by using $9.5$, $15.5$, and $15.0$.
 
 Concentration timeseries values when running `compartment()`. The plot was
 created with `reno.plot_trace_refs(compartment, [compartment()],
-[comparment.concentration])`. The black points are added to show the measured data
+[compartment.concentration])`. The black points are added to show the measured data
 that will be used.
 :::
 
@@ -734,7 +733,7 @@ variables/initial equations.
     parameters.
     2. Each component's equation is run (the equations are dependency
        ordered), stock values are updated, and the results of all of these are
-    returned for handling by the PyMC's scan function architecture.
+    returned for handling by PyMC's scan function architecture.
 3. All full timeseries sequences of every component are collected, and any final
    metric equations are run.
 
@@ -742,7 +741,7 @@ The conversion process results in python code with the following rough format:
 
 ```{code-block} python
 :label: code:pymc-transpile
-:caption: The roughly equivalent code that would construct a PyMC model in the same way as is returned from `reno.pymc.to_pymc_model`, or the string of raw code returned form `reno.pymc.to_pymc_model_str`.
+:caption: The roughly equivalent code that would construct a PyMC model in the same way as is returned from `reno.pymc.to_pymc_model`, or the string of raw code returned from `reno.pymc.to_pymc_model_str`.
 
 def step_function(*args):
 	# *args is populated by pytensor's `scan`, containing

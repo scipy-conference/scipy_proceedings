@@ -1,0 +1,18 @@
+name: Submit all 2026 articles
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  submit:
+    uses: curvenote/actions/.github/workflows/submit.yml@v1
+    with:
+      id-pattern-regex: '^scipy-2026-(?:[a-zA-Z0-9-_]{3,25})$'
+      venue: scipy
+      collection: '2026'
+      kind: article
+      path: papers/*
+      exclude: papers/myst_template, papers/tex_template
+      include-unchanged: true
+    secrets:
+      CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
+      GITHUB: ${{ secrets.GITHUB_TOKEN }}

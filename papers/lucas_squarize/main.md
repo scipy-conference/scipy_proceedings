@@ -64,7 +64,7 @@ threshold tuning as a crucial workflow for ML model deployment (@fig:workflow).
 
 :::{figure} figure1.png
 :label: fig:rdd-analysis
-RDD-based threshold tuning. In the graphs, the estimated score from a ML model is on the
+RDD-based threshold tuning. In the graphs, the estimated score from an ML model is on the
 horizontal axis, and the average outcome (e.g., conversion) is on the vertical axis. The
 graphs show the fitted local regressions to the left (red) and right (blue) of a threshold
 for a recommendation (grey shades are confidence intervals). **a)** RDD analysis estimates
