@@ -42,6 +42,7 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
+        - barba2016computational
         - becker1984s
         - grus2018idontlike
         - ipython2001firstrelease
