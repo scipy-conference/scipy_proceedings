@@ -894,7 +894,7 @@ Vaithilingam, P., Zhang, T., & Glassman, E. L. (2022). Expectation vs. Experienc
 
 Virtanen, P., Gommers, R., Oliphant, T. E., et al. (2020). SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261&ndash;272.
 
-Wang, J., Li, T.-Y., Li, L., & Zeller, A. (2020). Restoring Reproducibility of Jupyter Notebooks. *ICSE 2020 Companion* (pp. 288&ndash;289).
+Wang, J., Kuo, T.-Y., Li, L., & Zeller, A. (2020). Restoring Reproducibility of Jupyter Notebooks. *ICSE 2020 Companion* (pp. 288&ndash;289).
 
 Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3, 160018.
 
